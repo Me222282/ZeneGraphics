@@ -1,0 +1,83 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp5.0</TargetFramework>
+    <RootNamespace>Zene.Graphics</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+      None
+    </ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+    <NoWarn>1701;1702;IDE0090</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+      None
+    </ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\Owen\.nuget\packages\triangulation\1.0.0\contentFiles\any\netcoreapp3.1\third_party\Microsoft.Solver.Foundation.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="GL\Abstractions\TextureGL.cs~RF9e2bdfe.TMP" />
+    <None Remove="GL\Abstractions\TextureOpenGL.cs~RF148ca519.TMP" />
+    <None Remove="GL\Abstractions\TextureOpenGL.cs~RFd7976ed.TMP" />
+    <None Remove="GL\GL.cs~RF82eb96a9.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="glfw\win64\glfw3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ShaderPresets\FragmentShaderDM.shader">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="ShaderPresets\FragmentShaderP.shader">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="ShaderPresets\FragmentShaderB.shader">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="ShaderPresets\FragmentShaderL.shader">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="ShaderPresets\VertexShaderDM.shader">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="ShaderPresets\VertexShaderP.shader">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="ShaderPresets\VertexShaderB.shader">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="ShaderPresets\VertexShaderL.shader">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Structs\Structs.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Shaders\ShaderPresets.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ShaderPresets.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Shaders\ShaderPresets.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ShaderPresets.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

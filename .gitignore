@@ -1,0 +1,47 @@
+# Windowing project
+Windowing/obj/
+Windowing/bin/
+
+# Test projects
+Tests/Collisions/obj/
+Tests/Collisions/bin/
+Tests/CSGL/obj/
+Tests/CSGL/bin/
+Tests/GUI/GUI/obj/
+Tests/GUI/GUI/bin/
+Tests/ImplicitFunctions/ImplicitFunctions/obj/
+Tests/ImplicitFunctions/ImplicitFunctions/bin/
+Tests/PhysicsTest/PhysicsTest/obj/
+Tests/PhysicsTest/PhysicsTest/bin/
+
+# Structs project
+Structs/obj/
+Structs/bin/
+
+# Sprites project
+Sprites/obj/
+Sprites/bin/
+
+# Physics project
+Physics/obj/
+Physics/bin/
+
+# OpenTKConverts project
+OpenTKConverts/obj/
+OpenTKConverts/bin/
+
+# Graphics project
+Graphics/obj/
+Graphics/bin/
+
+# Forms project
+Forms/obj/
+Forms/bin/
+
+# Evolution projects
+Evolution/Evolution/obj/
+Evolution/Evolution/bin/
+Evolution/Tests/obj/
+Evolution/Tests/bin/
+Evolution/CheckDLL/obj/
+Evolution/CheckDLL/bin/
