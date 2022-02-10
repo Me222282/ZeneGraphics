@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhysicsTest", "PhysicsTest\PhysicsTest.csproj", "{8C588A85-1BA5-4E6C-B22E-DD161DA86332}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhysicsTest", "PhysicsTest.csproj", "{8C588A85-1BA5-4E6C-B22E-DD161DA86332}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graphics", "..\..\Graphics\Graphics.csproj", "{D8551A6A-4F2B-4BA3-B7BA-E5D0EEFF0F03}"
 EndProject

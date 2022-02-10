@@ -1,0 +1,80 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "GUI/1.0.0": {
+        "dependencies": {
+          "Forms": "1.0.0",
+          "Graphics": "1.0.0",
+          "Structs": "1.0.0",
+          "Windowing": "1.0.0"
+        },
+        "runtime": {
+          "GUI.dll": {}
+        }
+      },
+      "Forms/1.0.0": {
+        "dependencies": {
+          "Graphics": "1.0.0",
+          "Structs": "1.0.0"
+        },
+        "runtime": {
+          "Forms.dll": {}
+        }
+      },
+      "Graphics/1.0.0": {
+        "dependencies": {
+          "Structs": "1.0.0"
+        },
+        "runtime": {
+          "Graphics.dll": {}
+        }
+      },
+      "Structs/1.0.0": {
+        "runtime": {
+          "Structs.dll": {}
+        }
+      },
+      "Windowing/1.0.0": {
+        "dependencies": {
+          "Graphics": "1.0.0",
+          "Structs": "1.0.0"
+        },
+        "runtime": {
+          "Windowing.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "GUI/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Forms/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Graphics/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Structs/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Windowing/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
