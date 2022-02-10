@@ -42,6 +42,7 @@ namespace Zene.Windowing
             }
 
             Core.SetInitProperties(properties);
+            RefreshRate = properties.RefreshRate;
 
             _window = GLFW.CreateWindow(width, height, title, properties.Monitor.Handle, properties.SharedWindow.Handle);
 
@@ -53,6 +54,11 @@ namespace Zene.Windowing
             }
 
             GLFW.MakeContextCurrent(_window);
+
+            // Full screen required properties
+            _normalWidth = Width;
+            _normalHeight = Height;
+            _normalLocation = Location;
 
             SetCallBacks();
 
@@ -119,29 +125,40 @@ namespace Zene.Windowing
         private int _normalHeight;
         private Vector2I _normalLocation;
 
-        public bool FullScreen
+        private int _refreshRate;
+        public int RefreshRate
         {
-            get
-            {
-                return GLFW.GetWindowMonitor(_window) != IntPtr.Zero;
-            }
+            get => _refreshRate;
             set
             {
+                _refreshRate = value;
+                // Resets window's monitor - thus changing refresh rate
+                FullScreen = _fullScreen;
+            }
+        }
+
+        private bool _fullScreen = false;
+        public bool FullScreen
+        {
+            get => _fullScreen;
+            set
+            {
+                _fullScreen = value;
+
                 if (value)
                 {
-                    IntPtr monitor = GLFW.GetPrimaryMonitor();
-
                     _normalWidth = Width;
                     _normalHeight = Height;
                     _normalLocation = Location;
 
-                    GLFW.GetMonitorWorkarea(monitor, out int x, out int y, out int w, out int h);
+                    Monitor monitor = Monitor.Primary;
+                    VideoMode videoMode = monitor.VideoMode;
 
-                    GLFW.SetWindowMonitor(_window, monitor, x, y, w, h, 60);
+                    GLFW.SetWindowMonitor(_window, monitor.Handle, 0, 0, videoMode.Width, videoMode.Height, videoMode.RefreshRate);
                 }
                 else
                 {
-                    GLFW.SetWindowMonitor(_window, (IntPtr)null, _normalLocation.X, _normalLocation.Y, _normalWidth, _normalHeight, 60);
+                    GLFW.SetWindowMonitor(_window, IntPtr.Zero, _normalLocation.X, _normalLocation.Y, _normalWidth, _normalHeight, RefreshRate);
                 }
             }
         }

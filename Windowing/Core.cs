@@ -43,6 +43,8 @@ namespace Zene.Windowing
             GLFW.WindowHint(GLFW.Stereo, properties.Stereoscopic ? GLFW.True : GLFW.False);
             GLFW.WindowHint(GLFW.SrgbCapable, properties.SRGBSupported ? GLFW.True : GLFW.False);
             GLFW.WindowHint(GLFW.Doublebuffer, properties.DoubleBuffered ? GLFW.True : GLFW.False);
+
+            GLFW.WindowHint(GLFW.RefreshRate, properties.RefreshRate);
         }
     }
 }

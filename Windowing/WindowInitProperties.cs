@@ -28,6 +28,8 @@
         public bool SRGBSupported { get; set; } = false;
         public bool DoubleBuffered { get; set; } = true;
 
+        public int RefreshRate { get; set; } = -1;
+
         public Monitor Monitor { get; set; } = Monitor.None;
         public Window SharedWindow { get; set; } = Window.None;
 
