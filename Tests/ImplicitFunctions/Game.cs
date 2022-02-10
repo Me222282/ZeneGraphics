@@ -3,6 +3,7 @@ using Zene.Graphics;
 using Zene.Structs;
 using System;
 using System.Diagnostics;
+using Zene.Windowing.Base;
 
 namespace ImplicitFunctions
 {

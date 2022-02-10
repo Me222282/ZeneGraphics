@@ -14,7 +14,7 @@ namespace EvolutionTest
         private readonly int _genLength;
 
         public WindowL(int width, int height, string title, int lifeforms, int brainSize, int worldSize, int genLength)
-            : base(width, height, title, 4, 3, true)
+            : base(width, height, title, 4.3, true)
         {
             _lifeforms = lifeforms;
             _worldSize = worldSize;

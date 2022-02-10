@@ -10,19 +10,20 @@ namespace Zene.Windowing
     public unsafe class Window : IDisposable
     {
         public Window(int width, int height, string title, bool antiAlias = true)
-            : this(width, height, title, 4, 5, antiAlias)
+            : this(width, height, title, 4.5, antiAlias)
         {
 
         }
-        public Window(int width, int height, string title, int versionMajor, int versionMinor, bool antiAlias = true)
+        public Window(int width, int height, string title, double version, bool antiAlias = true)
         {
             _disposed = false;
 
             //GLFW.WindowHint(GLFW.GLFW_DOUBLEBUFFER, GLFW.GLFW_FALSE);
             GLFW.WindowHint(GLFW.ClientApi, GLFW.OpenglApi);
             GLFW.WindowHint(GLFW.OpenglProfile, GLFW.OpenglCoreProfile);
-            GLFW.WindowHint(GLFW.ContextVersionMajor, versionMajor);
-            GLFW.WindowHint(GLFW.ContextVersionMinor, versionMinor);
+            GLFW.WindowHint(GLFW.ContextVersionMajor, (int)Math.Floor(version));
+            GLFW.WindowHint(GLFW.ContextVersionMinor, (int)Math.Floor(
+                (version - (int)Math.Floor(version)) * 10));
 
             if (antiAlias) { GLFW.WindowHint(GLFW.Samples, 4); }
 
@@ -39,7 +40,7 @@ namespace Zene.Windowing
 
             SetCallBacks();
 
-            GL.Init(GLFW.GetProcAddress, versionMajor, versionMinor);
+            GL.Init(GLFW.GetProcAddress, version);
 
             // Setup debug callback - error output/display
             // If supported in current opengl version

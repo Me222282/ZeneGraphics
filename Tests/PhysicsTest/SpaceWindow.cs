@@ -15,7 +15,7 @@ namespace PhysicsTest
         private const int _seed = 1;
 
         public SpaceWindow(int width, int height, string title)
-            : base(width, height, title, 4, 3, false)
+            : base(width, height, title, 4.3, false)
         {
             _shader = new BasicShader();
             _planetShader = new TextureShader();

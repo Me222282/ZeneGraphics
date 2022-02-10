@@ -71,7 +71,7 @@ namespace GUI
         }
 
         public Program(int width, int height, string title)
-            : base(width, height, title, 4, 3, false)
+            : base(width, height, title, 4.3, false)
         {
             _textRender = new EditTextRenderer(100)
             {

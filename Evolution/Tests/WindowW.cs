@@ -10,7 +10,7 @@ namespace EvolutionTest
     public class WindowW : Window
     {
         public WindowW(int width, int height, string title, byte[][] frameData)
-            : base(width, height, title, 4, 3, true)
+            : base(width, height, title, 4.3, true)
         {
             _shader = new BasicShader();
 

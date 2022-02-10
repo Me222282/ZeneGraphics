@@ -767,7 +767,7 @@ namespace Zene.Graphics.OpenGL
 
 			public delegate void MultiDrawArraysIndirect(uint mode, void* indirect, int drawcount, int stride);
 
-			public delegate void MultiDrawArraysIndirectCount(uint mode, void* indirect, int drawcount, int maxdrawcount, int stride);
+			//public delegate void MultiDrawArraysIndirectCount(uint mode, void* indirect, int drawcount, int maxdrawcount, int stride);
 
 			public delegate void MultiDrawElements(uint mode, int* count, uint type, void** indices, int drawcount);
 
@@ -775,7 +775,7 @@ namespace Zene.Graphics.OpenGL
 
 			public delegate void MultiDrawElementsIndirect(uint mode, uint type, void* indirect, int drawcount, int stride);
 
-			public delegate void MultiDrawElementsIndirectCount(uint mode, uint type, void* indirect, int drawcount, int maxdrawcount, int stride);
+			//public delegate void MultiDrawElementsIndirectCount(uint mode, uint type, void* indirect, int drawcount, int maxdrawcount, int stride);
 
 			public delegate void NamedBufferData(uint buffer, int size, void* data, uint usage);
 
@@ -829,7 +829,7 @@ namespace Zene.Graphics.OpenGL
 
 			public delegate void PolygonOffset(float factor, float units);
 
-			public delegate void PolygonOffsetClamp(float factor, float units, float clamp);
+			//public delegate void PolygonOffsetClamp(float factor, float units, float clamp);
 
 			public delegate void PopDebugGroup();
 
@@ -989,7 +989,7 @@ namespace Zene.Graphics.OpenGL
 
 			public delegate void ShaderStorageBlockBinding(uint program, uint storageBlockIndex, uint storageBlockBinding);
 
-			public delegate void SpecializeShader(uint shader, string pEntryPoint, uint numSpecializationConstants, uint* pConstantIndex, uint* pConstantValue);
+			//public delegate void SpecializeShader(uint shader, string pEntryPoint, uint numSpecializationConstants, uint* pConstantIndex, uint* pConstantValue);
 
 			public delegate void StencilFunc(uint func, int @ref, uint mask);
 
@@ -2081,7 +2081,7 @@ namespace Zene.Graphics.OpenGL
 
 			public static Delegates.MultiDrawArraysIndirect MultiDrawArraysIndirect { get; set; }
 
-			public static Delegates.MultiDrawArraysIndirectCount MultiDrawArraysIndirectCount { get; set; }
+			//public static Delegates.MultiDrawArraysIndirectCount MultiDrawArraysIndirectCount { get; set; }
 
 			public static Delegates.MultiDrawElements MultiDrawElements { get; set; }
 
@@ -2089,7 +2089,7 @@ namespace Zene.Graphics.OpenGL
 
 			public static Delegates.MultiDrawElementsIndirect MultiDrawElementsIndirect { get; set; }
 
-			public static Delegates.MultiDrawElementsIndirectCount MultiDrawElementsIndirectCount { get; set; }
+			//public static Delegates.MultiDrawElementsIndirectCount MultiDrawElementsIndirectCount { get; set; }
 
 			public static Delegates.NamedBufferData NamedBufferData { get; set; }
 
@@ -2143,7 +2143,7 @@ namespace Zene.Graphics.OpenGL
 
 			public static Delegates.PolygonOffset PolygonOffset { get; set; }
 
-			public static Delegates.PolygonOffsetClamp PolygonOffsetClamp { get; set; }
+			//public static Delegates.PolygonOffsetClamp PolygonOffsetClamp { get; set; }
 
 			public static Delegates.PopDebugGroup PopDebugGroup { get; set; }
 
@@ -2303,7 +2303,7 @@ namespace Zene.Graphics.OpenGL
 
 			public static Delegates.ShaderStorageBlockBinding ShaderStorageBlockBinding { get; set; }
 
-			public static Delegates.SpecializeShader SpecializeShader { get; set; }
+			//public static Delegates.SpecializeShader SpecializeShader { get; set; }
 
 			public static Delegates.StencilFunc StencilFunc { get; set; }
 
@@ -2708,10 +2708,9 @@ namespace Zene.Graphics.OpenGL
 		}
 
 #if !GLDOTNET_EXCLUDE_GLINIT
-		public static void Init(Func<string, IntPtr> getProcAddress, int versionMajor, int versionMinor)
+		public static void Init(Func<string, IntPtr> getProcAddress, double version)
 		{
 			// Setup version acessor
-			double version = versionMajor + (versionMinor * 0.1);
 			if (Version < version) { Version = version; }
 
 
@@ -2719,7 +2718,7 @@ namespace Zene.Graphics.OpenGL
 
 			T getProc<T>(string name) => Marshal.GetDelegateForFunctionPointer<T>(getProcAddress("gl" + name));
 
-			if (versionMajor > 1 || (versionMajor == 1 && versionMinor >= 0))
+			if (version >= 1.0)
 			{
 				Functions.BlendFunc = getProc<Delegates.BlendFunc>("BlendFunc");
 				Functions.Clear = getProc<Delegates.Clear>("Clear");
@@ -2771,7 +2770,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.Viewport = getProc<Delegates.Viewport>("Viewport");
 			}
 
-			if (versionMajor > 1 || (versionMajor == 1 && versionMinor >= 1))
+			if (version >= 1.1)
 			{
 				Functions.BindTexture = getProc<Delegates.BindTexture>("BindTexture");
 				Functions.CopyTexImage1D = getProc<Delegates.CopyTexImage1D>("CopyTexImage1D");
@@ -2789,7 +2788,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.TexSubImage2D = getProc<Delegates.TexSubImage2D>("TexSubImage2D");
 			}
 
-			if (versionMajor > 1 || (versionMajor == 1 && versionMinor >= 2))
+			if (version >= 1.2)
 			{
 				Functions.CopyTexSubImage3D = getProc<Delegates.CopyTexSubImage3D>("CopyTexSubImage3D");
 				Functions.DrawRangeElements = getProc<Delegates.DrawRangeElements>("DrawRangeElements");
@@ -2797,7 +2796,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.TexSubImage3D = getProc<Delegates.TexSubImage3D>("TexSubImage3D");
 			}
 
-			if (versionMajor > 1 || (versionMajor == 1 && versionMinor >= 3))
+			if (version >= 1.3)
 			{
 				Functions.ActiveTexture = getProc<Delegates.ActiveTexture>("ActiveTexture");
 				Functions.CompressedTexImage1D = getProc<Delegates.CompressedTexImage1D>("CompressedTexImage1D");
@@ -2810,7 +2809,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.SampleCoverage = getProc<Delegates.SampleCoverage>("SampleCoverage");
 			}
 
-			if (versionMajor > 1 || (versionMajor == 1 && versionMinor >= 4))
+			if (version >= 1.4)
 			{
 				Functions.BlendColor = getProc<Delegates.BlendColor>("BlendColor");
 				Functions.BlendEquation = getProc<Delegates.BlendEquation>("BlendEquation");
@@ -2823,7 +2822,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.PointParameteriv = getProc<Delegates.PointParameteriv>("PointParameteriv");
 			}
 
-			if (versionMajor > 1 || (versionMajor == 1 && versionMinor >= 5))
+			if (version >= 1.5)
 			{
 				Functions.BeginQuery = getProc<Delegates.BeginQuery>("BeginQuery");
 				Functions.BindBuffer = getProc<Delegates.BindBuffer>("BindBuffer");
@@ -2846,7 +2845,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.UnmapBuffer = getProc<Delegates.UnmapBuffer>("UnmapBuffer");
 			}
 
-			if (versionMajor > 2 || (versionMajor == 2 && versionMinor >= 0))
+			if (version >= 2.0)
 			{
 				Functions.AttachShader = getProc<Delegates.AttachShader>("AttachShader");
 				Functions.BindAttribLocation = getProc<Delegates.BindAttribLocation>("BindAttribLocation");
@@ -2943,7 +2942,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.VertexAttribPointer = getProc<Delegates.VertexAttribPointer>("VertexAttribPointer");
 			}
 
-			if (versionMajor > 2 || (versionMajor == 2 && versionMinor >= 1))
+			if (version >= 2.1)
 			{
 				Functions.UniformMatrix2x3fv = getProc<Delegates.UniformMatrix2x3fv>("UniformMatrix2x3fv");
 				Functions.UniformMatrix2x4fv = getProc<Delegates.UniformMatrix2x4fv>("UniformMatrix2x4fv");
@@ -2953,7 +2952,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.UniformMatrix4x3fv = getProc<Delegates.UniformMatrix4x3fv>("UniformMatrix4x3fv");
 			}
 
-			if (versionMajor > 3 || (versionMajor == 3 && versionMinor >= 0))
+			if (version >= 3.0)
 			{
 				Functions.BeginConditionalRender = getProc<Delegates.BeginConditionalRender>("BeginConditionalRender");
 				Functions.BeginTransformFeedback = getProc<Delegates.BeginTransformFeedback>("BeginTransformFeedback");
@@ -3041,7 +3040,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.VertexAttribIPointer = getProc<Delegates.VertexAttribIPointer>("VertexAttribIPointer");
 			}
 
-			if (versionMajor > 3 || (versionMajor == 3 && versionMinor >= 1))
+			if (version >= 3.1)
 			{
 				Functions.CopyBufferSubData = getProc<Delegates.CopyBufferSubData>("CopyBufferSubData");
 				Functions.DrawArraysInstanced = getProc<Delegates.DrawArraysInstanced>("DrawArraysInstanced");
@@ -3057,7 +3056,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.UniformBlockBinding = getProc<Delegates.UniformBlockBinding>("UniformBlockBinding");
 			}
 
-			if (versionMajor > 3 || (versionMajor == 3 && versionMinor >= 2))
+			if (version >= 3.2)
 			{
 				Functions.ClientWaitSync = getProc<Delegates.ClientWaitSync>("ClientWaitSync");
 				Functions.DeleteSync = getProc<Delegates.DeleteSync>("DeleteSync");
@@ -3080,7 +3079,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.WaitSync = getProc<Delegates.WaitSync>("WaitSync");
 			}
 
-			if (versionMajor > 3 || (versionMajor == 3 && versionMinor >= 3))
+			if (version >= 3.3)
 			{
 				Functions.BindFragDataLocationIndexed = getProc<Delegates.BindFragDataLocationIndexed>("BindFragDataLocationIndexed");
 				Functions.BindSampler = getProc<Delegates.BindSampler>("BindSampler");
@@ -3112,7 +3111,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.VertexAttribP4uiv = getProc<Delegates.VertexAttribP4uiv>("VertexAttribP4uiv");
 			}
 
-			if (versionMajor > 4 || (versionMajor == 4 && versionMinor >= 0))
+			if (version >= 4.0)
 			{
 				Functions.BeginQueryIndexed = getProc<Delegates.BeginQueryIndexed>("BeginQueryIndexed");
 				Functions.BindTransformFeedback = getProc<Delegates.BindTransformFeedback>("BindTransformFeedback");
@@ -3162,7 +3161,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.UniformSubroutinesuiv = getProc<Delegates.UniformSubroutinesuiv>("UniformSubroutinesuiv");
 			}
 
-			if (versionMajor > 4 || (versionMajor == 4 && versionMinor >= 1))
+			if (version >= 4.1)
 			{
 				Functions.ActiveShaderProgram = getProc<Delegates.ActiveShaderProgram>("ActiveShaderProgram");
 				Functions.BindProgramPipeline = getProc<Delegates.BindProgramPipeline>("BindProgramPipeline");
@@ -3254,7 +3253,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.ViewportIndexedfv = getProc<Delegates.ViewportIndexedfv>("ViewportIndexedfv");
 			}
 
-			if (versionMajor > 4 || (versionMajor == 4 && versionMinor >= 2))
+			if (version >= 4.2)
 			{
 				Functions.BindImageTexture = getProc<Delegates.BindImageTexture>("BindImageTexture");
 				Functions.DrawArraysInstancedBaseInstance = getProc<Delegates.DrawArraysInstancedBaseInstance>("DrawArraysInstancedBaseInstance");
@@ -3270,7 +3269,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.TexStorage3D = getProc<Delegates.TexStorage3D>("TexStorage3D");
 			}
 
-			if (versionMajor > 4 || (versionMajor == 4 && versionMinor >= 3))
+			if (version >= 4.3)
 			{
 				Functions.BindVertexBuffer = getProc<Delegates.BindVertexBuffer>("BindVertexBuffer");
 				Functions.ClearBufferData = getProc<Delegates.ClearBufferData>("ClearBufferData");
@@ -3317,7 +3316,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.VertexBindingDivisor = getProc<Delegates.VertexBindingDivisor>("VertexBindingDivisor");
 			}
 
-			if (versionMajor > 4 || (versionMajor == 4 && versionMinor >= 4))
+			if (version >= 4.4)
 			{
 				Functions.BindBuffersBase = getProc<Delegates.BindBuffersBase>("BindBuffersBase");
 				Functions.BindBuffersRange = getProc<Delegates.BindBuffersRange>("BindBuffersRange");
@@ -3328,7 +3327,7 @@ namespace Zene.Graphics.OpenGL
 				Functions.ClearTexSubImage = getProc<Delegates.ClearTexSubImage>("ClearTexSubImage");
 			}
 
-			if (versionMajor > 4 || (versionMajor == 4 && versionMinor >= 5))
+			if (version >= 4.5)
 			{
 				Functions.BindTextureUnit = getProc<Delegates.BindTextureUnit>("BindTextureUnit");
 				Functions.BlitNamedFramebuffer = getProc<Delegates.BlitNamedFramebuffer>("BlitNamedFramebuffer");
@@ -3441,14 +3440,19 @@ namespace Zene.Graphics.OpenGL
 				Functions.VertexArrayVertexBuffer = getProc<Delegates.VertexArrayVertexBuffer>("VertexArrayVertexBuffer");
 				Functions.VertexArrayVertexBuffers = getProc<Delegates.VertexArrayVertexBuffers>("VertexArrayVertexBuffers");
 			}
-
+			/*
 			if (versionMajor > 4 || (versionMajor == 4 && versionMinor >= 6))
 			{
 				Functions.MultiDrawArraysIndirectCount = getProc<Delegates.MultiDrawArraysIndirectCount>("MultiDrawArraysIndirectCount");
 				Functions.MultiDrawElementsIndirectCount = getProc<Delegates.MultiDrawElementsIndirectCount>("MultiDrawElementsIndirectCount");
 				Functions.PolygonOffsetClamp = getProc<Delegates.PolygonOffsetClamp>("PolygonOffsetClamp");
 				Functions.SpecializeShader = getProc<Delegates.SpecializeShader>("SpecializeShader");
-			}
+			}*/
+
+			if (version > 4.5)
+            {
+				Console.WriteLine($"OpenGL version {version} is not properly supported. The Zene Graphics Library was made for OpenGL version 4.5 and below.");
+            }
 
 			// Setup texture binding referance
 			int size = 0;
@@ -5642,11 +5646,11 @@ namespace Zene.Graphics.OpenGL
 			Functions.MultiDrawArraysIndirect(mode, indirect, drawcount, stride);
 		}
 
-		[OpenGLSupport(4.6)]
-		public static void MultiDrawArraysIndirectCount(uint mode, void* indirect, int drawcount, int maxdrawcount, int stride)
-		{
-			Functions.MultiDrawArraysIndirectCount(mode, indirect, drawcount, maxdrawcount, stride);
-		}
+		//[OpenGLSupport(4.6)]
+		//public static void MultiDrawArraysIndirectCount(uint mode, void* indirect, int drawcount, int maxdrawcount, int stride)
+		//{
+		//	Functions.MultiDrawArraysIndirectCount(mode, indirect, drawcount, maxdrawcount, stride);
+		//}
 
 		[OpenGLSupport(1.4)]
 		public static void MultiDrawElements(uint mode, int* count, uint type, void** indices, int drawcount)
@@ -5666,11 +5670,11 @@ namespace Zene.Graphics.OpenGL
 			Functions.MultiDrawElementsIndirect(mode, type, indirect, drawcount, stride);
 		}
 
-		[OpenGLSupport(4.6)]
-		public static void MultiDrawElementsIndirectCount(uint mode, uint type, void* indirect, int drawcount, int maxdrawcount, int stride)
-		{
-			Functions.MultiDrawElementsIndirectCount(mode, type, indirect, drawcount, maxdrawcount, stride);
-		}
+		//[OpenGLSupport(4.6)]
+		//public static void MultiDrawElementsIndirectCount(uint mode, uint type, void* indirect, int drawcount, int maxdrawcount, int stride)
+		//{
+		//	Functions.MultiDrawElementsIndirectCount(mode, type, indirect, drawcount, maxdrawcount, stride);
+		//}
 
 		[OpenGLSupport(4.5)]
 		public static void NamedBufferData(uint buffer, int size, void* data, uint usage)
@@ -5827,11 +5831,11 @@ namespace Zene.Graphics.OpenGL
 			Functions.PolygonOffset(factor, units);
 		}
 
-		[OpenGLSupport(4.6)]
-		public static void PolygonOffsetClamp(float factor, float units, float clamp)
-		{
-			Functions.PolygonOffsetClamp(factor, units, clamp);
-		}
+		//[OpenGLSupport(4.6)]
+		//public static void PolygonOffsetClamp(float factor, float units, float clamp)
+		//{
+		//	Functions.PolygonOffsetClamp(factor, units, clamp);
+		//}
 
 		[OpenGLSupport(4.3)]
 		public static void PopDebugGroup()
@@ -6307,11 +6311,11 @@ namespace Zene.Graphics.OpenGL
 			Functions.ShaderStorageBlockBinding(program, storageBlockIndex, storageBlockBinding);
 		}
 
-		[OpenGLSupport(4.6)]
-		public static void SpecializeShader(uint shader, string pEntryPoint, uint numSpecializationConstants, uint* pConstantIndex, uint* pConstantValue)
-		{
-			Functions.SpecializeShader(shader, pEntryPoint, numSpecializationConstants, pConstantIndex, pConstantValue);
-		}
+		//[OpenGLSupport(4.6)]
+		//public static void SpecializeShader(uint shader, string pEntryPoint, uint numSpecializationConstants, uint* pConstantIndex, uint* pConstantValue)
+		//{
+		//	Functions.SpecializeShader(shader, pEntryPoint, numSpecializationConstants, pConstantIndex, pConstantValue);
+		//}
 
 		[OpenGLSupport(1.0)]
 		public static void StencilFunc(uint func, int @ref, uint mask)
