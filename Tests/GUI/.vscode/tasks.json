@@ -7,10 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                //"${workspaceFolder}/Tests/PhysicsTest/PhysicsTest.csproj",
-                //"${workspaceFolder}/Tests/GUI/PhysicsTest.csproj",
-                //"${workspaceFolder}/Tests/ImplicitFunctions/PhysicsTest.csproj",
-                "${workspaceFolder}/Tests/CSGL/CSGL.csproj",
+                "${workspaceFolder}/GUI.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -22,10 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                //"${workspaceFolder}/Tests/PhysicsTest/PhysicsTest.csproj",
-                //"${workspaceFolder}/Tests/GUI/PhysicsTest.csproj",
-                //"${workspaceFolder}/Tests/ImplicitFunctions/PhysicsTest.csproj",
-                "${workspaceFolder}/Tests/CSGL/CSGL.csproj",
+                "${workspaceFolder}/GUI.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -38,10 +32,7 @@
             "args": [
                 "watch",
                 "run",
-                //"${workspaceFolder}/Tests/PhysicsTest/PhysicsTest.csproj",
-                //"${workspaceFolder}/Tests/GUI/PhysicsTest.csproj",
-                //"${workspaceFolder}/Tests/ImplicitFunctions/PhysicsTest.csproj",
-                "${workspaceFolder}/Tests/CSGL/CSGL.csproj",
+                "${workspaceFolder}/GUI.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

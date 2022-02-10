@@ -10,15 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            //"program": "${workspaceFolder}/Tests/PhysicsTest/bin/Debug/net5.0/PhysicsTest.dll",
-            //"program": "${workspaceFolder}/Tests/GUI/bin/Debug/net5.0/GUI.dll",
-            //"program": "${workspaceFolder}/Tests/ImplicitFunctions/bin/Debug/net5.0/ImplicitFunctions.dll",
-            "program": "${workspaceFolder}/Tests/CSGL/bin/Debug/net5.0/CSGL.dll",
+            "program": "${workspaceFolder}/bin/Debug/net5.0/GUI.dll",
             "args": [],
-            //"cwd": "${workspaceFolder}/Tests/PhysicsTest",
-            //"cwd": "${workspaceFolder}/Tests/GUI",
-            //"cwd": "${workspaceFolder}/Tests/ImplicitFunctions",
-            "cwd": "${workspaceFolder}/Tests/CSGL",
+            "cwd": "${workspaceFolder}",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false
