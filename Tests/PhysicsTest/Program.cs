@@ -22,7 +22,7 @@ namespace PhysicsTest
         }
 
         public Program(int width, int height, string title)
-            : base(width, height, title, false)
+            : base(width, height, title)
         {
             _textDraw = new TextRenderer(13);
             _font = new FontA();

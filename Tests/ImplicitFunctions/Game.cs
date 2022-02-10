@@ -154,7 +154,7 @@ namespace ImplicitFunctions
         }
 
         public Game(int width, int height, string title)
-            : base(width, height, title, false)
+            : base(width, height, title)
         {
             _oilObj = new DrawObject<double, byte>(new double[]
             {

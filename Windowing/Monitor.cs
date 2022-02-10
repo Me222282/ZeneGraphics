@@ -10,7 +10,7 @@ namespace Zene.Windowing
     /// </summary>
     public unsafe struct Monitor
     {
-        internal Monitor(IntPtr handle)
+        private Monitor(IntPtr handle)
         {
             _monitor = handle;
         }
@@ -233,6 +233,20 @@ namespace Zene.Windowing
 
                 return result;
             }
+        }
+
+        /// <summary>
+        /// A null value monitor.
+        /// </summary>
+        public static Monitor None { get; } = new Monitor(IntPtr.Zero);
+        /// <summary>
+        /// Creates a monitor from an already created monitor.
+        /// </summary>
+        /// <param name="handle">The GLFW pointer to a monitor object.</param>
+        /// <returns></returns>
+        public static Monitor FromHandle(IntPtr handle)
+        {
+            return new Monitor(handle);
         }
     }
 }

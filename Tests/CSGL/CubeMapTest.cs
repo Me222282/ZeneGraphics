@@ -8,7 +8,7 @@ namespace CSGL
     public class CubeMapTest : Window
     {
         public CubeMapTest(int width, int height, string title)
-            : base(width, height, title, false)
+            : base(width, height, title)
         {
             _shader = new SkyBoxShader();
 

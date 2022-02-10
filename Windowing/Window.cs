@@ -9,25 +9,41 @@ namespace Zene.Windowing
 {
     public unsafe class Window : IDisposable
     {
-        public Window(int width, int height, string title, bool antiAlias = true)
-            : this(width, height, title, 4.5, antiAlias)
+        private Window(IntPtr window)
+        {
+            _window = window;
+        }
+
+        public Window(int width, int height, string title, WindowInitProperties properties = null)
+            : this(width, height, title, 4.5, properties)
         {
 
         }
-        public Window(int width, int height, string title, double version, bool antiAlias = true)
+        public Window(int width, int height, string title, double version, WindowInitProperties properties = null)
         {
-            _disposed = false;
-
             //GLFW.WindowHint(GLFW.GLFW_DOUBLEBUFFER, GLFW.GLFW_FALSE);
             GLFW.WindowHint(GLFW.ClientApi, GLFW.OpenglApi);
-            GLFW.WindowHint(GLFW.OpenglProfile, GLFW.OpenglCoreProfile);
+            if (version < 3.2)
+            {
+                GLFW.WindowHint(GLFW.OpenglProfile, GLFW.OpenglAnyProfile);
+            }
+            else
+            {
+                GLFW.WindowHint(GLFW.OpenglProfile, GLFW.OpenglCoreProfile);
+            }
             GLFW.WindowHint(GLFW.ContextVersionMajor, (int)Math.Floor(version));
             GLFW.WindowHint(GLFW.ContextVersionMinor, (int)Math.Floor(
                 (version - (int)Math.Floor(version)) * 10));
 
-            if (antiAlias) { GLFW.WindowHint(GLFW.Samples, 4); }
+            // Make sure there is no null refernace exception
+            if (properties == null)
+            {
+                properties = WindowInitProperties.Default;
+            }
 
-            _window = GLFW.CreateWindow(width, height, title, IntPtr.Zero, IntPtr.Zero);
+            Core.SetInitProperties(properties);
+
+            _window = GLFW.CreateWindow(width, height, title, properties.Monitor.Handle, properties.SharedWindow.Handle);
 
             if (_window == IntPtr.Zero)
             {
@@ -72,7 +88,7 @@ namespace Zene.Windowing
             }
         }
 
-        private bool _disposed;
+        private bool _disposed = false;
         public void Dispose()
         {
             if (!_disposed)
@@ -394,6 +410,20 @@ namespace Zene.Windowing
         protected virtual void OnSizePixelChange(SizeChangeEventArgs e)
         {
             SizePixelChange?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// A null value window.
+        /// </summary>
+        public static Window None { get; } = new Window(IntPtr.Zero);
+        /// <summary>
+        /// Creates a window from an already created window.
+        /// </summary>
+        /// <param name="handle">The GLFW pointer to a window object.</param>
+        /// <returns></returns>
+        public static Window FromHandle(IntPtr handle)
+        {
+            return new Window(handle);
         }
     }
 }

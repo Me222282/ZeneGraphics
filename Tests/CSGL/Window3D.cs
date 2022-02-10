@@ -14,7 +14,7 @@ namespace CSGL
     public unsafe class Window3D : Window
     {
         public Window3D(int width, int height, string title)
-            : base(width, height, title, false)
+            : base(width, height, title)
         {
             postShader = new PostProcessing(width, height);
 

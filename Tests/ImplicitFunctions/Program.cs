@@ -19,7 +19,7 @@ namespace ImplicitFunctions
         }
 
         public Program(int width, int height, string title)
-            : base(width, height, title, false)
+            : base(width, height, title)
         {
             _drawable = new DrawObject<double, byte>(new double[]
             {

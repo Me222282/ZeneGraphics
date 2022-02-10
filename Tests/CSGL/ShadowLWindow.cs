@@ -13,7 +13,7 @@ namespace CSGL
     public unsafe class ShadowLWindow : Window
     {
         public ShadowLWindow(int width, int height, string title)
-            : base(width, height, title, false)
+            : base(width, height, title)
         {
             postProcess = new PostProcessing(width, height);
 
