@@ -138,23 +138,23 @@ namespace Zene.Structs
         public Vector2 MultiplyMatrix(Matrix2x3 matrix)
         {
             return new Vector2(
-                (matrix[0, 0] * X) + (matrix[1, 0] * Y) + (matrix[2, 0] * Z),
-                (matrix[0, 1] * X) + (matrix[1, 1] * Y) + (matrix[2, 1] * Z));
+                (matrix[0, 0] * X) + (matrix[0, 1] * Y) + (matrix[0, 2] * Z),
+                (matrix[1, 0] * X) + (matrix[1, 1] * Y) + (matrix[1, 2] * Z));
         }
         public Vector3 MultiplyMatrix(Matrix3 matrix)
         {
             return new Vector3(
-                (matrix[0, 0] * X) + (matrix[1, 0] * Y) + (matrix[2, 0] * Z),
-                (matrix[0, 1] * X) + (matrix[1, 1] * Y) + (matrix[2, 1] * Z),
-                (matrix[0, 2] * X) + (matrix[1, 2] * Y) + (matrix[2, 2] * Z));
+                (matrix[0, 0] * X) + (matrix[0, 1] * Y) + (matrix[0, 2] * Z),
+                (matrix[1, 0] * X) + (matrix[1, 1] * Y) + (matrix[1, 2] * Z),
+                (matrix[2, 0] * X) + (matrix[2, 1] * Y) + (matrix[2, 2] * Z));
         }
         public Vector4 MultiplyMatrix(Matrix4x3 matrix)
         {
             return new Vector4(
-                (matrix[0, 0] * X) + (matrix[1, 0] * Y) + (matrix[2, 0] * Z),
-                (matrix[0, 1] * X) + (matrix[1, 1] * Y) + (matrix[2, 1] * Z),
-                (matrix[0, 2] * X) + (matrix[1, 2] * Y) + (matrix[2, 2] * Z),
-                (matrix[0, 3] * X) + (matrix[1, 3] * Y) + (matrix[2, 3] * Z));
+                (matrix[0, 0] * X) + (matrix[0, 1] * Y) + (matrix[0, 2] * Z),
+                (matrix[1, 0] * X) + (matrix[1, 1] * Y) + (matrix[1, 2] * Z),
+                (matrix[2, 0] * X) + (matrix[2, 1] * Y) + (matrix[2, 2] * Z),
+                (matrix[3, 0] * X) + (matrix[3, 1] * Y) + (matrix[3, 2] * Z));
         }
 
         public override string ToString()

@@ -558,23 +558,23 @@ namespace Zene.Structs
             return CreateScale(scale.X, scale.Y, scale.Z);
         }
 
-        public static Matrix3x4 CreateTranslation(double xyz)
+        public static Matrix3x4 CreateTranslation(double xy)
         {
             return new Matrix3x4(
-                new Vector4(1, 0, 0, xyz),
-                new Vector4(0, 1, 0, xyz),
-                new Vector4(0, 0, 1, xyz));
+                new Vector4(1, 0, 0, 0),
+                new Vector4(0, 1, 0, 0),
+                new Vector4(xy, xy, 1, 0));
         }
-        public static Matrix3x4 CreateTranslation(double x, double y, double z)
+        public static Matrix3x4 CreateTranslation(double x, double y)
         {
             return new Matrix3x4(
-                new Vector4(1, 0, 0, x),
-                new Vector4(0, 1, 0, y),
-                new Vector4(0, 0, 1, z));
+                new Vector4(1, 0, 0, 0),
+                new Vector4(0, 1, 0, 0),
+                new Vector4(x, y, 1, 0));
         }
-        public static Matrix3x4 CreateTranslation(Vector3 xyz)
+        public static Matrix3x4 CreateTranslation(Vector2 xy)
         {
-            return CreateTranslation(xyz.X, xyz.Y, xyz.Z);
+            return CreateTranslation(xy.X, xy.Y);
         }
 
         public static implicit operator Matrix3x4(Matrix3x4<double> matrix)

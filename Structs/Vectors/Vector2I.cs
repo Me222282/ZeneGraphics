@@ -111,23 +111,23 @@ namespace Zene.Structs
         public Vector2I MultiplyMatrix(Matrix2 matrix)
         {
             return new Vector2I(
-                (matrix[0, 0] * X) + (matrix[1, 0] * Y),
-                (matrix[0, 1] * X) + (matrix[1, 1] * Y));
+                (matrix[0, 0] * X) + (matrix[0, 1] * Y),
+                (matrix[1, 0] * X) + (matrix[1, 1] * Y));
         }
         public Vector3I MultiplyMatrix(Matrix3x2 matrix)
         {
             return new Vector3I(
-                (matrix[0, 0] * X) + (matrix[1, 0] * Y),
-                (matrix[0, 1] * X) + (matrix[1, 1] * Y),
-                (matrix[0, 2] * X) + (matrix[1, 2] * Y));
+                (matrix[0, 0] * X) + (matrix[0, 1] * Y),
+                (matrix[1, 0] * X) + (matrix[1, 1] * Y),
+                (matrix[2, 0] * X) + (matrix[2, 1] * Y));
         }
         public Vector4I MultiplyMatrix(Matrix4x2 matrix)
         {
             return new Vector4I(
-                (matrix[0, 0] * X) + (matrix[1, 0] * Y),
-                (matrix[0, 1] * X) + (matrix[1, 1] * Y),
-                (matrix[0, 2] * X) + (matrix[1, 2] * Y),
-                (matrix[0, 3] * X) + (matrix[1, 3] * Y));
+                (matrix[0, 0] * X) + (matrix[0, 0] * Y),
+                (matrix[1, 0] * X) + (matrix[1, 0] * Y),
+                (matrix[2, 0] * X) + (matrix[2, 0] * Y),
+                (matrix[3, 0] * X) + (matrix[3, 0] * Y));
         }
 
         public Vector2I Rotated90()

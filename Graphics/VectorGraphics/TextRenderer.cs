@@ -179,6 +179,9 @@ namespace Zene.Graphics
             compText = compText.Replace("\a", "");
             compText = compText.Replace("\u0027", "");
 
+            // No visable characters are drawn
+            if (compText == "") { return; }
+
             if (compText.Length > _capacity && !AutoIncreaseCapacity)
             {
                 throw new Exception($"{nameof(text)} has too many drawable characters. Must be less than, or equal to, {nameof(Capacity)} (White space doesn't count).");
@@ -298,6 +301,9 @@ namespace Zene.Graphics
             compText = compText.Replace("\0", "");
             compText = compText.Replace("\a", "");
             compText = compText.Replace("\u0027", "");
+
+            // No visable characters are drawn
+            if (compText == "") { return; }
 
             if (compText.Length > _capacity && !AutoIncreaseCapacity)
             {

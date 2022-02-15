@@ -5,15 +5,33 @@ namespace Zene.Windowing
 {
     public static class Core
     {
+#if AutoInit
+        static Core()
+        {
+            Init();
+        }
+#endif
+
+        private static bool _initialised = false;
         public static void Init()
         {
+            if (_initialised) { return; }
+
             if (GLFW.Init() == GLFW.False)
             {
                 throw new InvalidOperationException("Failed to initialize GLFW.");
             }
+
+            _initialised = true;
         }
 
-        public static void Terminate() => GLFW.Terminate();
+        public static void Terminate()
+        {
+            if (!_initialised) { return; }
+
+            GLFW.Terminate();
+            _initialised = false;
+        }
 
         public static void SetInitProperties(WindowInitProperties properties)
         {

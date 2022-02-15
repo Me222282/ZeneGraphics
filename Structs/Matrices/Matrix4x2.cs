@@ -464,6 +464,27 @@ namespace Zene.Structs
             return CreateScale(scale.X, scale.Y);
         }
 
+        public static Matrix4x2 CreateTranslation(double xy)
+        {
+            return new Matrix4x2(
+                new Vector2(1, 0),
+                new Vector2(0, 1),
+                Vector2.Zero,
+                new Vector2(xy, xy));
+        }
+        public static Matrix4x2 CreateTranslation(double x, double y)
+        {
+            return new Matrix4x2(
+                new Vector2(1, 0),
+                new Vector2(0, 1),
+                Vector2.Zero,
+                new Vector2(x, y));
+        }
+        public static Matrix4x2 CreateTranslation(Vector2 xy)
+        {
+            return CreateTranslation(xy.X, xy.Y);
+        }
+
         public static implicit operator Matrix4x2(Matrix4x2<double> matrix)
         {
             return new Matrix4x2(matrix.Data);
