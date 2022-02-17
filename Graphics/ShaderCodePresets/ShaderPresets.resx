@@ -119,39 +119,39 @@
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="BasicFragment" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\shaderpresets\fragmentshaderb.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>.\fragmentshaderb.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="BasicVertex" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\ShaderPresets\VertexShaderB.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>.\VertexShaderB.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="DepthMapFragment" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\shaderpresets\fragmentshaderdm.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>.\fragmentshaderdm.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="DepthMapVertex" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\shaderpresets\vertexshaderdm.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>.\vertexshaderdm.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="LightingFragment" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\shaderpresets\fragmentshaderl.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>.\fragmentshaderl.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="LightingVertex" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\shaderpresets\vertexshaderl.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>.\vertexshaderl.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="PostFragment" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\ShaderPresets\FragmentShaderP.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>.\FragmentShaderP.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="PostVertex" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\ShaderPresets\VertexShaderP.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>.\VertexShaderP.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="TextEditFrag" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\ShaderPresets\TextEditFrag.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>.\TextEditFrag.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="TextEditVert" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\shaderpresets\texteditvert.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>.\texteditvert.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="TextFrag" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\shaderpresets\textfrag.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>.\textfrag.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="TextVert" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\shaderpresets\textvert.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>.\textvert.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>
