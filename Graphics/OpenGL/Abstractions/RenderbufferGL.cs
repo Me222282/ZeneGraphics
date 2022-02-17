@@ -45,24 +45,16 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.0)]
         public void Bind()
         {
+            if (this.Bound()) { return; }
+
             GL.BindRenderbuffer(GLEnum.Renderbuffer, Id);
         }
         [OpenGLSupport(3.0)]
-        public void UnBind()
+        public void Unbind()
         {
             if (!this.Bound()) { return; }
 
             GL.BindRenderbuffer(GLEnum.Renderbuffer, 0);
-        }
-        /// <summary>
-        /// Sets the OpenGL context to referance this object.
-        /// </summary>
-        public void SetGLContext()
-        {
-            if (!this.Bound())
-            {
-                Bind();
-            }
         }
 
         /// <summary>
@@ -74,7 +66,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.0)]
         public void RenderbufferStorage(TextureFormat intFormat, int width, int height)
         {
-            SetGLContext();
+            Bind();
             GL.RenderbufferStorage(GLEnum.Renderbuffer, (uint)intFormat, width, height);
 
             InternalFormat = intFormat;
@@ -90,7 +82,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.0)]
         public void RenderbufferStorageMultisample(TextureFormat intFormat, int samples, int width, int height)
         {
-            SetGLContext();
+            Bind();
             GL.RenderbufferStorageMultisample(GLEnum.Renderbuffer, samples, (uint)intFormat, width, height);
 
             InternalFormat = intFormat;
@@ -106,7 +98,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.0)]
         public int GetWidth()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferWidth, &output);
@@ -120,7 +112,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.0)]
         public int GetHeight()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferHeight, &output);
@@ -134,7 +126,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.0)]
         public int GetSamples()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferSamples, &output);
@@ -148,7 +140,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.0)]
         public int GetRedSize()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferRedSize, &output);
@@ -162,7 +154,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.0)]
         public int GetGreenSize()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferGreenSize, &output);
@@ -176,7 +168,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.0)]
         public int GetBlueSize()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferBlueSize, &output);
@@ -190,7 +182,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.0)]
         public int GetAlphaSize()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferAlphaSize, &output);
@@ -204,7 +196,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.0)]
         public int GetDepthSize()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferDepthSize, &output);
@@ -218,7 +210,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.0)]
         public int GetStencilSize()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferStencilSize, &output);

@@ -115,8 +115,8 @@ namespace CSGL
 
             wallSide.Draw();
 
-            wallTexture.UnBind();
-            wallNormal.UnBind();
+            wallTexture.Unbind();
+            wallNormal.Unbind();
 
 
             wallTopTexture.Bind(TexTexSlot);
@@ -124,8 +124,8 @@ namespace CSGL
 
             wallTop.Draw();
 
-            wallTopTexture.UnBind();
-            wallTopNormal.UnBind();
+            wallTopTexture.Unbind();
+            wallTopNormal.Unbind();
 
 
             floorTexture.Bind(TexTexSlot);
@@ -133,8 +133,8 @@ namespace CSGL
 
             floor.Draw();
 
-            floorTexture.UnBind();
-            floorNormal.UnBind();
+            floorTexture.Unbind();
+            floorNormal.Unbind();
         }
 
         private static readonly Vector3[] wallVerts = new Vector3[]

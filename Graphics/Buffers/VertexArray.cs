@@ -69,8 +69,8 @@ namespace Zene.Graphics
 
             AddBuffer(ad);
 
-            if (!bound) { UnBind(); }
-            if (!bBound) { buffer.UnBind(); }
+            if (!bound) { Unbind(); }
+            if (!bBound) { buffer.Unbind(); }
         }
 
         private static void AddBuffer(VertexAttrib data)
@@ -90,7 +90,7 @@ namespace Zene.Graphics
 
             Bind();
             foreach (VertexAttrib d in data) { AddBuffer(d); }
-            UnBind();
+            Unbind();
             GL.BindBuffer(GLEnum.ArrayBuffer, 0);
 
             _dataCreated = true;
@@ -100,7 +100,7 @@ namespace Zene.Graphics
         {
             if (!DataCreated) { return; }
 
-            UnBind();
+            Unbind();
             GL.DeleteVertexArray(Id);
 
             Id = 0;
@@ -115,7 +115,7 @@ namespace Zene.Graphics
             _bound = true;
         }
 
-        public override void UnBind()
+        public override void Unbind()
         {
             GL.BindVertexArray(0);
 

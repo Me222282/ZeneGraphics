@@ -83,7 +83,7 @@ namespace PhysicsTest
             _disposed = true;
             GC.SuppressFinalize(this);
         }
-        public void UnBind()
+        public void Unbind()
         {
             GL.UseProgram(0);
         }
@@ -133,7 +133,7 @@ namespace PhysicsTest
             _texture.Bind(0);
             _drawable.Draw();
 
-            _shader.UnBind();
+            _shader.Unbind();
         }
 
         private bool _disposed = false;

@@ -58,7 +58,7 @@ namespace PhysicsTest
             {
                 GLFW.PollEvents();
 
-                IFrameBuffer.Clear(BufferBit.Colour);
+                Framebuffer.Clear(BufferBit.Colour);
 
                 _textDraw.DrawLeftBound($"Count:{count:N3}", _font, -0.15, 0);
                 count += 0.001;
@@ -74,7 +74,7 @@ namespace PhysicsTest
             _textDraw.Projection = Matrix4.CreateOrthographic(e.Width, e.Height, 0, -1);
             _textDraw.Model = Matrix4.CreateScale(30, 30, 1) * Matrix4.CreateTranslation(-e.Width * 0.5, e.Height * 0.5, 0);
 
-            IFrameBuffer.View((int)e.Width, (int)e.Height);
+            Framebuffer.ViewSize = new Vector2I((int)e.Width, (int)e.Height);
         }
     }
 }

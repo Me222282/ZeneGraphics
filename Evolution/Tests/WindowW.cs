@@ -48,6 +48,9 @@ namespace EvolutionTest
                 _frames[i] = Program.ImportFrames(frameData[i], out _frameCount[i], out _lifeCount[i], out _worldSize[i]);
             }
 
+            // Set Framebuffer's clear colour to light-grey
+            BaseFramebuffer.ClearColour = new Colour(225, 225, 225);
+
             OnSizePixelChange(new SizeChangeEventArgs(width, height));
         }
 
@@ -119,7 +122,7 @@ namespace EvolutionTest
             _shader.Matrix2 = Matrix4.CreateTranslation((_worldSize[_vidCounter] / -2) + 0.5, (_worldSize[_vidCounter] / -2) + 0.5, 0);
 
             // Clear screen light-grey
-            IFrameBuffer.ClearColour(new Colour(225, 225, 225));
+            Framebuffer.Clear(BufferBit.Colour);
 
             for (int l = 0; l < _lifeCount[_vidCounter]; l++)
             {
@@ -139,7 +142,7 @@ namespace EvolutionTest
             base.OnSizePixelChange(e);
 
             // Set drawing view
-            IFrameBuffer.View((int)e.Width, (int)e.Height);
+            Framebuffer.ViewSize = new Vector2I((int)e.Width, (int)e.Height);
 
             int w;
             int h;

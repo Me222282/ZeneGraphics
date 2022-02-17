@@ -33,24 +33,7 @@ namespace Zene.Graphics.OpenGL
         public TextureTarget Target { get; }
         public TextureFormat InternalFormat { get; private set; }
 
-        public uint ReferanceSlot { get; private set; }
-        /// <summary>
-        /// Sets the OpenGL context to referance this object.
-        /// </summary>
-        public void SetGLContext()
-        {
-            // Bind if not bound
-            if (!this.Bound())
-            {
-                Bind();
-                return;
-            }
-            // Set active texture to referance
-            if (State.ActiveTexture != ReferanceSlot)
-            {
-                State.ActiveTexture = ReferanceSlot;
-            }
-        }
+        public uint ReferanceSlot { get; private set; } = 0;
 
         private bool _disposed;
         public void Dispose()
@@ -69,15 +52,27 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void Bind()
         {
-            GL.BindTexture((uint)Target, Id);
+            if (this.Bound(State.ActiveTexture)) { return; }
+
+            GL.ActiveTexture(GLEnum.Texture0 + State.ActiveTexture);
             ReferanceSlot = State.ActiveTexture;
+            GL.BindTexture((uint)Target, Id);
         }
         [OpenGLSupport(1.3)]
         public void Bind(uint slot)
         {
-            GL.ActiveTexture(GLEnum.Texture0 + slot);
-            ReferanceSlot = slot;
-            GL.BindTexture((uint)Target, Id);
+            if (!this.Bound(slot))
+            {
+                GL.ActiveTexture(GLEnum.Texture0 + slot);
+                ReferanceSlot = slot;
+                GL.BindTexture((uint)Target, Id);
+                return;
+            }
+
+            if (State.ActiveTexture != slot)
+            {
+                GL.ActiveTexture(GLEnum.Texture0 + slot);
+            }
         }
         /// <summary>
         /// Bind the texture to a image unit.
@@ -86,8 +81,17 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(4.5)]
         public void BindUnit(uint unit)
         {
-            ReferanceSlot = unit;
-            GL.BindTextureUnit(unit, this);
+            if (!this.Bound(unit))
+            {
+                ReferanceSlot = unit;
+                GL.BindTextureUnit((uint)Target, this);
+                return;
+            }
+
+            if (State.ActiveTexture != unit)
+            {
+                GL.ActiveTexture(GLEnum.Texture0 + unit);
+            }
         }
         /// <summary>
         /// Bind a level of the texture to an image unit.
@@ -104,7 +108,7 @@ namespace Zene.Graphics.OpenGL
             GL.BindImageTexture(unit, this, level, layered, layer, (uint)access, (uint)InternalFormat);
         }
         [OpenGLSupport(1.1)]
-        public void UnBind()
+        public void Unbind()
         {
             if (!this.Bound()) { return; }
 
@@ -157,7 +161,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexImage1D<T>(int level, TextureFormat intFormat, int size, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexImage1D((uint)Target, level, (uint)intFormat, size, 0, data.Size * sizeof(T), data);
 
             InternalFormat = intFormat;
@@ -184,7 +188,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexImage1D<T>(int level, TextureFormat intFormat, int size, int imageSize, T* data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexImage1D((uint)Target, level, (uint)intFormat, size, 0, imageSize, data);
 
             InternalFormat = intFormat;
@@ -201,7 +205,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexImage1D(int level, TextureFormat intFormat, int size, int imageSize, IntPtr data)
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexImage1D((uint)Target, level, (uint)intFormat, size, 0, imageSize, data.ToPointer());
 
             InternalFormat = intFormat;
@@ -219,7 +223,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexImage2D<T>(int level, TextureFormat intFormat, int width, int height, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexImage2D((uint)Target, level, (uint)intFormat, width, height, 0, data.Size * sizeof(T), data);
 
             InternalFormat = intFormat;
@@ -237,7 +241,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexImage2D<T>(CubeMapFace target, int level, TextureFormat intFormat, int width, int height, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexImage2D((uint)target, level, (uint)intFormat, width, height, 0, data.Size * sizeof(T), data);
 
             InternalFormat = intFormat;
@@ -255,7 +259,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexImage2D<T>(int level, TextureFormat intFormat, int width, int height, int imageSize, T* data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexImage2D((uint)Target, level, (uint)intFormat, width, height, 0, imageSize, data);
 
             InternalFormat = intFormat;
@@ -274,7 +278,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexImage2D<T>(CubeMapFace target, int level, TextureFormat intFormat, int width, int height, int imageSize, T* data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexImage2D((uint)target, level, (uint)intFormat, width, height, 0, imageSize, data);
 
             InternalFormat = intFormat;
@@ -292,7 +296,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexImage2D(int level, TextureFormat intFormat, int width, int height, int imageSize, IntPtr data)
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexImage2D((uint)Target, level, (uint)intFormat, width, height, 0, imageSize, data.ToPointer());
 
             InternalFormat = intFormat;
@@ -311,7 +315,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexImage2D(CubeMapFace target, int level, TextureFormat intFormat, int width, int height, int imageSize, IntPtr data)
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexImage2D((uint)target, level, (uint)intFormat, width, height, 0, imageSize, data.ToPointer());
 
             InternalFormat = intFormat;
@@ -331,7 +335,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexImage3D<T>(int level, TextureFormat intFormat, int width, int height, int depth, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexImage3D((uint)Target, level, (uint)intFormat, width, height, depth, 0, data.Size * sizeof(T), data);
 
             InternalFormat = intFormat;
@@ -362,7 +366,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexImage3D<T>(int level, TextureFormat intFormat, int width, int height, int depth, int imageSize, T* data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexImage3D((uint)Target, level, (uint)intFormat, width, height, depth, 0, imageSize, data);
 
             InternalFormat = intFormat;
@@ -393,7 +397,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexImage3D(int level, TextureFormat intFormat, int width, int height, int depth, int imageSize, IntPtr data)
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexImage3D((uint)Target, level, (uint)intFormat, width, height, depth, 0, imageSize, data.ToPointer());
 
             InternalFormat = intFormat;
@@ -410,7 +414,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexSubImage1D<T>(int level, int offset, int size, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexSubImage1D((uint)Target, level, offset, size, (uint)InternalFormat, data.Size * sizeof(T), data);
         }
         /// <summary>
@@ -425,7 +429,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexSubImage1D<T>(int level, int offset, int size, int imageSize, T* data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexSubImage1D((uint)Target, level, offset, size, (uint)InternalFormat, imageSize, data);
         }
         /// <summary>
@@ -440,7 +444,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexSubImage1D(int level, int offset, int size, int imageSize, IntPtr data)
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexSubImage1D((uint)Target, level, offset, size, (uint)InternalFormat, imageSize, data.ToPointer());
         }
 
@@ -457,7 +461,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexSubImage2D<T>(int level, int xOffset, int yOffset, int width, int height, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexSubImage2D((uint)Target, level, xOffset, yOffset, width, height, (uint)InternalFormat, data.Size * sizeof(T), data);
         }
         /// <summary>
@@ -474,7 +478,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexSubImage2D<T>(int level, int xOffset, int yOffset, int width, int height, int imageSize, T* data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexSubImage2D((uint)Target, level, xOffset, yOffset, width, height, (uint)InternalFormat, imageSize, data);
         }
         /// <summary>
@@ -491,7 +495,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexSubImage2D(int level, int xOffset, int yOffset, int width, int height, int imageSize, IntPtr data)
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexSubImage2D((uint)Target, level, xOffset, yOffset, width, height, (uint)InternalFormat, imageSize, data.ToPointer());
         }
         /// <summary>
@@ -507,7 +511,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexSubImage2D<T>(CubeMapFace target, int level, int xOffset, int yOffset, int width, int height, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexSubImage2D((uint)target, level, xOffset, yOffset, width, height, (uint)InternalFormat, data.Size * sizeof(T), data);
         }
         /// <summary>
@@ -524,7 +528,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexSubImage2D<T>(CubeMapFace target, int level, int xOffset, int yOffset, int width, int height, int imageSize, T* data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexSubImage2D((uint)target, level, xOffset, yOffset, width, height, (uint)InternalFormat, imageSize, data);
         }
         /// <summary>
@@ -541,7 +545,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexSubImage2D(CubeMapFace target, int level, int xOffset, int yOffset, int width, int height, int imageSize, IntPtr data)
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexSubImage2D((uint)target, level, xOffset, yOffset, width, height, (uint)InternalFormat, imageSize, data.ToPointer());
         }
 
@@ -560,7 +564,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexSubImage3D<T>(int level, int xOffset, int yOffset, int zOffset, int width, int height, int depth, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexSubImage3D((uint)Target, level, xOffset, yOffset, zOffset, width, height, depth, (uint)InternalFormat, data.Size * sizeof(T), data);
         }
         /// <summary>
@@ -579,7 +583,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexSubImage3D<T>(int level, int xOffset, int yOffset, int zOffset, int width, int height, int depth, int imageSize, T* data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexSubImage3D((uint)Target, level, xOffset, yOffset, zOffset, width, height, depth, (uint)InternalFormat, imageSize, data);
         }
         /// <summary>
@@ -598,7 +602,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public void CompressedTexSubImage3D(int level, int xOffset, int yOffset, int zOffset, int width, int height, int depth, int imageSize, IntPtr data)
         {
-            SetGLContext();
+            Bind();
             GL.CompressedTexSubImage3D((uint)Target, level, xOffset, yOffset, zOffset, width, height, depth, (uint)InternalFormat, imageSize, data.ToPointer());
         }
 
@@ -674,7 +678,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void CopyTexImage1D(int level, TextureFormat intFormat, int x, int y, int size)
         {
-            SetGLContext();
+            Bind();
             GL.CopyTexImage1D((uint)Target, level, (uint)intFormat, x, y, size, 0);
 
             InternalFormat = intFormat;
@@ -691,7 +695,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void CopyTexImage2D(int level, TextureFormat intFormat, int x, int y, int width, int height)
         {
-            SetGLContext();
+            Bind();
             GL.CopyTexImage2D((uint)Target, level, (uint)intFormat, x, y, width, height, 0);
 
             InternalFormat = intFormat;
@@ -709,7 +713,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void CopyTexImage2D(CubeMapFace target, int level, TextureFormat intFormat, int x, int y, int width, int height)
         {
-            SetGLContext();
+            Bind();
             GL.CopyTexImage2D((uint)target, level, (uint)intFormat, x, y, width, height, 0);
 
             InternalFormat = intFormat;
@@ -726,7 +730,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void CopyTexSubImage1D(int level, int offset, int x, int y, int width)
         {
-            SetGLContext();
+            Bind();
             GL.CopyTexSubImage1D((uint)Target, level, offset, x, y, width);
         }
         /// <summary>
@@ -742,7 +746,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void CopyTexSubImage2D(int level, int xOffset, int yOffset, int x, int y, int width, int height)
         {
-            SetGLContext();
+            Bind();
             GL.CopyTexSubImage2D((uint)Target, level, xOffset, yOffset, x, y, width, height);
         }
         /// <summary>
@@ -758,7 +762,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void CopyTexSubImage2D(CubeMapFace target, int level, int xOffset, int yOffset, int x, int y, int width, int height)
         {
-            SetGLContext();
+            Bind();
             GL.CopyTexSubImage2D((uint)target, level, xOffset, yOffset, x, y, width, height);
         }
         /// <summary>
@@ -775,7 +779,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.2)]
         public void CopyTexSubImage3D(int level, int xOffset, int yOffset, int zOffset, int x, int y, int width, int height)
         {
-            SetGLContext();
+            Bind();
             GL.CopyTexSubImage3D((uint)Target, level, xOffset, yOffset, zOffset, x, y, width, height);
         }
 
@@ -789,7 +793,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public T[] GetCompressedTexImage<T>(int level, int bufferSize) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             T[] output = new T[bufferSize / sizeof(T)];
 
             fixed (T* pixelData = &output[0])
@@ -818,7 +822,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(4.5)]
         public T[] GetCompressedTextureSubImage<T>(int level, int xOffset, int yOffset, int zOffset, int width, int height, int depth, int bufferSize) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             T[] output = new T[bufferSize / sizeof(T)];
 
             fixed (T* pixelData = &output[0])
@@ -838,7 +842,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.3)]
         public T[] GetCompressedTexImage<T>(CubeMapFace target, int level, int bufferSize) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             T[] output = new T[bufferSize / sizeof(T)];
 
             fixed (T* pixelData = &output[0])
@@ -867,7 +871,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(4.5)]
         public T[] GetCompressedTextureSubImage<T>(CubeMapFace target, int level, int xOffset, int yOffset, int zOffset, int width, int height, int depth, int bufferSize) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             T[] output = new T[bufferSize / sizeof(T)];
 
             fixed (T* pixelData = &output[0])
@@ -889,7 +893,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.0)]
         public GLArray<T> GetTexImage<T>(int level, BaseFormat format, TextureData type) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GLArray<T> output = new GLArray<T>(
                 (GetWidth(level) * format.GetSize() * type.GetSize()) / sizeof(T),
                 GetHeight(level), GetDepth(level));
@@ -910,7 +914,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.0)]
         public GLArray<T> GetTexImage<T>(CubeMapFace face, int level, BaseFormat format, TextureData type) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GLArray<T> output = new GLArray<T>(
                 (GetWidth(level) * format.GetSize() * type.GetSize()) / sizeof(T),
                 GetHeight(level), GetDepth(level));
@@ -953,7 +957,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.0)]
         public void GenerateMipmap()
         {
-            SetGLContext();
+            Bind();
             GL.GenerateMipmap((uint)Target);
         }
 
@@ -964,7 +968,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(4.3)]
         public void InvalidateTexImage(int level)
         {
-            SetGLContext();
+            Bind();
             GL.InvalidateTexImage(Id, level);
         }
         /// <summary>
@@ -980,7 +984,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(4.3)]
         public void InvalidateTexSubImage(int level, int xOffset, int yOffset, int zOffset, int width, int height, int depth)
         {
-            SetGLContext();
+            Bind();
             GL.InvalidateTexSubImage(Id, level, xOffset, yOffset, zOffset, width, height, depth);
         }
 
@@ -992,7 +996,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.1)]
         public void TexBuffer(IBuffer buffer, TextureFormat intFormat)
         {
-            SetGLContext();
+            Bind();
             GL.TexBuffer((uint)Target, (uint)intFormat, buffer.Id);
 
             InternalFormat = intFormat;
@@ -1007,7 +1011,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(4.3)]
         public void TexBufferRange(IBuffer buffer, TextureFormat intFormat, int offset, int size)
         {
-            SetGLContext();
+            Bind();
             GL.TexBufferRange((uint)Target, (uint)intFormat, buffer.Id, offset, size);
 
             InternalFormat = intFormat;
@@ -1026,7 +1030,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.0)]
         public void TexImage1D<T>(int level, TextureFormat intFormat, int size, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexImage1D((uint)Target, level, (int)intFormat, size, 0, (uint)format, (uint)type, dataPtr);
 
             InternalFormat = intFormat;
@@ -1044,7 +1048,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.0)]
         public void TexImage1D(int level, TextureFormat intFormat, int size, BaseFormat format, TextureData type, IntPtr dataPtr)
         {
-            SetGLContext();
+            Bind();
             GL.TexImage1D((uint)Target, level, (int)intFormat, size, 0, (uint)format, (uint)type, dataPtr.ToPointer());
 
             InternalFormat = intFormat;
@@ -1062,7 +1066,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.0)]
         public void TexImage1D<T>(int level, TextureFormat intFormat, int size, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexImage1D((uint)Target, level, (int)intFormat, size, 0, (uint)format, (uint)type, data);
 
             InternalFormat = intFormat;
@@ -1084,7 +1088,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.0)]
         public void TexImage2D<T>(int level, TextureFormat intFormat, int width, int height, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexImage2D((uint)Target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr);
 
             InternalFormat = intFormat;
@@ -1106,7 +1110,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.0)]
         public void TexImage2D<T>(CubeMapFace target, int level, TextureFormat intFormat, int width, int height, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexImage2D((uint)target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr);
 
             InternalFormat = intFormat;
@@ -1127,7 +1131,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.0)]
         public void TexImage2D(int level, TextureFormat intFormat, int width, int height, BaseFormat format, TextureData type, IntPtr dataPtr)
         {
-            SetGLContext();
+            Bind();
             GL.TexImage2D((uint)Target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr.ToPointer());
 
             InternalFormat = intFormat;
@@ -1149,7 +1153,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.0)]
         public void TexImage2D(CubeMapFace target, int level, TextureFormat intFormat, int width, int height, BaseFormat format, TextureData type, IntPtr dataPtr)
         {
-            SetGLContext();
+            Bind();
             GL.TexImage2D((uint)target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr.ToPointer());
 
             InternalFormat = intFormat;
@@ -1170,7 +1174,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.0)]
         public void TexImage2D<T>(int level, TextureFormat intFormat, int width, int height, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexImage2D((uint)Target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, data);
 
             InternalFormat = intFormat;
@@ -1192,7 +1196,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.0)]
         public void TexImage2D<T>(CubeMapFace target, int level, TextureFormat intFormat, int width, int height, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexImage2D((uint)target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, data);
 
             InternalFormat = intFormat;
@@ -1212,7 +1216,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.2)]
         public void TexImage2DMultisample(int samples, TextureFormat intFormat, int width, int height, bool fixedsampleLocations)
         {
-            SetGLContext();
+            Bind();
             GL.TexImage2DMultisample((uint)Target, samples, (uint)intFormat, width, height, fixedsampleLocations);
 
             InternalFormat = intFormat;
@@ -1234,7 +1238,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.2)]
         public void TexImage3D<T>(int level, TextureFormat intFormat, int width, int height, int depth, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexImage3D((uint)Target, level, (int)intFormat, width, height, depth, 0, (uint)format, (uint)type, dataPtr);
 
             InternalFormat = intFormat;
@@ -1255,7 +1259,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.2)]
         public void TexImage3D(int level, TextureFormat intFormat, int width, int height, int depth, BaseFormat format, TextureData type, IntPtr dataPtr)
         {
-            SetGLContext();
+            Bind();
             GL.TexImage3D((uint)Target, level, (int)intFormat, width, height, depth, 0, (uint)format, (uint)type, dataPtr.ToPointer());
 
             InternalFormat = intFormat;
@@ -1276,7 +1280,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.2)]
         public void TexImage3D<T>(int level, TextureFormat intFormat, int width, int height, int depth, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexImage3D((uint)Target, level, (int)intFormat, width, height, depth, 0, (uint)format, (uint)type, data);
 
             InternalFormat = intFormat;
@@ -1297,7 +1301,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(3.2)]
         public void TexImage3DMultisample(int samples, TextureFormat intFormat, int width, int height, int depth, bool fixedsampleLocations)
         {
-            SetGLContext();
+            Bind();
             GL.TexImage3DMultisample((uint)Target, samples, (uint)intFormat, width, height, depth, fixedsampleLocations);
 
             InternalFormat = intFormat;
@@ -1312,7 +1316,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(4.2)]
         public void TexStorage1D(int levels, TextureFormat intFormat, int size)
         {
-            SetGLContext();
+            Bind();
             GL.TexStorage1D((uint)Target, levels, (uint)intFormat, size);
 
             InternalFormat = intFormat;
@@ -1327,7 +1331,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(4.2)]
         public void TexStorage2D(int levels, TextureFormat intFormat, int width, int height)
         {
-            SetGLContext();
+            Bind();
             GL.TexStorage2D((uint)Target, levels, (uint)intFormat, width, height);
 
             InternalFormat = intFormat;
@@ -1343,7 +1347,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(4.2)]
         public void TexStorage2D(CubeMapFace target, int levels, TextureFormat intFormat, int width, int height)
         {
-            SetGLContext();
+            Bind();
             GL.TexStorage2D((uint)target, levels, (uint)intFormat, width, height);
 
             InternalFormat = intFormat;
@@ -1360,7 +1364,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(4.3)]
         public void TexStorage2DMultisample(int samples, TextureFormat intFormat, int width, int height, bool fixedsampleLocations)
         {
-            SetGLContext();
+            Bind();
             GL.TexStorage2DMultisample((uint)Target, samples, (uint)intFormat, width, height, fixedsampleLocations);
 
             InternalFormat = intFormat;
@@ -1377,7 +1381,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(4.2)]
         public void TexStorage3D(int levels, TextureFormat intFormat, int width, int height, int depth)
         {
-            SetGLContext();
+            Bind();
             GL.TexStorage3D((uint)Target, levels, (uint)intFormat, width, height, depth);
 
             InternalFormat = intFormat;
@@ -1397,7 +1401,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(4.3)]
         public void TexStorage3DMultisample(int samples, TextureFormat intFormat, int width, int height, int depth, bool fixedsampleLocations)
         {
-            SetGLContext();
+            Bind();
             GL.TexStorage3DMultisample((uint)Target, samples, (uint)intFormat, width, height, depth, fixedsampleLocations);
 
             InternalFormat = intFormat;
@@ -1415,7 +1419,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void TexSubImage1D<T>(int level, int offset, int size, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexSubImage1D((uint)Target, level, offset, size, (uint)format, (uint)type, dataPtr);
         }
         /// <summary>
@@ -1430,7 +1434,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void TexSubImage1D(int level, int offset, int size, BaseFormat format, TextureData type, IntPtr dataPtr)
         {
-            SetGLContext();
+            Bind();
             GL.TexSubImage1D((uint)Target, level, offset, size, (uint)format, (uint)type, dataPtr.ToPointer());
         }
         /// <summary>
@@ -1445,7 +1449,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void TexSubImage1D<T>(int level, int offset, int size, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexSubImage1D((uint)Target, level, offset, size, (uint)format, (uint)type, data);
         }
 
@@ -1463,7 +1467,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void TexSubImage2D<T>(int level, int xOffset, int yOffset, int width, int height, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexSubImage2D((uint)Target, level, xOffset, yOffset, width, height, (uint)format, (uint)type, dataPtr);
         }
         /// <summary>
@@ -1480,7 +1484,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void TexSubImage2D(int level, int xOffset, int yOffset, int width, int height, BaseFormat format, TextureData type, IntPtr dataPtr)
         {
-            SetGLContext();
+            Bind();
             GL.TexSubImage2D((uint)Target, level, xOffset, yOffset, width, height, (uint)format, (uint)type, dataPtr.ToPointer());
         }
         /// <summary>
@@ -1497,7 +1501,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void TexSubImage2D<T>(int level, int xOffset, int yOffset, int width, int height, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexSubImage2D((uint)Target, level, xOffset, yOffset, width, height, (uint)format, (uint)type, data);
         }
         /// <summary>
@@ -1514,7 +1518,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void TexSubImage2D<T>(CubeMapFace target, int level, int xOffset, int yOffset, int width, int height, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexSubImage2D((uint)target, level, xOffset, yOffset, width, height, (uint)format, (uint)type, dataPtr);
         }
         /// <summary>
@@ -1531,7 +1535,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void TexSubImage2D(CubeMapFace target, int level, int xOffset, int yOffset, int width, int height, BaseFormat format, TextureData type, IntPtr dataPtr)
         {
-            SetGLContext();
+            Bind();
             GL.TexSubImage2D((uint)target, level, xOffset, yOffset, width, height, (uint)format, (uint)type, dataPtr.ToPointer());
         }
         /// <summary>
@@ -1548,7 +1552,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.1)]
         public void TexSubImage2D<T>(CubeMapFace target, int level, int xOffset, int yOffset, int width, int height, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexSubImage2D((uint)target, level, xOffset, yOffset, width, height, (uint)format, (uint)type, data);
         }
 
@@ -1568,7 +1572,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.2)]
         public void TexSubImage3D<T>(int level, int xOffset, int yOffset, int zOffset, int width, int height, int depth, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexSubImage3D((uint)Target, level, xOffset, yOffset, zOffset, width, height, depth, (uint)format, (uint)type, dataPtr);
         }
         /// <summary>
@@ -1587,7 +1591,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.2)]
         public void TexSubImage3D(int level, int xOffset, int yOffset, int zOffset, int width, int height, int depth, BaseFormat format, TextureData type, IntPtr dataPtr)
         {
-            SetGLContext();
+            Bind();
             GL.TexSubImage3D((uint)Target, level, xOffset, yOffset, zOffset, width, height, depth, (uint)format, (uint)type, dataPtr.ToPointer());
         }
         /// <summary>
@@ -1606,7 +1610,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(1.2)]
         public void TexSubImage3D<T>(int level, int xOffset, int yOffset, int zOffset, int width, int height, int depth, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
-            SetGLContext();
+            Bind();
             GL.TexSubImage3D((uint)Target, level, xOffset, yOffset, zOffset, width, height, depth, (uint)format, (uint)type, data);
         }
 
@@ -1622,7 +1626,7 @@ namespace Zene.Graphics.OpenGL
         [OpenGLSupport(4.3)]
         public void TextureView(ITexture original, TextureFormat intFormat, uint minLevel, uint numLevels, uint minLayer, uint numbLayers)
         {
-            SetGLContext();
+            Bind();
             GL.TextureView(Id, (uint)Target, original.Id, (uint)intFormat, minLevel, numLevels, minLayer, numbLayers);
 
             InternalFormat = intFormat;
@@ -1637,7 +1641,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetDepthStencilMode(DepthStencilMode value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.DepthStencilTextureMode, (int)value);
         }
 
@@ -1647,7 +1651,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="value"></param>
         public void SetBaseLevel(int value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureBaseLevel, value);
         }
 
@@ -1664,7 +1668,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="a">The alpha component.</param>
         public void SetBorderColourI(int r, int g, int b, int a)
         {
-            SetGLContext();
+            Bind();
             int[] colour = new int[] { r, g, b, a };
 
             fixed (int* parameter = &colour[0])
@@ -1686,7 +1690,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="a">The alpha component.</param>
         public void SetBorderColourI(byte r, byte g, byte b, byte a)
         {
-            SetGLContext();
+            Bind();
             int[] colour = new int[] { r, g, b, a };
 
             fixed (int* parameter = &colour[0])
@@ -1703,7 +1707,7 @@ namespace Zene.Graphics.OpenGL
         /// </remarks>
         public void SetBorderColourI(Colour colour)
         {
-            SetGLContext();
+            Bind();
             int[] iColour = new int[] { colour.R, colour.G, colour.B, colour.A };
 
             fixed (int* parameter = &iColour[0])
@@ -1720,7 +1724,7 @@ namespace Zene.Graphics.OpenGL
         /// </remarks>
         public void SetBorderColourI(ColourF colour)
         {
-            SetGLContext();
+            Bind();
             // Convert to integer equivelents
             Colour c = (Colour)colour;
 
@@ -1745,7 +1749,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="a">The alpha component.</param>
         public void SetBorderColour(int r, int g, int b, int a)
         {
-            SetGLContext();
+            Bind();
             int[] colour = new int[] { r, g, b, a };
 
             fixed (int* parameter = &colour[0])
@@ -1767,7 +1771,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="a">The alpha component.</param>
         public void SetBorderColour(byte r, byte g, byte b, byte a)
         {
-            SetGLContext();
+            Bind();
             int[] colour = new int[] { r, g, b, a };
 
             fixed (int* parameter = &colour[0])
@@ -1789,7 +1793,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="a">The alpha component.</param>
         public void SetBorderColour(float r, float g, float b, float a)
         {
-            SetGLContext();
+            Bind();
             float[] colour = new float[] { r, g, b, a };
 
             fixed (float* parameter = &colour[0])
@@ -1806,7 +1810,7 @@ namespace Zene.Graphics.OpenGL
         /// </remarks>
         public void SetBorderColour(Colour colour)
         {
-            SetGLContext();
+            Bind();
             int[] iColour = new int[] { colour.R, colour.G, colour.B, colour.A };
 
             fixed (int* parameter = &iColour[0])
@@ -1823,7 +1827,7 @@ namespace Zene.Graphics.OpenGL
         /// </remarks>
         public void SetBorderColour(ColourF colour)
         {
-            SetGLContext();
+            Bind();
             float[] iColour = new float[] { colour.R, colour.G, colour.B, colour.A };
 
             fixed (float* parameter = &iColour[0])
@@ -1837,7 +1841,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetLodBias(float value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameterf((uint)Target, GLEnum.TextureLodBias, value);
         }
 
@@ -1846,7 +1850,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetMinFilter(TextureSampling value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureMinFilter, (int)value);
         }
 
@@ -1855,7 +1859,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetMagFilter(TextureSampling value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureMagFilter, (int)value);
         }
 
@@ -1864,7 +1868,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetMinLod(float value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameterf((uint)Target, GLEnum.TextureMinLod, value);
         }
 
@@ -1873,7 +1877,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetMaxLod(float value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameterf((uint)Target, GLEnum.TextureMaxLod, value);
         }
 
@@ -1882,7 +1886,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetMaxLevel(int value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureMaxLevel, value);
         }
 
@@ -1891,7 +1895,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetSwizzleRed(Swizzle value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureSwizzleR, (int)value);
         }
 
@@ -1900,7 +1904,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetSwizzleGreen(Swizzle value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureSwizzleG, (int)value);
         }
 
@@ -1909,7 +1913,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetSwizzleBlue(Swizzle value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureSwizzleB, (int)value);
         }
 
@@ -1918,7 +1922,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetSwizzleAlpha(Swizzle value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureSwizzleA, (int)value);
         }
 
@@ -1927,7 +1931,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetSwizzle(Swizzle r, Swizzle g, Swizzle b, Swizzle a)
         {
-            SetGLContext();
+            Bind();
             int[] values = new int[] { (int)r, (int)g, (int)b, (int)a };
 
             fixed (int* parameters = &values[0])
@@ -1942,7 +1946,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="value"></param>
         public void SetWrapS(WrapStyle value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureWrapS, (int)value);
         }
 
@@ -1952,7 +1956,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="value"></param>
         public void SetWrapT(WrapStyle value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureWrapT, (int)value);
         }
 
@@ -1962,7 +1966,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="value"></param>
         public void SetWrapR(WrapStyle value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureWrapR, (int)value);
         }
 
@@ -1971,7 +1975,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetViewMinLevel(int value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureViewMinLevel, value);
         }
 
@@ -1980,7 +1984,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetViewNumLevels(int value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureViewNumLevels, value);
         }
 
@@ -1989,7 +1993,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetViewMinLayer(int value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureViewMinLayer, value);
         }
 
@@ -1998,7 +2002,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetViewNumLayers(int value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureViewNumLayers, value);
         }
 
@@ -2007,7 +2011,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetViewImmutableLevels(int value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureImmutableLevels, value);
         }
 
@@ -2017,7 +2021,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="value"></param>
         public void SetComparisonFunction(ComparisonFunction value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureCompareFunc, (int)value);
         }
 
@@ -2026,7 +2030,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void SetComparisonMode(ComparisonMode value)
         {
-            SetGLContext();
+            Bind();
             GL.TexParameteri((uint)Target, GLEnum.TextureCompareMode, (int)value);
         }
 
@@ -2040,7 +2044,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public DepthStencilMode GetDepthStencilMode()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.DepthStencilTextureMode, &output);
@@ -2053,7 +2057,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public int GetBaseLevel()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureBaseLevel, &output);
@@ -2068,7 +2072,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public Colour GetBorderColourI()
         {
-            SetGLContext();
+            Bind();
             int[] colour = new int[4];
 
             fixed (int* get = &colour[0])
@@ -2088,7 +2092,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public ColourF GetBorderColour()
         {
-            SetGLContext();
+            Bind();
             float[] colour = new float[4];
 
             fixed (float* get = &colour[0])
@@ -2104,7 +2108,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public float GetLodBias()
         {
-            SetGLContext();
+            Bind();
             float output;
 
             GL.GetTexParameterfv((uint)Target, GLEnum.TextureLodBias, &output);
@@ -2117,7 +2121,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public TextureSampling GetMinFilter()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureMinFilter, &output);
@@ -2130,7 +2134,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public TextureSampling GetMagFilter()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureMagFilter, &output);
@@ -2143,7 +2147,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public float GetMinLod()
         {
-            SetGLContext();
+            Bind();
             float output;
 
             GL.GetTexParameterfv((uint)Target, GLEnum.TextureMinLod, &output);
@@ -2156,7 +2160,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public float GetMaxLod()
         {
-            SetGLContext();
+            Bind();
             float output;
 
             GL.GetTexParameterfv((uint)Target, GLEnum.TextureMaxLod, &output);
@@ -2169,7 +2173,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public int GetMaxLevel()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureMaxLevel, &output);
@@ -2182,7 +2186,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public Swizzle GetSwizzleRed()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureSwizzleR, &output);
@@ -2195,7 +2199,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public Swizzle GetSwizzleGreen()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureSwizzleG, &output);
@@ -2208,7 +2212,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public Swizzle GetSwizzleBlue()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureSwizzleB, &output);
@@ -2221,7 +2225,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public Swizzle GetSwizzleAlpha()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureSwizzleA, &output);
@@ -2234,7 +2238,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public void GetSwizzle(out Swizzle r, out Swizzle g, out Swizzle b, out Swizzle a)
         {
-            SetGLContext();
+            Bind();
             int[] outputs = new int[4];
 
             fixed (int* gets = &outputs[0])
@@ -2253,7 +2257,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public WrapStyle GetWrapS()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureWrapS, &output);
@@ -2266,7 +2270,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public WrapStyle GetWrapT()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureWrapT, &output);
@@ -2279,7 +2283,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public WrapStyle GetWrapR()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureWrapR, &output);
@@ -2292,7 +2296,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public int GetViewMinLevel()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureViewMinLevel, &output);
@@ -2305,7 +2309,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public int GetViewNumLevels()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureViewNumLevels, &output);
@@ -2318,7 +2322,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public int GetViewMinLayer()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureViewMinLayer, &output);
@@ -2331,7 +2335,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public int GetViewNumLayers()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureViewNumLayers, &output);
@@ -2344,7 +2348,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public int GetViewImmutableLevels()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureImmutableLevels, &output);
@@ -2357,7 +2361,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public ComparisonFunction GetComparisonFunction()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureCompareFunc, &output);
@@ -2370,7 +2374,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public ComparisonMode GetComparisonMode()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureCompareMode, &output);
@@ -2383,7 +2387,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public FormatCompatibilityType GetFormatCompatibilityType()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.ImageFormatCompatibilityType, &output);
@@ -2396,7 +2400,7 @@ namespace Zene.Graphics.OpenGL
         /// </summary>
         public bool IsImmutableFormat()
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexParameteriv((uint)Target, GLEnum.TextureImmutableFormat, &output);
@@ -2410,7 +2414,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetWidth(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureWidth, &output);
@@ -2424,7 +2428,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetHeight(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureHeight, &output);
@@ -2438,7 +2442,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetDepth(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureDepth, &output);
@@ -2452,7 +2456,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public ChannelType GetRedType(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureRedType, &output);
@@ -2466,7 +2470,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public ChannelType GetGreenType(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureGreenType, &output);
@@ -2480,7 +2484,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public ChannelType GetBlueType(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureBlueType, &output);
@@ -2494,7 +2498,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public ChannelType GetAlphaType(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureAlphaType, &output);
@@ -2508,7 +2512,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public ChannelType GetDepthType(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureDepthType, &output);
@@ -2522,7 +2526,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetRedSize(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureRedSize, &output);
@@ -2536,7 +2540,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetGreenSize(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureGreenSize, &output);
@@ -2550,7 +2554,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetBlueSize(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureBlueSize, &output);
@@ -2564,7 +2568,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetAlphaSize(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureAlphaSize, &output);
@@ -2578,7 +2582,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetDepthSize(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureDepthSize, &output);
@@ -2592,7 +2596,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public bool GetIsCompressed(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureCompressed, &output);
@@ -2606,7 +2610,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetCompressedImageSize(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureCompressedImageSize, &output);
@@ -2620,7 +2624,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetBufferOffset(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureBufferOffset, &output);
@@ -2634,7 +2638,7 @@ namespace Zene.Graphics.OpenGL
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetBufferSize(int level)
         {
-            SetGLContext();
+            Bind();
             int output;
 
             GL.GetTexLevelParameteriv((uint)Target, level, GLEnum.TextureBufferSize, &output);

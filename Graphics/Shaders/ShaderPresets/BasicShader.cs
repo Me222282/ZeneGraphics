@@ -48,7 +48,7 @@ namespace Zene.Graphics.Shaders
                 }
                 else if ((!value) && _Bound)
                 {
-                    UnBind();
+                    Unbind();
                 }
             }
         }
@@ -161,7 +161,7 @@ namespace Zene.Graphics.Shaders
             _Bound = true;
         }
 
-        public void UnBind()
+        public void Unbind()
         {
             GL.UseProgram(0);
 

@@ -14,6 +14,7 @@ namespace GUI
             _frame = new TextureRenderer((int)bounds.Width, (int)bounds.Height);
             _frame.SetColourAttachment(0, TextureFormat.Rgba8);
             _frame.SetDepthAttachment(TextureFormat.DepthComponent16, false);
+            _frame.ClearColour = _colour;
 
             _bounds = bounds;
             _tabBox = bounds;
@@ -339,6 +340,7 @@ namespace GUI
             {
                 _colour = value;
 
+                _frame.ClearColour = value;
                 _redraw = true;
             }
         }
@@ -350,8 +352,7 @@ namespace GUI
             if (_redraw)
             {
                 _frame.Bind();
-                IFrameBuffer.Clear(BufferBit.Depth);
-                IFrameBuffer.ClearColour(_colour);
+                _frame.Clear(BufferBit.Colour | BufferBit.Depth);
 
                 _shader.Bind();
                 _shader.Matrix3 = Matrix4.CreateOrthographic(_bounds.Width, _bounds.Height, 0, -2);

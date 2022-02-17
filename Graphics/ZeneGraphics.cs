@@ -1,6 +1,7 @@
 ﻿using System;
 using Zene.Graphics.OpenGL;
 using Zene.Graphics.OpenGL.Abstract3;
+using Zene.Structs;
 
 namespace Zene.Graphics
 {
@@ -16,13 +17,40 @@ namespace Zene.Graphics
             return texture.Id == State.GetBoundTexture(texture.ReferanceSlot, texture.Target);
         }
         /// <summary>
+        /// Determines whether <paramref name="texture"/> is bound to the current context.
+        /// </summary>
+        /// <param name="texture">The texture to query.</param>
+        /// <param name="slot">The slot that the texture needs to be bounds to to return True</param>
+        /// <returns></returns>
+        public static bool Bound(this ITexture texture, uint slot)
+        {
+            return texture.Id == State.GetBoundTexture(slot, texture.Target);
+        }
+        /// <summary>
         /// Determines whether <paramref name="framebuffer"/> is bound to the current context.
         /// </summary>
         /// <param name="framebuffer">The framebuffer to query.</param>
         /// <returns></returns>
-        public static bool Bound(this IFrameBuffer framebuffer)
+        public static bool Bound(this IFramebuffer framebuffer)
         {
             return framebuffer.Binding switch
+            {
+                FrameTarget.FrameBuffer => framebuffer.Id == GL.BoundFrameBuffers.Draw &&
+                                       framebuffer.Id == GL.BoundFrameBuffers.Read,
+                FrameTarget.Read => framebuffer.Id == GL.BoundFrameBuffers.Read,
+                FrameTarget.Draw => framebuffer.Id == GL.BoundFrameBuffers.Draw,
+                _ => false,
+            };
+        }
+        /// <summary>
+        /// Determines whether <paramref name="framebuffer"/> is bound to the current context.
+        /// </summary>
+        /// <param name="framebuffer">The framebuffer to query.</param>
+        /// <param name="target">The target that the framebuffer needs to be bound to to return True.</param>
+        /// <returns></returns>
+        public static bool Bound(this IFramebuffer framebuffer, FrameTarget target)
+        {
+            return target switch
             {
                 FrameTarget.FrameBuffer => framebuffer.Id == GL.BoundFrameBuffers.Draw &&
                                        framebuffer.Id == GL.BoundFrameBuffers.Read,
@@ -282,6 +310,77 @@ namespace Zene.Graphics
 
                 _ => (int)type
             };
+        }
+
+        /// <summary>
+        /// Read a block of pixels from a framebuffer.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="framebuffer">The framebuffer to reead pixels from.</param>
+        /// <param name="x">Specify the window x coordinate of the first pixel that is read from the frame buffer. This location is the lower left corner of a rectangular block of pixels.</param>
+        /// <param name="y">Specify the window y coordinate of the first pixel that is read from the frame buffer. This location is the lower left corner of a rectangular block of pixels.</param>
+        /// <param name="width">Specify the width of the pixel rectangle.</param>
+        /// <param name="height">Specify the height of the pixel rectangle.</param>
+        /// <param name="format">Specifies the format of the returned data.</param>
+        /// <param name="type">Specifies the data type of the returned data.</param>
+        /// <returns></returns>
+        [OpenGLSupport(1.0)]
+        public static unsafe GLArray<T> ReadPixels<T>(this IFramebuffer framebuffer, int x, int y, int width, int height, BaseFormat format, TextureData type) where T : unmanaged
+        {
+            framebuffer.Bind();
+
+            GLArray<T> data = new GLArray<T>(
+                (width * format.GetSize() * type.GetSize()) / sizeof(T),
+                height);
+
+            GL.ReadPixels(x, y, width, height, (uint)format, (uint)type, data);
+
+            return data;
+        }
+        /// <summary>
+        /// Read a block of pixels from a framebuffer.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="framebuffer">The framebuffer to reead pixels from.</param>
+        /// <param name="bounds">The window coordinate based bounds for the block of data to be read from. It is bottom-left based.</param>
+        /// <param name="format">Specifies the format of the returned data.</param>
+        /// <param name="type">Specifies the data type of the returned data.</param>
+        /// <returns></returns>
+        [OpenGLSupport(1.0)]
+        public static unsafe GLArray<T> ReadPixels<T>(this IFramebuffer framebuffer, IBox bounds, BaseFormat format, TextureData type) where T : unmanaged
+        {
+            framebuffer.Bind();
+
+            RectangleI rect = new RectangleI(bounds);
+
+            GLArray<T> data = new GLArray<T>(
+                (rect.Width * format.GetSize() * type.GetSize()) / sizeof(T),
+                rect.Height);
+
+            GL.ReadPixels(rect.Left, rect.Bottom, rect.Width, rect.Height, (uint)format, (uint)type, data);
+
+            return data;
+        }
+        /// <summary>
+        /// Read all pixels from a framebuffer based on its view size.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="framebuffer">The framebuffer to reead pixels from.</param>
+        /// <param name="format">Specifies the format of the returned data.</param>
+        /// <param name="type">Specifies the data type of the returned data.</param>
+        /// <returns></returns>
+        [OpenGLSupport(1.0)]
+        public static unsafe GLArray<T> ReadPixels<T>(this IFramebuffer framebuffer, BaseFormat format, TextureData type) where T : unmanaged
+        {
+            framebuffer.Bind();
+
+            GLArray<T> data = new GLArray<T>(
+                (framebuffer.View.Width * format.GetSize() * type.GetSize()) / sizeof(T),
+                framebuffer.View.Height);
+
+            GL.ReadPixels(0, 0, framebuffer.View.Width, framebuffer.View.Height, (uint)format, (uint)type, data);
+
+            return data;
         }
     }
 }

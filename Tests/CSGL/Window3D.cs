@@ -16,18 +16,19 @@ namespace CSGL
         public Window3D(int width, int height, string title)
             : base(width, height, title)
         {
-            postShader = new PostProcessing(width, height);
+            Framebuffer = new PostProcessing(width, height);
 
             //postShader.Pixelate(true);
             //postShader.UseKernel(true);
-            postShader.SetKernel(PostShader.SharpenKernel);
-            postShader.SetKernelOffset(200);
+            Framebuffer.SetKernel(PostShader.SharpenKernel);
+            Framebuffer.SetKernelOffset(200);
 
             SetUp();
 
             GLFW.SetInputMode(Handle, GLFW.Cursor, GLFW.CursorHidden);
 
             OnSizeChange(new SizeChangeEventArgs(width, height));
+            BaseFramebuffer.View = new RectangleI(0, 0, width, height);
         }
 
         protected override void Dispose(bool dispose)
@@ -37,7 +38,7 @@ namespace CSGL
             if (dispose)
             {
                 Shader.Dispose();
-                postShader.Dispose();
+                Framebuffer.Dispose();
 
                 DrawObject.Dispose();
 
@@ -73,11 +74,11 @@ namespace CSGL
 
             while (GLFW.WindowShouldClose(Handle) == 0)
             {
-                postShader.Bind();
+                Framebuffer.Bind();
 
                 Draw();
 
-                postShader.Draw();
+                Framebuffer.Draw();
 
                 GLFW.SwapBuffers(Handle);
 
@@ -103,7 +104,7 @@ namespace CSGL
             Dispose();
         }
 
-        private readonly PostProcessing postShader;
+        public override PostProcessing Framebuffer { get; }
 
         private static readonly Vector3 Red = new Vector3(1, 0, 0);
 
@@ -302,7 +303,7 @@ namespace CSGL
             State.DepthTesting = true;
 
             //IFrameBuffer.ClearColour(new ColourF(0.2f, 0.4f, 0.8f, 1.0f));
-            IFrameBuffer.Clear(BufferBit.Colour | BufferBit.Depth);
+            Framebuffer.Clear(BufferBit.Colour | BufferBit.Depth);
 
             Shader.UseNormalMapping(false);
             Shader.DrawLighting(doLight);
@@ -330,8 +331,8 @@ namespace CSGL
 
             Floor.Draw();
 
-            FloorTexture.UnBind();
-            FloorNormalMap.UnBind();
+            FloorTexture.Unbind();
+            FloorNormalMap.Unbind();
 
             Shader.UseNormalMapping(false);
             Shader.DrawLighting(false);
@@ -484,13 +485,13 @@ namespace CSGL
 
                 if (_postProcess)
                 {
-                    postShader.Pixelate(true);
-                    postShader.UseKernel(true);
+                    Framebuffer.Pixelate(true);
+                    Framebuffer.UseKernel(true);
                 }
                 else
                 {
-                    postShader.Pixelate(false);
-                    postShader.UseKernel(false);
+                    Framebuffer.Pixelate(false);
+                    Framebuffer.UseKernel(false);
                 }
             }
             else if (e.Key == Keys.M)
@@ -557,7 +558,8 @@ namespace CSGL
         {
             base.OnSizePixelChange(e);
 
-            postShader.Size = new Vector2I(Width, Height);
+            Framebuffer.Size = new Vector2I(Width, Height);
+            BaseFramebuffer.ViewSize = new Vector2I(Width, Height);
 
             double mWidth;
             double mHeight;
@@ -579,7 +581,7 @@ namespace CSGL
                 mWidth = mHeight * widthPercent;
             }
 
-            postShader.PixelSize(mWidth, mHeight);
+            Framebuffer.PixelSize(mWidth, mHeight);
         }
 
         private bool _mouseShow = false;

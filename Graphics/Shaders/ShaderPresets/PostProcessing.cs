@@ -4,16 +4,17 @@ using Zene.Structs;
 
 namespace Zene.Graphics.Shaders
 {
-    public class PostProcessing : PostShader, IDrawable
+    public class PostProcessing : PostShader, IDrawable, IFramebuffer
     {
         public PostProcessing(int width, int height)
         {
             _multiSFramebuffer = new TextureRendererMS(width, height, 4);
             _multiSFramebuffer.SetColourAttachment(0, TextureFormat.Rgb8);
             _multiSFramebuffer.SetDepthAttachment(TextureFormat.DepthComponent24, false);
-
             _framebuffer = new TextureRenderer(width, height);
             _framebuffer.SetColourAttachment(0, TextureFormat.Rgb8);
+
+            base.Size = new Vector2I(width, height);
 
             _drawingObject = new DrawObject<Vector2I, byte>(new Vector2I[]
             {
@@ -30,6 +31,8 @@ namespace Zene.Graphics.Shaders
         private readonly TextureRenderer _framebuffer;
 
         private readonly DrawObject<Vector2I, byte> _drawingObject;
+
+        public FrameTarget Binding => _multiSFramebuffer.Binding;
 
         public new Vector2I Size
         {
@@ -49,20 +52,82 @@ namespace Zene.Graphics.Shaders
                 _multiSFramebuffer.ViewSize = value;
             }
         }
-
-        public new void Bind()
+        public RectangleI View
         {
-            _multiSFramebuffer.Bind();
-
-            _bound = true;
+            get => _multiSFramebuffer.View;
+            set
+            {
+                _multiSFramebuffer.View = value;
+                Size = value.Size;
+            }
+        }
+        Vector2I IFramebuffer.ViewSize
+        {
+            get => Size;
+            set => Size = value;
         }
 
-        public new void UnBind()
+        public FrameDrawTarget ReadBuffer
+        {
+            get => _multiSFramebuffer.ReadBuffer;
+            set => _multiSFramebuffer.ReadBuffer = value;
+        }
+        public FrameDrawTarget[] DrawBuffers
+        {
+            get => _multiSFramebuffer.DrawBuffers;
+            set => _multiSFramebuffer.DrawBuffers = value;
+        }
+
+        /// <summary>
+        /// Gets or sets a colour buffer as a destination for draw calls.
+        /// </summary>
+        [OpenGLSupport(2.0)]
+        public FrameDrawTarget DrawBuffer
+        {
+            set
+            {
+                _multiSFramebuffer.DrawBuffers = new FrameDrawTarget[] { value };
+            }
+        }
+
+        /// <summary>
+        /// The clear colour that is used when <see cref="Clear(BufferBit)"/> is called.
+        /// </summary>
+        public ColourF ClearColour { get; set; } = new ColourF(0f, 0f, 0f, 1f);
+        /// <summary>
+        /// The depth value that is used when <see cref="Clear(BufferBit)"/> is called.
+        /// </summary>
+        public double ClearDepth { get; set; } = 1.0;
+        /// <summary>
+        /// The stencil value that is used when <see cref="Clear(BufferBit)"/> is called.
+        /// </summary>
+        public int CLearStencil { get; set; } = 0;
+
+        public void Clear(BufferBit buffer)
         {
             _multiSFramebuffer.Bind();
+            
+            if ((buffer & BufferBit.Colour) == BufferBit.Colour)
+            {
+                GL.ClearColor(ClearColour.R, ClearColour.G, ClearColour.B, ClearColour.A);
+            }
+            if ((buffer & BufferBit.Depth) == BufferBit.Depth)
+            {
+                GL.ClearDepth(ClearDepth);
+            }
+            if ((buffer & BufferBit.Stencil) == BufferBit.Stencil)
+            {
+                GL.ClearStencil(CLearStencil);
+            }
 
-            _bound = false;
+            GL.Clear((uint)buffer);
         }
+
+        bool IFramebuffer.Validate() => throw new NotSupportedException();
+
+        public new void Bind() => _multiSFramebuffer.Bind();
+        public void Bind(FrameTarget target) => _multiSFramebuffer.Bind(target);
+        public new void Unbind() => _multiSFramebuffer.Unbind();
 
         public new void Dispose()
         {

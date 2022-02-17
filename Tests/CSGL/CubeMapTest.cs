@@ -104,7 +104,7 @@ namespace CSGL
         }
         private void Draw()
         {
-            IFrameBuffer.Clear(BufferBit.Colour);
+            Framebuffer.Clear(BufferBit.Colour);
 
             MouseMovement();
 
@@ -116,7 +116,7 @@ namespace CSGL
 
             _drawObject.Draw();
 
-            _cubeMap.UnBind();
+            _cubeMap.Unbind();
         }
 
         protected override void OnSizeChange(SizeChangeEventArgs e)
@@ -137,7 +137,7 @@ namespace CSGL
             // Invalide size
             if ((int)e.Width <= 0 || (int)e.Height <= 0) { return; }
 
-            IFrameBuffer.View((int)e.Width, (int)e.Height);
+            Framebuffer.ViewSize = new Vector2I((int)e.Width, (int)e.Height);
         }
         protected override void OnKeyDown(KeyEventArgs e)
         {

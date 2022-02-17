@@ -15,13 +15,14 @@ namespace CSGL
         public ShadowLWindow(int width, int height, string title)
             : base(width, height, title)
         {
-            postProcess = new PostProcessing(width, height);
+            Framebuffer = new PostProcessing(width, height);
 
             SetUp();
 
             GLFW.SetInputMode(Handle, GLFW.Cursor, GLFW.CursorHidden);
 
             OnSizeChange(new SizeChangeEventArgs(width, height));
+            BaseFramebuffer.View = new RectangleI(0, 0, width, height);
 
             FullScreen = true;
         }
@@ -33,7 +34,7 @@ namespace CSGL
             if (dispose)
             {
                 Shader.Dispose();
-                postProcess.Dispose();
+                Framebuffer.Dispose();
                 ShadowMapShader.Dispose();
 
                 DrawObject.Dispose();
@@ -57,7 +58,7 @@ namespace CSGL
             {
                 Draw();
 
-                postProcess.Draw();
+                Framebuffer.Draw();
 
                 GLFW.SwapBuffers(Handle);
 
@@ -67,7 +68,7 @@ namespace CSGL
             Dispose();
         }
 
-        private readonly PostProcessing postProcess;
+        public override PostProcessing Framebuffer { get; }
 
         private static readonly Vector3 Red = new Vector3(1, 0, 0);
 
@@ -271,8 +272,8 @@ namespace CSGL
 
             CreateShadowMap(playerMatrix);
 
-            postProcess.Bind();
-            IFrameBuffer.Clear(BufferBit.Colour | BufferBit.Depth);
+            Framebuffer.Bind();
+            Framebuffer.Clear(BufferBit.Colour | BufferBit.Depth);
 
             Shader.Bind();
 
@@ -324,8 +325,8 @@ namespace CSGL
             Shader.SetModelMatrix(Matrix4.Identity);
             Floor.Draw();
 
-            FloorTexture.UnBind();
-            FloorNormalMap.UnBind();
+            FloorTexture.Unbind();
+            FloorNormalMap.Unbind();
 
             //DepthDraw.Draw();
         }
@@ -559,7 +560,8 @@ namespace CSGL
             // Invalide size
             if ((int)e.Width <= 0 || (int)e.Height <= 0) { return; }
 
-            postProcess.Size = new Vector2I(Width, Height);
+            Framebuffer.Size = new Vector2I(Width, Height);
+            BaseFramebuffer.ViewSize = new Vector2I(Width, Height);
         }
 
         private Vector2 mouseLocation;

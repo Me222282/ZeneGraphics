@@ -78,7 +78,7 @@ namespace Zene.Graphics
         {
             GL.UseProgram(ShaderId);
         }
-        void IBindable.UnBind()
+        void IBindable.Unbind()
         {
             GL.UseProgram(0);
         }
@@ -112,7 +112,7 @@ namespace Zene.Graphics
             GL.VertexAttribDivisor(4, 1);
             GL.VertexAttribDivisor(5, 1);
 
-            _drawable.Vao.UnBind();
+            _drawable.Vao.Unbind();
 
             //
             // Shader setup
@@ -153,7 +153,7 @@ namespace Zene.Graphics
                 _drawable.Vao.AddBuffer(_instanceData, 4, 2, DataType.Double, AttributeSize.D2);
                 _drawable.Vao.AddBuffer(_instanceData, 5, 3, DataType.Double, AttributeSize.D2);
 
-                _drawable.Vao.UnBind();
+                _drawable.Vao.Unbind();
             }
         }
 

@@ -8,7 +8,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <summary>
         /// Sets the OpenGL context to referance <paramref name="framebuffer"/>.
         /// </summary>
-        public static void SetGLContext(this IFrameBuffer framebuffer)
+        public static void SetGLContext(this IFramebuffer framebuffer)
         {
             if (!framebuffer.Bound())
             {
@@ -42,9 +42,8 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="mask">The bitwise or of the flags indicating which buffers are to be copied.</param>
         /// <param name="filter">Specifies the interpolation to be applied if the image is stretched.</param>
         [OpenGLSupport(3.0)]
-        public static void BlitBuffer(this IFrameBuffer framebuffer, IFrameBuffer destination, IBox srcBox, IBox dstBox, BufferBit mask, TextureSampling filter)
+        public static void BlitBuffer(this IFramebuffer framebuffer, IFramebuffer destination, IBox srcBox, IBox dstBox, BufferBit mask, TextureSampling filter)
         {
-            framebuffer.Bind(FrameTarget.Read);
             if (destination == null)
             {
                 State.NullBind(Target.DrawFramebuffer);
@@ -53,6 +52,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
             {
                 destination.Bind(FrameTarget.Draw);
             }
+            framebuffer.Bind(FrameTarget.Read);
 
             GL.BlitFramebuffer(
                 (int)srcBox.Left, (int)srcBox.Top, (int)srcBox.Right, (int)(srcBox.Top + srcBox.Height),
@@ -74,9 +74,8 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="mask">The bitwise or of the flags indicating which buffers are to be copied.</param>
         /// <param name="filter">Specifies the interpolation to be applied if the image is stretched.</param>
         [OpenGLSupport(3.0)]
-        public static void BlitBuffer(this IFrameBuffer framebuffer, IFrameBuffer destination, int x, int y, int width, int height, int dstX, int dstY, int dstWidth, int dstHeight, BufferBit mask, TextureSampling filter)
+        public static void BlitBuffer(this IFramebuffer framebuffer, IFramebuffer destination, int x, int y, int width, int height, int dstX, int dstY, int dstWidth, int dstHeight, BufferBit mask, TextureSampling filter)
         {
-            framebuffer.Bind(FrameTarget.Read);
             if (destination == null)
             {
                 State.NullBind(Target.DrawFramebuffer);
@@ -85,6 +84,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
             {
                 destination.Bind(FrameTarget.Draw);
             }
+            framebuffer.Bind(FrameTarget.Read);
 
             GL.BlitFramebuffer(x, y, x + width, y + height, dstX, dstY, dstX + dstWidth, dstY + dstHeight, (uint)mask, (uint)filter);
         }
@@ -93,7 +93,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// Check the completeness status of a framebuffer.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public static FrameBufferStatus CheckStatus(this IFrameBuffer framebuffer)
+        public static FrameBufferStatus CheckStatus(this IFramebuffer framebuffer)
         {
             framebuffer.SetGLContext();
             return (FrameBufferStatus)GL.CheckFramebufferStatus(GLEnum.Framebuffer);
@@ -104,7 +104,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// </summary>
         /// <param name="buffer">The buffer to draw to.</param>
         [OpenGLSupport(3.0)]
-        public static void DrawBuffers(this IFrameBuffer framebuffer, FrameDrawTarget buffer)
+        public static void DrawBuffers(this IFramebuffer framebuffer, FrameDrawTarget buffer)
         {
             framebuffer.SetGLContext();
             uint buf = (uint)buffer;
@@ -115,7 +115,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// </summary>
         /// <param name="buffers">The buffers to draw to.</param>
         [OpenGLSupport(3.0)]
-        public static void DrawBuffers(this IFrameBuffer framebuffer, FrameDrawTarget[] buffers)
+        public static void DrawBuffers(this IFramebuffer framebuffer, FrameDrawTarget[] buffers)
         {
             framebuffer.SetGLContext();
             fixed (void* pointer = &buffers[0])
@@ -130,7 +130,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="renderbuffer">Specifies the renderbuffer object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public static void FramebufferRenderbuffer(this IFrameBuffer framebuffer, IRenderbuffer renderbuffer, FrameAttachment attachment)
+        public static void FramebufferRenderbuffer(this IFramebuffer framebuffer, IRenderbuffer renderbuffer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             GL.FramebufferRenderbuffer(GLEnum.Framebuffer, (uint)attachment, GLEnum.Renderbuffer, renderbuffer.Id);
@@ -143,7 +143,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="level">Specifies the mipmap level of the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.2)]
-        public static void FramebufferTexture(this IFrameBuffer framebuffer, ITexture texture, int level, FrameAttachment attachment)
+        public static void FramebufferTexture(this IFramebuffer framebuffer, ITexture texture, int level, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             GL.FramebufferTexture(GLEnum.Framebuffer, (uint)attachment, texture.Id, level);
@@ -155,7 +155,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="level">Specifies the mipmap level of the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public static void FramebufferTexture1D(this IFrameBuffer framebuffer, ITexture texture, int level, FrameAttachment attachment)
+        public static void FramebufferTexture1D(this IFramebuffer framebuffer, ITexture texture, int level, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             GL.FramebufferTexture1D(GLEnum.Framebuffer, (uint)attachment, GLEnum.Texture1d, texture.Id, level);
@@ -167,7 +167,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="level">Specifies the mipmap level of the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public static void FramebufferTexture2D(this IFrameBuffer framebuffer, CubeMapFace textureTarget, ITexture texture, int level, FrameAttachment attachment)
+        public static void FramebufferTexture2D(this IFramebuffer framebuffer, CubeMapFace textureTarget, ITexture texture, int level, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             GL.FramebufferTexture2D(GLEnum.Framebuffer, (uint)attachment, (uint)textureTarget, texture.Id, level);
@@ -179,7 +179,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="level">Specifies the mipmap level of the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public static void FramebufferTexture2D(this IFrameBuffer framebuffer, ITexture texture, int level, FrameAttachment attachment)
+        public static void FramebufferTexture2D(this IFramebuffer framebuffer, ITexture texture, int level, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             GL.FramebufferTexture2D(GLEnum.Framebuffer, (uint)attachment, (uint)texture.Target, texture.Id, level);
@@ -192,7 +192,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         /// <param name="offset">The offset into the 3d texture to be the 2d section to be attached.</param>
         [OpenGLSupport(3.0)]
-        public static void FramebufferTexture3D(this IFrameBuffer framebuffer, ITexture texture, int level, FrameAttachment attachment, int offset)
+        public static void FramebufferTexture3D(this IFramebuffer framebuffer, ITexture texture, int level, FrameAttachment attachment, int offset)
         {
             framebuffer.SetGLContext();
             GL.FramebufferTexture3D(GLEnum.Framebuffer, (uint)attachment, (uint)texture.Target, texture.Id, level, offset);
@@ -204,7 +204,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="texture">Specifies the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.2)]
-        public static void FramebufferTexture(this IFrameBuffer framebuffer, ITexture texture, FrameAttachment attachment)
+        public static void FramebufferTexture(this IFramebuffer framebuffer, ITexture texture, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             GL.FramebufferTexture(GLEnum.Framebuffer, (uint)attachment, texture.Id, 0);
@@ -215,7 +215,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="texture">Specifies the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public static void FramebufferTexture1D(this IFrameBuffer framebuffer, ITexture texture, FrameAttachment attachment)
+        public static void FramebufferTexture1D(this IFramebuffer framebuffer, ITexture texture, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             GL.FramebufferTexture1D(GLEnum.Framebuffer, (uint)attachment, GLEnum.Texture1d, texture.Id, 0);
@@ -226,7 +226,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="texture">Specifies the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public static void FramebufferTexture2D(this IFrameBuffer framebuffer, CubeMapFace textureTarget, ITexture texture, FrameAttachment attachment)
+        public static void FramebufferTexture2D(this IFramebuffer framebuffer, CubeMapFace textureTarget, ITexture texture, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             GL.FramebufferTexture2D(GLEnum.Framebuffer, (uint)attachment, (uint)textureTarget, texture.Id, 0);
@@ -237,7 +237,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="texture">Specifies the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public static void FramebufferTexture2D(this IFrameBuffer framebuffer, ITexture texture, FrameAttachment attachment)
+        public static void FramebufferTexture2D(this IFramebuffer framebuffer, ITexture texture, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             GL.FramebufferTexture2D(GLEnum.Framebuffer, (uint)attachment, (uint)texture.Target, texture.Id, 0);
@@ -249,7 +249,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         /// <param name="offset">The offset into the 3d texture to be the 2d section to be attached.</param>
         [OpenGLSupport(3.0)]
-        public static void FramebufferTexture3D(this IFrameBuffer framebuffer, ITexture texture, FrameAttachment attachment, int offset)
+        public static void FramebufferTexture3D(this IFramebuffer framebuffer, ITexture texture, FrameAttachment attachment, int offset)
         {
             framebuffer.SetGLContext();
             GL.FramebufferTexture3D(GLEnum.Framebuffer, (uint)attachment, (uint)texture.Target, texture.Id, 0, offset);
@@ -263,7 +263,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="layer">Specifies the layer of the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public static void FramebufferTextureLayer(this IFrameBuffer framebuffer, ITexture texture, int level, int layer, FrameAttachment attachment)
+        public static void FramebufferTextureLayer(this IFramebuffer framebuffer, ITexture texture, int level, int layer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             GL.FramebufferTextureLayer(GLEnum.Framebuffer, (uint)attachment, texture.Id, level, layer);
@@ -275,7 +275,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="layer">Specifies the layer of the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public static void FramebufferTextureLayer(this IFrameBuffer framebuffer, ITexture texture, int layer, FrameAttachment attachment)
+        public static void FramebufferTextureLayer(this IFramebuffer framebuffer, ITexture texture, int layer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             GL.FramebufferTextureLayer(GLEnum.Framebuffer, (uint)attachment, texture.Id, 0, layer);
@@ -286,7 +286,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// </summary>
         /// <param name="attachments">Specifies the attachments to be invalidated.</param>
         [OpenGLSupport(4.3)]
-        public static void Invalidate(this IFrameBuffer framebuffer, FrameAttachment[] attachments)
+        public static void Invalidate(this IFramebuffer framebuffer, FrameAttachment[] attachments)
         {
             framebuffer.SetGLContext();
             fixed (void* pointer = &attachments[0])
@@ -303,7 +303,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="width">Specifies the width of the region to be invalidated.</param>
         /// <param name="height">Specifies the height of the region to be invalidated.</param>
         [OpenGLSupport(4.3)]
-        public static void InvalidateSub(this IFrameBuffer framebuffer, FrameAttachment[] attachments, int x, int y, int width, int height)
+        public static void InvalidateSub(this IFramebuffer framebuffer, FrameAttachment[] attachments, int x, int y, int width, int height)
         {
             framebuffer.SetGLContext();
             fixed (void* pointer = &attachments[0])
@@ -318,7 +318,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public static int GetRedSize(this IFrameBuffer framebuffer, FrameAttachment attachment)
+        public static int GetRedSize(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -334,7 +334,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public static int GetGreenSize(this IFrameBuffer framebuffer, FrameAttachment attachment)
+        public static int GetGreenSize(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -350,7 +350,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public static int GetBlueSize(this IFrameBuffer framebuffer, FrameAttachment attachment)
+        public static int GetBlueSize(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -366,7 +366,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public static int GetAlphaSize(this IFrameBuffer framebuffer, FrameAttachment attachment)
+        public static int GetAlphaSize(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -382,7 +382,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public static int GetDepthSize(this IFrameBuffer framebuffer, FrameAttachment attachment)
+        public static int GetDepthSize(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -398,7 +398,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public static int GetStencilSize(this IFrameBuffer framebuffer, FrameAttachment attachment)
+        public static int GetStencilSize(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -414,7 +414,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public static ChannelType GetComponentType(this IFrameBuffer framebuffer, FrameAttachment attachment)
+        public static ChannelType GetComponentType(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -430,7 +430,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public static ColourEncode GetColourEncoding(this IFrameBuffer framebuffer, FrameAttachment attachment)
+        public static ColourEncode GetColourEncoding(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -446,7 +446,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public static AttachType GetObjectType(this IFrameBuffer framebuffer, FrameAttachment attachment)
+        public static AttachType GetObjectType(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -462,7 +462,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public static uint GetObjectId(this IFrameBuffer framebuffer, FrameAttachment attachment)
+        public static uint GetObjectId(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -478,7 +478,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public static int GetTextureLevel(this IFrameBuffer framebuffer, FrameAttachment attachment)
+        public static int GetTextureLevel(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -494,7 +494,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public static CubeMapFace GetTextureCubeMapFace(this IFrameBuffer framebuffer, FrameAttachment attachment)
+        public static CubeMapFace GetTextureCubeMapFace(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -510,7 +510,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.2)]
-        public static bool GetLayered(this IFrameBuffer framebuffer, FrameAttachment attachment)
+        public static bool GetLayered(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -526,7 +526,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public static int GetTextureLayer(this IFrameBuffer framebuffer, FrameAttachment attachment)
+        public static int GetTextureLayer(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -545,7 +545,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// </summary>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public static int GetDefaultWidth(this IFrameBuffer framebuffer)
+        public static int GetDefaultWidth(this IFramebuffer framebuffer)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -560,7 +560,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// </summary>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public static int GetDefaultHeight(this IFrameBuffer framebuffer)
+        public static int GetDefaultHeight(this IFramebuffer framebuffer)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -575,7 +575,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// </summary>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public static int GetDefaultLayers(this IFrameBuffer framebuffer)
+        public static int GetDefaultLayers(this IFramebuffer framebuffer)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -590,7 +590,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// </summary>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public static int GetDefaultSamples(this IFrameBuffer framebuffer)
+        public static int GetDefaultSamples(this IFramebuffer framebuffer)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -605,7 +605,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// </summary>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public static bool GetDefaultFixedSampleLocations(this IFrameBuffer framebuffer)
+        public static bool GetDefaultFixedSampleLocations(this IFramebuffer framebuffer)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -620,7 +620,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// </summary>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
-        public static bool GetDoubleBuffer(this IFrameBuffer framebuffer)
+        public static bool GetDoubleBuffer(this IFramebuffer framebuffer)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -635,7 +635,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// </summary>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
-        public static int GetSamples(this IFrameBuffer framebuffer)
+        public static int GetSamples(this IFramebuffer framebuffer)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -650,7 +650,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// </summary>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
-        public static int GetSampleBuffers(this IFrameBuffer framebuffer)
+        public static int GetSampleBuffers(this IFramebuffer framebuffer)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -665,7 +665,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// </summary>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
-        public static bool GetStereo(this IFrameBuffer framebuffer)
+        public static bool GetStereo(this IFramebuffer framebuffer)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -680,7 +680,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// </summary>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
-        public static BaseFormat GetColourReadFormat(this IFrameBuffer framebuffer)
+        public static BaseFormat GetColourReadFormat(this IFramebuffer framebuffer)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -695,7 +695,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// </summary>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
-        public static TextureData GetColourReadType(this IFrameBuffer framebuffer)
+        public static TextureData GetColourReadType(this IFramebuffer framebuffer)
         {
             framebuffer.SetGLContext();
             int value = 0;
@@ -715,7 +715,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="value">The value to set to the parameter.</param>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public static void SetDefaultWidth(this IFrameBuffer framebuffer, int value)
+        public static void SetDefaultWidth(this IFramebuffer framebuffer, int value)
         {
             framebuffer.SetGLContext();
             GL.FramebufferParameteri(GLEnum.Framebuffer, GLEnum.FramebufferDefaultWidth, value);
@@ -727,7 +727,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="value">The value to set to the parameter.</param>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public static void SetDefaultHeight(this IFrameBuffer framebuffer, int value)
+        public static void SetDefaultHeight(this IFramebuffer framebuffer, int value)
         {
             framebuffer.SetGLContext();
             GL.FramebufferParameteri(GLEnum.Framebuffer, GLEnum.FramebufferDefaultHeight, value);
@@ -739,7 +739,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="value">The value to set to the parameter.</param>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public static void SetDefaultLayers(this IFrameBuffer framebuffer, int value)
+        public static void SetDefaultLayers(this IFramebuffer framebuffer, int value)
         {
             framebuffer.SetGLContext();
             GL.FramebufferParameteri(GLEnum.Framebuffer, GLEnum.FramebufferDefaultLayers, value);
@@ -751,7 +751,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="value">The value to set to the parameter.</param>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public static void SetDefaultSamples(this IFrameBuffer framebuffer, int value)
+        public static void SetDefaultSamples(this IFramebuffer framebuffer, int value)
         {
             framebuffer.SetGLContext();
             GL.FramebufferParameteri(GLEnum.Framebuffer, GLEnum.FramebufferDefaultSamples, value);
@@ -763,7 +763,7 @@ namespace Zene.Graphics.OpenGL.Abstract3
         /// <param name="value">The value to set to the parameter.</param>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public static void SetDefaultFixedSampleLocations(this IFrameBuffer framebuffer, bool value)
+        public static void SetDefaultFixedSampleLocations(this IFramebuffer framebuffer, bool value)
         {
             framebuffer.SetGLContext();
             GL.FramebufferParameteri(GLEnum.Framebuffer, GLEnum.FramebufferDefaultFixedSampleLocations, value ? 1 : 0);

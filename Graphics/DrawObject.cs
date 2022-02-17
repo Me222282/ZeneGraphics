@@ -118,10 +118,10 @@ namespace Zene.Graphics
             _bound = true;
         }
 
-        public override void UnBind()
+        public override void Unbind()
         {
-            Vao.UnBind();
-            Ibo.UnBind();
+            Vao.Unbind();
+            Ibo.Unbind();
 
             _bound = false;
         }
@@ -139,7 +139,7 @@ namespace Zene.Graphics
 
             GL.DrawElements(GLEnum.Triangles, Ibo.Size, _drawType, IntPtr.Zero);
 
-            if (!bound) { UnBind(); }
+            if (!bound) { Unbind(); }
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Zene.Graphics
 
             GL.DrawElementsInstanced(GLEnum.Triangles, Ibo.Size, _drawType, IntPtr.Zero.ToPointer(), n);
 
-            if (!bound) { UnBind(); }
+            if (!bound) { Unbind(); }
         }
     }
 }

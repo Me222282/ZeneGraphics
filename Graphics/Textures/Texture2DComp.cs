@@ -538,7 +538,7 @@ namespace Zene.Graphics
         /// <param name="level">The level of the texture.</param>
         /// <param name="access">The access type for the texture.</param>
         public void Bind(uint slot, int level, AccessType access) => _texture.BindLevel(slot, level, false, 0, access);
-        public void UnBind() => _texture.UnBind();
+        public void Unbind() => _texture.Unbind();
 
         private bool _disposed = false;
         public void Dispose()

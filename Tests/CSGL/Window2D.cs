@@ -138,14 +138,16 @@ namespace CSGL
         {
             if (_bool)
             {
-                IFrameBuffer.ClearColour(new Colour(0, 0, 0));
+                BaseFramebuffer.ClearColour = new Colour(0, 0, 0);
                 _bool = false;
             }
             else
             {
-                IFrameBuffer.ClearColour(new Colour(255, 255, 255));
+                BaseFramebuffer.ClearColour = new Colour(255, 255, 255);
                 _bool = true;
             }
+
+            BaseFramebuffer.Clear(BufferBit.Colour);
 
             /*
             if (_rightShift || _leftShift)

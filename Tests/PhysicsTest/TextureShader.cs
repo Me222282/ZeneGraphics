@@ -82,7 +82,7 @@ namespace PhysicsTest
             GC.SuppressFinalize(this);
         }
 
-        public void UnBind()
+        public void Unbind()
         {
             GL.UseProgram(0);
         }

@@ -30,7 +30,7 @@ namespace Zene.Forms
         }
         IBox IFormObject.Bounds => Bounds;
 
-        public IFrameBuffer FrameBuffer { get; }
+        public IFramebuffer FrameBuffer { get; }
 
         public void Draw()
         {

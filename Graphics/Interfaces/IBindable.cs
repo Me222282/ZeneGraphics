@@ -13,6 +13,6 @@
         /// <summary>
         /// Sets this objects relative OpenGL target to 0.
         /// </summary>
-        public void UnBind();
+        public void Unbind();
     }
 }

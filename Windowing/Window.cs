@@ -121,6 +121,8 @@ namespace Zene.Windowing
             GLFW.SetWindowShouldClose(_window, 1);
         }
 
+        public virtual IFramebuffer Framebuffer { get; } = new GLFWFrameBuffer();
+
         private int _normalWidth;
         private int _normalHeight;
         private Vector2I _normalLocation;

@@ -107,7 +107,7 @@ namespace Zene.Graphics
     }
 
     /// <summary>
-    /// The completion status of an <see cref="IFrameBuffer"/>.
+    /// The completion status of an <see cref="IFramebuffer"/>.
     /// </summary>
     public enum FrameBufferStatus : uint
     {
@@ -172,12 +172,34 @@ namespace Zene.Graphics
     /// Objects that encapsulate an OpnelGL framebuffer.
     /// </summary>
     [OpenGLSupport(3.0)]
-    public unsafe interface IFrameBuffer : IBindable, IIdentifiable, IDisposable
+    public unsafe interface IFramebuffer : IBindable, IIdentifiable, IDisposable
     {
         /// <summary>
         /// The framebuffer target this framebuffer was last bound to.
         /// </summary>
         public FrameTarget Binding { get; }
+
+        /// <summary>
+        /// Gets or sets the render size and location for the framebuffer.
+        /// </summary>
+        [OpenGLSupport(1.0)]
+        public RectangleI View { get; set; }
+        /// <summary>
+        /// Sets the render size for the framebuffer.
+        /// </summary>
+        [OpenGLSupport(1.0)]
+        public Vector2I ViewSize { get; set; }
+
+        /// <summary>
+        /// Gets or sets a colour buffer as a source for pixel reads.
+        /// </summary>
+        [OpenGLSupport(1.0)]
+        public FrameDrawTarget ReadBuffer { get; set; }
+        /// <summary>
+        /// Gets or sets the colour buffers as a destination for draw calls.
+        /// </summary>
+        [OpenGLSupport(2.0)]
+        public FrameDrawTarget[] DrawBuffers { get; set; }
 
         /// <summary>
         /// Checks whether the framebuffer is complete.
@@ -194,139 +216,10 @@ namespace Zene.Graphics
         public void Bind(FrameTarget target);
 
         /// <summary>
-        /// Sets the render size and location for the current framebuffer.
-        /// </summary>
-        /// <param name="x">The x location in pixels</param>
-        /// <param name="y">The y location in pixels</param>
-        /// <param name="width">The width in pixels</param>
-        /// <param name="height">The height in pixels</param>
-        [OpenGLSupport(1.0)]
-        public static void View(int x, int y, int width, int height)
-        {
-            GL.Viewport(x, y, width, height);
-        }
-
-        /// <summary>
-        /// Sets the render size and location for the current framebuffer.
-        /// </summary>
-        /// <param name="width">The width in pixels</param>
-        /// <param name="height">The height in pixels</param>
-        [OpenGLSupport(1.0)]
-        public static void View(int width, int height)
-        {
-            GL.Viewport(0, 0, width, height);
-        }
-
-        /// <summary>
         /// Clears the specified attachments to a generic value.
         /// </summary>
         /// <param name="buffer">The buffers to clear</param>
         [OpenGLSupport(1.0)]
-        public static void Clear(BufferBit buffer)
-        {
-            GL.Clear((uint)buffer);
-        }
-
-        /// <summary>
-        /// Clears the colour attachments to a specifid value.
-        /// </summary>
-        /// <param name="value">The value to clear the colour</param>
-        [OpenGLSupport(1.0)]
-        public static void ClearColour(Colour value)
-        {
-            ColourF c = (ColourF)value;
-
-            GL.ClearColor(c.R, c.G, c.B, c.A);
-            GL.Clear(GLEnum.ColourBufferBit);
-        }
-        /// <summary>
-        /// Clears the colour attachments to a specifid value.
-        /// </summary>
-        /// <param name="value">The value to clear the colour</param>
-        [OpenGLSupport(1.0)]
-        public static void ClearColour(ColourF value)
-        {
-            GL.ClearColor(value.R, value.G, value.B, value.A);
-            GL.Clear(GLEnum.ColourBufferBit);
-        }
-
-        /// <summary>
-        /// Clears the depth attachment to a specifid value.
-        /// </summary>
-        /// <param name="value">The value to clear the depth</param>
-        [OpenGLSupport(1.0)]
-        public static void ClearDepth(double value)
-        {
-            GL.ClearDepth(value);
-            GL.Clear(GLEnum.DepthBufferBit);
-        }
-
-        /// <summary>
-        /// Clears the stencil attachment to a specifid value.
-        /// </summary>
-        /// <param name="value">The value to clear the stencil</param>
-        [OpenGLSupport(1.0)]
-        public static void ClearStencil(int value)
-        {
-            GL.ClearStencil(value);
-            GL.Clear(GLEnum.StencilBufferBit);
-        }
-
-        /// <summary>
-        /// Gets the maximum colour attachments for the hardware being used.
-        /// </summary>
-        /// <returns>The maximum number of colour attachments.</returns>
-        [OpenGLSupport(3.0)]
-        public static int MaxColourAttach()
-        {
-            int value = 0; // Output value
-            // Get the maximum colour attachments
-            GL.GetIntegerv(GLEnum.MaxColourAttachments, ref value);
-
-            return value;
-        }
-
-        /// <summary>
-        /// Read a block of pixels from the bound frame buffer.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="x">Specify the window x coordinate of the first pixel that is read from the frame buffer. This location is the lower left corner of a rectangular block of pixels.</param>
-        /// <param name="y">Specify the window y coordinate of the first pixel that is read from the frame buffer. This location is the lower left corner of a rectangular block of pixels.</param>
-        /// <param name="width">Specify the width of the pixel rectangle.</param>
-        /// <param name="height">Specify the height of the pixel rectangle.</param>
-        /// <param name="format">Specifies the format of the returned data.</param>
-        /// <param name="type">Specifies the data type of the returned data.</param>
-        /// <returns></returns>
-        [OpenGLSupport(1.0)]
-        public static GLArray<T> ReadPixels<T>(int x, int y, int width, int height, BaseFormat format, TextureData type) where T : unmanaged
-        {
-            GLArray<T> data = new GLArray<T>(
-                (width * format.GetSize() * type.GetSize()) / sizeof(T),
-                height);
-
-            GL.ReadPixels(x, y, width, height, (uint)format, (uint)type, data);
-
-            return data;
-        }
-
-        /// <summary>
-        /// Select a colour buffer source for pixels.
-        /// </summary>
-        /// <param name="mode">Specifies a colour buffer.</param>
-        [OpenGLSupport(1.0)]
-        public static void ReadBuffer(FrameDrawTarget mode)
-        {
-            GL.ReadBuffer((uint)mode);
-        }
-
-        /// <summary>
-        /// Specify which colour buffer is to be drawn into.
-        /// </summary>
-        /// <param name="buffer"></param>
-        [OpenGLSupport(1.0)]
-        public static void DrawBuffer(FrameDrawTarget buffer)
-        {
-            GL.DrawBuffer((uint)buffer);
-        }
+        public void Clear(BufferBit buffer);
     }
 }

@@ -48,6 +48,9 @@ namespace EvolutionTest
 
             _world = new World(_lifeforms, brainSize, _worldSize, _worldSize);
 
+            // Set Framebuffer's clear colour to light-grey
+            BaseFramebuffer.ClearColour = new Colour(225, 225, 225);
+
             OnSizePixelChange(new SizeChangeEventArgs(width, height));
 
             // Setup propper alpha channel support
@@ -118,7 +121,7 @@ namespace EvolutionTest
             _shader.Matrix2 = Matrix4.CreateTranslation((_worldSize / -2) + 0.5, (_worldSize / -2) + 0.5, 0);
 
             // Clear screen light-grey
-            IFrameBuffer.ClearColour(new Colour(225, 225, 225));
+            Framebuffer.Clear(BufferBit.Colour);
 
             // Update and draw all lifeforms
             _world.UpdateDraw(DrawLifeform);
@@ -136,7 +139,7 @@ namespace EvolutionTest
             base.OnSizePixelChange(e);
 
             // Set drawing view
-            IFrameBuffer.View((int)e.Width, (int)e.Height);
+            Framebuffer.ViewSize = new Vector2I((int)e.Width, (int)e.Height);
 
             int w;
             int h;

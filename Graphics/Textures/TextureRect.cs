@@ -55,7 +55,7 @@ namespace Zene.Graphics
             _disposed = true;
             GC.SuppressFinalize(this);
         }
-        public void UnBind() => _texture.UnBind();
+        public void Unbind() => _texture.Unbind();
 
         /// <summary>
         /// Creats and filles the data inside the texture with <paramref name="data"/>.

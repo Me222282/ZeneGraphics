@@ -24,13 +24,15 @@ namespace Zene.Graphics.Passing
 
         public void Bind()
         {
+            if (this.Bound()) { return; }
+
             GL.BindRenderbuffer(GLEnum.Renderbuffer, Id);
         }
         public void Dispose()
         {
             GC.SuppressFinalize(this);
         }
-        public void UnBind()
+        public void Unbind()
         {
             GL.BindRenderbuffer(GLEnum.Renderbuffer, 0);
         }

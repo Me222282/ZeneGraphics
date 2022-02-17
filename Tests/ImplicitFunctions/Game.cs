@@ -225,7 +225,7 @@ namespace ImplicitFunctions
 
                 GLFW.PollEvents();
                 // Clear screen black
-                IFrameBuffer.Clear(BufferBit.Colour);
+                IFramebuffer.Clear(BufferBit.Colour);
 
                 foreach (Ball b in _balls)
                 {
@@ -248,7 +248,7 @@ namespace ImplicitFunctions
         {
             base.OnSizeChange(e);
 
-            IFrameBuffer.View((int)e.Width, (int)e.Height);
+            IFramebuffer.View((int)e.Width, (int)e.Height);
 
             _shader.Scale = new Vector2(e.Width * 2, e.Height * 2);
             _bounds = new Box(-e.Width * 2, e.Width * 2, e.Height * 2, -e.Height * 2);

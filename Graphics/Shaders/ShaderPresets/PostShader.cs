@@ -23,26 +23,6 @@ namespace Zene.Graphics.Shaders
         public uint Program { get; private set; }
         uint IIdentifiable.Id => Program;
 
-        protected bool _bound;
-        public bool Bound
-        {
-            get
-            {
-                return _bound;
-            }
-            set
-            {
-                if (value && (!_bound))
-                {
-                    Bind();
-                }
-                else if ((!value) && _bound)
-                {
-                    UnBind();
-                }
-            }
-        }
-
         private int _uniformWidth;
         private int _uniformHeight;
 
@@ -166,15 +146,11 @@ namespace Zene.Graphics.Shaders
         public void Bind()
         {
             GL.UseProgram(Program);
-
-            _bound = true;
         }
 
-        public void UnBind()
+        public void Unbind()
         {
             GL.UseProgram(0);
-
-            _bound = false;
         }
 
         public static double[] BlurKernel { get; } = new double[]

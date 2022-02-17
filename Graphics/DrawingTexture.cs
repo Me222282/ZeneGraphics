@@ -148,7 +148,7 @@ namespace Zene.Graphics
             _bound = true;
         }
 
-        public override void UnBind()
+        public override void Unbind()
         {
             _DrawObject.Bind();
             _Texture.Bind();
@@ -169,7 +169,7 @@ namespace Zene.Graphics
 
             _DrawObject.Draw();
 
-            if (!bound) { UnBind(); }
+            if (!bound) { Unbind(); }
         }
 
         private static readonly byte[] IndexArray = new byte[] { 0, 1, 2, 2, 3, 0 };

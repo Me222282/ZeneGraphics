@@ -36,7 +36,7 @@
         /// </remarks>
         /// <param name="framebuffer"></param>
         /// <returns></returns>
-        public static FrameBufferPasser Copy(this IFrameBuffer framebuffer)
+        public static FrameBufferPasser Copy(this IFramebuffer framebuffer)
         {
             return new FrameBufferPasser(framebuffer);
         }

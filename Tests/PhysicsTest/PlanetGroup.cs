@@ -109,7 +109,7 @@ namespace PhysicsTest
             GL.VertexAttribDivisor(5, 1);
             GL.VertexAttribDivisor(6, 1);
 
-            _drawable.Vao.UnBind();
+            _drawable.Vao.Unbind();
         }
 
         /*
@@ -306,7 +306,7 @@ namespace PhysicsTest
 
             _drawable.DrawMultiple(PlanetCount);
 
-            _shader.UnBind();
+            _shader.Unbind();
         }
         /*
         public void ApplyPhysics(double frameTime)

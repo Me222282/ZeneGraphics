@@ -24,7 +24,7 @@ namespace Zene.Graphics.OpenGL
             GC.SuppressFinalize(this);
         }
 
-        public void UnBind()
+        public void Unbind()
         {
             if (!this.Bound()) { return; }
 

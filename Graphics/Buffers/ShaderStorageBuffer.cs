@@ -59,7 +59,7 @@ namespace Zene.Graphics
 
             _dataCreated = true;
 
-            if (!bound) { UnBind(); }
+            if (!bound) { Unbind(); }
         }
 
         public void SetDataRange(int index, T[] data)
@@ -89,7 +89,7 @@ namespace Zene.Graphics
 
             _dataCreated = true;
 
-            if (!bound) { UnBind(); }
+            if (!bound) { Unbind(); }
         }
 
         protected override void AsignData(bool reAsign)
@@ -114,7 +114,7 @@ namespace Zene.Graphics
 
             _dataCreated = true;
 
-            if (!bound) { UnBind(); }
+            if (!bound) { Unbind(); }
         }
 
         public void Bind(uint index)

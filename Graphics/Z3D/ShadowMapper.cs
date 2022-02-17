@@ -5,7 +5,7 @@ using Zene.Structs;
 
 namespace Zene.Graphics.Z3D
 {
-    public class ShadowMapper : IFrameBuffer, IShaderProgram
+    public class ShadowMapper : IFramebuffer, IShaderProgram
     {
         public ShadowMapper(int width, int height)
         {
@@ -14,9 +14,9 @@ namespace Zene.Graphics.Z3D
             // Framebuffer initialization
             _framebuffer = new TextureRenderer(width, height);
             _framebuffer.SetDepthAttachment(TextureFormat.DepthComponent32f, true);
-            _framebuffer.DrawBuffer(FrameDrawTarget.None);
-            _framebuffer.ReadBuffer(FrameDrawTarget.None);
-            _framebuffer.UnBind();
+            _framebuffer.DrawBuffer = FrameDrawTarget.None;
+            _framebuffer.ReadBuffer = FrameDrawTarget.None;
+            _framebuffer.Unbind();
 
             // Texture properties
             _texture = _framebuffer.GetTexture(FrameAttachment.Depth);
@@ -24,7 +24,7 @@ namespace Zene.Graphics.Z3D
             _texture.MagFilter = TextureSampling.Blend;
             _texture.WrapStyle = WrapStyle.BorderClamp;
             _texture.BorderColour = new ColourF(1f, 1f, 1f, 1f);
-            _texture.UnBind();
+            _texture.Unbind();
         }
 
         public uint Id => _framebuffer.Id;
@@ -84,6 +84,10 @@ namespace Zene.Graphics.Z3D
             }
         }
 
+        public FrameDrawTarget ReadBuffer { get => FrameDrawTarget.None; set => throw new NotSupportedException(); }
+        private static readonly FrameDrawTarget[] _drawbuffers = new FrameDrawTarget[] { FrameDrawTarget.None };
+        public FrameDrawTarget[] DrawBuffers { get => _drawbuffers; set => throw new NotSupportedException(); }
+
         /// <summary>
         /// Bind the framebuffer for a specific task.
         /// </summary>
@@ -94,7 +98,7 @@ namespace Zene.Graphics.Z3D
 
             _framebuffer.Bind(target);
         }
-        void IFrameBuffer.Bind(FrameTarget target) => GL.BindFramebuffer((uint)target, Id);
+        void IFramebuffer.Bind(FrameTarget target) => GL.BindFramebuffer((uint)target, Id);
         /// <summary>
         /// Bind the framebuffer.
         /// </summary>
@@ -121,11 +125,11 @@ namespace Zene.Graphics.Z3D
         /// </summary>
         public void UnBind()
         {
-            _shader.UnBind();
+            _shader.Unbind();
 
-            _framebuffer.UnBind();
+            _framebuffer.Unbind();
         }
-        void IBindable.UnBind() => GL.BindFramebuffer(GLEnum.Framebuffer, 0);
+        void IBindable.Unbind() => GL.BindFramebuffer(GLEnum.Framebuffer, 0);
         public bool Validate()
         {
             return _framebuffer.Validate();
@@ -134,13 +138,8 @@ namespace Zene.Graphics.Z3D
         /// <summary>
         /// Clears the data inside the framebuffer.
         /// </summary>
-        public void Clear()
-        {
-            // Bind framebuffer
-            GL.BindFramebuffer(GLEnum.Framebuffer, Id);
-
-            IFrameBuffer.Clear(BufferBit.Depth);
-        }
+        public void Clear() => _framebuffer.Clear(BufferBit.Depth);
+        void IFramebuffer.Clear(BufferBit buffer) => _framebuffer.Clear(buffer);
 
         /// <summary>
         /// Binds the texture apart of this texture.

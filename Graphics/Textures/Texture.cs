@@ -89,7 +89,7 @@ namespace Zene.Graphics
             _disposed = true;
             GC.SuppressFinalize(this);
         }
-        public void UnBind() => _texture.UnBind();
+        public void Unbind() => _texture.Unbind();
 
         /// <summary>
         /// Gets or sets a signal pixel of the texture.

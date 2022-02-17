@@ -80,7 +80,7 @@ namespace ImplicitFunctions
         {
             GL.UseProgram(Id);
         }
-        public void UnBind()
+        public void Unbind()
         {
             GL.UseProgram(0);
         }

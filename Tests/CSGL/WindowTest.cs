@@ -139,7 +139,7 @@ namespace CSGL
 
             _texture.Bind(0);
             _drawObject.Draw();
-            _texture.UnBind();
+            _texture.Unbind();
         }
 
         private bool _left;

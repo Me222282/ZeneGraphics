@@ -19,7 +19,7 @@ namespace PhysicsTest
         {
             _shader = new BasicShader();
             _planetShader = new TextureShader();
-            _frameBuffer = new PostProcessing(width, height);
+            Framebuffer = new PostProcessing(width, height);
 
             _rocket = new Rocket(0, 0, 15, 15, _shader);
 
@@ -67,7 +67,7 @@ namespace PhysicsTest
             if (dispose)
             {
                 _shader.Dispose();
-                _frameBuffer.Dispose();
+                Framebuffer.Dispose();
                 _rocket.Dispose();
                 _background.Dispose();
                 _planets.Dispose();
@@ -77,7 +77,7 @@ namespace PhysicsTest
         }
 
         private readonly BasicShader _shader;
-        private readonly PostProcessing _frameBuffer;
+        public override PostProcessing Framebuffer { get; }
         private readonly Background _background;
 
         private readonly PlanetGroup _planets;
@@ -103,13 +103,13 @@ namespace PhysicsTest
 
             while (GLFW.WindowShouldClose(Handle) == 0) // Window shouldn't close
             {
-                _frameBuffer.Bind();
+                Framebuffer.Bind();
 
                 // Frametime is in seconds
                 Draw(frameTime * 0.001);
 
-                _frameBuffer.UnBind();
-                _frameBuffer.Draw();
+                Framebuffer.Unbind();
+                Framebuffer.Draw();
 
                 GLFW.PollEvents();
                 GLFW.SwapBuffers(Handle);
@@ -132,7 +132,7 @@ namespace PhysicsTest
             //Console.WriteLine((1 / frameTime).ToString("N3"));
             //Console.WriteLine(_rocket.Velocity.Speed.ToString("N3"));
 
-            IFrameBuffer.Clear(BufferBit.Colour | BufferBit.Depth);
+            Framebuffer.Clear(BufferBit.Colour | BufferBit.Depth);
 
             _background.SetTranslation(Matrix4.CreateTranslation((Vector3)(_rocket.Location / (_mSize * 0.1))));
             _background.Draw();
@@ -193,7 +193,7 @@ namespace PhysicsTest
             _shader.Matrix3 = orthMat;
             _planetShader.Projection = orthMat;
 
-            _frameBuffer.Size = this.Size;
+            Framebuffer.Size = this.Size;
 
             _rocket.Arrow = mWidth > 6000;
             _rocket.Multiplier = (mWidth / _rocket.Box.Width) * 0.005;

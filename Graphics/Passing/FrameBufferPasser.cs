@@ -1,15 +1,16 @@
 ﻿using System;
 using Zene.Graphics.OpenGL;
 using Zene.Graphics.OpenGL.Abstract3;
+using Zene.Structs;
 
 namespace Zene.Graphics.Passing
 {
     /// <summary>
     /// An object for coping and externally managing framebuffer objects.
     /// </summary>
-    public class FrameBufferPasser : IFrameBuffer
+    public class FrameBufferPasser : IFramebuffer
     {
-        public FrameBufferPasser(IFrameBuffer frameBuffer)
+        public FrameBufferPasser(IFramebuffer frameBuffer)
         {
             Id = frameBuffer.Id;
         }
@@ -21,13 +22,22 @@ namespace Zene.Graphics.Passing
         public uint Id { get; }
         public FrameTarget Binding { get; private set; } = FrameTarget.FrameBuffer;
 
+        public RectangleI View { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+        public Vector2I ViewSize { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+        public FrameDrawTarget ReadBuffer { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+        public FrameDrawTarget[] DrawBuffers { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+
         public void Bind(FrameTarget target)
         {
+            if (this.Bound()) { return; }
+
             Binding = target;
             GL.BindFramebuffer((uint)target, Id);
         }
         public void Bind()
         {
+            if (this.Bound()) { return; }
+
             Binding = FrameTarget.FrameBuffer;
             GL.BindFramebuffer(GLEnum.Framebuffer, Id);
         }
@@ -35,7 +45,7 @@ namespace Zene.Graphics.Passing
         {
             GC.SuppressFinalize(this);
         }
-        public void UnBind()
+        public void Unbind()
         {
             GL.BindFramebuffer((uint)Binding, 0);
         }
@@ -60,6 +70,13 @@ namespace Zene.Graphics.Passing
         public static FrameBufferGL Pass(uint id)
         {
             return new FrameBufferGL(id);
+        }
+
+        public void Clear(BufferBit buffer)
+        {
+            Bind();
+
+            GL.Clear((uint)buffer);
         }
     }
 }

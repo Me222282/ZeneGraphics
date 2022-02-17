@@ -530,7 +530,7 @@ namespace Zene.Graphics
         /// <param name="index">The index into the texture array.</param>
         /// <param name="access">The access type for the texture.</param>
         public void Bind(uint slot, int level, int index, AccessType access) => _texture.BindLevel(slot, level, false, index, access);
-        public void UnBind() => _texture.UnBind();
+        public void Unbind() => _texture.Unbind();
 
         private bool _disposed = false;
         public void Dispose()

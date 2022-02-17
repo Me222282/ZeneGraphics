@@ -178,7 +178,7 @@ namespace PhysicsTest
 
                 _drawable.Draw();
 
-                _shader.UnBind();
+                _shader.Unbind();
             }
         }
 

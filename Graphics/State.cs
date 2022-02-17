@@ -685,7 +685,7 @@ namespace Zene.Graphics
                 target == Target.ReadFramebuffer ||
                 target == Target.DrawFramebuffer)
             {
-                GL.BindFramebuffer((uint)target, 0);
+                BaseFramebuffer.Bind((FrameTarget)target);
                 return;
             }
             if (target == Target.Renderbuffer)
@@ -746,6 +746,22 @@ namespace Zene.Graphics
         public static void ReleaseShaderCompiler()
         {
             GL.ReleaseShaderCompiler();
+        }
+
+        /// <summary>
+        /// Gets the maximum colour attachments of framebuffers for the hardware being used.
+        /// </summary>
+        [OpenGLSupport(3.0)]
+        public static int MaxColourAttach
+        {
+            get
+            {
+                int value = 0; // Output value
+                // Get the maximum colour attachments
+                GL.GetIntegerv(GLEnum.MaxColourAttachments, ref value);
+
+                return value;
+            }
         }
     }
 }

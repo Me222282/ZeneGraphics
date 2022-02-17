@@ -61,7 +61,7 @@ namespace GUI
                 _textRender.Dispose();
                 _drawingBox.Dispose();
                 _shader.Dispose();
-                _framebuffer.Dispose();
+                Framebuffer.Dispose();
 
                 foreach (Panel panel in _panels)
                 {
@@ -94,9 +94,9 @@ namespace GUI
 
             _shader = new BasicShader();
 
-            _framebuffer = new TextureRenderer(width, height);
-            _framebuffer.SetColourAttachment(0, TextureFormat.Rgba8);
-            _framebuffer.SetDepthAttachment(TextureFormat.DepthComponent16, false);
+            Framebuffer = new TextureRenderer(width, height);
+            Framebuffer.SetColourAttachment(0, TextureFormat.Rgba8);
+            Framebuffer.SetDepthAttachment(TextureFormat.DepthComponent16, false);
 
             _panels = new List<Panel>()
             {
@@ -118,17 +118,16 @@ namespace GUI
         private readonly DrawObject<double, byte> _drawingBox;
         private readonly BasicShader _shader;
 
-        public void BindFramebuffer() => _framebuffer.Bind();
+        public void BindFramebuffer() => Framebuffer.Bind();
 
-        private readonly TextureRenderer _framebuffer;
+        public override TextureRenderer Framebuffer { get; }
         private readonly List<Panel> _panels;
 
         private void Draw()
         {
-            _framebuffer.Bind();
+            Framebuffer.Bind();
 
-            IFrameBuffer.Clear(BufferBit.Depth);
-            IFrameBuffer.ClearColour(Colour.Zero);
+            Framebuffer.Clear(BufferBit.Colour | BufferBit.Depth);
 
             // Text
             _textRender.Model = Matrix4.CreateScale(10, 10, 0);
@@ -141,7 +140,7 @@ namespace GUI
                 _panels[i].Draw(dp * i);
             }
 
-            _framebuffer.CopyFrameBuffer(_framebuffer.View, BufferBit.Colour, TextureSampling.Nearest);
+            Framebuffer.CopyFrameBuffer(Framebuffer.View, BufferBit.Colour, TextureSampling.Nearest);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -195,8 +194,8 @@ namespace GUI
 
             if (e.Width > 0 && e.Height > 0)
             {
-                _framebuffer.Size = new Vector2I(Width, Height);
-                _framebuffer.ViewSize = new Vector2I(Width, Height);
+                Framebuffer.Size = new Vector2I(Width, Height);
+                Framebuffer.ViewSize = new Vector2I(Width, Height);
             }
         }
 

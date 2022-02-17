@@ -39,7 +39,7 @@ namespace Zene.Graphics
                 }
                 else if ((!value) && _bound)
                 {
-                    UnBind();
+                    Unbind();
                 }
             }
         }
@@ -64,6 +64,6 @@ namespace Zene.Graphics
 
         public abstract void Bind();
 
-        public abstract void UnBind();
+        public abstract void Unbind();
     }
 }

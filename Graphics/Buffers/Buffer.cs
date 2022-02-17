@@ -80,7 +80,7 @@ namespace Zene.Graphics
                 }
                 else if ((!value) && _bound)
                 {
-                    UnBind();
+                    Unbind();
                 }
             }
         }
@@ -143,7 +143,7 @@ namespace Zene.Graphics
 
             _dataCreated = true;
 
-            if (!bound) { UnBind(); }
+            if (!bound) { Unbind(); }
         }
 
         public virtual void CreateData()
@@ -157,7 +157,7 @@ namespace Zene.Graphics
         {
             if (!DataCreated) { return; }
 
-            UnBind();
+            Unbind();
             GL.DeleteBuffer(Id);
 
             Id = 0;
@@ -184,7 +184,7 @@ namespace Zene.Graphics
             _bound = true;
         }
 
-        public virtual void UnBind()
+        public virtual void Unbind()
         {
             GL.BindBuffer((uint)Target, 0);
 

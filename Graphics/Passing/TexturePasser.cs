@@ -30,19 +30,31 @@ namespace Zene.Graphics.Passing
         }
 
         public uint Id { get; }
-        public uint ReferanceSlot { get; private set; }
+        public uint ReferanceSlot { get; private set; } = 0;
         public TextureTarget Target { get; }
         public TextureFormat InternalFormat { get; }
         private readonly TextureData _dataType = 0;
 
         public void Bind(uint slot)
         {
-            GL.ActiveTexture(GLEnum.Texture0 + slot);
-            ReferanceSlot = slot;
-            GL.BindTexture((uint)Target, Id);
+            if (!this.Bound(slot))
+            {
+                GL.ActiveTexture(GLEnum.Texture0 + slot);
+                ReferanceSlot = slot;
+                GL.BindTexture((uint)Target, Id);
+                return;
+            }
+
+            if (State.ActiveTexture != slot)
+            {
+                GL.ActiveTexture(GLEnum.Texture0 + slot);
+            }
         }
         public void Bind()
         {
+            if (this.Bound(State.ActiveTexture)) { return; }
+
+            GL.ActiveTexture(GLEnum.Texture0 + State.ActiveTexture);
             ReferanceSlot = State.ActiveTexture;
             GL.BindTexture((uint)Target, Id);
         }
@@ -50,7 +62,7 @@ namespace Zene.Graphics.Passing
         {
             GC.SuppressFinalize(this);
         }
-        public void UnBind()
+        public void Unbind()
         {
             State.ActiveTexture = ReferanceSlot;
             GL.BindTexture((uint)Target, 0);

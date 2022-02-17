@@ -56,7 +56,7 @@ namespace ImplicitFunctions
             {
                 GLFW.PollEvents();
                 // Clear screen black
-                IFrameBuffer.Clear(BufferBit.Colour);
+                IFramebuffer.Clear(BufferBit.Colour);
 
                 // Use shader and render object
                 _shader.Bind();
@@ -72,7 +72,7 @@ namespace ImplicitFunctions
         {
             base.OnSizeChange(e);
 
-            IFrameBuffer.View((int)e.Width, (int)e.Height);
+            IFramebuffer.View((int)e.Width, (int)e.Height);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
