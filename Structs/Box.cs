@@ -68,7 +68,7 @@ namespace Zene.Structs
             }
         }
 
-        public Vector2 Center
+        public Vector2 Centre
         {
             get
             {

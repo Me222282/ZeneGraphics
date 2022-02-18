@@ -22,7 +22,7 @@
         /// <summary>
         /// The center location of the box.
         /// </summary>
-        public Vector2 Center { get; }
+        public Vector2 Centre { get; }
 
         /// <summary>
         /// The x location of the box.

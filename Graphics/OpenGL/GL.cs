@@ -135,7 +135,7 @@ namespace Zene.Graphics.OpenGL
 
 			public delegate void BindVertexBuffers(uint first, int count, uint* buffers, int* offsets, int* strides);
 
-			public delegate void BlendColor(float red, float green, float blue, float alpha);
+			public delegate void BlendColour(float red, float green, float blue, float alpha);
 
 			public delegate void BlendEquation(uint mode);
 
@@ -167,7 +167,7 @@ namespace Zene.Graphics.OpenGL
 
 			public delegate uint CheckNamedFramebufferStatus(uint framebuffer, uint target);
 
-			public delegate void ClampColor(uint target, uint clamp);
+			public delegate void ClampColour(uint target, uint clamp);
 
 			public delegate void Clear(uint mask);
 
@@ -183,7 +183,7 @@ namespace Zene.Graphics.OpenGL
 
 			public delegate void ClearBufferuiv(uint buffer, int drawbuffer, uint* value);
 
-			public delegate void ClearColor(float red, float green, float blue, float alpha);
+			public delegate void ClearColour(float red, float green, float blue, float alpha);
 
 			public delegate void ClearDepth(double depth);
 
@@ -211,9 +211,9 @@ namespace Zene.Graphics.OpenGL
 
 			public delegate void ClipControl(uint origin, uint depth);
 
-			public delegate void ColorMask(bool red, bool green, bool blue, bool alpha);
+			public delegate void ColourMask(bool red, bool green, bool blue, bool alpha);
 
-			public delegate void ColorMaski(uint index, bool r, bool g, bool b, bool a);
+			public delegate void ColourMaski(uint index, bool r, bool g, bool b, bool a);
 
 			public delegate void CompileShader(uint shader);
 
@@ -1449,7 +1449,7 @@ namespace Zene.Graphics.OpenGL
 
 			public static Delegates.BindVertexBuffers BindVertexBuffers { get; set; }
 
-			public static Delegates.BlendColor BlendColor { get; set; }
+			public static Delegates.BlendColour BlendColour { get; set; }
 
 			public static Delegates.BlendEquation BlendEquation { get; set; }
 
@@ -1481,7 +1481,7 @@ namespace Zene.Graphics.OpenGL
 
 			public static Delegates.CheckNamedFramebufferStatus CheckNamedFramebufferStatus { get; set; }
 
-			public static Delegates.ClampColor ClampColor { get; set; }
+			public static Delegates.ClampColour ClampColour { get; set; }
 
 			public static Delegates.Clear Clear { get; set; }
 
@@ -1497,7 +1497,7 @@ namespace Zene.Graphics.OpenGL
 
 			public static Delegates.ClearBufferuiv ClearBufferuiv { get; set; }
 
-			public static Delegates.ClearColor ClearColor { get; set; }
+			public static Delegates.ClearColour ClearColour { get; set; }
 
 			public static Delegates.ClearDepth ClearDepth { get; set; }
 
@@ -1525,9 +1525,9 @@ namespace Zene.Graphics.OpenGL
 
 			public static Delegates.ClipControl ClipControl { get; set; }
 
-			public static Delegates.ColorMask ColorMask { get; set; }
+			public static Delegates.ColourMask ColourMask { get; set; }
 
-			public static Delegates.ColorMaski ColorMaski { get; set; }
+			public static Delegates.ColourMaski ColourMaski { get; set; }
 
 			public static Delegates.CompileShader CompileShader { get; set; }
 
@@ -2722,10 +2722,10 @@ namespace Zene.Graphics.OpenGL
 			{
 				Functions.BlendFunc = getProc<Delegates.BlendFunc>("BlendFunc");
 				Functions.Clear = getProc<Delegates.Clear>("Clear");
-				Functions.ClearColor = getProc<Delegates.ClearColor>("ClearColor");
+				Functions.ClearColour = getProc<Delegates.ClearColour>("ClearColour");
 				Functions.ClearDepth = getProc<Delegates.ClearDepth>("ClearDepth");
 				Functions.ClearStencil = getProc<Delegates.ClearStencil>("ClearStencil");
-				Functions.ColorMask = getProc<Delegates.ColorMask>("ColorMask");
+				Functions.ColourMask = getProc<Delegates.ColourMask>("ColourMask");
 				Functions.CullFace = getProc<Delegates.CullFace>("CullFace");
 				Functions.DepthFunc = getProc<Delegates.DepthFunc>("DepthFunc");
 				Functions.DepthMask = getProc<Delegates.DepthMask>("DepthMask");
@@ -2811,7 +2811,7 @@ namespace Zene.Graphics.OpenGL
 
 			if (version >= 1.4)
 			{
-				Functions.BlendColor = getProc<Delegates.BlendColor>("BlendColor");
+				Functions.BlendColour = getProc<Delegates.BlendColour>("BlendColour");
 				Functions.BlendEquation = getProc<Delegates.BlendEquation>("BlendEquation");
 				Functions.BlendFuncSeparate = getProc<Delegates.BlendFuncSeparate>("BlendFuncSeparate");
 				Functions.MultiDrawArrays = getProc<Delegates.MultiDrawArrays>("MultiDrawArrays");
@@ -2964,12 +2964,12 @@ namespace Zene.Graphics.OpenGL
 				Functions.BindVertexArray = getProc<Delegates.BindVertexArray>("BindVertexArray");
 				Functions.BlitFramebuffer = getProc<Delegates.BlitFramebuffer>("BlitFramebuffer");
 				Functions.CheckFramebufferStatus = getProc<Delegates.CheckFramebufferStatus>("CheckFramebufferStatus");
-				Functions.ClampColor = getProc<Delegates.ClampColor>("ClampColor");
+				Functions.ClampColour = getProc<Delegates.ClampColour>("ClampColour");
 				Functions.ClearBufferfi = getProc<Delegates.ClearBufferfi>("ClearBufferfi");
 				Functions.ClearBufferfv = getProc<Delegates.ClearBufferfv>("ClearBufferfv");
 				Functions.ClearBufferiv = getProc<Delegates.ClearBufferiv>("ClearBufferiv");
 				Functions.ClearBufferuiv = getProc<Delegates.ClearBufferuiv>("ClearBufferuiv");
-				Functions.ColorMaski = getProc<Delegates.ColorMaski>("ColorMaski");
+				Functions.ColourMaski = getProc<Delegates.ColourMaski>("ColourMaski");
 				Functions.DeleteFramebuffers = getProc<Delegates.DeleteFramebuffers>("DeleteFramebuffers");
 				Functions.DeleteRenderbuffers = getProc<Delegates.DeleteRenderbuffers>("DeleteRenderbuffers");
 				Functions.DeleteVertexArrays = getProc<Delegates.DeleteVertexArrays>("DeleteVertexArrays");
@@ -3859,9 +3859,9 @@ namespace Zene.Graphics.OpenGL
 		}
 
 		[OpenGLSupport(1.4)]
-		public static void BlendColor(float red, float green, float blue, float alpha)
+		public static void BlendColour(float red, float green, float blue, float alpha)
 		{
-			Functions.BlendColor(red, green, blue, alpha);
+			Functions.BlendColour(red, green, blue, alpha);
 		}
 
 		[OpenGLSupport(1.4)]
@@ -3955,9 +3955,9 @@ namespace Zene.Graphics.OpenGL
 		}
 
 		[OpenGLSupport(3.0)]
-		public static void ClampColor(uint target, uint clamp)
+		public static void ClampColour(uint target, uint clamp)
 		{
-			Functions.ClampColor(target, clamp);
+			Functions.ClampColour(target, clamp);
 		}
 
 		[OpenGLSupport(1.0)]
@@ -4003,9 +4003,9 @@ namespace Zene.Graphics.OpenGL
 		}
 
 		[OpenGLSupport(1.0)]
-		public static void ClearColor(float red, float green, float blue, float alpha)
+		public static void ClearColour(float red, float green, float blue, float alpha)
 		{
-			Functions.ClearColor(red, green, blue, alpha);
+			Functions.ClearColour(red, green, blue, alpha);
 		}
 
 		[OpenGLSupport(1.0)]
@@ -4087,15 +4087,15 @@ namespace Zene.Graphics.OpenGL
 		}
 
 		[OpenGLSupport(1.0)]
-		public static void ColorMask(bool red, bool green, bool blue, bool alpha)
+		public static void ColourMask(bool red, bool green, bool blue, bool alpha)
 		{
-			Functions.ColorMask(red, green, blue, alpha);
+			Functions.ColourMask(red, green, blue, alpha);
 		}
 
 		[OpenGLSupport(3.0)]
-		public static void ColorMaski(uint index, bool r, bool g, bool b, bool a)
+		public static void ColourMaski(uint index, bool r, bool g, bool b, bool a)
 		{
-			Functions.ColorMaski(index, r, g, b, a);
+			Functions.ColourMaski(index, r, g, b, a);
 		}
 
 		[OpenGLSupport(2.0)]

@@ -15,7 +15,7 @@
         /// The center location of the box.
         /// </summary>
         public new Vector3 Center { get; }
-        Vector2 IBox.Center => (Vector2)Center;
+        Vector2 IBox.Centre => (Vector2)Center;
 
         /// <summary>
         /// The z location of the box.

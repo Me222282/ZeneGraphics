@@ -55,10 +55,10 @@
         {
             get
             {
-                return new Vector2I(X + (Width * 0.5), Y + (Height * 0.5));
+                return new Vector2I(X + (Width * 0.5), Y - (Height * 0.5));
             }
         }
-        Vector2 IBox.Center => Center;
+        Vector2 IBox.Centre => Center;
 
         /// <summary>
         /// The top-left location of the box.

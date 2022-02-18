@@ -38,11 +38,11 @@
         public double Width { get; set; }
         public double Height { get; set; }
 
-        public Vector2 Center
+        public Vector2 Centre
         {
             get
             {
-                return new Vector2(X + (Width * 0.5), Y + (Height * 0.5));
+                return new Vector2(X + (Width * 0.5), Y - (Height * 0.5));
             }
         }
 

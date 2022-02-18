@@ -197,7 +197,7 @@ namespace Zene.Structs
         /// <returns></returns>
         public static bool Intersects(this IBox box, Line2 line)
         {
-            Vector2 dist = box.Center.Relative(line);
+            Vector2 dist = box.Centre.Relative(line);
 
             // Half of height
             double hh = box.Height / 2;
@@ -217,7 +217,7 @@ namespace Zene.Structs
         {
             T tolBox = box.Expanded(tolerance);
 
-            Vector2 dist = tolBox.Center.Relative(line);
+            Vector2 dist = tolBox.Centre.Relative(line);
 
             // Half of height
             double hh = tolBox.Height / 2;
