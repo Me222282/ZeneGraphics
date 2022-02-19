@@ -9,6 +9,16 @@ The main projects being worked on are **The Zene Graphics Library**, **The Zene 
 **The Zene Physics Library**, **The Zene Sprites Library** and **The Zene Forms Library** won't have many change until the main libraries are ready for a release, even if development is still due.
 This is expected to happen around 2023.
 
+## Sub Libraries
+
+ - [The Zene Graphics Library](./Graphics)</br>
+ - [The Zene Windowing Library](./Windowing)</br>
+ - [The Zene Structs Library](./Structs)</br>
+ - [The Zene Physics Library](./Physics)</br>
+ - [The Zene Sprites Library](./Sprites)</br>
+ - [The Zene Forms Library](./Forms)</br>
+ - [Zene Neural Networking](./Evolutions)</br>
+
 ## Credits
 
 OpenGL Loader by Zackary Snow(smack0007) - [Source Page](https://github.com/smack0007/GLDotNet)</br>
