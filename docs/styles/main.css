@@ -1,0 +1,143 @@
+:root
+{
+    --colour1: #e9f0ee;
+    --colour2: #cccccc;
+    --colour3: #479987;
+    --colour4: #004d3d;
+    --colour5: #2a584f;
+    --colour6: #999999;
+    --colour7: #748594;
+    --colourFoot: #b6b6b6;
+}
+
+/* Code for Firefox */
+::-moz-selection
+{
+    color: var(--colour4);
+    background: var(--colour2);
+}
+::selection
+{
+    color: var(--colour4);
+    background: var(--colour2);
+}
+
+body
+{
+    margin: 0%;
+    font-family: Nunito;
+    background-color: var(--colour1);
+}
+
+header
+{
+    background-color: var(--colour2);
+    margin: 0%;
+    padding: 10px;
+    padding-top: 2.5px;
+    padding-bottom: 2.5px;
+}
+
+footer
+{
+    background-color: var(--colourFoot);
+    margin: 0%;
+    padding: 10px;
+    text-align: center;
+}
+
+p
+{
+    margin: 10px 15px;
+}
+
+hr
+{
+    margin: 40px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-color: var(--colour7);
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 1px;
+}
+
+.preHeading
+{
+    margin: 40px;
+    margin-top: 20px;
+    margin-bottom: 7px;
+}
+
+h1
+{
+    color: var(--colour3);
+    margin: auto;
+    text-align: center;
+    font-weight: 800;
+    font-size: 400%;
+    text-shadow: 2px 2px 2px var(--colour4);
+}
+/* Code for Firefox */
+h1::-moz-selection
+{
+    color: var(--colour1);
+    background: var(--colour6);
+    text-shadow: 2px 2px 2px var(--colour2);
+}
+h1::selection
+{
+    color: var(--colour1);
+    background: var(--colour6);
+    text-shadow: 2px 2px 2px var(--colour2);
+}
+
+h2
+{
+    color: var(--colour3);
+    margin: 0 0 0 20px;
+    text-align: left;
+    font-weight: 800;
+    font-size: 300%;
+    text-shadow: 1.25px 1.25px 2px var(--colour4);
+}
+/* Code for Firefox */
+h2::-moz-selection
+{
+    color: var(--colour1);
+    background: var(--colour6);
+    text-shadow: 1.25px 1.25px 2px var(--colour2);
+}
+h2::selection
+{
+    color: var(--colour1);
+    background: var(--colour6);
+    text-shadow: 1.25px 1.25px 2px var(--colour2);
+}
+
+a
+{
+    color: var(--colour5);
+    text-decoration: none;
+}
+a:hover
+{
+    color: var(--colour4);
+    text-decoration: none;
+}
+a:active
+{
+    color: var(--colour3);
+    text-decoration: none;
+}
+
+ul
+{
+    padding-left: 55px;
+    margin-top: 7px;
+}
+li
+{
+    margin: 2.5px;
+    font-size: 115%;
+}
