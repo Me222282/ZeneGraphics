@@ -1,6 +1,6 @@
 # The Zene Library
 
-The Zene Library is a wrapping library that contains many sub libraries. These are generally lower level things like graphics and window managment.
+The Zene Library is a wrapping library that contains many sub libraries. These are generally lower level things like graphics and window management.
 The original idea was to make fully object orientated abstractions of OpenGL and GLFW but now includes other base libraries like **The Zene Physics Library**.
 The end goal is to have a collection of libraries that can be used together to make something like a game engine, but also used separately and mixed with other libraries as well.
 This isn't a professional project so development will be slow and inconsistent and there may be large changes to some of the core structures.</br>
