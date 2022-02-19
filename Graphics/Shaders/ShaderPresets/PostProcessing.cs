@@ -109,7 +109,7 @@ namespace Zene.Graphics.Shaders
             
             if ((buffer & BufferBit.Colour) == BufferBit.Colour)
             {
-                GL.ClearColor(ClearColour.R, ClearColour.G, ClearColour.B, ClearColour.A);
+                GL.ClearColour(ClearColour.R, ClearColour.G, ClearColour.B, ClearColour.A);
             }
             if ((buffer & BufferBit.Depth) == BufferBit.Depth)
             {

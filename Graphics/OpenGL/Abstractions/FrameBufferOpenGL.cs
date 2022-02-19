@@ -5,17 +5,6 @@ namespace Zene.Graphics.Base.Extensions
     [OpenGLSupport(3.0)]
     public static unsafe class FrameBufferOpenGL
     {
-        /// <summary>
-        /// Sets the OpenGL context to referance <paramref name="framebuffer"/>.
-        /// </summary>
-        public static void SetGLContext(this IFramebuffer framebuffer)
-        {
-            if (!framebuffer.Bound())
-            {
-                framebuffer.Bind();
-            }
-        }
-
         /*
         /// <summary>
         /// Copy a block of pixels from one framebuffer object to another.
@@ -95,7 +84,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static FrameBufferStatus CheckStatus(this IFramebuffer framebuffer)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             return (FrameBufferStatus)GL.CheckFramebufferStatus(GLEnum.Framebuffer);
         }
 
@@ -106,7 +95,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static void DrawBuffers(this IFramebuffer framebuffer, FrameDrawTarget buffer)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             uint buf = (uint)buffer;
             GL.DrawBuffers(1, &buf);
         }
@@ -117,7 +106,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static void DrawBuffers(this IFramebuffer framebuffer, FrameDrawTarget[] buffers)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             fixed (void* pointer = &buffers[0])
             {
                 GL.DrawBuffers(buffers.Length, (uint*)pointer);
@@ -132,7 +121,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static void FramebufferRenderbuffer(this IFramebuffer framebuffer, IRenderbuffer renderbuffer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferRenderbuffer(GLEnum.Framebuffer, (uint)attachment, GLEnum.Renderbuffer, renderbuffer.Id);
         }
 
@@ -145,7 +134,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.2)]
         public static void FramebufferTexture(this IFramebuffer framebuffer, ITexture texture, int level, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferTexture(GLEnum.Framebuffer, (uint)attachment, texture.Id, level);
         }
         /// <summary>
@@ -157,7 +146,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static void FramebufferTexture1D(this IFramebuffer framebuffer, ITexture texture, int level, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferTexture1D(GLEnum.Framebuffer, (uint)attachment, GLEnum.Texture1d, texture.Id, level);
         }
         /// <summary>
@@ -169,7 +158,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static void FramebufferTexture2D(this IFramebuffer framebuffer, CubeMapFace textureTarget, ITexture texture, int level, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferTexture2D(GLEnum.Framebuffer, (uint)attachment, (uint)textureTarget, texture.Id, level);
         }
         /// <summary>
@@ -181,7 +170,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static void FramebufferTexture2D(this IFramebuffer framebuffer, ITexture texture, int level, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferTexture2D(GLEnum.Framebuffer, (uint)attachment, (uint)texture.Target, texture.Id, level);
         }
         /// <summary>
@@ -194,7 +183,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static void FramebufferTexture3D(this IFramebuffer framebuffer, ITexture texture, int level, FrameAttachment attachment, int offset)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferTexture3D(GLEnum.Framebuffer, (uint)attachment, (uint)texture.Target, texture.Id, level, offset);
         }
 
@@ -206,7 +195,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.2)]
         public static void FramebufferTexture(this IFramebuffer framebuffer, ITexture texture, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferTexture(GLEnum.Framebuffer, (uint)attachment, texture.Id, 0);
         }
         /// <summary>
@@ -217,7 +206,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static void FramebufferTexture1D(this IFramebuffer framebuffer, ITexture texture, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferTexture1D(GLEnum.Framebuffer, (uint)attachment, GLEnum.Texture1d, texture.Id, 0);
         }
         /// <summary>
@@ -228,7 +217,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static void FramebufferTexture2D(this IFramebuffer framebuffer, CubeMapFace textureTarget, ITexture texture, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferTexture2D(GLEnum.Framebuffer, (uint)attachment, (uint)textureTarget, texture.Id, 0);
         }
         /// <summary>
@@ -239,7 +228,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static void FramebufferTexture2D(this IFramebuffer framebuffer, ITexture texture, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferTexture2D(GLEnum.Framebuffer, (uint)attachment, (uint)texture.Target, texture.Id, 0);
         }
         /// <summary>
@@ -251,7 +240,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static void FramebufferTexture3D(this IFramebuffer framebuffer, ITexture texture, FrameAttachment attachment, int offset)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferTexture3D(GLEnum.Framebuffer, (uint)attachment, (uint)texture.Target, texture.Id, 0, offset);
         }
 
@@ -265,7 +254,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static void FramebufferTextureLayer(this IFramebuffer framebuffer, ITexture texture, int level, int layer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferTextureLayer(GLEnum.Framebuffer, (uint)attachment, texture.Id, level, layer);
         }
         /// <summary>
@@ -277,7 +266,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static void FramebufferTextureLayer(this IFramebuffer framebuffer, ITexture texture, int layer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferTextureLayer(GLEnum.Framebuffer, (uint)attachment, texture.Id, 0, layer);
         }
 
@@ -288,7 +277,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.3)]
         public static void Invalidate(this IFramebuffer framebuffer, FrameAttachment[] attachments)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             fixed (void* pointer = &attachments[0])
             {
                 GL.InvalidateFramebuffer(GLEnum.Framebuffer, attachments.Length, (uint*)pointer);
@@ -305,7 +294,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.3)]
         public static void InvalidateSub(this IFramebuffer framebuffer, FrameAttachment[] attachments, int x, int y, int width, int height)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             fixed (void* pointer = &attachments[0])
             {
                 GL.InvalidateSubFramebuffer(GLEnum.Framebuffer, attachments.Length, (uint*)pointer, x, y, width, height);
@@ -320,7 +309,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static int GetRedSize(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferAttachmentParameteriv(GLEnum.Framebuffer, (uint)attachment, GLEnum.FramebufferAttachmentRedSize, &value);
@@ -336,7 +325,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static int GetGreenSize(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferAttachmentParameteriv(GLEnum.Framebuffer, (uint)attachment, GLEnum.FramebufferAttachmentGreenSize, &value);
@@ -352,7 +341,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static int GetBlueSize(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferAttachmentParameteriv(GLEnum.Framebuffer, (uint)attachment, GLEnum.FramebufferAttachmentBlueSize, &value);
@@ -368,7 +357,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static int GetAlphaSize(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferAttachmentParameteriv(GLEnum.Framebuffer, (uint)attachment, GLEnum.FramebufferAttachmentAlphaSize, &value);
@@ -384,7 +373,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static int GetDepthSize(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferAttachmentParameteriv(GLEnum.Framebuffer, (uint)attachment, GLEnum.FramebufferAttachmentDepthSize, &value);
@@ -400,7 +389,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static int GetStencilSize(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferAttachmentParameteriv(GLEnum.Framebuffer, (uint)attachment, GLEnum.FramebufferAttachmentStencilSize, &value);
@@ -416,7 +405,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static ChannelType GetComponentType(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferAttachmentParameteriv(GLEnum.Framebuffer, (uint)attachment, GLEnum.FramebufferAttachmentComponentType, &value);
@@ -432,7 +421,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static ColourEncode GetColourEncoding(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferAttachmentParameteriv(GLEnum.Framebuffer, (uint)attachment, GLEnum.FramebufferAttachmentColourEncoding, &value);
@@ -448,7 +437,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static AttachType GetObjectType(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferAttachmentParameteriv(GLEnum.Framebuffer, (uint)attachment, GLEnum.FramebufferAttachmentObjectType, &value);
@@ -464,7 +453,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static uint GetObjectId(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferAttachmentParameteriv(GLEnum.Framebuffer, (uint)attachment, GLEnum.FramebufferAttachmentObjectName, &value);
@@ -480,7 +469,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static int GetTextureLevel(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferAttachmentParameteriv(GLEnum.Framebuffer, (uint)attachment, GLEnum.FramebufferAttachmentTextureLevel, &value);
@@ -496,7 +485,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static CubeMapFace GetTextureCubeMapFace(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferAttachmentParameteriv(GLEnum.Framebuffer, (uint)attachment, GLEnum.FramebufferAttachmentTextureCubeMapFace, &value);
@@ -512,7 +501,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.2)]
         public static bool GetLayered(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferAttachmentParameteriv(GLEnum.Framebuffer, (uint)attachment, GLEnum.FramebufferAttachmentLayered, &value);
@@ -528,7 +517,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(3.0)]
         public static int GetTextureLayer(this IFramebuffer framebuffer, FrameAttachment attachment)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferAttachmentParameteriv(GLEnum.Framebuffer, (uint)attachment, GLEnum.FramebufferAttachmentTextureLayer, &value);
@@ -547,7 +536,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.3)]
         public static int GetDefaultWidth(this IFramebuffer framebuffer)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferParameteriv(GLEnum.Framebuffer, GLEnum.FramebufferDefaultWidth, &value);
@@ -562,7 +551,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.3)]
         public static int GetDefaultHeight(this IFramebuffer framebuffer)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferParameteriv(GLEnum.Framebuffer, GLEnum.FramebufferDefaultHeight, &value);
@@ -577,7 +566,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.3)]
         public static int GetDefaultLayers(this IFramebuffer framebuffer)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferParameteriv(GLEnum.Framebuffer, GLEnum.FramebufferDefaultLayers, &value);
@@ -592,7 +581,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.3)]
         public static int GetDefaultSamples(this IFramebuffer framebuffer)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferParameteriv(GLEnum.Framebuffer, GLEnum.FramebufferDefaultSamples, &value);
@@ -607,7 +596,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.3)]
         public static bool GetDefaultFixedSampleLocations(this IFramebuffer framebuffer)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferParameteriv(GLEnum.Framebuffer, GLEnum.FramebufferDefaultFixedSampleLocations, &value);
@@ -622,7 +611,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.5)]
         public static bool GetDoubleBuffer(this IFramebuffer framebuffer)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferParameteriv(GLEnum.Framebuffer, GLEnum.Doublebuffer, &value);
@@ -637,7 +626,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.5)]
         public static int GetSamples(this IFramebuffer framebuffer)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferParameteriv(GLEnum.Framebuffer, GLEnum.Samples, &value);
@@ -652,7 +641,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.5)]
         public static int GetSampleBuffers(this IFramebuffer framebuffer)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferParameteriv(GLEnum.Framebuffer, GLEnum.SampleBuffers, &value);
@@ -667,7 +656,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.5)]
         public static bool GetStereo(this IFramebuffer framebuffer)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferParameteriv(GLEnum.Framebuffer, GLEnum.Stereo, &value);
@@ -682,7 +671,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.5)]
         public static BaseFormat GetColourReadFormat(this IFramebuffer framebuffer)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferParameteriv(GLEnum.Framebuffer, GLEnum.Doublebuffer, &value);
@@ -697,7 +686,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.5)]
         public static TextureData GetColourReadType(this IFramebuffer framebuffer)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             int value = 0;
 
             GL.GetFramebufferParameteriv(GLEnum.Framebuffer, GLEnum.Doublebuffer, &value);
@@ -717,7 +706,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.3)]
         public static void SetDefaultWidth(this IFramebuffer framebuffer, int value)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferParameteri(GLEnum.Framebuffer, GLEnum.FramebufferDefaultWidth, value);
         }
 
@@ -729,7 +718,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.3)]
         public static void SetDefaultHeight(this IFramebuffer framebuffer, int value)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferParameteri(GLEnum.Framebuffer, GLEnum.FramebufferDefaultHeight, value);
         }
 
@@ -741,7 +730,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.3)]
         public static void SetDefaultLayers(this IFramebuffer framebuffer, int value)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferParameteri(GLEnum.Framebuffer, GLEnum.FramebufferDefaultLayers, value);
         }
 
@@ -753,7 +742,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.3)]
         public static void SetDefaultSamples(this IFramebuffer framebuffer, int value)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferParameteri(GLEnum.Framebuffer, GLEnum.FramebufferDefaultSamples, value);
         }
 
@@ -765,7 +754,7 @@ namespace Zene.Graphics.Base.Extensions
         [OpenGLSupport(4.3)]
         public static void SetDefaultFixedSampleLocations(this IFramebuffer framebuffer, bool value)
         {
-            framebuffer.SetGLContext();
+            framebuffer.Bind();
             GL.FramebufferParameteri(GLEnum.Framebuffer, GLEnum.FramebufferDefaultFixedSampleLocations, value ? 1 : 0);
         }
     }

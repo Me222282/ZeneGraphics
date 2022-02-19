@@ -35,6 +35,8 @@ namespace Zene.Graphics
 
         public TextureTarget Target => TextureTarget.CubeMap;
         public TextureFormat InternalFormat { get; }
+        protected TextureProperties Properties => _texture.Properties;
+        TextureProperties ITexture.Properties => _texture.Properties;
 
         /// <summary>
         /// The type of data being inputed into the texture.

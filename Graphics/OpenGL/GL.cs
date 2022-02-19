@@ -1041,18 +1041,6 @@ namespace Zene.Graphics.Base
 			Functions.GetIntegerv(pname, data);
 		}
 
-		[OpenGLSupport(4.3)]
-		public static void GetInternalformati64v(uint target, uint internalformat, uint pname, int bufSize, long* @params)
-		{
-			Functions.GetInternalformati64v(target, internalformat, pname, bufSize, @params);
-		}
-
-		[OpenGLSupport(4.2)]
-		public static void GetInternalformativ(uint target, uint internalformat, uint pname, int bufSize, int* @params)
-		{
-			Functions.GetInternalformativ(target, internalformat, pname, bufSize, @params);
-		}
-
 		[OpenGLSupport(3.2)]
 		public static void GetMultisamplefv(uint pname, uint index, float* val)
 		{

@@ -75,6 +75,8 @@ namespace Zene.Graphics
 
         public TextureTarget Target => _texture.Target;
         public TextureFormat InternalFormat { get; }
+        protected TextureProperties Properties => _texture.Properties;
+        TextureProperties ITexture.Properties => _texture.Properties;
 
         public void Bind(uint slot) => _texture.Bind(slot);
         public void Bind() => _texture.Bind();

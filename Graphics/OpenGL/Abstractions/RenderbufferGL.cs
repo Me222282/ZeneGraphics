@@ -13,25 +13,27 @@ namespace Zene.Graphics.Base
         /// </summary>
         public RenderbufferGL()
         {
-            _disposed = false;
-
             InternalFormat = 0;
 
             Id = GL.GenRenderbuffer();
+
+            Properties = new TexRenProperties(this);
         }
         internal RenderbufferGL(uint id, TextureFormat format = 0)
         {
             Id = id;
             InternalFormat = format;
 
-            _disposed = false;
+            Properties = new TexRenProperties(this);
         }
 
         public uint Id { get; }
 
         public TextureFormat InternalFormat { get; private set; }
 
-        private bool _disposed;
+        public TexRenProperties Properties { get; }
+
+        private bool _disposed = false;
         [OpenGLSupport(3.0)]
         public void Dispose()
         {

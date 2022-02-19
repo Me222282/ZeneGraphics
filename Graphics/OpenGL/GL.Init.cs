@@ -2651,10 +2651,10 @@ namespace Zene.Graphics.Base
 			{
 				Functions.BlendFunc = getProc<Delegates.BlendFunc>("BlendFunc");
 				Functions.Clear = getProc<Delegates.Clear>("Clear");
-				Functions.ClearColour = getProc<Delegates.ClearColour>("ClearColour");
+				Functions.ClearColour = getProc<Delegates.ClearColour>("ClearColor");
 				Functions.ClearDepth = getProc<Delegates.ClearDepth>("ClearDepth");
 				Functions.ClearStencil = getProc<Delegates.ClearStencil>("ClearStencil");
-				Functions.ColourMask = getProc<Delegates.ColourMask>("ColourMask");
+				Functions.ColourMask = getProc<Delegates.ColourMask>("ColorMask");
 				Functions.CullFace = getProc<Delegates.CullFace>("CullFace");
 				Functions.DepthFunc = getProc<Delegates.DepthFunc>("DepthFunc");
 				Functions.DepthMask = getProc<Delegates.DepthMask>("DepthMask");
@@ -2740,7 +2740,7 @@ namespace Zene.Graphics.Base
 
 			if (version >= 1.4)
 			{
-				Functions.BlendColour = getProc<Delegates.BlendColour>("BlendColour");
+				Functions.BlendColour = getProc<Delegates.BlendColour>("BlendColor");
 				Functions.BlendEquation = getProc<Delegates.BlendEquation>("BlendEquation");
 				Functions.BlendFuncSeparate = getProc<Delegates.BlendFuncSeparate>("BlendFuncSeparate");
 				Functions.MultiDrawArrays = getProc<Delegates.MultiDrawArrays>("MultiDrawArrays");
@@ -2893,12 +2893,12 @@ namespace Zene.Graphics.Base
 				Functions.BindVertexArray = getProc<Delegates.BindVertexArray>("BindVertexArray");
 				Functions.BlitFramebuffer = getProc<Delegates.BlitFramebuffer>("BlitFramebuffer");
 				Functions.CheckFramebufferStatus = getProc<Delegates.CheckFramebufferStatus>("CheckFramebufferStatus");
-				Functions.ClampColour = getProc<Delegates.ClampColour>("ClampColour");
+				Functions.ClampColour = getProc<Delegates.ClampColour>("ClampColor");
 				Functions.ClearBufferfi = getProc<Delegates.ClearBufferfi>("ClearBufferfi");
 				Functions.ClearBufferfv = getProc<Delegates.ClearBufferfv>("ClearBufferfv");
 				Functions.ClearBufferiv = getProc<Delegates.ClearBufferiv>("ClearBufferiv");
 				Functions.ClearBufferuiv = getProc<Delegates.ClearBufferuiv>("ClearBufferuiv");
-				Functions.ColourMaski = getProc<Delegates.ColourMaski>("ColourMaski");
+				Functions.ColourMaski = getProc<Delegates.ColourMaski>("ColorMaski");
 				Functions.DeleteFramebuffers = getProc<Delegates.DeleteFramebuffers>("DeleteFramebuffers");
 				Functions.DeleteRenderbuffers = getProc<Delegates.DeleteRenderbuffers>("DeleteRenderbuffers");
 				Functions.DeleteVertexArrays = getProc<Delegates.DeleteVertexArrays>("DeleteVertexArrays");

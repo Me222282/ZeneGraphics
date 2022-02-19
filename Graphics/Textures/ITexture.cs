@@ -278,6 +278,12 @@ namespace Zene.Graphics
     public interface ITexture : IRenderTexture
     {
         /// <summary>
+        /// The properties of this Texture.
+        /// </summary>
+        public new TextureProperties Properties { get; }
+        TexRenProperties IRenderTexture.Properties => Properties;
+
+        /// <summary>
         /// The type of this texture.
         /// </summary>
         public TextureTarget Target { get; }

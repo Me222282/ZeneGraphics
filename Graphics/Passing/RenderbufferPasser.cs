@@ -12,15 +12,19 @@ namespace Zene.Graphics.Passing
         {
             Id = renderbuffer.Id;
             InternalFormat = renderbuffer.InternalFormat;
+            Properties = renderbuffer.Properties;
         }
         public RenderbufferPasser(uint id, TextureFormat format)
         {
             Id = id;
             InternalFormat = format;
+
+            Properties = new TexRenProperties(this);
         }
 
         public uint Id { get; }
         public TextureFormat InternalFormat { get; }
+        public TexRenProperties Properties { get; }
 
         public void Bind()
         {

@@ -37,6 +37,8 @@ namespace Zene.Graphics
         public TextureTarget Target => TextureTarget.Texture2DArray;
 
         public TextureFormat InternalFormat { get; }
+        protected TextureProperties Properties => _texture.Properties;
+        TextureProperties ITexture.Properties => _texture.Properties;
 
         public uint Id => _texture.Id;
         public uint ReferanceSlot => _texture.ReferanceSlot;

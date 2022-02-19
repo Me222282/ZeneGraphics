@@ -81,6 +81,7 @@ namespace CSGL
             GL.Enable(GLEnum.DepthTest);
 
             _room = new Room();
+            BaseFramebuffer.ClearColour = new ColourF(1f, 1f, 1f);
         }
 
         private Matrix3 rotationMatrix;
@@ -124,8 +125,7 @@ namespace CSGL
             _shader.Matrix2 = Matrix4.CreateTranslation(CameraPos) * Matrix4.CreateRotationY(rotateY) *
                 Matrix4.CreateRotationX(Radian.Percent(-0.125));
 
-            GL.ClearColor(1, 1, 1, 1);
-            GL.Clear(GLEnum.ColourBufferBit | GLEnum.DepthBufferBit);
+            BaseFramebuffer.Clear(BufferBit.Colour | BufferBit.Depth);
 
             _shader.Matrix1 = Matrix4.Identity;
             _shader.SetColourSource(ColourSource.Texture);
@@ -250,7 +250,7 @@ namespace CSGL
         {
             base.OnSizePixelChange(e);
 
-            GL.Viewport(0, 0, (int)e.Width, (int)e.Height);
+            BaseFramebuffer.ViewSize = new Vector2I((int)e.Width, (int)e.Height);
         }
 
         private Vector2 mouseLocation;

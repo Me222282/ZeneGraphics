@@ -14,12 +14,15 @@ namespace Zene.Graphics.Passing
             ReferanceSlot = texture.ReferanceSlot;
             Target = texture.Target;
             InternalFormat = texture.InternalFormat;
+            Properties = texture.Properties;
         }
         public TexturePasser(TextureTarget target, uint id, TextureFormat format)
         {
             Id = id;
             Target = target;
             InternalFormat = format;
+
+            Properties = new TextureProperties(this);
         }
         public TexturePasser(TextureTarget target, uint id, TextureFormat format, TextureData type)
         {
@@ -27,12 +30,15 @@ namespace Zene.Graphics.Passing
             Target = target;
             InternalFormat = format;
             _dataType = type;
+
+            Properties = new TextureProperties(this);
         }
 
         public uint Id { get; }
         public uint ReferanceSlot { get; private set; } = 0;
         public TextureTarget Target { get; }
         public TextureFormat InternalFormat { get; }
+        public TextureProperties Properties { get; }
         private readonly TextureData _dataType = 0;
 
         public void Bind(uint slot)
@@ -52,10 +58,9 @@ namespace Zene.Graphics.Passing
         }
         public void Bind()
         {
-            if (this.Bound(State.ActiveTexture)) { return; }
+            if (this.Bound(ReferanceSlot)) { return; }
 
-            GL.ActiveTexture(GLEnum.Texture0 + State.ActiveTexture);
-            ReferanceSlot = State.ActiveTexture;
+            GL.ActiveTexture(GLEnum.Texture0 + ReferanceSlot);
             GL.BindTexture((uint)Target, Id);
         }
         public void Dispose()

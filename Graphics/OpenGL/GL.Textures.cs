@@ -265,9 +265,13 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(1.3)]
-		public static void CompressedTexImage1D(uint target, int level, uint internalformat, int width, int border, int imageSize, void* data)
+		public static void CompressedTexImage1D(ITexture texture, int level, uint internalformat, int width, int border, int imageSize, void* data)
 		{
-			Functions.CompressedTexImage1D(target, level, internalformat, width, border, imageSize, data);
+			Functions.CompressedTexImage1D((uint)texture.Target, level, internalformat, width, border, imageSize, data);
+
+			texture.Properties._width = width;
+			texture.Properties._height = 1;
+			texture.Properties._depth = 1;
 		}
 		[OpenGLSupport(1.3)]
 		public static void CompressedTexImage2D(uint target, int level, uint internalformat, int width, int height, int border, int imageSize, void* data)
@@ -682,6 +686,17 @@ namespace Zene.Graphics.Base
 		public static void GetnTexImage(uint target, int level, uint format, uint type, int bufSize, void* pixels)
 		{
 			Functions.GetnTexImage(target, level, format, type, bufSize, pixels);
+		}
+
+		[OpenGLSupport(4.3)]
+		public static void GetInternalformati64v(uint target, uint internalformat, uint pname, int bufSize, long* @params)
+		{
+			Functions.GetInternalformati64v(target, internalformat, pname, bufSize, @params);
+		}
+		[OpenGLSupport(4.2)]
+		public static void GetInternalformativ(uint target, uint internalformat, uint pname, int bufSize, int* @params)
+		{
+			Functions.GetInternalformativ(target, internalformat, pname, bufSize, @params);
 		}
 	}
 }

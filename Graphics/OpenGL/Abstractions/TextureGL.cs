@@ -18,14 +18,16 @@ namespace Zene.Graphics.Base
             Id = GL.GenTexture();
             Target = target;
             InternalFormat = 0;
-            _disposed = false;
+
+            Properties = new TextureProperties(this);
         }
         internal TextureGL(uint id, TextureTarget target, TextureFormat format = 0)
         {
             Id = id;
             Target = target;
             InternalFormat = format;
-            _disposed = false;
+
+            Properties = new TextureProperties(this);
         }
 
         public uint Id { get; }
@@ -33,9 +35,11 @@ namespace Zene.Graphics.Base
         public TextureTarget Target { get; }
         public TextureFormat InternalFormat { get; private set; }
 
+        public TextureProperties Properties { get; }
+
         public uint ReferanceSlot { get; private set; } = 0;
 
-        private bool _disposed;
+        private bool _disposed = false;
         public void Dispose()
         {
             if (_disposed) { return; }
@@ -52,10 +56,9 @@ namespace Zene.Graphics.Base
         [OpenGLSupport(1.1)]
         public void Bind()
         {
-            if (this.Bound(State.ActiveTexture)) { return; }
+            if (this.Bound(ReferanceSlot)) { return; }
 
-            GL.ActiveTexture(GLEnum.Texture0 + State.ActiveTexture);
-            ReferanceSlot = State.ActiveTexture;
+            GL.ActiveTexture(GLEnum.Texture0 + ReferanceSlot);
             GL.BindTexture((uint)Target, Id);
         }
         [OpenGLSupport(1.3)]
@@ -200,7 +203,7 @@ namespace Zene.Graphics.Base
         public void CompressedTexImage1D<T>(int level, TextureFormat intFormat, int size, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexImage1D((uint)Target, level, (uint)intFormat, size, 0, data.Size * sizeof(T), data);
+            GL.CompressedTexImage1D(this, level, (uint)intFormat, size, 0, data.Size * sizeof(T), data);
 
             InternalFormat = intFormat;
         }
@@ -227,7 +230,7 @@ namespace Zene.Graphics.Base
         public void CompressedTexImage1D<T>(int level, TextureFormat intFormat, int size, int imageSize, T* data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexImage1D((uint)Target, level, (uint)intFormat, size, 0, imageSize, data);
+            GL.CompressedTexImage1D(this, level, (uint)intFormat, size, 0, imageSize, data);
 
             InternalFormat = intFormat;
         }
@@ -244,7 +247,7 @@ namespace Zene.Graphics.Base
         public void CompressedTexImage1D(int level, TextureFormat intFormat, int size, int imageSize, IntPtr data)
         {
             Bind();
-            GL.CompressedTexImage1D((uint)Target, level, (uint)intFormat, size, 0, imageSize, data.ToPointer());
+            GL.CompressedTexImage1D(this, level, (uint)intFormat, size, 0, imageSize, data.ToPointer());
 
             InternalFormat = intFormat;
         }

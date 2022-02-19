@@ -1,56 +1,17 @@
 ﻿using Zene.Graphics.Base;
-using Zene.Graphics.Base.Extensions;
 using Zene.Structs;
 
-namespace Zene.Graphics.GLObjects.Textures
+namespace Zene.Graphics
 {
-    public unsafe struct TextureProperties
+    public unsafe sealed class TextureProperties : TexRenProperties
     {
         public TextureProperties(ITexture source)
+            : base(source)
         {
-            Handle = source;
 
-            _dsMode = DepthStencilMode.Depth;
-            _magFilter = TextureSampling.Blend;
-            _minFilter = TextureSampling.Blend;
-            _minLod = -1000;
-            _lodBias = 0;
-            _maxLod = 1000;
-            _baseLevel = 0;
-            _maxLevel = 0;
-            _redSwiz = Swizzle.Red;
-            _greenSwiz = Swizzle.Green;
-            _blueSwiz = Swizzle.Blue;
-            _alphaSwiz = Swizzle.Alpha;
-            _wrapX = WrapStyle.Repeated;
-            _wrapY = WrapStyle.Repeated;
-            _wrapZ = WrapStyle.Repeated;
-            _border = ColourF.Zero;
-            _compareMode = ComparisonMode.None;
-            _compareFunc = ComparisonFunction.LessEqual;
-            _minLevel = 0;
-            _minLayer = 0;
-            _numLevels = 0;
-            _numLayers = 0;
-            _immutableLevels = 0;
         }
-        public ITexture Handle;
+        public override ITexture Handle { get; }
 
-        /// <summary>
-        /// The internal storage resolution of the alpha component at base level.
-        /// </summary>
-        public int AlphaSize
-        {
-            get
-            {
-                Handle.SetGLContext();
-                int output;
-
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureAlphaSize, &output);
-
-                return output;
-            }
-        }
         /// <summary>
         /// The data type used to store the alpha component at base level.
         /// </summary>
@@ -58,7 +19,7 @@ namespace Zene.Graphics.GLObjects.Textures
         {
             get
             {
-                Handle.SetGLContext();
+                Handle.Bind();
                 int output;
 
                 GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureAlphaType, &output);
@@ -66,7 +27,7 @@ namespace Zene.Graphics.GLObjects.Textures
                 return (ChannelType)output;
             }
         }
-        private int _baseLevel;
+        internal int _baseLevel = 0;
         /// <summary>
         /// The base texture mipmap level.
         /// </summary>
@@ -77,23 +38,8 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _baseLevel = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureBaseLevel, value);
-            }
-        }
-        /// <summary>
-        /// The internal storage resolution of the blue component at base level.
-        /// </summary>
-        public int BlueSize
-        {
-            get
-            {
-                Handle.SetGLContext();
-                int output;
-
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureBlueSize, &output);
-
-                return output;
             }
         }
         /// <summary>
@@ -103,7 +49,7 @@ namespace Zene.Graphics.GLObjects.Textures
         {
             get
             {
-                Handle.SetGLContext();
+                Handle.Bind();
                 int output;
 
                 GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureBlueType, &output);
@@ -111,7 +57,7 @@ namespace Zene.Graphics.GLObjects.Textures
                 return (ChannelType)output;
             }
         }
-        private ColourF _border;
+        internal ColourF _border = ColourF.Zero;
         /// <summary>
         /// The border colour of the texture.
         /// </summary>
@@ -125,7 +71,7 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _border = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 float[] colour = new float[] { value.R, value.G, value.B, value.A };
 
                 fixed (float* parameter = &colour[0])
@@ -147,7 +93,7 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _border = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 int[] colour = new int[] { value.R, value.G, value.B, value.A };
 
                 fixed (int* parameter = &colour[0])
@@ -156,7 +102,7 @@ namespace Zene.Graphics.GLObjects.Textures
                 }
             }
         }
-        private ComparisonFunction _compareFunc;
+        internal ComparisonFunction _compareFunc = ComparisonFunction.LessEqual;
         /// <summary>
         /// The comparison operator used when <see cref="ComparisonMode"/> is set to <see cref="ComparisonMode.CompareToDepth"/>.
         /// </summary>
@@ -167,11 +113,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _compareFunc = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureCompareFunc, (int)value);
             }
         }
-        private ComparisonMode _compareMode;
+        internal ComparisonMode _compareMode = ComparisonMode.None;
         /// <summary>
         /// The texture comparison mode for depth textures.
         /// </summary>
@@ -182,41 +128,19 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _compareMode = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureCompareMode, (int)value);
             }
         }
+        internal int _depth = 0;
         /// <summary>
         /// The depth of the texture at base level.
         /// </summary>
         public int Depth
         {
-            get
-            {
-                Handle.SetGLContext();
-                int output;
-
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureDepth, &output);
-
-                return output;
-            }
+            get => _depth;
         }
-        /// <summary>
-        /// The internal storage resolution of the depth component at base level.
-        /// </summary>
-        public int DepthSize
-        {
-            get
-            {
-                Handle.SetGLContext();
-                int output;
-
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureDepthSize, &output);
-
-                return output;
-            }
-        }
-        private DepthStencilMode _dsMode;
+        internal DepthStencilMode _dsMode = DepthStencilMode.Depth;
         /// <summary>
         /// The mode used to read from depth-stencil format textures.
         /// </summary>
@@ -227,7 +151,7 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _dsMode = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.DepthStencilTextureMode, (int)value);
             }
         }
@@ -238,7 +162,7 @@ namespace Zene.Graphics.GLObjects.Textures
         {
             get
             {
-                Handle.SetGLContext();
+                Handle.Bind();
                 int output;
 
                 GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureDepthType, &output);
@@ -253,27 +177,12 @@ namespace Zene.Graphics.GLObjects.Textures
         {
             get
             {
-                Handle.SetGLContext();
+                Handle.Bind();
                 int output;
 
                 GL.GetTexParameteriv((uint)Handle.Target, GLEnum.ImageFormatCompatibilityType, &output);
 
                 return (FormatCompatibilityType)output;
-            }
-        }
-        /// <summary>
-        /// The internal storage resolution of the green component at base level.
-        /// </summary>
-        public int GreenSize
-        {
-            get
-            {
-                Handle.SetGLContext();
-                int output;
-
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureGreenSize, &output);
-
-                return output;
             }
         }
         /// <summary>
@@ -283,7 +192,7 @@ namespace Zene.Graphics.GLObjects.Textures
         {
             get
             {
-                Handle.SetGLContext();
+                Handle.Bind();
                 int output;
 
                 GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureGreenType, &output);
@@ -291,22 +200,7 @@ namespace Zene.Graphics.GLObjects.Textures
                 return (ChannelType)output;
             }
         }
-        /// <summary>
-        /// The height of the texture at base level.
-        /// </summary>
-        public int Height
-        {
-            get
-            {
-                Handle.SetGLContext();
-                int output;
-
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureHeight, &output);
-
-                return output;
-            }
-        }
-        private double _lodBias;
+        internal double _lodBias = 0;
         /// <summary>
         /// A fixed bias that is to be added to the level-of-detail parameter before texture sampling.
         /// </summary>
@@ -317,11 +211,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _lodBias = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameterf((uint)Handle.Target, GLEnum.TextureLodBias, (float)value);
             }
         }
-        private TextureSampling _magFilter;
+        internal TextureSampling _magFilter = TextureSampling.Blend;
         /// <summary>
         /// The texture magnification function used when the level-of-detail function determines that the texture should be magified.
         /// </summary>
@@ -332,11 +226,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _magFilter = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureMagFilter, (int)value);
             }
         }
-        private int _maxLevel;
+        internal int _maxLevel = 0;
         /// <summary>
         /// The maximum texture mipmap array level.
         /// </summary>
@@ -347,11 +241,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _maxLevel = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureMaxLevel, value);
             }
         }
-        private double _maxLod;
+        internal double _maxLod = 1000;
         /// <summary>
         /// The maximum value for the level-of-detail parameter.
         /// </summary>
@@ -362,11 +256,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _maxLod = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameterf((uint)Handle.Target, GLEnum.TextureMaxLod, (float)value);
             }
         }
-        private TextureSampling _minFilter;
+        internal TextureSampling _minFilter = TextureSampling.Blend;
         /// <summary>
         /// The texture minification function used when the level-of-detail function determines that the texture should be minified.
         /// </summary>
@@ -377,11 +271,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _minFilter = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureMinFilter, (int)value);
             }
         }
-        private double _minLod;
+        internal double _minLod = -1000;
         /// <summary>
         /// The minimum value for the level-of-detail parameter.
         /// </summary>
@@ -392,23 +286,8 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _minLod = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameterf((uint)Handle.Target, GLEnum.TextureMinLod, (float)value);
-            }
-        }
-        /// <summary>
-        /// The internal storage resolution of the red component at base level.
-        /// </summary>
-        public int RedSize
-        {
-            get
-            {
-                Handle.SetGLContext();
-                int output;
-
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureRedSize, &output);
-
-                return output;
             }
         }
         /// <summary>
@@ -418,7 +297,7 @@ namespace Zene.Graphics.GLObjects.Textures
         {
             get
             {
-                Handle.SetGLContext();
+                Handle.Bind();
                 int output;
 
                 GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureRedType, &output);
@@ -426,7 +305,7 @@ namespace Zene.Graphics.GLObjects.Textures
                 return (ChannelType)output;
             }
         }
-        private Swizzle _redSwiz;
+        internal Swizzle _redSwiz = Swizzle.Red;
         /// <summary>
         /// The swizzle that will be applied to the red component of a texel before it is returned to the shader.
         /// </summary>
@@ -437,11 +316,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _redSwiz = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureSwizzleR, (int)value);
             }
         }
-        private Swizzle _greenSwiz;
+        internal Swizzle _greenSwiz = Swizzle.Green;
         /// <summary>
         /// The swizzle that will be applied to the green component of a texel before it is returned to the shader.
         /// </summary>
@@ -452,11 +331,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _greenSwiz = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureSwizzleG, (int)value);
             }
         }
-        private Swizzle _blueSwiz;
+        internal Swizzle _blueSwiz = Swizzle.Blue;
         /// <summary>
         /// The swizzle that will be applied to the blue component of a texel before it is returned to the shader.
         /// </summary>
@@ -467,11 +346,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _blueSwiz = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureSwizzleB, (int)value);
             }
         }
-        private Swizzle _alphaSwiz;
+        internal Swizzle _alphaSwiz = Swizzle.Alpha;
         /// <summary>
         /// The swizzle that will be applied to the alpha component of a texel before it is returned to the shader.
         /// </summary>
@@ -482,26 +361,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _alphaSwiz = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureSwizzleA, (int)value);
             }
         }
-        /// <summary>
-        /// The width of the texture at base level.
-        /// </summary>
-        public int Width
-        {
-            get
-            {
-                Handle.SetGLContext();
-                int output;
-
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureWidth, &output);
-
-                return output;
-            }
-        }
-        private WrapStyle _wrapX;
+        internal WrapStyle _wrapX = WrapStyle.Repeated;
         /// <summary>
         /// The wrapping function used on the x coordinate.
         /// </summary>
@@ -512,11 +376,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _wrapX = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureWrapS, (int)value);
             }
         }
-        private WrapStyle _wrapY;
+        internal WrapStyle _wrapY = WrapStyle.Repeated;
         /// <summary>
         /// The wrapping function used on the y coordinate.
         /// </summary>
@@ -527,11 +391,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _wrapY = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureWrapT, (int)value);
             }
         }
-        private WrapStyle _wrapZ;
+        internal WrapStyle _wrapZ = WrapStyle.Repeated;
         /// <summary>
         /// The wrapping function used on the z coordinate.
         /// </summary>
@@ -542,7 +406,7 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _wrapZ = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureWrapR, (int)value);
             }
         }
@@ -566,7 +430,7 @@ namespace Zene.Graphics.GLObjects.Textures
         {
             get
             {
-                Handle.SetGLContext();
+                Handle.Bind();
                 int output;
 
                 GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureBufferOffset, &output);
@@ -581,7 +445,7 @@ namespace Zene.Graphics.GLObjects.Textures
         {
             get
             {
-                Handle.SetGLContext();
+                Handle.Bind();
                 int output;
 
                 GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureBufferSize, &output);
@@ -590,7 +454,7 @@ namespace Zene.Graphics.GLObjects.Textures
             }
         }
 
-        private int _immutableLevels;
+        internal int _immutableLevels = 0;
         /// <summary>
         /// The number of immutable texture levels in a texture view.
         /// </summary>
@@ -601,11 +465,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _immutableLevels = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureImmutableLevels, value);
             }
         }
-        private int _minLayer;
+        internal int _minLayer = 0;
         /// <summary>
         /// The first level of a texture array view relative to its parent.
         /// </summary>
@@ -616,11 +480,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _minLayer = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureViewMinLayer, value);
             }
         }
-        private int _minLevel;
+        internal int _minLevel = 0;
         /// <summary>
         /// The base level of a texture view relative to its parent.
         /// </summary>
@@ -631,11 +495,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _minLevel = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureViewMinLevel, value);
             }
         }
-        private int _numLayers;
+        internal int _numLayers = 0;
         /// <summary>
         /// The number of layers in a texture array view.
         /// </summary>
@@ -646,11 +510,11 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _numLayers = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureViewNumLayers, value);
             }
         }
-        private int _numLevels;
+        internal int _numLevels = 0;
         /// <summary>
         /// The number of levels of detail of a texture view.
         /// </summary>
@@ -661,7 +525,7 @@ namespace Zene.Graphics.GLObjects.Textures
             {
                 _numLevels = value;
 
-                Handle.SetGLContext();
+                Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureViewNumLevels, value);
             }
         }
@@ -673,7 +537,7 @@ namespace Zene.Graphics.GLObjects.Textures
         {
             get
             {
-                Handle.SetGLContext();
+                Handle.Bind();
                 int output;
 
                 GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureCompressedImageSize, &output);
@@ -688,7 +552,7 @@ namespace Zene.Graphics.GLObjects.Textures
         {
             get
             {
-                Handle.SetGLContext();
+                Handle.Bind();
                 int output;
 
                 GL.GetTexParameteriv((uint)Handle.Target, GLEnum.TextureImmutableFormat, &output);

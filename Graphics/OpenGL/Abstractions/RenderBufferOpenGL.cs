@@ -4,17 +4,6 @@
     public static unsafe class RenderBufferOpenGL
     {
         /// <summary>
-        /// Sets the OpenGL context to referance <paramref name="renderbuffer"/>.
-        /// </summary>
-        public static void SetGLContext(this IRenderbuffer renderbuffer)
-        {
-            if (!renderbuffer.Bound())
-            {
-                renderbuffer.Bind();
-            }
-        }
-
-        /// <summary>
         /// Establish data storage, format and dimensions of a renderbuffer object's image.
         /// </summary>
         /// <param name="width">Specifies the width of the renderbuffer, in pixels.</param>
@@ -22,7 +11,7 @@
         [OpenGLSupport(3.0)]
         public static void RenderbufferStorage(this IRenderbuffer renderbuffer, int width, int height)
         {
-            renderbuffer.SetGLContext();
+            renderbuffer.Bind();
             GL.RenderbufferStorage(GLEnum.Renderbuffer, (uint)renderbuffer.InternalFormat, width, height);
         }
         /// <summary>
@@ -34,7 +23,7 @@
         [OpenGLSupport(3.0)]
         public static void RenderbufferStorageMultisample(this IRenderbuffer renderbuffer, int samples, int width, int height)
         {
-            renderbuffer.SetGLContext();
+            renderbuffer.Bind();
             GL.RenderbufferStorageMultisample(GLEnum.Renderbuffer, samples, (uint)renderbuffer.InternalFormat, width, height);
         }
 
@@ -48,7 +37,7 @@
         [OpenGLSupport(3.0)]
         public static int GetWidth(this IRenderbuffer renderbuffer)
         {
-            renderbuffer.SetGLContext();
+            renderbuffer.Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferWidth, &output);
@@ -61,7 +50,7 @@
         [OpenGLSupport(3.0)]
         public static int GetHeight(this IRenderbuffer renderbuffer)
         {
-            renderbuffer.SetGLContext();
+            renderbuffer.Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferHeight, &output);
@@ -74,7 +63,7 @@
         [OpenGLSupport(3.0)]
         public static int GetSamples(this IRenderbuffer renderbuffer)
         {
-            renderbuffer.SetGLContext();
+            renderbuffer.Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferSamples, &output);
@@ -87,7 +76,7 @@
         [OpenGLSupport(3.0)]
         public static int GetRedSize(this IRenderbuffer renderbuffer)
         {
-            renderbuffer.SetGLContext();
+            renderbuffer.Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferRedSize, &output);
@@ -100,7 +89,7 @@
         [OpenGLSupport(3.0)]
         public static int GetGreenSize(this IRenderbuffer renderbuffer)
         {
-            renderbuffer.SetGLContext();
+            renderbuffer.Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferGreenSize, &output);
@@ -113,7 +102,7 @@
         [OpenGLSupport(3.0)]
         public static int GetBlueSize(this IRenderbuffer renderbuffer)
         {
-            renderbuffer.SetGLContext();
+            renderbuffer.Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferBlueSize, &output);
@@ -126,7 +115,7 @@
         [OpenGLSupport(3.0)]
         public static int GetAlphaSize(this IRenderbuffer renderbuffer)
         {
-            renderbuffer.SetGLContext();
+            renderbuffer.Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferAlphaSize, &output);
@@ -139,7 +128,7 @@
         [OpenGLSupport(3.0)]
         public static int GetDepthSize(this IRenderbuffer renderbuffer)
         {
-            renderbuffer.SetGLContext();
+            renderbuffer.Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferDepthSize, &output);
@@ -152,7 +141,7 @@
         [OpenGLSupport(3.0)]
         public static int GetStencilSize(this IRenderbuffer renderbuffer)
         {
-            renderbuffer.SetGLContext();
+            renderbuffer.Bind();
             int output;
 
             GL.GetRenderbufferParameteriv(GLEnum.Renderbuffer, GLEnum.RenderbufferStencilSize, &output);
