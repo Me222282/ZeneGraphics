@@ -54,12 +54,6 @@ namespace Zene.Graphics.Base
         }
 
         [OpenGLSupport(3.0)]
-        public static void DeleteFramebuffer(uint framebuffer)
-        {
-            DeleteFramebuffers(1, &framebuffer);
-        }
-
-        [OpenGLSupport(3.0)]
         public static void DeleteRenderbuffer(uint renderbuffer)
         {
             DeleteRenderbuffers(1, &renderbuffer);
@@ -89,14 +83,6 @@ namespace Zene.Graphics.Base
             uint buffer;
             GenBuffers(1, &buffer);
             return buffer;
-        }
-
-        [OpenGLSupport(3.0)]
-        public static uint GenFramebuffer()
-        {
-            uint framebuffer;
-            GenFramebuffers(1, &framebuffer);
-            return framebuffer;
         }
 
         [OpenGLSupport(3.0)]

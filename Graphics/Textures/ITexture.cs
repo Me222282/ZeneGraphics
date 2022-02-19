@@ -1,5 +1,4 @@
-﻿using System;
-using Zene.Graphics.Base;
+﻿using Zene.Graphics.Base;
 
 namespace Zene.Graphics
 {
@@ -276,17 +275,12 @@ namespace Zene.Graphics
     /// <summary>
     /// Object that encapsulate an OpenGL texture object.
     /// </summary>
-    public interface ITexture : IDisposable, IIdentifiable, IBindable
+    public interface ITexture : IRenderTexture
     {
         /// <summary>
         /// The type of this texture.
         /// </summary>
         public TextureTarget Target { get; }
-
-        /// <summary>
-        /// The formating of data stored in this texture.
-        /// </summary>
-        public TextureFormat InternalFormat { get; }
 
         /// <summary>
         /// The texture slot this texture is bound to.
