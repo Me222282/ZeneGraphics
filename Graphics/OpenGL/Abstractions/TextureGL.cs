@@ -148,6 +148,44 @@ namespace Zene.Graphics.Base
         {
             GL.ClearTexSubImage(Id, level, xOffset, yOffset, zOffset, width, height, depth, (uint)format, (uint)type, &data);
         }
+        /// <summary>
+        /// Fills all a texture image with a constant value.
+        /// </summary>
+        /// <typeparam name="T"><paramref name="type"/></typeparam>
+        /// <param name="level">The level containing the region to be cleared.</param>
+        /// <param name="format">The format of the data whose address in memory is given by <paramref name="data"/>.</param>
+        /// <param name="type">The type of the data whose address in memory is given by <paramref name="data"/>.</param>
+        /// <param name="data">The data to be used to clear the specified region.</param>
+        [OpenGLSupport(4.4)]
+        public void ClearTextureImage<T>(int level, BaseFormat format, TextureData type, T[] data) where T : unmanaged
+        {
+            fixed (T* ptr = &data[0])
+            {
+                GL.ClearTexImage(Id, level, (uint)format, (uint)type, ptr);
+            }
+        }
+        /// <summary>
+        /// Fills all a texture image with a constant value.
+        /// </summary>
+        /// <typeparam name="T"><paramref name="type"/></typeparam>
+        /// <param name="level">The level containing the region to be cleared.</param>
+        /// <param name="xOffset">The coordinate of the left edge of the region to be cleared.</param>
+        /// <param name="yOffset">The coordinate of the lower edge of the region to be cleared.</param>
+        /// <param name="zOffset">The coordinate of the front of the region to be cleared.</param>
+        /// <param name="width">The width of the region to be cleared.</param>
+        /// <param name="height">The height of the region to be cleared.</param>
+        /// <param name="depth">The depth of the region to be cleared.</param>
+        /// <param name="format">The format of the data whose address in memory is given by <paramref name="data"/>.</param>
+        /// <param name="type">The type of the data whose address in memory is given by <paramref name="data"/>.</param>
+        /// <param name="data">The data to be used to clear the specified region.</param>
+        [OpenGLSupport(4.4)]
+        public void ClearTextureSubImage<T>(int level, int xOffset, int yOffset, int zOffset, int width, int height, int depth, BaseFormat format, TextureData type, T[] data) where T : unmanaged
+        {
+            fixed (T* ptr = &data[0])
+            {
+                GL.ClearTexSubImage(Id, level, xOffset, yOffset, zOffset, width, height, depth, (uint)format, (uint)type, ptr);
+            }
+        }
 
         /// <summary>
         /// Specify a one-dimensional texture image in a compressed format.

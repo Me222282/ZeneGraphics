@@ -60,12 +60,6 @@ namespace Zene.Graphics.Base
         }
 
         [OpenGLSupport(3.0)]
-        public static void DeleteTexture(uint texture)
-        {
-            DeleteTextures(1, &texture);
-        }
-
-        [OpenGLSupport(3.0)]
         public static void DeleteVertexArray(uint vertexArray)
         {
             DeleteVertexArrays(1, &vertexArray);
@@ -91,14 +85,6 @@ namespace Zene.Graphics.Base
             uint renderbuffer;
             GenRenderbuffers(1, &renderbuffer);
             return renderbuffer;
-        }
-
-        [OpenGLSupport(1.1)]
-        public static uint GenTexture()
-        {
-            uint texture;
-            GenTextures(1, &texture);
-            return texture;
         }
 
         [OpenGLSupport(3.0)]

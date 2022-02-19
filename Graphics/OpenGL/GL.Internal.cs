@@ -98,80 +98,8 @@ namespace Zene.Graphics.Base
 		// Get texture param
 		//
 
-		[OpenGLSupport(1.0)]
-		internal static void GetTexLevelParameterfv(uint target, int level, uint pname, float* @params)
-		{
-			Functions.GetTexLevelParameterfv(target, level, pname, @params);
-		}
-
-		[OpenGLSupport(1.0)]
-		internal static void GetTexLevelParameteriv(uint target, int level, uint pname, int* @params)
-		{
-			Functions.GetTexLevelParameteriv(target, level, pname, @params);
-		}
-
-		[OpenGLSupport(1.0)]
-		internal static void GetTexParameterfv(uint target, uint pname, float* @params)
-		{
-			Functions.GetTexParameterfv(target, pname, @params);
-		}
-
-		[OpenGLSupport(3.0)]
-		internal static void GetTexParameterIiv(uint target, uint pname, int* @params)
-		{
-			Functions.GetTexParameterIiv(target, pname, @params);
-		}
-
-		[OpenGLSupport(3.0)]
-		internal static void GetTexParameterIuiv(uint target, uint pname, uint* @params)
-		{
-			Functions.GetTexParameterIuiv(target, pname, @params);
-		}
-
-		[OpenGLSupport(1.0)]
-		internal static void GetTexParameteriv(uint target, uint pname, int* @params)
-		{
-			Functions.GetTexParameteriv(target, pname, @params);
-		}
-
 		//
 		// Set texture param
 		//
-
-		[OpenGLSupport(1.0)]
-		internal static void TexParameterf(uint target, uint pname, float param)
-		{
-			Functions.TexParameterf(target, pname, param);
-		}
-
-		[OpenGLSupport(1.0)]
-		internal static void TexParameterfv(uint target, uint pname, float* @params)
-		{
-			Functions.TexParameterfv(target, pname, @params);
-		}
-
-		[OpenGLSupport(1.0)]
-		internal static void TexParameteri(uint target, uint pname, int param)
-		{
-			Functions.TexParameteri(target, pname, param);
-		}
-
-		[OpenGLSupport(3.0)]
-		internal static void TexParameterIiv(uint target, uint pname, int* @params)
-		{
-			Functions.TexParameterIiv(target, pname, @params);
-		}
-
-		[OpenGLSupport(3.0)]
-		internal static void TexParameterIuiv(uint target, uint pname, uint* @params)
-		{
-			Functions.TexParameterIuiv(target, pname, @params);
-		}
-
-		[OpenGLSupport(1.0)]
-		internal static void TexParameteriv(uint target, uint pname, int* @params)
-		{
-			Functions.TexParameteriv(target, pname, @params);
-		}
 	}
 }

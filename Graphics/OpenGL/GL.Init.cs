@@ -3393,5 +3393,26 @@ namespace Zene.Graphics.Base
 				BoundTextures[i] = new TextureBinding();
             }*/
 		}
+
+		[OpenGLSupport(1.0)]
+		public static void Viewport(int x, int y, int width, int height)
+		{
+			Functions.Viewport(x, y, width, height);
+		}
+		[OpenGLSupport(4.1)]
+		public static void ViewportArrayv(uint first, int count, float* v)
+		{
+			Functions.ViewportArrayv(first, count, v);
+		}
+		[OpenGLSupport(4.1)]
+		public static void ViewportIndexedf(uint index, float x, float y, float w, float h)
+		{
+			Functions.ViewportIndexedf(index, x, y, w, h);
+		}
+		[OpenGLSupport(4.1)]
+		public static void ViewportIndexedfv(uint index, float* v)
+		{
+			Functions.ViewportIndexedfv(index, v);
+		}
 	}
 }
