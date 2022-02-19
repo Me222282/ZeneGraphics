@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
-using static Zene.Graphics.OpenGL.GL;
+using static Zene.Graphics.Base.GL;
 
-namespace Zene.Graphics.OpenGL
+namespace Zene.Graphics.Base
 {
     public static class GLUtility
     {

@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Zene.Graphics.OpenGL
+namespace Zene.Graphics.Base
 {
     public static unsafe partial class GL
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using Zene.Graphics;
-using Zene.Graphics.OpenGL;
+using Zene.Graphics.Base;
 using Zene.Structs;
 
 namespace Zene.Windowing

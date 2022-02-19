@@ -1,4 +1,4 @@
-﻿using Zene.Graphics.OpenGL;
+﻿using Zene.Graphics.Base;
 using System;
 using System.Collections.Generic;
 

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Zene.Graphics.OpenGL.Abstract3
+namespace Zene.Graphics.Base.Extensions
 {
     public static unsafe class ShaderOpenGL
     {

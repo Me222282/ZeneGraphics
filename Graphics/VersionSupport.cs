@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using Zene.Graphics.OpenGL;
+using Zene.Graphics.Base;
 
 namespace Zene.Graphics
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Zene.Graphics.OpenGL
+namespace Zene.Graphics.Base
 {
     public static unsafe partial class GL
     {

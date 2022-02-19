@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using Zene.Graphics;
-using Zene.Graphics.OpenGL;
+using Zene.Graphics.Base;
 using Zene.Structs;
 using Zene.Windowing.Base;
 

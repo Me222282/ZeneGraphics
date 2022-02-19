@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Zene.Graphics.OpenGL
+namespace Zene.Graphics.Base
 {
     /// <summary>
     /// The most basic implimentation of an OpenGL renderbuffer.

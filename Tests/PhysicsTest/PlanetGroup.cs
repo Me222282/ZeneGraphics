@@ -1,6 +1,6 @@
 ﻿using System;
 using Zene.Graphics;
-using Zene.Graphics.OpenGL;
+using Zene.Graphics.Base;
 using Zene.Sprites;
 using Zene.Structs;
 using Zene.Physics;

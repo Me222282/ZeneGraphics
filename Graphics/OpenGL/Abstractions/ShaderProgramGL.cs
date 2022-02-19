@@ -1,7 +1,7 @@
 ﻿using System;
 using Zene.Structs;
 
-namespace Zene.Graphics.OpenGL
+namespace Zene.Graphics.Base
 {
     public unsafe class ShaderProgramGL : IShaderProgram
     {

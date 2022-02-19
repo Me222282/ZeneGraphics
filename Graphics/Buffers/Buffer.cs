@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Zene.Graphics.OpenGL;
+using Zene.Graphics.Base;
 
 namespace Zene.Graphics
 {

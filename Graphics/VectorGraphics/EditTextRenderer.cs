@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Zene.Graphics.OpenGL;
+using Zene.Graphics.Base;
 using Zene.Graphics.Shaders;
 using Zene.Structs;
 

@@ -1,7 +1,7 @@
 ﻿using StbImageSharp;
 using System;
 using System.IO;
-using Zene.Graphics.OpenGL;
+using Zene.Graphics.Base;
 using Zene.Structs;
 
 namespace Zene.Graphics

@@ -184,8 +184,8 @@ namespace ImplicitFunctions
             }
 
             // Enabling transparency
-            Zene.Graphics.OpenGL.GL.Enable(Zene.Graphics.OpenGL.GLEnum.Blend);
-            Zene.Graphics.OpenGL.GL.BlendFunc(Zene.Graphics.OpenGL.GLEnum.SrcAlpha, Zene.Graphics.OpenGL.GLEnum.OneMinusSrcAlpha);
+            Zene.Graphics.Base.GL.Enable(Zene.Graphics.Base.GLEnum.Blend);
+            Zene.Graphics.Base.GL.BlendFunc(Zene.Graphics.Base.GLEnum.SrcAlpha, Zene.Graphics.Base.GLEnum.OneMinusSrcAlpha);
         }
 
         private readonly DrawObject<double, byte> _oilObj;

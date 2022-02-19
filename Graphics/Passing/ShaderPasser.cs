@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
-using Zene.Graphics.OpenGL;
-using Zene.Graphics.OpenGL.Abstract3;
+using Zene.Graphics.Base;
+using Zene.Graphics.Base.Extensions;
 
 namespace Zene.Graphics.Passing
 {

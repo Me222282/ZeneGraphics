@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Zene.Graphics;
-using Zene.Graphics.OpenGL;
+using Zene.Graphics.Base;
 using Zene.Graphics.Shaders;
 
 namespace ImplicitFunctions

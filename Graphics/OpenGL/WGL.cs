@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 #pragma warning disable CA1401 // P/Invokes should not be visible
 #pragma warning disable CA2101 // Specify marshaling for P/Invoke string arguments
 
-namespace Zene.Graphics.OpenGL
+namespace Zene.Graphics.Base
 {
     public static class WGL
     {

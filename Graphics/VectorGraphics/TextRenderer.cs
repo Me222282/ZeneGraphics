@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Zene.Graphics.OpenGL;
+using Zene.Graphics.Base;
 using Zene.Graphics.Shaders;
 using Zene.Structs;
 

@@ -1,4 +1,4 @@
-﻿namespace Zene.Graphics.OpenGL.Abstract3
+﻿namespace Zene.Graphics.Base.Extensions
 {
     [OpenGLSupport(3.0)]
     public static unsafe class RenderBufferOpenGL

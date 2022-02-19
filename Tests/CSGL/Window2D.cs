@@ -1,5 +1,5 @@
 ﻿using System;
-using Zene.Graphics.OpenGL;
+using Zene.Graphics.Base;
 using Zene.Graphics;
 using Zene.Windowing;
 using Zene.Windowing.Base;

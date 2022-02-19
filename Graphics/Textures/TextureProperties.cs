@@ -1,5 +1,5 @@
-﻿using Zene.Graphics.OpenGL;
-using Zene.Graphics.OpenGL.Abstract3;
+﻿using Zene.Graphics.Base;
+using Zene.Graphics.Base.Extensions;
 using Zene.Structs;
 
 namespace Zene.Graphics.GLObjects.Textures

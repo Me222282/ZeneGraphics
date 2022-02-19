@@ -1,5 +1,5 @@
 ﻿using System;
-using Zene.Graphics.OpenGL;
+using Zene.Graphics.Base;
 using Zene.Graphics.Z3D;
 using Zene.Graphics;
 using Zene.Graphics.Shaders;
