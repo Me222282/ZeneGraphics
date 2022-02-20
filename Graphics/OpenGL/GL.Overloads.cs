@@ -178,12 +178,6 @@ namespace Zene.Graphics.Base
             ShaderSource(shader, 1, stringArray, &length);
         }
 
-        [OpenGLSupport(1.0)]
-        public static void TexImage2D(uint target, int level, int internalformat, int width, int height, int border, uint format, uint type, IntPtr pixels)
-        {
-            TexImage2D(target, level, internalformat, width, height, border, format, type, pixels.ToPointer());
-        }
-
         [OpenGLSupport(2.0)]
         public static void UniformMatrix4fv(int location, int count, bool transpose, ref float value)
         {
@@ -217,36 +211,6 @@ namespace Zene.Graphics.Base
             fixed (void* dataPtr = &MemoryMarshal.GetReference(data))
             {
                 BufferSubData(target, offset, Marshal.SizeOf<T>() * data.Length, dataPtr);
-            }
-        }
-
-        [OpenGLSupport(1.0)]
-        public static unsafe void TexImage1D<T>(uint target, int level, int internalformat, int width, int border, uint format, uint type, ReadOnlySpan<T> pixels)
-            where T: unmanaged
-        {
-            fixed (void* dataPtr = &MemoryMarshal.GetReference(pixels))
-            {
-                TexImage1D(target, level, internalformat, width, border, format, type, dataPtr);
-            }
-        }
-
-        [OpenGLSupport(1.0)]
-        public static unsafe void TexImage2D<T>(uint target, int level, int internalformat, int width, int height, int border, uint format, uint type, ReadOnlySpan<T> pixels)
-            where T: unmanaged
-        {
-            fixed (void* dataPtr = &MemoryMarshal.GetReference(pixels))
-            {
-                TexImage2D(target, level, internalformat, width, height, border, format, type, dataPtr);
-            }
-        }
-
-        [OpenGLSupport(1.2)]
-        public static unsafe void TexImage3D<T>(uint target, int level, int internalformat, int width, int height, int depth, int border, uint format, uint type, ReadOnlySpan<T> pixels)
-            where T: unmanaged
-        {
-            fixed (void* dataPtr = &MemoryMarshal.GetReference(pixels))
-            {
-                TexImage3D(target, level, internalformat, width, height, depth, border, format, type, dataPtr);
             }
         }
 

@@ -18,6 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
+using System.Runtime.InteropServices;
+
 namespace Zene.Graphics.Base
 {
     public unsafe partial class GL
@@ -267,6 +270,11 @@ namespace Zene.Graphics.Base
 		[OpenGLSupport(1.3)]
 		public static void CompressedTexImage1D(ITexture target, int level, uint internalformat, int width, int border, int imageSize, void* data)
 		{
+			if (target == null)
+            {
+				throw new ArgumentNullException(nameof(target));
+            }
+
 			Functions.CompressedTexImage1D((uint)target.Target, level, internalformat, width, border, imageSize, data);
 
 			if (level == target.Properties._baseLevel)
@@ -278,14 +286,58 @@ namespace Zene.Graphics.Base
 			}
 		}
 		[OpenGLSupport(1.3)]
-		public static void CompressedTexImage2D(uint target, int level, uint internalformat, int width, int height, int border, int imageSize, void* data)
+		public static void CompressedTexImage2D(ITexture target, int level, uint internalformat, int width, int height, int border, int imageSize, void* data)
 		{
-			Functions.CompressedTexImage2D(target, level, internalformat, width, height, border, imageSize, data);
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.CompressedTexImage2D((uint)target.Target, level, internalformat, width, height, border, imageSize, data);
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = height;
+				target.Properties._depth = 1;
+				target.Properties.InternalFormatChanged();
+			}
 		}
 		[OpenGLSupport(1.3)]
-		public static void CompressedTexImage3D(uint target, int level, uint internalformat, int width, int height, int depth, int border, int imageSize, void* data)
+		public static void CompressedTexImage2D(ITexture target, CubeMapFace face, int level, uint internalformat, int width, int height, int border, int imageSize, void* data)
 		{
-			Functions.CompressedTexImage3D(target, level, internalformat, width, height, depth, border, imageSize, data);
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.CompressedTexImage2D((uint)face, level, internalformat, width, height, border, imageSize, data);
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = height;
+				target.Properties._depth = 1;
+				target.Properties.InternalFormatChanged();
+			}
+		}
+		[OpenGLSupport(1.3)]
+		public static void CompressedTexImage3D(ITexture target, int level, uint internalformat, int width, int height, int depth, int border, int imageSize, void* data)
+		{
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.CompressedTexImage3D((uint)target.Target, level, internalformat, width, height, depth, border, imageSize, data);
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = height;
+				target.Properties._depth = depth;
+				target.Properties.InternalFormatChanged();
+			}
 		}
 		[OpenGLSupport(1.3)]
 		public static void CompressedTexSubImage1D(uint target, int level, int xoffset, int width, uint format, int imageSize, void* data)
@@ -325,14 +377,58 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(1.1)]
-		public static void CopyTexImage1D(uint target, int level, uint internalformat, int x, int y, int width, int border)
+		public static void CopyTexImage1D(ITexture target, int level, uint internalformat, int x, int y, int width, int border)
 		{
-			Functions.CopyTexImage1D(target, level, internalformat, x, y, width, border);
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.CopyTexImage1D((uint)target.Target, level, internalformat, x, y, width, border);
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = 1;
+				target.Properties._depth = 1;
+				target.Properties.InternalFormatChanged();
+			}
 		}
 		[OpenGLSupport(1.1)]
-		public static void CopyTexImage2D(uint target, int level, uint internalformat, int x, int y, int width, int height, int border)
+		public static void CopyTexImage2D(ITexture target, int level, uint internalformat, int x, int y, int width, int height, int border)
 		{
-			Functions.CopyTexImage2D(target, level, internalformat, x, y, width, height, border);
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.CopyTexImage2D((uint)target.Target, level, internalformat, x, y, width, height, border);
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = height;
+				target.Properties._depth = 1;
+				target.Properties.InternalFormatChanged();
+			}
+		}
+		[OpenGLSupport(1.1)]
+		public static void CopyTexImage2D(ITexture target, CubeMapFace face, int level, uint internalformat, int x, int y, int width, int height, int border)
+		{
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.CopyTexImage2D((uint)face, level, internalformat, x, y, width, height, border);
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = height;
+				target.Properties._depth = 1;
+				target.Properties.InternalFormatChanged();
+			}
 		}
 		[OpenGLSupport(1.1)]
 		public static void CopyTexSubImage1D(uint target, int level, int xoffset, int x, int y, int width)
@@ -473,81 +569,421 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(1.0)]
-		public static void TexImage1D(uint target, int level, int internalformat, int width, int border, uint format, uint type, void* pixels)
+		public static void TexImage1D(ITexture target, int level, int internalformat, int width, int border, uint format, uint type, void* pixels)
 		{
-			Functions.TexImage1D(target, level, internalformat, width, border, format, type, pixels);
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.TexImage1D((uint)target.Target, level, internalformat, width, border, format, type, pixels);
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = 1;
+				target.Properties._depth = 1;
+				target.Properties._samples = 0;
+				target.Properties.InternalFormatChanged();
+			}
 		}
 		[OpenGLSupport(1.0)]
-		public static void TexImage2D(uint target, int level, int internalformat, int width, int height, int border, uint format, uint type, void* pixels)
+		public static void TexImage2D(ITexture target, int level, int internalformat, int width, int height, int border, uint format, uint type, void* pixels)
 		{
-			Functions.TexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.TexImage2D((uint)target.Target, level, internalformat, width, height, border, format, type, pixels);
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = height;
+				target.Properties._depth = 1;
+				target.Properties._samples = 0;
+				target.Properties.InternalFormatChanged();
+			}
+		}
+		[OpenGLSupport(1.0)]
+		public static void TexImage2D(ITexture target, int level, int internalformat, int width, int height, int border, uint format, uint type, IntPtr pixels)
+		{
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.TexImage2D((uint)target.Target, level, internalformat, width, height, border, format, type, pixels.ToPointer());
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = height;
+				target.Properties._depth = 1;
+				target.Properties._samples = 0;
+				target.Properties.InternalFormatChanged();
+			}
+		}
+		[OpenGLSupport(1.0)]
+		public static void TexImage2D(ITexture target, CubeMapFace face, int level, int internalformat, int width, int height, int border, uint format, uint type, void* pixels)
+		{
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.TexImage2D((uint)face, level, internalformat, width, height, border, format, type, pixels);
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = height;
+				target.Properties._depth = 1;
+				target.Properties._samples = 0;
+				target.Properties.InternalFormatChanged();
+			}
+		}
+		[OpenGLSupport(1.0)]
+		public static void TexImage2D(ITexture target, CubeMapFace face, int level, int internalformat, int width, int height, int border, uint format, uint type, IntPtr pixels)
+		{
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.TexImage2D((uint)face, level, internalformat, width, height, border, format, type, pixels.ToPointer());
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = height;
+				target.Properties._depth = 1;
+				target.Properties._samples = 0;
+				target.Properties.InternalFormatChanged();
+			}
 		}
 		[OpenGLSupport(3.2)]
-		public static void TexImage2DMultisample(uint target, int samples, uint internalformat, int width, int height, bool fixedsamplelocations)
+		public static void TexImage2DMultisample(ITexture target, int samples, uint internalformat, int width, int height, bool fixedsamplelocations)
 		{
-			Functions.TexImage2DMultisample(target, samples, internalformat, width, height, fixedsamplelocations);
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.TexImage2DMultisample((uint)target.Target, samples, internalformat, width, height, fixedsamplelocations);
+
+			target.Properties._width = width;
+			target.Properties._height = height;
+			target.Properties._depth = 1;
+			target.Properties._samples = samples;
+			target.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(1.2)]
-		public static void TexImage3D(uint target, int level, int internalformat, int width, int height, int depth, int border, uint format, uint type, void* pixels)
+		public static void TexImage3D(ITexture target, int level, int internalformat, int width, int height, int depth, int border, uint format, uint type, void* pixels)
 		{
-			Functions.TexImage3D(target, level, internalformat, width, height, depth, border, format, type, pixels);
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.TexImage3D((uint)target.Target, level, internalformat, width, height, depth, border, format, type, pixels);
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = height;
+				target.Properties._depth = depth;
+				target.Properties._samples = 0;
+				target.Properties.InternalFormatChanged();
+			}
 		}
 		[OpenGLSupport(3.2)]
-		public static void TexImage3DMultisample(uint target, int samples, uint internalformat, int width, int height, int depth, bool fixedsamplelocations)
+		public static void TexImage3DMultisample(ITexture target, int samples, uint internalformat, int width, int height, int depth, bool fixedsamplelocations)
 		{
-			Functions.TexImage3DMultisample(target, samples, internalformat, width, height, depth, fixedsamplelocations);
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.TexImage3DMultisample((uint)target.Target, samples, internalformat, width, height, depth, fixedsamplelocations);
+
+			target.Properties._width = width;
+			target.Properties._height = height;
+			target.Properties._depth = depth;
+			target.Properties._samples = samples;
+			target.Properties.InternalFormatChanged();
+		}
+
+		[OpenGLSupport(1.0)]
+		public static unsafe void TexImage1D<T>(ITexture target, int level, int internalformat, int width, int border, uint format, uint type, ReadOnlySpan<T> pixels)
+			where T : unmanaged
+		{
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			fixed (void* dataPtr = &MemoryMarshal.GetReference(pixels))
+			{
+				Functions.TexImage1D((uint)target.Target, level, internalformat, width, border, format, type, dataPtr);
+			}
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = 1;
+				target.Properties._depth = 1;
+				target.Properties._samples = 0;
+				target.Properties.InternalFormatChanged();
+			}
+		}
+		[OpenGLSupport(1.0)]
+		public static unsafe void TexImage2D<T>(ITexture target, int level, int internalformat, int width, int height, int border, uint format, uint type, ReadOnlySpan<T> pixels)
+			where T : unmanaged
+		{
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			fixed (void* dataPtr = &MemoryMarshal.GetReference(pixels))
+			{
+				Functions.TexImage2D((uint)target.Target, level, internalformat, width, height, border, format, type, dataPtr);
+			}
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = height;
+				target.Properties._depth = 1;
+				target.Properties._samples = 0;
+				target.Properties.InternalFormatChanged();
+			}
+		}
+		[OpenGLSupport(1.0)]
+		public static unsafe void TexImage2D<T>(ITexture target, CubeMapFace face, int level, int internalformat, int width, int height, int border, uint format, uint type, ReadOnlySpan<T> pixels)
+			where T : unmanaged
+		{
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			fixed (void* dataPtr = &MemoryMarshal.GetReference(pixels))
+			{
+				Functions.TexImage2D((uint)face, level, internalformat, width, height, border, format, type, dataPtr);
+			}
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = height;
+				target.Properties._depth = 1;
+				target.Properties._samples = 0;
+				target.Properties.InternalFormatChanged();
+			}
+		}
+		[OpenGLSupport(1.2)]
+		public static unsafe void TexImage3D<T>(ITexture target, int level, int internalformat, int width, int height, int depth, int border, uint format, uint type, ReadOnlySpan<T> pixels)
+			where T : unmanaged
+		{
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			fixed (void* dataPtr = &MemoryMarshal.GetReference(pixels))
+			{
+				Functions.TexImage3D((uint)target.Target, level, internalformat, width, height, depth, border, format, type, dataPtr);
+			}
+
+			if (level == target.Properties._baseLevel)
+			{
+				target.Properties._width = width;
+				target.Properties._height = height;
+				target.Properties._depth = depth;
+				target.Properties._samples = 0;
+				target.Properties.InternalFormatChanged();
+			}
 		}
 
 		[OpenGLSupport(4.2)]
-		public static void TexStorage1D(uint target, int levels, uint internalformat, int width)
+		public static void TexStorage1D(ITexture target, int levels, uint internalformat, int width)
 		{
-			Functions.TexStorage1D(target, levels, internalformat, width);
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.TexStorage1D((uint)target.Target, levels, internalformat, width);
+
+			target.Properties._width = width;
+			target.Properties._height = 1;
+			target.Properties._depth = 1;
+			target.Properties._samples = 0;
+			target.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.2)]
-		public static void TexStorage2D(uint target, int levels, uint internalformat, int width, int height)
+		public static void TexStorage2D(ITexture target, int levels, uint internalformat, int width, int height)
 		{
-			Functions.TexStorage2D(target, levels, internalformat, width, height);
-		}
-		[OpenGLSupport(4.3)]
-		public static void TexStorage2DMultisample(uint target, int samples, uint internalformat, int width, int height, bool fixedsamplelocations)
-		{
-			Functions.TexStorage2DMultisample(target, samples, internalformat, width, height, fixedsamplelocations);
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.TexStorage2D((uint)target.Target, levels, internalformat, width, height);
+
+			target.Properties._width = width;
+			target.Properties._height = height;
+			target.Properties._depth = 1;
+			target.Properties._samples = 0;
+			target.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.2)]
-		public static void TexStorage3D(uint target, int levels, uint internalformat, int width, int height, int depth)
+		public static void TexStorage2D(ITexture target, CubeMapFace face, int levels, uint internalformat, int width, int height)
 		{
-			Functions.TexStorage3D(target, levels, internalformat, width, height, depth);
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.TexStorage2D((uint)face, levels, internalformat, width, height);
+
+			target.Properties._width = width;
+			target.Properties._height = height;
+			target.Properties._depth = 1;
+			target.Properties._samples = 0;
+			target.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.3)]
-		public static void TexStorage3DMultisample(uint target, int samples, uint internalformat, int width, int height, int depth, bool fixedsamplelocations)
+		public static void TexStorage2DMultisample(ITexture target, int samples, uint internalformat, int width, int height, bool fixedsamplelocations)
 		{
-			Functions.TexStorage3DMultisample(target, samples, internalformat, width, height, depth, fixedsamplelocations);
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.TexStorage2DMultisample((uint)target.Target, samples, internalformat, width, height, fixedsamplelocations);
+
+			target.Properties._width = width;
+			target.Properties._height = height;
+			target.Properties._depth = 1;
+			target.Properties._samples = samples;
+			target.Properties.InternalFormatChanged();
+		}
+		[OpenGLSupport(4.2)]
+		public static void TexStorage3D(ITexture target, int levels, uint internalformat, int width, int height, int depth)
+		{
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.TexStorage3D((uint)target.Target, levels, internalformat, width, height, depth);
+
+			target.Properties._width = width;
+			target.Properties._height = height;
+			target.Properties._depth = depth;
+			target.Properties._samples = 0;
+			target.Properties.InternalFormatChanged();
+		}
+		[OpenGLSupport(4.3)]
+		public static void TexStorage3DMultisample(ITexture target, int samples, uint internalformat, int width, int height, int depth, bool fixedsamplelocations)
+		{
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			Functions.TexStorage3DMultisample((uint)target.Target, samples, internalformat, width, height, depth, fixedsamplelocations);
+
+			target.Properties._width = width;
+			target.Properties._height = height;
+			target.Properties._depth = depth;
+			target.Properties._samples = samples;
+			target.Properties.InternalFormatChanged();
 		}
 
 		[OpenGLSupport(4.5)]
-		public static void TextureStorage1D(uint texture, int levels, uint internalformat, int width)
+		public static void TextureStorage1D(ITexture texture, int levels, uint internalformat, int width)
 		{
-			Functions.TextureStorage1D(texture, levels, internalformat, width);
+			if (texture == null)
+			{
+				throw new ArgumentNullException(nameof(texture));
+			}
+
+			Functions.TextureStorage1D(texture.Id, levels, internalformat, width);
+
+			texture.Properties._width = width;
+			texture.Properties._height = 1;
+			texture.Properties._depth = 1;
+			texture.Properties._samples = 0;
+			texture.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.5)]
-		public static void TextureStorage2D(uint texture, int levels, uint internalformat, int width, int height)
+		public static void TextureStorage2D(ITexture texture, int levels, uint internalformat, int width, int height)
 		{
-			Functions.TextureStorage2D(texture, levels, internalformat, width, height);
+			if (texture == null)
+			{
+				throw new ArgumentNullException(nameof(texture));
+			}
+
+			Functions.TextureStorage2D(texture.Id, levels, internalformat, width, height);
+
+			texture.Properties._width = width;
+			texture.Properties._height = height;
+			texture.Properties._depth = 1;
+			texture.Properties._samples = 0;
+			texture.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.5)]
-		public static void TextureStorage2DMultisample(uint texture, int samples, uint internalformat, int width, int height, bool fixedsamplelocations)
+		public static void TextureStorage2DMultisample(ITexture texture, int samples, uint internalformat, int width, int height, bool fixedsamplelocations)
 		{
-			Functions.TextureStorage2DMultisample(texture, samples, internalformat, width, height, fixedsamplelocations);
+			if (texture == null)
+			{
+				throw new ArgumentNullException(nameof(texture));
+			}
+
+			Functions.TextureStorage2DMultisample(texture.Id, samples, internalformat, width, height, fixedsamplelocations);
+
+			texture.Properties._width = width;
+			texture.Properties._height = height;
+			texture.Properties._depth = 1;
+			texture.Properties._samples = samples;
+			texture.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.5)]
-		public static void TextureStorage3D(uint texture, int levels, uint internalformat, int width, int height, int depth)
+		public static void TextureStorage3D(ITexture texture, int levels, uint internalformat, int width, int height, int depth)
 		{
-			Functions.TextureStorage3D(texture, levels, internalformat, width, height, depth);
+			if (texture == null)
+			{
+				throw new ArgumentNullException(nameof(texture));
+			}
+
+			Functions.TextureStorage3D(texture.Id, levels, internalformat, width, height, depth);
+
+			texture.Properties._width = width;
+			texture.Properties._height = height;
+			texture.Properties._depth = depth;
+			texture.Properties._samples = 0;
+			texture.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.5)]
-		public static void TextureStorage3DMultisample(uint texture, int samples, uint internalformat, int width, int height, int depth, bool fixedsamplelocations)
+		public static void TextureStorage3DMultisample(ITexture texture, int samples, uint internalformat, int width, int height, int depth, bool fixedsamplelocations)
 		{
-			Functions.TextureStorage3DMultisample(texture, samples, internalformat, width, height, depth, fixedsamplelocations);
+			if (texture == null)
+			{
+				throw new ArgumentNullException(nameof(texture));
+			}
+
+			Functions.TextureStorage3DMultisample(texture.Id, samples, internalformat, width, height, depth, fixedsamplelocations);
+
+			texture.Properties._width = width;
+			texture.Properties._height = height;
+			texture.Properties._depth = depth;
+			texture.Properties._samples = samples;
+			texture.Properties.InternalFormatChanged();
 		}
 
 		[OpenGLSupport(1.1)]
@@ -583,9 +1019,24 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(4.3)]
-		public static void TextureView(uint texture, uint target, uint origtexture, uint internalformat, uint minlevel, uint numlevels, uint minlayer, uint numlayers)
+		public static void TextureView(ITexture texture, uint target, ITexture origtexture, uint internalformat, uint minlevel, uint numlevels, uint minlayer, uint numlayers)
 		{
-			Functions.TextureView(texture, target, origtexture, internalformat, minlevel, numlevels, minlayer, numlayers);
+			if (texture == null)
+			{
+				throw new ArgumentNullException(nameof(texture));
+			}
+			if (origtexture == null)
+			{
+				throw new ArgumentNullException(nameof(origtexture));
+			}
+
+			Functions.TextureView(texture.Id, target, origtexture.Id, internalformat, minlevel, numlevels, minlayer, numlayers);
+
+			texture.Properties._width = origtexture.Properties._width;
+			texture.Properties._height = origtexture.Properties._height;
+			texture.Properties._depth = origtexture.Properties._depth;
+			texture.Properties._samples = origtexture.Properties._samples;
+			texture.Properties.InternalFormatChanged();
 		}
 
 		[OpenGLSupport(4.5)]

@@ -265,7 +265,7 @@ namespace Zene.Graphics.Base
         public void CompressedTexImage2D<T>(int level, TextureFormat intFormat, int width, int height, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexImage2D((uint)Target, level, (uint)intFormat, width, height, 0, data.Size * sizeof(T), data);
+            GL.CompressedTexImage2D(this, level, (uint)intFormat, width, height, 0, data.Size * sizeof(T), data);
 
             InternalFormat = intFormat;
         }
@@ -283,7 +283,7 @@ namespace Zene.Graphics.Base
         public void CompressedTexImage2D<T>(CubeMapFace target, int level, TextureFormat intFormat, int width, int height, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexImage2D((uint)target, level, (uint)intFormat, width, height, 0, data.Size * sizeof(T), data);
+            GL.CompressedTexImage2D(this, level, (uint)intFormat, width, height, 0, data.Size * sizeof(T), data);
 
             InternalFormat = intFormat;
         }
@@ -301,7 +301,7 @@ namespace Zene.Graphics.Base
         public void CompressedTexImage2D<T>(int level, TextureFormat intFormat, int width, int height, int imageSize, T* data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexImage2D((uint)Target, level, (uint)intFormat, width, height, 0, imageSize, data);
+            GL.CompressedTexImage2D(this, level, (uint)intFormat, width, height, 0, imageSize, data);
 
             InternalFormat = intFormat;
         }
@@ -320,7 +320,7 @@ namespace Zene.Graphics.Base
         public void CompressedTexImage2D<T>(CubeMapFace target, int level, TextureFormat intFormat, int width, int height, int imageSize, T* data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexImage2D((uint)target, level, (uint)intFormat, width, height, 0, imageSize, data);
+            GL.CompressedTexImage2D(this, target, level, (uint)intFormat, width, height, 0, imageSize, data);
 
             InternalFormat = intFormat;
         }
@@ -338,7 +338,7 @@ namespace Zene.Graphics.Base
         public void CompressedTexImage2D(int level, TextureFormat intFormat, int width, int height, int imageSize, IntPtr data)
         {
             Bind();
-            GL.CompressedTexImage2D((uint)Target, level, (uint)intFormat, width, height, 0, imageSize, data.ToPointer());
+            GL.CompressedTexImage2D(this, level, (uint)intFormat, width, height, 0, imageSize, data.ToPointer());
 
             InternalFormat = intFormat;
         }
@@ -357,7 +357,7 @@ namespace Zene.Graphics.Base
         public void CompressedTexImage2D(CubeMapFace target, int level, TextureFormat intFormat, int width, int height, int imageSize, IntPtr data)
         {
             Bind();
-            GL.CompressedTexImage2D((uint)target, level, (uint)intFormat, width, height, 0, imageSize, data.ToPointer());
+            GL.CompressedTexImage2D(this, target, level, (uint)intFormat, width, height, 0, imageSize, data.ToPointer());
 
             InternalFormat = intFormat;
         }
@@ -377,7 +377,7 @@ namespace Zene.Graphics.Base
         public void CompressedTexImage3D<T>(int level, TextureFormat intFormat, int width, int height, int depth, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexImage3D((uint)Target, level, (uint)intFormat, width, height, depth, 0, data.Size * sizeof(T), data);
+            GL.CompressedTexImage3D(this, level, (uint)intFormat, width, height, depth, 0, data.Size * sizeof(T), data);
 
             InternalFormat = intFormat;
         }
@@ -408,7 +408,7 @@ namespace Zene.Graphics.Base
         public void CompressedTexImage3D<T>(int level, TextureFormat intFormat, int width, int height, int depth, int imageSize, T* data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexImage3D((uint)Target, level, (uint)intFormat, width, height, depth, 0, imageSize, data);
+            GL.CompressedTexImage3D(this, level, (uint)intFormat, width, height, depth, 0, imageSize, data);
 
             InternalFormat = intFormat;
         }
@@ -439,7 +439,7 @@ namespace Zene.Graphics.Base
         public void CompressedTexImage3D(int level, TextureFormat intFormat, int width, int height, int depth, int imageSize, IntPtr data)
         {
             Bind();
-            GL.CompressedTexImage3D((uint)Target, level, (uint)intFormat, width, height, depth, 0, imageSize, data.ToPointer());
+            GL.CompressedTexImage3D(this, level, (uint)intFormat, width, height, depth, 0, imageSize, data.ToPointer());
 
             InternalFormat = intFormat;
         }
@@ -720,7 +720,7 @@ namespace Zene.Graphics.Base
         public void CopyTexImage1D(int level, TextureFormat intFormat, int x, int y, int size)
         {
             Bind();
-            GL.CopyTexImage1D((uint)Target, level, (uint)intFormat, x, y, size, 0);
+            GL.CopyTexImage1D(this, level, (uint)intFormat, x, y, size, 0);
 
             InternalFormat = intFormat;
         }
@@ -737,7 +737,7 @@ namespace Zene.Graphics.Base
         public void CopyTexImage2D(int level, TextureFormat intFormat, int x, int y, int width, int height)
         {
             Bind();
-            GL.CopyTexImage2D((uint)Target, level, (uint)intFormat, x, y, width, height, 0);
+            GL.CopyTexImage2D(this, level, (uint)intFormat, x, y, width, height, 0);
 
             InternalFormat = intFormat;
         }
@@ -755,7 +755,7 @@ namespace Zene.Graphics.Base
         public void CopyTexImage2D(CubeMapFace target, int level, TextureFormat intFormat, int x, int y, int width, int height)
         {
             Bind();
-            GL.CopyTexImage2D((uint)target, level, (uint)intFormat, x, y, width, height, 0);
+            GL.CopyTexImage2D(this, level, (uint)intFormat, x, y, width, height, 0);
 
             InternalFormat = intFormat;
         }
@@ -1070,7 +1070,7 @@ namespace Zene.Graphics.Base
         public void TexImage1D<T>(int level, TextureFormat intFormat, int size, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
         {
             Bind();
-            GL.TexImage1D((uint)Target, level, (int)intFormat, size, 0, (uint)format, (uint)type, dataPtr);
+            GL.TexImage1D(this, level, (int)intFormat, size, 0, (uint)format, (uint)type, dataPtr);
 
             InternalFormat = intFormat;
         }
@@ -1088,7 +1088,7 @@ namespace Zene.Graphics.Base
         public void TexImage1D(int level, TextureFormat intFormat, int size, BaseFormat format, TextureData type, IntPtr dataPtr)
         {
             Bind();
-            GL.TexImage1D((uint)Target, level, (int)intFormat, size, 0, (uint)format, (uint)type, dataPtr.ToPointer());
+            GL.TexImage1D(this, level, (int)intFormat, size, 0, (uint)format, (uint)type, dataPtr.ToPointer());
 
             InternalFormat = intFormat;
         }
@@ -1106,7 +1106,7 @@ namespace Zene.Graphics.Base
         public void TexImage1D<T>(int level, TextureFormat intFormat, int size, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.TexImage1D((uint)Target, level, (int)intFormat, size, 0, (uint)format, (uint)type, data);
+            GL.TexImage1D(this, level, (int)intFormat, size, 0, (uint)format, (uint)type, data);
 
             InternalFormat = intFormat;
         }
@@ -1128,7 +1128,7 @@ namespace Zene.Graphics.Base
         public void TexImage2D<T>(int level, TextureFormat intFormat, int width, int height, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
         {
             Bind();
-            GL.TexImage2D((uint)Target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr);
+            GL.TexImage2D(this, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr);
 
             InternalFormat = intFormat;
         }
@@ -1150,7 +1150,7 @@ namespace Zene.Graphics.Base
         public void TexImage2D<T>(CubeMapFace target, int level, TextureFormat intFormat, int width, int height, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
         {
             Bind();
-            GL.TexImage2D((uint)target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr);
+            GL.TexImage2D(this, target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr);
 
             InternalFormat = intFormat;
         }
@@ -1171,7 +1171,7 @@ namespace Zene.Graphics.Base
         public void TexImage2D(int level, TextureFormat intFormat, int width, int height, BaseFormat format, TextureData type, IntPtr dataPtr)
         {
             Bind();
-            GL.TexImage2D((uint)Target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr.ToPointer());
+            GL.TexImage2D(this, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr.ToPointer());
 
             InternalFormat = intFormat;
         }
@@ -1193,7 +1193,7 @@ namespace Zene.Graphics.Base
         public void TexImage2D(CubeMapFace target, int level, TextureFormat intFormat, int width, int height, BaseFormat format, TextureData type, IntPtr dataPtr)
         {
             Bind();
-            GL.TexImage2D((uint)target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr.ToPointer());
+            GL.TexImage2D(this, target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr.ToPointer());
 
             InternalFormat = intFormat;
         }
@@ -1214,7 +1214,7 @@ namespace Zene.Graphics.Base
         public void TexImage2D<T>(int level, TextureFormat intFormat, int width, int height, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.TexImage2D((uint)Target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, data);
+            GL.TexImage2D(this, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, data);
 
             InternalFormat = intFormat;
         }
@@ -1236,7 +1236,7 @@ namespace Zene.Graphics.Base
         public void TexImage2D<T>(CubeMapFace target, int level, TextureFormat intFormat, int width, int height, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.TexImage2D((uint)target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, data);
+            GL.TexImage2D(this, target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, data);
 
             InternalFormat = intFormat;
         }
@@ -1256,7 +1256,7 @@ namespace Zene.Graphics.Base
         public void TexImage2DMultisample(int samples, TextureFormat intFormat, int width, int height, bool fixedsampleLocations)
         {
             Bind();
-            GL.TexImage2DMultisample((uint)Target, samples, (uint)intFormat, width, height, fixedsampleLocations);
+            GL.TexImage2DMultisample(this, samples, (uint)intFormat, width, height, fixedsampleLocations);
 
             InternalFormat = intFormat;
         }
@@ -1278,7 +1278,7 @@ namespace Zene.Graphics.Base
         public void TexImage3D<T>(int level, TextureFormat intFormat, int width, int height, int depth, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
         {
             Bind();
-            GL.TexImage3D((uint)Target, level, (int)intFormat, width, height, depth, 0, (uint)format, (uint)type, dataPtr);
+            GL.TexImage3D(this, level, (int)intFormat, width, height, depth, 0, (uint)format, (uint)type, dataPtr);
 
             InternalFormat = intFormat;
         }
@@ -1299,7 +1299,7 @@ namespace Zene.Graphics.Base
         public void TexImage3D(int level, TextureFormat intFormat, int width, int height, int depth, BaseFormat format, TextureData type, IntPtr dataPtr)
         {
             Bind();
-            GL.TexImage3D((uint)Target, level, (int)intFormat, width, height, depth, 0, (uint)format, (uint)type, dataPtr.ToPointer());
+            GL.TexImage3D(this, level, (int)intFormat, width, height, depth, 0, (uint)format, (uint)type, dataPtr.ToPointer());
 
             InternalFormat = intFormat;
         }
@@ -1320,7 +1320,7 @@ namespace Zene.Graphics.Base
         public void TexImage3D<T>(int level, TextureFormat intFormat, int width, int height, int depth, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.TexImage3D((uint)Target, level, (int)intFormat, width, height, depth, 0, (uint)format, (uint)type, data);
+            GL.TexImage3D(this, level, (int)intFormat, width, height, depth, 0, (uint)format, (uint)type, data);
 
             InternalFormat = intFormat;
         }
@@ -1341,7 +1341,7 @@ namespace Zene.Graphics.Base
         public void TexImage3DMultisample(int samples, TextureFormat intFormat, int width, int height, int depth, bool fixedsampleLocations)
         {
             Bind();
-            GL.TexImage3DMultisample((uint)Target, samples, (uint)intFormat, width, height, depth, fixedsampleLocations);
+            GL.TexImage3DMultisample(this, samples, (uint)intFormat, width, height, depth, fixedsampleLocations);
 
             InternalFormat = intFormat;
         }
@@ -1356,7 +1356,7 @@ namespace Zene.Graphics.Base
         public void TexStorage1D(int levels, TextureFormat intFormat, int size)
         {
             Bind();
-            GL.TexStorage1D((uint)Target, levels, (uint)intFormat, size);
+            GL.TexStorage1D(this, levels, (uint)intFormat, size);
 
             InternalFormat = intFormat;
         }
@@ -1371,7 +1371,7 @@ namespace Zene.Graphics.Base
         public void TexStorage2D(int levels, TextureFormat intFormat, int width, int height)
         {
             Bind();
-            GL.TexStorage2D((uint)Target, levels, (uint)intFormat, width, height);
+            GL.TexStorage2D(this, levels, (uint)intFormat, width, height);
 
             InternalFormat = intFormat;
         }
@@ -1387,7 +1387,7 @@ namespace Zene.Graphics.Base
         public void TexStorage2D(CubeMapFace target, int levels, TextureFormat intFormat, int width, int height)
         {
             Bind();
-            GL.TexStorage2D((uint)target, levels, (uint)intFormat, width, height);
+            GL.TexStorage2D(this, target, levels, (uint)intFormat, width, height);
 
             InternalFormat = intFormat;
         }
@@ -1404,7 +1404,7 @@ namespace Zene.Graphics.Base
         public void TexStorage2DMultisample(int samples, TextureFormat intFormat, int width, int height, bool fixedsampleLocations)
         {
             Bind();
-            GL.TexStorage2DMultisample((uint)Target, samples, (uint)intFormat, width, height, fixedsampleLocations);
+            GL.TexStorage2DMultisample(this, samples, (uint)intFormat, width, height, fixedsampleLocations);
 
             InternalFormat = intFormat;
         }
@@ -1421,7 +1421,7 @@ namespace Zene.Graphics.Base
         public void TexStorage3D(int levels, TextureFormat intFormat, int width, int height, int depth)
         {
             Bind();
-            GL.TexStorage3D((uint)Target, levels, (uint)intFormat, width, height, depth);
+            GL.TexStorage3D(this, levels, (uint)intFormat, width, height, depth);
 
             InternalFormat = intFormat;
         }
@@ -1441,7 +1441,7 @@ namespace Zene.Graphics.Base
         public void TexStorage3DMultisample(int samples, TextureFormat intFormat, int width, int height, int depth, bool fixedsampleLocations)
         {
             Bind();
-            GL.TexStorage3DMultisample((uint)Target, samples, (uint)intFormat, width, height, depth, fixedsampleLocations);
+            GL.TexStorage3DMultisample(this, samples, (uint)intFormat, width, height, depth, fixedsampleLocations);
 
             InternalFormat = intFormat;
         }
@@ -1666,7 +1666,7 @@ namespace Zene.Graphics.Base
         public void TextureView(ITexture original, TextureFormat intFormat, uint minLevel, uint numLevels, uint minLayer, uint numbLayers)
         {
             Bind();
-            GL.TextureView(Id, (uint)Target, original.Id, (uint)intFormat, minLevel, numLevels, minLayer, numbLayers);
+            GL.TextureView(this, (uint)Target, original, (uint)intFormat, minLevel, numLevels, minLayer, numbLayers);
 
             InternalFormat = intFormat;
         }
