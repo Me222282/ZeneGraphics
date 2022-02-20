@@ -10,6 +10,7 @@
                 //"${workspaceFolder}/Tests/PhysicsTest/PhysicsTest.csproj",
                 //"${workspaceFolder}/Tests/GUI/PhysicsTest.csproj",
                 //"${workspaceFolder}/Tests/ImplicitFunctions/PhysicsTest.csproj",
+                //"${workspaceFolder}/Evolution/Tests/EvoutionTest.csproj",
                 "${workspaceFolder}/Tests/CSGL/CSGL.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
@@ -25,6 +26,7 @@
                 //"${workspaceFolder}/Tests/PhysicsTest/PhysicsTest.csproj",
                 //"${workspaceFolder}/Tests/GUI/PhysicsTest.csproj",
                 //"${workspaceFolder}/Tests/ImplicitFunctions/PhysicsTest.csproj",
+                //"${workspaceFolder}/Evolution/Tests/EvoutionTest.csproj",
                 "${workspaceFolder}/Tests/CSGL/CSGL.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
@@ -41,6 +43,7 @@
                 //"${workspaceFolder}/Tests/PhysicsTest/PhysicsTest.csproj",
                 //"${workspaceFolder}/Tests/GUI/PhysicsTest.csproj",
                 //"${workspaceFolder}/Tests/ImplicitFunctions/PhysicsTest.csproj",
+                //"${workspaceFolder}/Evolution/Tests/EvoutionTest.csproj",
                 "${workspaceFolder}/Tests/CSGL/CSGL.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
