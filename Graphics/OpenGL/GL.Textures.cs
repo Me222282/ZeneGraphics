@@ -822,6 +822,7 @@ namespace Zene.Graphics.Base
 			target.Properties._height = 1;
 			target.Properties._depth = 1;
 			target.Properties._samples = 0;
+			target.Properties._immutableFormat = true;
 			target.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.2)]
@@ -838,6 +839,7 @@ namespace Zene.Graphics.Base
 			target.Properties._height = height;
 			target.Properties._depth = 1;
 			target.Properties._samples = 0;
+			target.Properties._immutableFormat = true;
 			target.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.2)]
@@ -854,6 +856,7 @@ namespace Zene.Graphics.Base
 			target.Properties._height = height;
 			target.Properties._depth = 1;
 			target.Properties._samples = 0;
+			target.Properties._immutableFormat = true;
 			target.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.3)]
@@ -870,6 +873,7 @@ namespace Zene.Graphics.Base
 			target.Properties._height = height;
 			target.Properties._depth = 1;
 			target.Properties._samples = samples;
+			target.Properties._immutableFormat = true;
 			target.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.2)]
@@ -886,6 +890,7 @@ namespace Zene.Graphics.Base
 			target.Properties._height = height;
 			target.Properties._depth = depth;
 			target.Properties._samples = 0;
+			target.Properties._immutableFormat = true;
 			target.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.3)]
@@ -902,6 +907,7 @@ namespace Zene.Graphics.Base
 			target.Properties._height = height;
 			target.Properties._depth = depth;
 			target.Properties._samples = samples;
+			target.Properties._immutableFormat = true;
 			target.Properties.InternalFormatChanged();
 		}
 
@@ -919,6 +925,7 @@ namespace Zene.Graphics.Base
 			texture.Properties._height = 1;
 			texture.Properties._depth = 1;
 			texture.Properties._samples = 0;
+			texture.Properties._immutableFormat = true;
 			texture.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.5)]
@@ -935,6 +942,7 @@ namespace Zene.Graphics.Base
 			texture.Properties._height = height;
 			texture.Properties._depth = 1;
 			texture.Properties._samples = 0;
+			texture.Properties._immutableFormat = true;
 			texture.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.5)]
@@ -951,6 +959,7 @@ namespace Zene.Graphics.Base
 			texture.Properties._height = height;
 			texture.Properties._depth = 1;
 			texture.Properties._samples = samples;
+			texture.Properties._immutableFormat = true;
 			texture.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.5)]
@@ -967,6 +976,7 @@ namespace Zene.Graphics.Base
 			texture.Properties._height = height;
 			texture.Properties._depth = depth;
 			texture.Properties._samples = 0;
+			texture.Properties._immutableFormat = true;
 			texture.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(4.5)]
@@ -983,6 +993,7 @@ namespace Zene.Graphics.Base
 			texture.Properties._height = height;
 			texture.Properties._depth = depth;
 			texture.Properties._samples = samples;
+			texture.Properties._immutableFormat = true;
 			texture.Properties.InternalFormatChanged();
 		}
 
@@ -1036,6 +1047,9 @@ namespace Zene.Graphics.Base
 			texture.Properties._height = origtexture.Properties._height;
 			texture.Properties._depth = origtexture.Properties._depth;
 			texture.Properties._samples = origtexture.Properties._samples;
+
+			texture.Properties._immutableFormat = true;
+
 			texture.Properties.InternalFormatChanged();
 		}
 

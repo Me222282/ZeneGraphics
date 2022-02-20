@@ -12,6 +12,7 @@ namespace Zene.Graphics
         }
 
         private readonly TextureGL _texture;
+        protected TextureProperties Properties { get; }
 
         /// <summary>
         /// The internal storage resolution of the alpha component at base level.

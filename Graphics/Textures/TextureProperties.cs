@@ -93,7 +93,7 @@ namespace Zene.Graphics
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureBaseLevel, value);
             }
         }
-        internal ColourF _border = ColourF.Zero;
+        private ColourF _border = ColourF.Zero;
         /// <summary>
         /// The border colour of the texture.
         /// </summary>
@@ -138,7 +138,7 @@ namespace Zene.Graphics
                 }
             }
         }
-        internal ComparisonFunction _compareFunc = ComparisonFunction.LessEqual;
+        private ComparisonFunction _compareFunc = ComparisonFunction.LessEqual;
         /// <summary>
         /// The comparison operator used when <see cref="ComparisonMode"/> is set to <see cref="ComparisonMode.CompareToDepth"/>.
         /// </summary>
@@ -153,7 +153,7 @@ namespace Zene.Graphics
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureCompareFunc, (int)value);
             }
         }
-        internal ComparisonMode _compareMode = ComparisonMode.None;
+        private ComparisonMode _compareMode = ComparisonMode.None;
         /// <summary>
         /// The texture comparison mode for depth textures.
         /// </summary>
@@ -172,11 +172,8 @@ namespace Zene.Graphics
         /// <summary>
         /// The depth of the texture at base level.
         /// </summary>
-        public int Depth
-        {
-            get => _depth;
-        }
-        internal DepthStencilMode _dsMode = DepthStencilMode.Depth;
+        public int Depth => _depth;
+        private DepthStencilMode _dsMode = DepthStencilMode.Depth;
         /// <summary>
         /// The mode used to read from depth-stencil format textures.
         /// </summary>
@@ -206,7 +203,7 @@ namespace Zene.Graphics
                 return (FormatCompatibilityType)output;
             }
         }
-        internal double _lodBias = 0;
+        private double _lodBias = 0;
         /// <summary>
         /// A fixed bias that is to be added to the level-of-detail parameter before texture sampling.
         /// </summary>
@@ -221,7 +218,7 @@ namespace Zene.Graphics
                 GL.TexParameterf((uint)Handle.Target, GLEnum.TextureLodBias, (float)value);
             }
         }
-        internal TextureSampling _magFilter = TextureSampling.Blend;
+        private TextureSampling _magFilter = TextureSampling.Blend;
         /// <summary>
         /// The texture magnification function used when the level-of-detail function determines that the texture should be magified.
         /// </summary>
@@ -251,7 +248,7 @@ namespace Zene.Graphics
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureMaxLevel, value);
             }
         }
-        internal double _maxLod = 1000;
+        private double _maxLod = 1000;
         /// <summary>
         /// The maximum value for the level-of-detail parameter.
         /// </summary>
@@ -266,7 +263,7 @@ namespace Zene.Graphics
                 GL.TexParameterf((uint)Handle.Target, GLEnum.TextureMaxLod, (float)value);
             }
         }
-        internal TextureSampling _minFilter = TextureSampling.Blend;
+        private TextureSampling _minFilter = TextureSampling.Blend;
         /// <summary>
         /// The texture minification function used when the level-of-detail function determines that the texture should be minified.
         /// </summary>
@@ -281,7 +278,7 @@ namespace Zene.Graphics
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureMinFilter, (int)value);
             }
         }
-        internal double _minLod = -1000;
+        private double _minLod = -1000;
         /// <summary>
         /// The minimum value for the level-of-detail parameter.
         /// </summary>
@@ -296,7 +293,7 @@ namespace Zene.Graphics
                 GL.TexParameterf((uint)Handle.Target, GLEnum.TextureMinLod, (float)value);
             }
         }
-        internal Swizzle _redSwiz = Swizzle.Red;
+        private Swizzle _redSwiz = Swizzle.Red;
         /// <summary>
         /// The swizzle that will be applied to the red component of a texel before it is returned to the shader.
         /// </summary>
@@ -311,7 +308,7 @@ namespace Zene.Graphics
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureSwizzleR, (int)value);
             }
         }
-        internal Swizzle _greenSwiz = Swizzle.Green;
+        private Swizzle _greenSwiz = Swizzle.Green;
         /// <summary>
         /// The swizzle that will be applied to the green component of a texel before it is returned to the shader.
         /// </summary>
@@ -326,7 +323,7 @@ namespace Zene.Graphics
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureSwizzleG, (int)value);
             }
         }
-        internal Swizzle _blueSwiz = Swizzle.Blue;
+        private Swizzle _blueSwiz = Swizzle.Blue;
         /// <summary>
         /// The swizzle that will be applied to the blue component of a texel before it is returned to the shader.
         /// </summary>
@@ -341,7 +338,7 @@ namespace Zene.Graphics
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureSwizzleB, (int)value);
             }
         }
-        internal Swizzle _alphaSwiz = Swizzle.Alpha;
+        private Swizzle _alphaSwiz = Swizzle.Alpha;
         /// <summary>
         /// The swizzle that will be applied to the alpha component of a texel before it is returned to the shader.
         /// </summary>
@@ -356,7 +353,7 @@ namespace Zene.Graphics
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureSwizzleA, (int)value);
             }
         }
-        internal WrapStyle _wrapX = WrapStyle.Repeated;
+        private WrapStyle _wrapX = WrapStyle.Repeated;
         /// <summary>
         /// The wrapping function used on the x coordinate.
         /// </summary>
@@ -371,7 +368,7 @@ namespace Zene.Graphics
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureWrapS, (int)value);
             }
         }
-        internal WrapStyle _wrapY = WrapStyle.Repeated;
+        private WrapStyle _wrapY = WrapStyle.Repeated;
         /// <summary>
         /// The wrapping function used on the y coordinate.
         /// </summary>
@@ -386,7 +383,7 @@ namespace Zene.Graphics
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureWrapT, (int)value);
             }
         }
-        internal WrapStyle _wrapZ = WrapStyle.Repeated;
+        private WrapStyle _wrapZ = WrapStyle.Repeated;
         /// <summary>
         /// The wrapping function used on the z coordinate.
         /// </summary>
@@ -414,236 +411,6 @@ namespace Zene.Graphics
             }
         }
 
-        internal override void InternalFormatChanged()
-        {
-            // Texture format hasn't changed
-            if (Handle.InternalFormat == _oldFormat) { return; }
-
-            base.InternalFormatChanged();
-
-            switch (Handle.InternalFormat)
-            {
-                case TextureFormat.CompressedRed:
-                case TextureFormat.CompressedRedRgtc1:
-                case TextureFormat.R16:
-                case TextureFormat.R8:
-                    _redChannel = ChannelType.UNormalised;
-                    _greenChannel = ChannelType.None;
-                    _blueChannel = ChannelType.None;
-                    _alphaChannel = ChannelType.None;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.CompressedRg:
-                case TextureFormat.CompressedRgRgtc2:
-                case TextureFormat.Rg16:
-                case TextureFormat.Rg8:
-                    _redChannel = ChannelType.UNormalised;
-                    _greenChannel = ChannelType.UNormalised;
-                    _blueChannel = ChannelType.None;
-                    _alphaChannel = ChannelType.None;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.CompressedRgb:
-                case TextureFormat.CompressedSrgb:
-                case TextureFormat.R3G3B2:
-                case TextureFormat.Rgb:
-                case TextureFormat.Rgb10:
-                case TextureFormat.Rgb12:
-                case TextureFormat.Rgb16:
-                case TextureFormat.Rgb4:
-                case TextureFormat.Rgb5:
-                case TextureFormat.Rgb8:
-                case TextureFormat.Srgb:
-                case TextureFormat.Srgb8:
-                    _redChannel = ChannelType.UNormalised;
-                    _greenChannel = ChannelType.UNormalised;
-                    _blueChannel = ChannelType.UNormalised;
-                    _alphaChannel = ChannelType.None;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.CompressedRgba:
-                case TextureFormat.CompressedRgbaBptcUnorm:
-                case TextureFormat.CompressedSrgba:
-                case TextureFormat.CompressedSrgbaBptcUnorm:
-                case TextureFormat.Rgb10A2:
-                case TextureFormat.Rgb5A1:
-                case TextureFormat.Rgba:
-                case TextureFormat.Rgba12:
-                case TextureFormat.Rgba16:
-                case TextureFormat.Rgba2:
-                case TextureFormat.Rgba4:
-                case TextureFormat.Rgba8:
-                case TextureFormat.Srgba:
-                case TextureFormat.Srgba8:
-                    _redChannel = ChannelType.UNormalised;
-                    _greenChannel = ChannelType.UNormalised;
-                    _blueChannel = ChannelType.UNormalised;
-                    _alphaChannel = ChannelType.UNormalised;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.R16f:
-                case TextureFormat.R32f:
-                    _redChannel = ChannelType.Float;
-                    _greenChannel = ChannelType.None;
-                    _blueChannel = ChannelType.None;
-                    _alphaChannel = ChannelType.None;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.Rg16f:
-                case TextureFormat.Rg32f:
-                    _redChannel = ChannelType.Float;
-                    _greenChannel = ChannelType.Float;
-                    _blueChannel = ChannelType.None;
-                    _alphaChannel = ChannelType.None;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.CompressedRgbBptcSignedFloat:
-                case TextureFormat.R11fG11fB10f:
-                case TextureFormat.Rgb16f:
-                case TextureFormat.Rgb32f:
-                case TextureFormat.Rgb9E5:
-                    _redChannel = ChannelType.Float;
-                    _greenChannel = ChannelType.Float;
-                    _blueChannel = ChannelType.Float;
-                    _alphaChannel = ChannelType.None;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.Rgba16f:
-                case TextureFormat.Rgba32f:
-                    _redChannel = ChannelType.Float;
-                    _greenChannel = ChannelType.Float;
-                    _blueChannel = ChannelType.Float;
-                    _alphaChannel = ChannelType.Float;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.R16i:
-                case TextureFormat.R32i:
-                case TextureFormat.R8i:
-                    _redChannel = ChannelType.Int;
-                    _greenChannel = ChannelType.None;
-                    _blueChannel = ChannelType.None;
-                    _alphaChannel = ChannelType.None;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.Rg16i:
-                case TextureFormat.Rg32i:
-                case TextureFormat.Rg8i:
-                    _redChannel = ChannelType.Int;
-                    _greenChannel = ChannelType.Int;
-                    _blueChannel = ChannelType.None;
-                    _alphaChannel = ChannelType.None;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.Rgb16i:
-                case TextureFormat.Rgb32i:
-                case TextureFormat.Rgb8i:
-                    _redChannel = ChannelType.Int;
-                    _greenChannel = ChannelType.Int;
-                    _blueChannel = ChannelType.Int;
-                    _alphaChannel = ChannelType.None;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.Rgba16i:
-                case TextureFormat.Rgba32i:
-                case TextureFormat.Rgba8i:
-                    _redChannel = ChannelType.Int;
-                    _greenChannel = ChannelType.Int;
-                    _blueChannel = ChannelType.Int;
-                    _alphaChannel = ChannelType.Int;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.R16ui:
-                case TextureFormat.R32ui:
-                case TextureFormat.R8ui:
-                    _redChannel = ChannelType.Uint;
-                    _greenChannel = ChannelType.None;
-                    _blueChannel = ChannelType.None;
-                    _alphaChannel = ChannelType.None;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.Rg16ui:
-                case TextureFormat.Rg32ui:
-                case TextureFormat.Rg8ui:
-                    _redChannel = ChannelType.Uint;
-                    _greenChannel = ChannelType.Uint;
-                    _blueChannel = ChannelType.None;
-                    _alphaChannel = ChannelType.None;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.Rgb16ui:
-                case TextureFormat.Rgb32ui:
-                case TextureFormat.Rgb8ui:
-                    _redChannel = ChannelType.Uint;
-                    _greenChannel = ChannelType.Uint;
-                    _blueChannel = ChannelType.Uint;
-                    _alphaChannel = ChannelType.None;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.Rgba16ui:
-                case TextureFormat.Rgba32ui:
-                case TextureFormat.Rgba8ui:
-                case TextureFormat.Rgb10A2ui:
-                    _redChannel = ChannelType.Uint;
-                    _greenChannel = ChannelType.Uint;
-                    _blueChannel = ChannelType.Uint;
-                    _alphaChannel = ChannelType.Uint;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.CompressedSignedRedRgtc1:
-                case TextureFormat.R16Snorm:
-                case TextureFormat.R8Snorm:
-                    _redChannel = ChannelType.Normalised;
-                    _greenChannel = ChannelType.None;
-                    _blueChannel = ChannelType.None;
-                    _alphaChannel = ChannelType.None;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.CompressedSignedRgRgtc2:
-                case TextureFormat.Rg16Snorm:
-                case TextureFormat.Rg8Snorm:
-                    _redChannel = ChannelType.Normalised;
-                    _greenChannel = ChannelType.Normalised;
-                    _blueChannel = ChannelType.None;
-                    _alphaChannel = ChannelType.None;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.Rgb16Snorm:
-                case TextureFormat.Rgb8Snorm:
-                    _redChannel = ChannelType.Normalised;
-                    _greenChannel = ChannelType.Normalised;
-                    _blueChannel = ChannelType.Normalised;
-                    _alphaChannel = ChannelType.None;
-                    _depthChannel = ChannelType.None;
-                    break;
-
-                case TextureFormat.Rgba16Snorm:
-                case TextureFormat.Rgba8Snorm:
-                    _redChannel = ChannelType.Normalised;
-                    _greenChannel = ChannelType.Normalised;
-                    _blueChannel = ChannelType.Normalised;
-                    _alphaChannel = ChannelType.Normalised;
-                    _depthChannel = ChannelType.None;
-                    break;
-            }
-        }
 
         private ChannelType _redChannel = ChannelType.None;
         /// <summary>
@@ -793,20 +560,10 @@ namespace Zene.Graphics
                 return output;
             }
         }
+        internal bool _immutableFormat = false;
         /// <summary>
         /// Returns <see cref="true"/> if the texture has an immutable format, otherwise <see cref="false"/>.
         /// </summary>
-        public bool ImmutableFormat
-        {
-            get
-            {
-                Handle.Bind();
-                int output;
-
-                GL.GetTexParameteriv((uint)Handle.Target, GLEnum.TextureImmutableFormat, &output);
-
-                return output > 0;
-            }
-        }
+        public bool ImmutableFormat => _immutableFormat;
     }
 }
