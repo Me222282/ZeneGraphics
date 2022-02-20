@@ -89,13 +89,13 @@ namespace Zene.Graphics
         CompressedRgb = GLEnum.CompressedRgb,
         CompressedRgba = GLEnum.CompressedRgba,
         CompressedSrgb = GLEnum.CompressedSrgb,
-        CompressedSrgbAlpha = GLEnum.CompressedSrgbAlpha,
+        CompressedSrgba = GLEnum.CompressedSrgbAlpha,
         CompressedRedRgtc1 = GLEnum.CompressedRedRgtc1,
         CompressedSignedRedRgtc1 = GLEnum.CompressedSignedRedRgtc1,
         CompressedRgRgtc2 = GLEnum.CompressedRgRgtc2,
         CompressedSignedRgRgtc2 = GLEnum.CompressedSignedRgRgtc2,
         CompressedRgbaBptcUnorm = GLEnum.CompressedRgbaBptcUnorm,
-        CompressedSrgbAlphaBptcUnorm = GLEnum.CompressedSrgbAlphaBptcUnorm,
+        CompressedSrgbaBptcUnorm = GLEnum.CompressedSrgbAlphaBptcUnorm,
         CompressedRgbBptcSignedFloat = GLEnum.CompressedRgbBptcSignedFloat
     }
     /// <summary>

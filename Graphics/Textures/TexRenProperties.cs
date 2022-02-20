@@ -84,8 +84,8 @@
 
                 case TextureFormat.CompressedRgba:
                 case TextureFormat.CompressedRgbaBptcUnorm:
-                case TextureFormat.CompressedSrgbAlpha:
-                case TextureFormat.CompressedSrgbAlphaBptcUnorm:
+                case TextureFormat.CompressedSrgba:
+                case TextureFormat.CompressedSrgbaBptcUnorm:
                 case TextureFormat.Rgba:
                 case TextureFormat.Rgba2:
                 case TextureFormat.Rgba4:

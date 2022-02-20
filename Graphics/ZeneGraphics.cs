@@ -105,8 +105,8 @@ namespace Zene.Graphics
                 format == TextureFormat.CompressedSignedRedRgtc1 ||
                 format == TextureFormat.CompressedSignedRgRgtc2 ||
                 format == TextureFormat.CompressedSrgb ||
-                format == TextureFormat.CompressedSrgbAlpha ||
-                format == TextureFormat.CompressedSrgbAlphaBptcUnorm;
+                format == TextureFormat.CompressedSrgba ||
+                format == TextureFormat.CompressedSrgbaBptcUnorm;
         }
         /// <summary>
         /// Dtermines whether the internal format <paramref name="format"/> represents a depth component format.

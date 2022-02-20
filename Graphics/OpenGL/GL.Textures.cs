@@ -265,14 +265,17 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(1.3)]
-		public static void CompressedTexImage1D(ITexture texture, int level, uint internalformat, int width, int border, int imageSize, void* data)
+		public static void CompressedTexImage1D(ITexture target, int level, uint internalformat, int width, int border, int imageSize, void* data)
 		{
-			Functions.CompressedTexImage1D((uint)texture.Target, level, internalformat, width, border, imageSize, data);
+			Functions.CompressedTexImage1D((uint)target.Target, level, internalformat, width, border, imageSize, data);
 
-			texture.Properties._width = width;
-			texture.Properties._height = 1;
-			texture.Properties._depth = 1;
-			texture.Properties.InternalFormatChanged();
+			if (level == target.Properties._baseLevel)
+            {
+				target.Properties._width = width;
+				target.Properties._height = 1;
+				target.Properties._depth = 1;
+				target.Properties.InternalFormatChanged();
+			}
 		}
 		[OpenGLSupport(1.3)]
 		public static void CompressedTexImage2D(uint target, int level, uint internalformat, int width, int height, int border, int imageSize, void* data)
