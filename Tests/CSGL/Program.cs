@@ -12,7 +12,10 @@ namespace CSGL
         static void Main()
         {
             Core.Init();
-            /*
+
+            //TestTextureParam();
+
+
             //ShadowLWindow window = new ShadowLWindow(800, 500, "Work");
 
             //CubeMapTest window = new CubeMapTest(800, 500, "Work");
@@ -31,22 +34,20 @@ namespace CSGL
             {
                 Console.WriteLine(ex);
                 Console.ReadLine();
-            }*/
-            
+            }
+
+            Core.Terminate();
+        }
+
+        private static void TestTextureParam()
+        {
             Window w = new Window(800, 500, "Test", new WindowInitProperties()
             {
                 Resizable = false,
                 TransparentFramebuffer = true
             });
 
-            GLArray<ColourI> a = new GLArray<ColourI>(1, 1)
-            {
-                //ColourI.Zero, ColourI.Zero, ColourI.Zero, ColourI.Zero, ColourI.Zero,
-                //ColourI.Zero, ColourI.Zero, ColourI.Zero, ColourI.Zero, ColourI.Zero,
-                //ColourI.Zero, ColourI.Zero, ColourI.Zero, ColourI.Zero, ColourI.Zero,
-                //ColourI.Zero, ColourI.Zero, ColourI.Zero, ColourI.Zero, ColourI.Zero,
-                //ColourI.Zero, ColourI.Zero, ColourI.Zero, ColourI.Zero, ColourI.Zero
-            };
+            GLArray<ColourI> a = new GLArray<ColourI>(1, 1);
 
             TextureFormat[] allFormats = new TextureFormat[]
             {
@@ -136,8 +137,8 @@ namespace CSGL
                 TextureFormat.Rgba8ui,
                 TextureFormat.Srgb,
                 TextureFormat.Srgb8,
-                TextureFormat.Srgb8Alpha8,
-                TextureFormat.SrgbAlpha
+                TextureFormat.Srgba8,
+                TextureFormat.Srgba
             };
 
             State.OutputDebug = false;
@@ -189,9 +190,7 @@ namespace CSGL
                 Zene.Windowing.Base.GLFW.SwapBuffers(w.Handle);
             }
 
-            w.Close();
-
-            Core.Terminate();
+            w.Dispose();
         }
     }
 }

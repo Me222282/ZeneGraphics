@@ -7,6 +7,8 @@ namespace Zene.Graphics
     /// </summary>
     public enum TextureFormat : uint
     {
+        R = GLEnum.Red,
+        Rg = GLEnum.Rg,
         Rgb = GLEnum.Rgb,
         Rgba = GLEnum.Rgba,
         R3G3B2 = GLEnum.R3G3B2,
@@ -51,8 +53,8 @@ namespace Zene.Graphics
         Rgb9E5 = GLEnum.Rgb9E5,
         Srgb = GLEnum.Srgb,
         Srgb8 = GLEnum.Srgb8,
-        SrgbAlpha = GLEnum.SrgbAlpha,
-        Srgb8Alpha8 = GLEnum.Srgb8Alpha8,
+        Srgba = GLEnum.SrgbAlpha,
+        Srgba8 = GLEnum.Srgb8Alpha8,
         Rgba32ui = GLEnum.Rgba32ui,
         Rgb32ui = GLEnum.Rgb32ui,
         Rgba16ui = GLEnum.Rgba16ui,

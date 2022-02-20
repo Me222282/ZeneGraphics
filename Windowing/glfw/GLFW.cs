@@ -1011,10 +1011,14 @@ namespace Zene.Windowing.Base
 		/// </returns>
 		public static int Init()
 		{
-			LoadFunctions(LoadAssembly());
+			if (!_functionsLoaded)
+            {
+				LoadFunctions(LoadAssembly());
+			}
 			return _glfwInit();
 		}
 
+		private static bool _functionsLoaded = false;
 		private static void LoadFunctions(Func<string, IntPtr> getProcAddress)
 		{
 			_glfwInit = Marshal.GetDelegateForFunctionPointer<Delegates.glfwInit>(getProcAddress("glfwInit"));
@@ -1139,6 +1143,8 @@ namespace Zene.Windowing.Base
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) _glfwGetWin32Window = Marshal.GetDelegateForFunctionPointer<Delegates.glfwGetWin32Window>(getProcAddress("glfwGetWin32Window"));
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) _glfwGetX11Window = Marshal.GetDelegateForFunctionPointer<Delegates.glfwGetX11Window>(getProcAddress("glfwGetX11Window"));
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) _glfwGetCocoaWindow = Marshal.GetDelegateForFunctionPointer<Delegates.glfwGetCocoaWindow>(getProcAddress("glfwGetCocoaWindow"));
+
+			_functionsLoaded = true;
 		}
 
 		/// <summary>

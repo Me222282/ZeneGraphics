@@ -1,0 +1,1056 @@
+CompressedRed
+Red:     8
+         UNormalised
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+CompressedRedRgtc1
+Red:     8
+         UNormalised
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+CompressedRg
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+CompressedRgb
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   0
+         None
+Depth:   0
+         None
+
+CompressedRgba
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   8
+         UNormalised
+Depth:   0
+         None
+
+CompressedRgbaBptcUnorm
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   8
+         UNormalised
+Depth:   0
+         None
+
+CompressedRgbBptcSignedFloat
+Red:     32
+         Float
+Green:   32
+         Float
+Blue:    32
+         Float
+Alpha:   0
+         None
+Depth:   0
+         None
+
+CompressedRgRgtc2
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+CompressedSignedRedRgtc1
+Red:     8
+         Normalised
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+CompressedSignedRgRgtc2
+Red:     8
+         Normalised
+Green:   8
+         Normalised
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+CompressedSrgb
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   0
+         None
+Depth:   0
+         None
+
+CompressedSrgbAlpha
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   8
+         UNormalised
+Depth:   0
+         None
+
+CompressedSrgbAlphaBptcUnorm
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   8
+         UNormalised
+Depth:   0
+         None
+
+Depth24Stencil8
+Red:     0
+         None
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   24
+         UNormalised
+
+Depth32fStencil8
+Red:     0
+         None
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   32
+         Float
+
+DepthComponent
+Red:     0
+         None
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   24
+         UNormalised
+
+DepthComponent16
+Red:     0
+         None
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   16
+         UNormalised
+
+DepthComponent24
+Red:     0
+         None
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   24
+         UNormalised
+
+DepthComponent32
+Red:     0
+         None
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   24
+         UNormalised
+
+DepthComponent32f
+Red:     0
+         None
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   32
+         Float
+
+DepthStencil
+Red:     0
+         None
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   24
+         UNormalised
+
+R11fG11fB10f
+Red:     11
+         Float
+Green:   11
+         Float
+Blue:    10
+         Float
+Alpha:   0
+         None
+Depth:   0
+         None
+
+R16
+Red:     16
+         UNormalised
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+R16f
+Red:     16
+         Float
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+R16i
+Red:     16
+         Int
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+R16Snorm
+Red:     16
+         Normalised
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+R16ui
+Red:     16
+         Uint
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+R32f
+Red:     32
+         Float
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+R32i
+Red:     32
+         Int
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+R32ui
+Red:     32
+         Uint
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+R3G3B2
+Red:     5
+         UNormalised
+Green:   6
+         UNormalised
+Blue:    5
+         UNormalised
+Alpha:   0
+         None
+Depth:   0
+         None
+
+R8
+Red:     8
+         UNormalised
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+R8i
+Red:     8
+         Int
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+R8Snorm
+Red:     8
+         Normalised
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+R8ui
+Red:     8
+         Uint
+Green:   0
+         None
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rg16
+Red:     16
+         UNormalised
+Green:   16
+         UNormalised
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rg16f
+Red:     16
+         Float
+Green:   16
+         Float
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rg16i
+Red:     16
+         Int
+Green:   16
+         Int
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rg16Snorm
+Red:     16
+         Normalised
+Green:   16
+         Normalised
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rg16ui
+Red:     16
+         Uint
+Green:   16
+         Uint
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rg32f
+Red:     32
+         Float
+Green:   32
+         Float
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rg32i
+Red:     32
+         Int
+Green:   32
+         Int
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rg32ui
+Red:     32
+         Uint
+Green:   32
+         Uint
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rg8
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rg8i
+Red:     8
+         Int
+Green:   8
+         Int
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rg8Snorm
+Red:     8
+         Normalised
+Green:   8
+         Normalised
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rg8ui
+Red:     8
+         Uint
+Green:   8
+         Uint
+Blue:    0
+         None
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb10
+Red:     10
+         UNormalised
+Green:   10
+         UNormalised
+Blue:    10
+         UNormalised
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb10A2
+Red:     10
+         UNormalised
+Green:   10
+         UNormalised
+Blue:    10
+         UNormalised
+Alpha:   2
+         UNormalised
+Depth:   0
+         None
+
+Rgb10A2ui
+Red:     10
+         Uint
+Green:   10
+         Uint
+Blue:    10
+         Uint
+Alpha:   2
+         Uint
+Depth:   0
+         None
+
+Rgb12
+Red:     16
+         UNormalised
+Green:   16
+         UNormalised
+Blue:    16
+         UNormalised
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb16
+Red:     16
+         UNormalised
+Green:   16
+         UNormalised
+Blue:    16
+         UNormalised
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb16f
+Red:     16
+         Float
+Green:   16
+         Float
+Blue:    16
+         Float
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb16i
+Red:     16
+         Int
+Green:   16
+         Int
+Blue:    16
+         Int
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb16Snorm
+Red:     16
+         Normalised
+Green:   16
+         Normalised
+Blue:    16
+         Normalised
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb16ui
+Red:     16
+         Uint
+Green:   16
+         Uint
+Blue:    16
+         Uint
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb32f
+Red:     32
+         Float
+Green:   32
+         Float
+Blue:    32
+         Float
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb32i
+Red:     32
+         Int
+Green:   32
+         Int
+Blue:    32
+         Int
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb32ui
+Red:     32
+         Uint
+Green:   32
+         Uint
+Blue:    32
+         Uint
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb4
+Red:     5
+         UNormalised
+Green:   6
+         UNormalised
+Blue:    5
+         UNormalised
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb5
+Red:     5
+         UNormalised
+Green:   6
+         UNormalised
+Blue:    5
+         UNormalised
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb5A1
+Red:     5
+         UNormalised
+Green:   5
+         UNormalised
+Blue:    5
+         UNormalised
+Alpha:   1
+         UNormalised
+Depth:   0
+         None
+
+Rgb8
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb8i
+Red:     8
+         Int
+Green:   8
+         Int
+Blue:    8
+         Int
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb8Snorm
+Red:     8
+         Normalised
+Green:   8
+         Normalised
+Blue:    8
+         Normalised
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb8ui
+Red:     8
+         Uint
+Green:   8
+         Uint
+Blue:    8
+         Uint
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgb9E5
+Red:     9
+         Float
+Green:   9
+         Float
+Blue:    9
+         Float
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Rgba
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   8
+         UNormalised
+Depth:   0
+         None
+
+Rgba12
+Red:     16
+         UNormalised
+Green:   16
+         UNormalised
+Blue:    16
+         UNormalised
+Alpha:   16
+         UNormalised
+Depth:   0
+         None
+
+Rgba16
+Red:     16
+         UNormalised
+Green:   16
+         UNormalised
+Blue:    16
+         UNormalised
+Alpha:   16
+         UNormalised
+Depth:   0
+         None
+
+Rgba16f
+Red:     16
+         Float
+Green:   16
+         Float
+Blue:    16
+         Float
+Alpha:   16
+         Float
+Depth:   0
+         None
+
+Rgba16i
+Red:     16
+         Int
+Green:   16
+         Int
+Blue:    16
+         Int
+Alpha:   16
+         Int
+Depth:   0
+         None
+
+Rgba16Snorm
+Red:     16
+         Normalised
+Green:   16
+         Normalised
+Blue:    16
+         Normalised
+Alpha:   16
+         Normalised
+Depth:   0
+         None
+
+Rgba16ui
+Red:     16
+         Uint
+Green:   16
+         Uint
+Blue:    16
+         Uint
+Alpha:   16
+         Uint
+Depth:   0
+         None
+
+Rgba2
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   8
+         UNormalised
+Depth:   0
+         None
+
+Rgba32f
+Red:     32
+         Float
+Green:   32
+         Float
+Blue:    32
+         Float
+Alpha:   32
+         Float
+Depth:   0
+         None
+
+Rgba32i
+Red:     32
+         Int
+Green:   32
+         Int
+Blue:    32
+         Int
+Alpha:   32
+         Int
+Depth:   0
+         None
+
+Rgba32ui
+Red:     32
+         Uint
+Green:   32
+         Uint
+Blue:    32
+         Uint
+Alpha:   32
+         Uint
+Depth:   0
+         None
+
+Rgba4
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   8
+         UNormalised
+Depth:   0
+         None
+
+Rgba8
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   8
+         UNormalised
+Depth:   0
+         None
+
+Rgba8i
+Red:     8
+         Int
+Green:   8
+         Int
+Blue:    8
+         Int
+Alpha:   8
+         Int
+Depth:   0
+         None
+
+Rgba8Snorm
+Red:     8
+         Normalised
+Green:   8
+         Normalised
+Blue:    8
+         Normalised
+Alpha:   8
+         Normalised
+Depth:   0
+         None
+
+Rgba8ui
+Red:     8
+         Uint
+Green:   8
+         Uint
+Blue:    8
+         Uint
+Alpha:   8
+         Uint
+Depth:   0
+         None
+
+Srgb
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Srgb8
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   0
+         None
+Depth:   0
+         None
+
+Srgb8Alpha8
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   8
+         UNormalised
+Depth:   0
+         None
+
+SrgbAlpha
+Red:     8
+         UNormalised
+Green:   8
+         UNormalised
+Blue:    8
+         UNormalised
+Alpha:   8
+         UNormalised
+Depth:   0
+         None
+

@@ -12,21 +12,6 @@ namespace Zene.Graphics
         }
         public override ITexture Handle { get; }
 
-        /// <summary>
-        /// The data type used to store the alpha component at base level.
-        /// </summary>
-        public ChannelType AlphaChannel
-        {
-            get
-            {
-                Handle.Bind();
-                int output;
-
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureAlphaType, &output);
-
-                return (ChannelType)output;
-            }
-        }
         internal int _baseLevel = 0;
         /// <summary>
         /// The base texture mipmap level.
@@ -40,21 +25,6 @@ namespace Zene.Graphics
 
                 Handle.Bind();
                 GL.TexParameteri((uint)Handle.Target, GLEnum.TextureBaseLevel, value);
-            }
-        }
-        /// <summary>
-        /// The data type used to store the blue component at base level.
-        /// </summary>
-        public ChannelType BlueChannel
-        {
-            get
-            {
-                Handle.Bind();
-                int output;
-
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureBlueType, &output);
-
-                return (ChannelType)output;
             }
         }
         internal ColourF _border = ColourF.Zero;
@@ -156,21 +126,6 @@ namespace Zene.Graphics
             }
         }
         /// <summary>
-        /// The data type used to store the depth component at base level.
-        /// </summary>
-        public ChannelType DepthChannel
-        {
-            get
-            {
-                Handle.Bind();
-                int output;
-
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureDepthType, &output);
-
-                return (ChannelType)output;
-            }
-        }
-        /// <summary>
         /// The matching criteria use for the texture when used as an image texture.
         /// </summary>
         public FormatCompatibilityType FormatCompatibilityType
@@ -183,21 +138,6 @@ namespace Zene.Graphics
                 GL.GetTexParameteriv((uint)Handle.Target, GLEnum.ImageFormatCompatibilityType, &output);
 
                 return (FormatCompatibilityType)output;
-            }
-        }
-        /// <summary>
-        /// The data type used to store the green component at base level.
-        /// </summary>
-        public ChannelType GreenChannel
-        {
-            get
-            {
-                Handle.Bind();
-                int output;
-
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureGreenType, &output);
-
-                return (ChannelType)output;
             }
         }
         internal double _lodBias = 0;
@@ -288,21 +228,6 @@ namespace Zene.Graphics
 
                 Handle.Bind();
                 GL.TexParameterf((uint)Handle.Target, GLEnum.TextureMinLod, (float)value);
-            }
-        }
-        /// <summary>
-        /// The data type used to store the red component at base level.
-        /// </summary>
-        public ChannelType RedChannel
-        {
-            get
-            {
-                Handle.Bind();
-                int output;
-
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureRedType, &output);
-
-                return (ChannelType)output;
             }
         }
         internal Swizzle _redSwiz = Swizzle.Red;
@@ -422,6 +347,45 @@ namespace Zene.Graphics
                 WrapZ = value;
             }
         }
+
+        internal override void InternalFormatChanged()
+        {
+            // Texture format hasn't changed
+            if (Handle.InternalFormat == _oldFormat) { return; }
+
+            base.InternalFormatChanged();
+
+            switch (Handle.InternalFormat)
+            {
+
+            }
+        }
+
+        private ChannelType _redChannel = ChannelType.None;
+        /// <summary>
+        /// The data type used to store the red component at base level.
+        /// </summary>
+        public ChannelType RedChannel => _redChannel;
+        private ChannelType _greenChannel = ChannelType.None;
+        /// <summary>
+        /// The data type used to store the green component at base level.
+        /// </summary>
+        public ChannelType GreenChannel => _greenChannel;
+        private ChannelType _blueChannel = ChannelType.None;
+        /// <summary>
+        /// The data type used to store the blue component at base level.
+        /// </summary>
+        public ChannelType BlueChannel => _blueChannel;
+        private ChannelType _alphaChannel = ChannelType.None;
+        /// <summary>
+        /// The data type used to store the alpha component at base level.
+        /// </summary>
+        public ChannelType AlphaChannel => _alphaChannel;
+        private ChannelType _depthChannel = ChannelType.None;
+        /// <summary>
+        /// The data type used to store the depth component at base level.
+        /// </summary>
+        public ChannelType DepthChannel => _depthChannel;
 
         /// <summary>
         /// The offset into the data store of the buffer bound to a buffer texture

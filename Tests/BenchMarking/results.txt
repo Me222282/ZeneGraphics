@@ -1,0 +1,28 @@
+create and destory context and window:
+74.97ms
+84KB
+
+texture + window:
+81.98ms
+84KB
+
+drawobject + window:
+82.61ms
+86KB
+
+texture + drawobject + window:
+81.57ms
+88KB
+
+draw environment(texture, object, shader) + window:
+74.76ms
+86KB
+
+draw environment(texture, object, shader) + draw + window:
+??
+
+texture - 7.01ms & 0KB
+drawobject - 7.64ms & 2KB
+texture + drawobject - 6.60ms & 4KB
+draw environment - 0ms & 2KB
+drawing - ??

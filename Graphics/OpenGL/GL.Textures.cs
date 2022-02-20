@@ -272,6 +272,7 @@ namespace Zene.Graphics.Base
 			texture.Properties._width = width;
 			texture.Properties._height = 1;
 			texture.Properties._depth = 1;
+			texture.Properties.InternalFormatChanged();
 		}
 		[OpenGLSupport(1.3)]
 		public static void CompressedTexImage2D(uint target, int level, uint internalformat, int width, int height, int border, int imageSize, void* data)
