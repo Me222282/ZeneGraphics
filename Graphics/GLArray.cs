@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Zene.Graphics
 {
@@ -6,7 +8,7 @@ namespace Zene.Graphics
     /// A 1, 2 or 3 dimensional array of type <typeparamref name="T"/> stored in the format expected by OpenGL textures.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public unsafe class GLArray<T> where T : unmanaged
+    public unsafe class GLArray<T> : IEnumerable<T> where T : unmanaged
     {
         /// <summary>
         /// Creates an array from raw values.
@@ -242,6 +244,25 @@ namespace Zene.Graphics
             catch { throw; }
 
             return output;
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator() => ((IEnumerable<T>)Data).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => Data.GetEnumerator();
+
+        private int _current = 0;
+        /// <summary>
+        /// This is just for initialisation. <see cref="GLArray{T}"/> is not a dynamic array.
+        /// </summary>
+        /// <param name="value"></param>
+        public void Add(T value)
+        {
+            if (_current >= Data.Length)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            Data[_current] = value;
+            _current++;
         }
 
         public static implicit operator T[](GLArray<T> glArray)

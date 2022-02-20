@@ -829,13 +829,12 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <typeparam name="T">The type of the returned array.</typeparam>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the n-th mipmap reduction image.</param>
-        /// <param name="bufferSize">Specifies the size of the buffer to receive the retrieved pixel data.</param>
         /// <returns>The compressed texture image.</returns>
         [OpenGLSupport(1.3)]
-        public T[] GetCompressedTexImage<T>(int level, int bufferSize) where T : unmanaged
+        public T[] GetCompressedTexImage<T>(int level) where T : unmanaged
         {
             Bind();
-            T[] output = new T[bufferSize / sizeof(T)];
+            T[] output = new T[Properties.CompressedImageSize / sizeof(T)];
 
             fixed (T* pixelData = &output[0])
             {
@@ -878,13 +877,12 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <typeparam name="T">The type of the returned array.</typeparam>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the n-th mipmap reduction image.</param>
-        /// <param name="bufferSize">Specifies the size of the buffer to receive the retrieved pixel data.</param>
         /// <returns>The compressed texture image.</returns>
         [OpenGLSupport(1.3)]
-        public T[] GetCompressedTexImage<T>(CubeMapFace target, int level, int bufferSize) where T : unmanaged
+        public T[] GetCompressedTexImage<T>(CubeMapFace target, int level) where T : unmanaged
         {
             Bind();
-            T[] output = new T[bufferSize / sizeof(T)];
+            T[] output = new T[Properties.CompressedImageSize / sizeof(T)];
 
             fixed (T* pixelData = &output[0])
             {

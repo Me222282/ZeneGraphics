@@ -79,24 +79,6 @@ namespace Zene.Graphics.Passing
         /// <returns></returns>
         public ITexture Pass()
         {
-            if (InternalFormat.IsCompressed())
-            {
-                if (Target.Is1D())
-                {
-                    return new Texture1DComp(Id, InternalFormat);
-                }
-                if (Target.Is2D())
-                {
-                    return new Texture2DComp(Target, Id, InternalFormat);
-                }
-                if (Target.Is3D())
-                {
-                    return new Texture3DComp(Target, Id, InternalFormat);
-                }
-
-                return this;
-            }
-
             return Target switch
             {
                 TextureTarget.Texture1D => new Texture1D(Id, InternalFormat, _dataType),
@@ -122,24 +104,6 @@ namespace Zene.Graphics.Passing
         /// <returns></returns>
         public static ITexture Pass(TextureTarget target, uint id, TextureFormat format)
         {
-            if (format.IsCompressed())
-            {
-                if (target.Is1D())
-                {
-                    return new Texture1DComp(id, format);
-                }
-                if (target.Is2D())
-                {
-                    return new Texture2DComp(target, id, format);
-                }
-                if (target.Is3D())
-                {
-                    return new Texture3DComp(target, id, format);
-                }
-
-                return new TexturePasser(target, id, format);
-            }
-
             return target switch
             {
                 TextureTarget.Texture1D => new Texture1D(id, format, 0),

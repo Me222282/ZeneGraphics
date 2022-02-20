@@ -608,13 +608,12 @@ namespace Zene.Graphics.Base.Extensions
         /// </summary>
         /// <typeparam name="T">The type of the returned array.</typeparam>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the n-th mipmap reduction image.</param>
-        /// <param name="bufferSize">Specifies the size of the buffer to receive the retrieved pixel data.</param>
         /// <returns>The compressed texture image.</returns>
         [OpenGLSupport(1.3)]
-        public static T[] GetCompressedTexImage<T>(this ITexture texture, int level, int bufferSize) where T : unmanaged
+        public static T[] GetCompressedTexImage<T>(this ITexture texture, int level) where T : unmanaged
         {
             texture.Bind();
-            T[] output = new T[bufferSize / sizeof(T)];
+            T[] output = new T[texture.Properties.CompressedImageSize / sizeof(T)];
 
             fixed (T* pixelData = &output[0])
             {
@@ -628,13 +627,12 @@ namespace Zene.Graphics.Base.Extensions
         /// </summary>
         /// <typeparam name="T">The type of the returned array.</typeparam>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the n-th mipmap reduction image.</param>
-        /// <param name="bufferSize">Specifies the size of the buffer to receive the retrieved pixel data.</param>
         /// <returns>The compressed texture image.</returns>
         [OpenGLSupport(1.3)]
-        public static T[] GetCompressedTexImage<T>(this ITexture texture, CubeMapFace target, int level, int bufferSize) where T : unmanaged
+        public static T[] GetCompressedTexImage<T>(this ITexture texture, CubeMapFace target, int level) where T : unmanaged
         {
             texture.Bind();
-            T[] output = new T[bufferSize / sizeof(T)];
+            T[] output = new T[texture.Properties.CompressedImageSize / sizeof(T)];
 
             fixed (T* pixelData = &output[0])
             {

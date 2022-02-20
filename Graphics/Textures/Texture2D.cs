@@ -18,11 +18,6 @@ namespace Zene.Graphics
         /// <param name="dataType">The type of data that is going to be passed to OpenGL.</param>
         public Texture2D(TextureFormat format, TextureData dataType)
         {
-            if (format.IsCompressed())
-            {
-                throw new Exception("Invalid format. Must not be a compressed type to be valid for Texture2D.");
-            }
-
             _texture = new TextureGL(TextureTarget.Texture2D);
             InternalFormat = format;
             DataType = dataType;

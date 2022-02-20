@@ -11,9 +11,14 @@ namespace CSGL
     public unsafe class Window2D : Window
     {
         public Window2D(int width, int height, string title)
-            : base(width, height, title)
+            : base(width, height, title, new WindowInitProperties()
+            {
+                TransparentFramebuffer = true
+            })
         {
             SetUp();
+
+            OnSizeChange(new SizeChangeEventArgs(width, height));
         }
 
         protected override void Dispose(bool dispose)
@@ -31,35 +36,10 @@ namespace CSGL
 
         public void Run()
         {
-            string fps = Console.ReadLine();
-
-            int interval = 1000 / int.Parse(fps);
-
-            double[] times = new double[100];
-            System.Diagnostics.Stopwatch s = new System.Diagnostics.Stopwatch();
-
-            s.Start();
-
-            int i = 0;
-
-            GLFW.SwapInterval(0);
+            GLFW.SwapInterval(1);
 
             while (GLFW.WindowShouldClose(Handle) == 0)
             {
-                times[i] = s.ElapsedMilliseconds;
-                i++;
-                if (i >= times.Length)
-                {
-                    double total = 0;
-                    foreach (double d in times)
-                    {
-                        total += d;
-                    }
-
-                    Console.WriteLine(1000 / (total / times.Length));
-                    i = 0;
-                }
-                s.Restart();
 
                 Draw();
 
@@ -132,24 +112,12 @@ namespace CSGL
             //GL.PolygonMode(GLEnum.FrontAndBack, GLEnum.Line);
         }
 
-        private bool _bool;
-
         protected virtual void Draw()
         {
-            if (_bool)
-            {
-                BaseFramebuffer.ClearColour = new Colour(0, 0, 0);
-                _bool = false;
-            }
-            else
-            {
-                BaseFramebuffer.ClearColour = new Colour(255, 255, 255);
-                _bool = true;
-            }
-
+            BaseFramebuffer.ClearColour = new ColourF(0.2f, 0.4f, 0.8f, 0.5f);
+            //BaseFramebuffer.ClearColour = new ColourF(0.2f, 0.4f, 0.8f, 1.0f);
             BaseFramebuffer.Clear(BufferBit.Colour);
-
-            /*
+            
             if (_rightShift || _leftShift)
             {
                 scale += 1;
@@ -161,11 +129,8 @@ namespace CSGL
 
             Shader.Bind();
 
-            Shader.SetMatrix1(matrix * Matrix4.CreateScale(scale) * Matrix4.CreateOrthographic(orthoWidth, orthoHeight, 10, 0));
-            //Shader.SetMatrix(Matrix4.CreateTranslation(0, 0, scale) * Matrix4.CreatePerspectiveFieldOfView(Radian.Degrees(60), orthoWidth / orthoHeight, 1, 100));
-
-            GL.ClearColor(0.2f, 0.4f, 0.8f, 1.0f);
-            GL.Clear(GLEnum.ColourBufferBit);
+            Shader.Matrix1 = matrix * Matrix4.CreateScale(scale) * Matrix4.CreateOrthographic(orthoWidth, orthoHeight, 10, 0);
+            //Shader.Matrix1 = Matrix4.CreateTranslation(0, 0, scale) * Matrix4.CreatePerspectiveFieldOfView(Radian.Degrees(60), orthoWidth / orthoHeight, 1, 100);
 
             Shader.SetColourSource(ColourSource.AttributeColour);
 
@@ -174,7 +139,7 @@ namespace CSGL
             Shader.SetColourSource(ColourSource.Texture);
             Shader.SetTextureSlot(0);
 
-            PointObject.Draw();*/
+            PointObject.Draw();
         }
 
         private bool _leftShift;
@@ -201,6 +166,10 @@ namespace CSGL
             else if (e.Key == Keys.RightControl)
             {
                 _rightControl = true;
+            }
+            else if (e.Key == Keys.Tab)
+            {
+                FullScreen = !FullScreen;
             }
         }
 
@@ -261,7 +230,7 @@ namespace CSGL
         {
             base.OnSizePixelChange(e);
 
-            GL.Viewport(0, 0, (int)e.Width, (int)e.Height);
+            BaseFramebuffer.ViewSize = new Vector2I((int)e.Width, (int)e.Height);
         }
     }
 }

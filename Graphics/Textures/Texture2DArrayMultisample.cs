@@ -14,11 +14,6 @@ namespace Zene.Graphics
         /// <param name="dataType">The type of data that is going to be passed to OpenGL.</param>
         public Texture2DArrayMultisample(TextureFormat format)
         {
-            if (format.IsCompressed())
-            {
-                throw new Exception("Invalid format. Must not be a compressed type to be valid for Texture2DArrayMultisample.");
-            }
-
             _texture = new TextureGL(TextureTarget.MultisampleArray2D);
             InternalFormat = format;
         }

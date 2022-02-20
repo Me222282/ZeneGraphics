@@ -15,11 +15,6 @@ namespace Zene.Graphics
         /// <param name="format">The internal format of the texture.</param>
         public Texture2DMultisample(TextureFormat format)
         {
-            if (format.IsCompressed())
-            {
-                throw new Exception("Invalid format. Must not be a compressed type to be valid for Texture2DMultisample.");
-            }
-
             _texture = new TextureGL(TextureTarget.Multisample2D);
             InternalFormat = format;
         }

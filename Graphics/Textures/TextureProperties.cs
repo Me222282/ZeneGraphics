@@ -8,7 +8,7 @@ namespace Zene.Graphics
         public TextureProperties(ITexture source)
             : base(source)
         {
-
+            Handle = source;
         }
         public override ITexture Handle { get; }
 
