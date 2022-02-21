@@ -2,6 +2,7 @@
 using Zene.Windowing;
 using Zene.Windowing.Base;
 using Zene.Structs;
+using System;
 
 namespace CSGL
 {
@@ -50,7 +51,7 @@ namespace CSGL
                     2, 3, 7,
                     7, 6, 2
                 }, 3, 0, AttributeSize.D3, BufferUsage.DrawFrequent);
-
+            /*
             Bitmap skyBox = new Bitmap("Resources/StandardCubeMap.jpg");
             int faceSize = skyBox.Width / 4;
             _cubeMap = CubeMap.Create(new Bitmap[]
@@ -62,6 +63,20 @@ namespace CSGL
                 skyBox.SubBitmap(faceSize, faceSize, faceSize, faceSize),       // Front
                 skyBox.SubBitmap(faceSize * 3, faceSize, faceSize, faceSize)    // Back
             }, WrapStyle.EdgeClamp, TextureSampling.Nearest, false);
+            */
+            Bitmap skyBox = new Bitmap("Resources/CubeMapHD.png");
+            Console.WriteLine("Texture Decoded.");
+            int faceSize = skyBox.Width / 6;
+            _cubeMap = CubeMap.Create(new Bitmap[]
+            {
+                skyBox.SubBitmap(faceSize * 1, 0, faceSize, faceSize),      // Right
+                skyBox.SubBitmap(faceSize * 3, 0, faceSize, faceSize),      // Left
+                skyBox.SubBitmap(faceSize * 4, 0, faceSize, faceSize),      // Top
+                skyBox.SubBitmap(faceSize * 5, 0, faceSize, faceSize),      // Bottom
+                skyBox.SubBitmap(faceSize * 0, 0, faceSize, faceSize),      // Front
+                skyBox.SubBitmap(faceSize * 2, 0, faceSize, faceSize)       // Back
+            }, WrapStyle.EdgeClamp, TextureSampling.Blend, false);
+            Console.WriteLine("Texture Loaded.");
 
             State.SeamlessCubeMaps = true;
 
@@ -109,7 +124,7 @@ namespace CSGL
             MouseMovement();
 
             _shader.Bind();
-            _shader.ViewMat = Matrix4.CreateRotationY(rotateY) * Matrix4.CreateRotationX(rotateX);
+            _shader.View = Matrix4.CreateRotationY(rotateY) * Matrix4.CreateRotationX(rotateX);
             _shader.TextureSlot = 0;
 
             _cubeMap.Bind(0);
@@ -119,6 +134,28 @@ namespace CSGL
             _cubeMap.Unbind();
         }
 
+        private double _zoom = 60;
+        private const double _near = 0.000001;
+        private const double _far = 2;
+        protected override void OnScroll(ScrollEventArgs e)
+        {
+            base.OnScroll(e);
+
+            _zoom -= e.YDelta;
+
+            if (_zoom >= 179)
+            {
+                _zoom = 179;
+            }
+
+            else if (_zoom <= 1)
+            {
+                _zoom = 1;
+            }
+
+            _shader.Projection = Matrix4.CreatePerspectiveFieldOfView(Radian.Degrees(_zoom), (double)Width / Height, _near, _far);
+        }
+
         protected override void OnSizeChange(SizeChangeEventArgs e)
         {
             base.OnSizeChange(e);
@@ -126,9 +163,7 @@ namespace CSGL
             _width = (int)e.Width;
             _height = (int)e.Height;
 
-            Matrix4 proj = Matrix4.CreatePerspectiveFieldOfView(Radian.Degrees(60), e.Width / e.Height, 0.01, 5000);
-
-            _shader.ProjectionMat = proj;
+            _shader.Projection = Matrix4.CreatePerspectiveFieldOfView(Radian.Degrees(_zoom), e.Width / e.Height, _near, _far);
         }
         protected override void OnSizePixelChange(SizeChangeEventArgs e)
         {
@@ -185,7 +220,7 @@ namespace CSGL
             if (new Vector2(mX, mY) == mouseLocation) { return; }
 
             double distanceX = mX - mouseLocation.X;
-            double distanceY = mY - mouseLocation.Y;
+            double distanceY = mouseLocation.Y - mY;
 
             mouseLocation = new Vector2(mX, mY);
 

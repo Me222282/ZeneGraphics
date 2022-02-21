@@ -30,6 +30,9 @@
     <None Update="Resources\Bean.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\CubeMapHD.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\fontB.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

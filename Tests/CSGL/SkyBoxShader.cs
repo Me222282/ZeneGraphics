@@ -16,8 +16,7 @@ namespace CSGL
                 File.ReadAllText("Resources/skyBoxFrag.shader"));
 
             _uniformSampler = GL.GetUniformLocation(Program, "skybox");
-            _uniformProjMatrix = GL.GetUniformLocation(Program, "projection");
-            _uniformViewMatrix = GL.GetUniformLocation(Program, "view");
+            _uniformMatrix = GL.GetUniformLocation(Program, "matrix");
         }
 
         public uint Program { get; }
@@ -43,8 +42,7 @@ namespace CSGL
         }
 
         private readonly int _uniformSampler;
-        private readonly int _uniformProjMatrix;
-        private readonly int _uniformViewMatrix;
+        private readonly int _uniformMatrix;
 
         public int TextureSlot
         {
@@ -53,19 +51,31 @@ namespace CSGL
                 GL.ProgramUniform1i(Program, _uniformSampler, value);
             }
         }
-        public Matrix4 ProjectionMat
+        private Matrix4 _m3 = Matrix4.Identity;
+        public Matrix4 Projection
         {
+            get => _m3;
             set
             {
-                GL.ProgramUniformMatrix4fv(Program, _uniformProjMatrix, false, value.GetGLData());
+                _m3 = value;
+
+                SetMatrices();
             }
         }
-        public Matrix4 ViewMat
+        private Matrix4 _m2 = Matrix4.Identity;
+        public Matrix4 View
         {
+            get => _m2;
             set
             {
-                GL.ProgramUniformMatrix4fv(Program, _uniformViewMatrix, false, value.GetGLData());
+                _m2 = value;
+
+                SetMatrices();
             }
+        }
+        private void SetMatrices()
+        {
+            GL.ProgramUniformMatrix4fv(Program, _uniformMatrix, false, (_m2 * _m3).GetGLData());
         }
     }
 }
