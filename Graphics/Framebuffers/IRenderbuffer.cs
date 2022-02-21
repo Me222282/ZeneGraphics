@@ -6,6 +6,8 @@
     [OpenGLSupport(3.0)]
     public interface IRenderbuffer : IRenderTexture
     {
+        bool IRenderTexture.IsRenderbuffer => true;
+
         /// <summary>
         /// The formating of data stored in this renderbuffer.
         /// </summary>

@@ -100,7 +100,7 @@ namespace Zene.Graphics
         }
 
         private readonly ITexture[] _colourAttachs;
-        private IIdentifiable _depth;
+        private IRenderTexture _depth;
         private ITexture _stencil;
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace Zene.Graphics
         /// Gets or sets the depth or depthStencil attachment.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public IIdentifiable Depth
+        public IRenderTexture Depth
         {
             get
             {
@@ -486,7 +486,7 @@ namespace Zene.Graphics
             if (_depth == null) { return; }
 
             // Texture
-            if (_depth.IsTexture())
+            if (!_depth.IsRenderbuffer)
             {
                 ITexture texture = (ITexture)_depth;
 

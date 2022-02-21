@@ -279,6 +279,8 @@ namespace Zene.Graphics
     /// </summary>
     public interface ITexture : IRenderTexture
     {
+        bool IRenderTexture.IsRenderbuffer => false;
+
         /// <summary>
         /// The properties of this Texture.
         /// </summary>
