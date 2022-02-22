@@ -122,16 +122,16 @@ namespace Zene.Physics
             int DistanceSort(IBox x, IBox y)
             {
                 double xDis = Math.Min(
-                    Math.Min((box.Center - new Vector2(x.Left, x.Top)).SquaredLength,       // Top Left
-                        (box.Center - new Vector2(x.Right, x.Top)).SquaredLength),          // Top Right
-                    Math.Min((box.Center - new Vector2(x.Left, x.Bottom)).SquaredLength,    // Bottom Left
-                        (box.Center - new Vector2(x.Right, x.Bottom)).SquaredLength));      // Bottom Right
+                    Math.Min((box.Centre - new Vector2(x.Left, x.Top)).SquaredLength,       // Top Left
+                        (box.Centre - new Vector2(x.Right, x.Top)).SquaredLength),          // Top Right
+                    Math.Min((box.Centre - new Vector2(x.Left, x.Bottom)).SquaredLength,    // Bottom Left
+                        (box.Centre - new Vector2(x.Right, x.Bottom)).SquaredLength));      // Bottom Right
 
                 double yDis = Math.Min(
-                    Math.Min((box.Center - new Vector2(y.Left, y.Top)).SquaredLength,       // Top Left
-                        (box.Center - new Vector2(y.Right, y.Top)).SquaredLength),          // Top Right
-                    Math.Min((box.Center - new Vector2(y.Left, y.Bottom)).SquaredLength,    // Bottom Left
-                        (box.Center - new Vector2(y.Right, y.Bottom)).SquaredLength));      // Bottom Right
+                    Math.Min((box.Centre - new Vector2(y.Left, y.Top)).SquaredLength,       // Top Left
+                        (box.Centre - new Vector2(y.Right, y.Top)).SquaredLength),          // Top Right
+                    Math.Min((box.Centre - new Vector2(y.Left, y.Bottom)).SquaredLength,    // Bottom Left
+                        (box.Centre - new Vector2(y.Right, y.Bottom)).SquaredLength));      // Bottom Right
 
                 if (xDis < yDis)
                 {
@@ -166,7 +166,7 @@ namespace Zene.Physics
         {
             Vector2 tolerance = new Vector2(origin.Width / 2, origin.Height / 2);
             // The line of movement
-            Line2 line = new Line2(dir, origin.Center);
+            Line2 line = new Line2(dir, origin.Centre);
 
             foreach (IBox box in compare)
             {
@@ -296,16 +296,16 @@ namespace Zene.Physics
             int DistanceSort(T x, T y)
             {
                 double xDis = Math.Min(
-                    Math.Min((box.Center - new Vector2(x.Left, x.Top)).SquaredLength,       // Top Left
-                        (box.Center - new Vector2(x.Right, x.Top)).SquaredLength),          // Top Right
-                    Math.Min((box.Center - new Vector2(x.Left, x.Bottom)).SquaredLength,    // Bottom Left
-                        (box.Center - new Vector2(x.Right, x.Bottom)).SquaredLength));      // Bottom Right
+                    Math.Min((box.Centre - new Vector2(x.Left, x.Top)).SquaredLength,       // Top Left
+                        (box.Centre - new Vector2(x.Right, x.Top)).SquaredLength),          // Top Right
+                    Math.Min((box.Centre - new Vector2(x.Left, x.Bottom)).SquaredLength,    // Bottom Left
+                        (box.Centre - new Vector2(x.Right, x.Bottom)).SquaredLength));      // Bottom Right
 
                 double yDis = Math.Min(
-                    Math.Min((box.Center - new Vector2(y.Left, y.Top)).SquaredLength,       // Top Left
-                        (box.Center - new Vector2(y.Right, y.Top)).SquaredLength),          // Top Right
-                    Math.Min((box.Center - new Vector2(y.Left, y.Bottom)).SquaredLength,    // Bottom Left
-                        (box.Center - new Vector2(y.Right, y.Bottom)).SquaredLength));      // Bottom Right
+                    Math.Min((box.Centre - new Vector2(y.Left, y.Top)).SquaredLength,       // Top Left
+                        (box.Centre - new Vector2(y.Right, y.Top)).SquaredLength),          // Top Right
+                    Math.Min((box.Centre - new Vector2(y.Left, y.Bottom)).SquaredLength,    // Bottom Left
+                        (box.Centre - new Vector2(y.Right, y.Bottom)).SquaredLength));      // Bottom Right
 
                 if (xDis < yDis)
                 {
@@ -340,7 +340,7 @@ namespace Zene.Physics
         {
             Vector2 tolerance = new Vector2(origin.Width / 2, origin.Height / 2);
             // The line of movement
-            Line2 line = new Line2(dir, origin.Center);
+            Line2 line = new Line2(dir, origin.Centre);
 
             foreach (T box in compare)
             {

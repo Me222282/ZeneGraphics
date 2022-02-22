@@ -6,11 +6,11 @@ namespace Zene.Physics
     {
         public GravityForce(Vector2 location, double mass)
         {
-            CenterOfMass = location;
+            CentreOfMass = location;
             Mass = mass;
         }
 
-        public Vector2 CenterOfMass { get; set; }
+        public Vector2 CentreOfMass { get; set; }
 
         public double Mass { get; set; }
         double IForceController.Strength
@@ -27,10 +27,10 @@ namespace Zene.Physics
 
         public Velocity GetForce(PhyisicsProperties properties, double frameTime)
         {
-            Velocity v = Velocity.FromPath(properties.Box.Center, CenterOfMass);
+            Velocity v = Velocity.FromPath(properties.Box.Centre, CentreOfMass);
 
             // Use newtons equation g = G*M / r^2 to find the force of the gravity
-            double distance = properties.Box.Center.Distance(CenterOfMass);
+            double distance = properties.Box.Centre.Distance(CentreOfMass);
             v.Speed = frameTime * ((Gravitation * Mass) / (distance * distance));
 
             return v;
