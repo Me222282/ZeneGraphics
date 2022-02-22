@@ -345,11 +345,11 @@ namespace PhysicsTest
 
             if (_space)
             {
-                scroll = -e.YDelta * 3_000;
+                scroll = -e.DeltaY * 3_000;
             }
             else
             {
-                scroll = -e.YDelta * 30;
+                scroll = -e.DeltaY * 30;
             }
 
             if ((_viewSize.X + scroll) < 1 || (_viewSize.Y + scroll) < 1)

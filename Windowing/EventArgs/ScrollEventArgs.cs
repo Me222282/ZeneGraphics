@@ -6,12 +6,12 @@ namespace Zene.Windowing
     {
         public ScrollEventArgs(double scrollX, double scrollY)
         {
-            XDelta = scrollX;
-            YDelta = scrollY;
+            DeltaX = scrollX;
+            DeltaY = scrollY;
         }
 
-        public double XDelta { get; }
+        public double DeltaX { get; }
 
-        public double YDelta { get; }
+        public double DeltaY { get; }
     }
 }

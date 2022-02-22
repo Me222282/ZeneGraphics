@@ -595,7 +595,7 @@ namespace CSGL
         {
             base.OnScroll(e);
 
-            _zoom -= e.YDelta;
+            _zoom -= e.DeltaY;
 
             if (_zoom < 1)
             {
