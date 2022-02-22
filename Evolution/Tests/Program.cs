@@ -17,19 +17,21 @@ namespace EvolutionTest
             Core.Init();
 
             //SimulateLive(1, 1000, 80, 128, 300, true, 0);
+            
+            SimulateLive(1, 1000, 4, 128, 300, true, 0);
 
             //Simulate(300, new int[] { 100, 200, 300 }, 1, 1000, 4, 128, 300);
             //RunGeneration(new string[] { "output100.gen", "output200.gen", "output300.gen" });
             //RunGeneration(args);
-
+            /*
             if (!File.Exists("settings.txt"))
             {
                 Console.WriteLine("No settings file.");
-                Console.ReadKey();
+                Console.ReadLine();
                 return;
-            }
+            }*/
 
-            SimulateLive(GetSettings("settings.txt"));
+            //SimulateLive(GetSettings("settings.txt"));
             //Simulate(GetSettings("settings.txt"));
 
             Core.Terminate();
@@ -180,18 +182,23 @@ namespace EvolutionTest
 
         public static bool CheckLifeform(Lifeform lifeform)
         {
+            // Get to left
             //return lifeform.Location.X > (lifeform.CurrentWorld.Width / 2);
-
+            
+            // Get to centre X
             //return lifeform.Location.X > (lifeform.CurrentWorld.Width / 4) &&
             //    lifeform.Location.X < (lifeform.CurrentWorld.Width - (lifeform.CurrentWorld.Width / 4));
-
+            
+            // Get to corners
             //return (lifeform.Location.X < (lifeform.CurrentWorld.Width / 4) && (lifeform.Location.Y < (lifeform.CurrentWorld.Height / 4))) ||
             //    (lifeform.Location.X > (lifeform.CurrentWorld.Width - (lifeform.CurrentWorld.Width / 4)) && (lifeform.Location.Y > (lifeform.CurrentWorld.Height - (lifeform.CurrentWorld.Height / 4)))) ||
             //    (lifeform.Location.X > (lifeform.CurrentWorld.Width - (lifeform.CurrentWorld.Width / 4)) && (lifeform.Location.Y < (lifeform.CurrentWorld.Height / 4))) ||
             //    (lifeform.Location.X < (lifeform.CurrentWorld.Width / 4) && (lifeform.Location.Y > (lifeform.CurrentWorld.Height - (lifeform.CurrentWorld.Height / 4))));
-
+            
+            // Get to checkered patern location
             //return ((lifeform.Location.X + lifeform.Location.Y) % 2) == 0;
-
+            
+            // Get to the centre
             return (lifeform.Location.X > (lifeform.CurrentWorld.Width / 4)) &&
                 (lifeform.Location.X < (lifeform.CurrentWorld.Width - (lifeform.CurrentWorld.Width / 4))) &&
                 (lifeform.Location.Y > (lifeform.CurrentWorld.Height / 4)) &&
