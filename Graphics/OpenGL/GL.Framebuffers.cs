@@ -114,54 +114,144 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(3.0)]
-		public static void FramebufferRenderbuffer(uint target, uint attachment, uint renderbuffertarget, uint renderbuffer)
+		public static void FramebufferRenderbuffer(IFramebuffer target, uint attachment, uint renderbuffertarget, IRenderbuffer renderbuffer)
 		{
-			Functions.FramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
+			if (renderbuffer == null)
+			{
+				Functions.FramebufferRenderbuffer((uint)target.Binding, attachment, renderbuffertarget, 0);
+				target.Properties._attachments.Remove(attachment);
+				return;
+			}
+
+			Functions.FramebufferRenderbuffer((uint)target.Binding, attachment, renderbuffertarget, renderbuffer.Id);
+
+			target.Properties._attachments.Add(renderbuffer, attachment);
+			target.Properties._samples = renderbuffer.Properties.Samples;
 		}
 		[OpenGLSupport(4.5)]
-		public static void NamedFramebufferRenderbuffer(uint framebuffer, uint attachment, uint renderbuffertarget, uint renderbuffer)
+		public static void NamedFramebufferRenderbuffer(IFramebuffer framebuffer, uint attachment, uint renderbuffertarget, IRenderbuffer renderbuffer)
 		{
-			Functions.NamedFramebufferRenderbuffer(framebuffer, attachment, renderbuffertarget, renderbuffer);
+			if (renderbuffer == null)
+			{
+				Functions.NamedFramebufferRenderbuffer(framebuffer.Id, attachment, renderbuffertarget, 0);
+				framebuffer.Properties._attachments.Remove(attachment);
+				return;
+			}
+
+			Functions.NamedFramebufferRenderbuffer(framebuffer.Id, attachment, renderbuffertarget, renderbuffer.Id);
+
+			framebuffer.Properties._attachments.Add(renderbuffer, attachment);
+			framebuffer.Properties._samples = renderbuffer.Properties.Samples;
 		}
 
 		[OpenGLSupport(4.5)]
-		public static void NamedFramebufferTexture(uint framebuffer, uint attachment, uint texture, int level)
+		public static void NamedFramebufferTexture(IFramebuffer framebuffer, uint attachment, ITexture texture, int level)
 		{
-			Functions.NamedFramebufferTexture(framebuffer, attachment, texture, level);
+			if (texture == null)
+            {
+				Functions.NamedFramebufferTexture(framebuffer.Id, attachment, 0, level);
+				framebuffer.Properties._attachments.Remove(attachment);
+				return;
+			}
+
+			Functions.NamedFramebufferTexture(framebuffer.Id, attachment, texture.Id, level);
+
+			framebuffer.Properties._attachments.Add(texture, attachment);
+			framebuffer.Properties._samples = texture.Properties.Samples;
 		}
 		[OpenGLSupport(3.2)]
-		public static void FramebufferTexture(uint target, uint attachment, uint texture, int level)
+		public static void FramebufferTexture(IFramebuffer target, uint attachment, ITexture texture, int level)
 		{
-			Functions.FramebufferTexture(target, attachment, texture, level);
+			if (texture == null)
+			{
+				Functions.FramebufferTexture((uint)target.Binding, attachment, 0, level);
+				target.Properties._attachments.Remove(attachment);
+				return;
+			}
+
+			Functions.FramebufferTexture((uint)target.Binding, attachment, texture.Id, level);
+
+			target.Properties._attachments.Add(texture, attachment);
+			target.Properties._samples = texture.Properties.Samples;
 		}
 
 		[OpenGLSupport(3.0)]
-		public static void FramebufferTexture1D(uint target, uint attachment, uint textarget, uint texture, int level)
+		public static void FramebufferTexture1D(IFramebuffer target, uint attachment, uint textarget, ITexture texture, int level)
 		{
-			Functions.FramebufferTexture1D(target, attachment, textarget, texture, level);
+			if (texture == null)
+			{
+				Functions.FramebufferTexture1D((uint)target.Binding, attachment, textarget, 0, level);
+				target.Properties._attachments.Remove(attachment);
+				return;
+			}
+
+			Functions.FramebufferTexture1D((uint)target.Binding, attachment, textarget, texture.Id, level);
+
+			target.Properties._attachments.Add(texture, attachment);
+			target.Properties._samples = texture.Properties.Samples;
 		}
 
 		[OpenGLSupport(3.0)]
-		public static void FramebufferTexture2D(uint target, uint attachment, uint textarget, uint texture, int level)
+		public static void FramebufferTexture2D(IFramebuffer target, uint attachment, uint textarget, ITexture texture, int level)
 		{
-			Functions.FramebufferTexture2D(target, attachment, textarget, texture, level);
+			if (texture == null)
+			{
+				Functions.FramebufferTexture2D((uint)target.Binding, attachment, textarget, 0, level);
+				target.Properties._attachments.Remove(attachment);
+				return;
+			}
+
+			Functions.FramebufferTexture2D((uint)target.Binding, attachment, textarget, texture.Id, level);
+
+			target.Properties._attachments.Add(texture, attachment);
+			target.Properties._samples = texture.Properties.Samples;
 		}
 
 		[OpenGLSupport(3.0)]
-		public static void FramebufferTexture3D(uint target, uint attachment, uint textarget, uint texture, int level, int zoffset)
+		public static void FramebufferTexture3D(IFramebuffer target, uint attachment, uint textarget, ITexture texture, int level, int zoffset)
 		{
-			Functions.FramebufferTexture3D(target, attachment, textarget, texture, level, zoffset);
+			if (texture == null)
+			{
+				Functions.FramebufferTexture3D((uint)target.Binding, attachment, textarget, 0, level, zoffset);
+				target.Properties._attachments.Remove(attachment);
+				return;
+			}
+
+			Functions.FramebufferTexture3D((uint)target.Binding, attachment, textarget, texture.Id, level, zoffset);
+
+			target.Properties._attachments.Add(texture, attachment);
+			target.Properties._samples = texture.Properties.Samples;
 		}
 
 		[OpenGLSupport(3.0)]
-		public static void FramebufferTextureLayer(uint target, uint attachment, uint texture, int level, int layer)
+		public static void FramebufferTextureLayer(IFramebuffer target, uint attachment, ITexture texture, int level, int layer)
 		{
-			Functions.FramebufferTextureLayer(target, attachment, texture, level, layer);
+			if (texture == null)
+			{
+				Functions.FramebufferTextureLayer((uint)target.Binding, attachment, 0, level, layer);
+				target.Properties._attachments.Remove(attachment);
+				return;
+			}
+
+			Functions.FramebufferTextureLayer((uint)target.Binding, attachment, texture.Id, level, layer);
+
+			target.Properties._attachments.Add(texture, attachment);
+			target.Properties._samples = texture.Properties.Samples;
 		}
 		[OpenGLSupport(4.5)]
-		public static void NamedFramebufferTextureLayer(uint framebuffer, uint attachment, uint texture, int level, int layer)
+		public static void NamedFramebufferTextureLayer(IFramebuffer framebuffer, uint attachment, ITexture texture, int level, int layer)
 		{
-			Functions.NamedFramebufferTextureLayer(framebuffer, attachment, texture, level, layer);
+			if (texture == null)
+			{
+				Functions.NamedFramebufferTextureLayer(framebuffer.Id, attachment, 0, level, layer);
+				framebuffer.Properties._attachments.Remove(attachment);
+				return;
+			}
+
+			Functions.NamedFramebufferTextureLayer(framebuffer.Id, attachment, texture.Id, level, layer);
+
+			framebuffer.Properties._attachments.Add(texture, attachment);
+			framebuffer.Properties._samples = texture.Properties.Samples;
 		}
 
 		[OpenGLSupport(4.3)]

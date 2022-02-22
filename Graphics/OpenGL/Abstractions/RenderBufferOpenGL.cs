@@ -12,7 +12,7 @@
         public static void RenderbufferStorage(this IRenderbuffer renderbuffer, int width, int height)
         {
             renderbuffer.Bind();
-            GL.RenderbufferStorage(GLEnum.Renderbuffer, (uint)renderbuffer.InternalFormat, width, height);
+            GL.RenderbufferStorage(renderbuffer, (uint)renderbuffer.InternalFormat, width, height);
         }
         /// <summary>
         /// Establish data storage, format, dimensions and sample count of a renderbuffer object's image.
@@ -24,7 +24,7 @@
         public static void RenderbufferStorageMultisample(this IRenderbuffer renderbuffer, int samples, int width, int height)
         {
             renderbuffer.Bind();
-            GL.RenderbufferStorageMultisample(GLEnum.Renderbuffer, samples, (uint)renderbuffer.InternalFormat, width, height);
+            GL.RenderbufferStorageMultisample(renderbuffer, samples, (uint)renderbuffer.InternalFormat, width, height);
         }
 
         //

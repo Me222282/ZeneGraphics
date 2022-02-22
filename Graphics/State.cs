@@ -748,19 +748,41 @@ namespace Zene.Graphics
             GL.ReleaseShaderCompiler();
         }
 
+        static State()
+        {
+            if (GL.Version >= 3.0)
+            {
+                int value = 0;
+                GL.GetIntegerv(GLEnum.MaxColourAttachments, ref value);
+                MaxColourAttach = value;
+            }
+            if (GL.Version >= 2.0)
+            {
+                int value = 0;
+                GL.GetIntegerv(GLEnum.MaxDrawBuffers, ref value);
+                MaxDrawBuffers = value;
+            }
+        }
+
         /// <summary>
         /// Gets the maximum colour attachments of framebuffers for the hardware being used.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public static int MaxColourAttach
-        {
-            get
-            {
-                int value = 0; // Output value
-                // Get the maximum colour attachments
-                GL.GetIntegerv(GLEnum.MaxColourAttachments, ref value);
+        public static int MaxColourAttach { get; } = 8;
+        /// <summary>
+        /// Gets the maximum colour attachments of framebuffers for the hardware being used.
+        /// </summary>
+        [OpenGLSupport(2.0)]
+        public static int MaxDrawBuffers { get; } = 1;
 
-                return value;
+        /// <summary>
+        /// Clears all errors in gl error stack.
+        /// </summary>
+        public static void ClearErrors()
+        {
+            while (GL.GetError() != GLEnum.NoError)
+            {
+                // Nothing happens - content is in check statment
             }
         }
     }

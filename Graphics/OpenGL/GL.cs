@@ -43,7 +43,6 @@ namespace Zene.Graphics.Base
 			public uint Uniform;
 		}
 
-		public static uint BoundRenderbuffer { get; private set; } = 0;
 		public static uint BoundShaderProgram { get; private set; } = 0;
 		private static BufferBinding _boundBuffers = new BufferBinding();
 		public static BufferBinding BoundBuffers => _boundBuffers;
@@ -182,17 +181,6 @@ namespace Zene.Graphics.Base
 		public static void BindProgramPipeline(uint pipeline)
 		{
 			Functions.BindProgramPipeline(pipeline);
-		}
-
-		[OpenGLSupport(3.0)]
-		public static void BindRenderbuffer(uint target, uint renderbuffer)
-		{
-			if (target == GLEnum.Renderbuffer)
-            {
-				BoundRenderbuffer = renderbuffer;
-			}
-
-			Functions.BindRenderbuffer(target, renderbuffer);
 		}
 
 		[OpenGLSupport(3.3)]
@@ -430,12 +418,6 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(4.5)]
-		public static void CreateRenderbuffers(int n, uint* renderbuffers)
-		{
-			Functions.CreateRenderbuffers(n, renderbuffers);
-		}
-
-		[OpenGLSupport(4.5)]
 		public static void CreateSamplers(int n, uint* samplers)
 		{
 			Functions.CreateSamplers(n, samplers);
@@ -511,12 +493,6 @@ namespace Zene.Graphics.Base
 		public static void DeleteQueries(int n, uint* ids)
 		{
 			Functions.DeleteQueries(n, ids);
-		}
-
-		[OpenGLSupport(3.0)]
-		public static void DeleteRenderbuffers(int n, uint* renderbuffers)
-		{
-			Functions.DeleteRenderbuffers(n, renderbuffers);
 		}
 
 		[OpenGLSupport(3.3)]
@@ -831,12 +807,6 @@ namespace Zene.Graphics.Base
 			Functions.GenQueries(n, ids);
 		}
 
-		[OpenGLSupport(3.0)]
-		public static void GenRenderbuffers(int n, uint* renderbuffers)
-		{
-			Functions.GenRenderbuffers(n, renderbuffers);
-		}
-
 		[OpenGLSupport(3.3)]
 		public static void GenSamplers(int count, uint* samplers)
 		{
@@ -1072,12 +1042,6 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(4.5)]
-		public static void GetNamedRenderbufferParameteriv(uint renderbuffer, uint pname, int* @params)
-		{
-			Functions.GetNamedRenderbufferParameteriv(renderbuffer, pname, @params);
-		}
-
-		[OpenGLSupport(4.5)]
 		public static void GetnUniformdv(uint program, int location, int bufSize, double* @params)
 		{
 			Functions.GetnUniformdv(program, location, bufSize, @params);
@@ -1249,12 +1213,6 @@ namespace Zene.Graphics.Base
 		public static void GetQueryObjectuiv(uint id, uint pname, uint* @params)
 		{
 			Functions.GetQueryObjectuiv(id, pname, @params);
-		}
-
-		[OpenGLSupport(3.0)]
-		public static void GetRenderbufferParameteriv(uint target, uint pname, int* @params)
-		{
-			Functions.GetRenderbufferParameteriv(target, pname, @params);
 		}
 
 		[OpenGLSupport(3.3)]
@@ -1615,18 +1573,6 @@ namespace Zene.Graphics.Base
 		public static void NamedBufferSubData(uint buffer, int offset, int size, void* data)
 		{
 			Functions.NamedBufferSubData(buffer, offset, size, data);
-		}
-
-		[OpenGLSupport(4.5)]
-		public static void NamedRenderbufferStorage(uint renderbuffer, uint internalformat, int width, int height)
-		{
-			Functions.NamedRenderbufferStorage(renderbuffer, internalformat, width, height);
-		}
-
-		[OpenGLSupport(4.5)]
-		public static void NamedRenderbufferStorageMultisample(uint renderbuffer, int samples, uint internalformat, int width, int height)
-		{
-			Functions.NamedRenderbufferStorageMultisample(renderbuffer, samples, internalformat, width, height);
 		}
 
 		[OpenGLSupport(4.3)]
@@ -2076,18 +2022,6 @@ namespace Zene.Graphics.Base
 		public static void ReleaseShaderCompiler()
 		{
 			Functions.ReleaseShaderCompiler();
-		}
-
-		[OpenGLSupport(3.0)]
-		public static void RenderbufferStorage(uint target, uint internalformat, int width, int height)
-		{
-			Functions.RenderbufferStorage(target, internalformat, width, height);
-		}
-
-		[OpenGLSupport(3.0)]
-		public static void RenderbufferStorageMultisample(uint target, int samples, uint internalformat, int width, int height)
-		{
-			Functions.RenderbufferStorageMultisample(target, samples, internalformat, width, height);
 		}
 
 		[OpenGLSupport(4.0)]

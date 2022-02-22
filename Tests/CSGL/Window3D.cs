@@ -29,6 +29,8 @@ namespace CSGL
 
             OnSizeChange(new SizeChangeEventArgs(width, height));
             BaseFramebuffer.View = new RectangleI(0, 0, width, height);
+
+            State.OutputDebug = false;
         }
 
         protected override void Dispose(bool dispose)
@@ -74,6 +76,8 @@ namespace CSGL
 
             while (GLFW.WindowShouldClose(Handle) == 0)
             {
+                State.ClearErrors();
+
                 Framebuffer.Bind();
 
                 Draw();
@@ -544,11 +548,13 @@ namespace CSGL
                 _up = false;
             }
         }
+        private const double _near = 0.1;
+        private const double _far = 3000;
         protected override void OnSizeChange(SizeChangeEventArgs e)
         {
             base.OnSizeChange(e);
 
-            Matrix4 matrix = Matrix4.CreatePerspectiveFieldOfView(Radian.Degrees(60), e.Width / e.Height, 0.1, 3000);
+            Matrix4 matrix = Matrix4.CreatePerspectiveFieldOfView(Radian.Degrees(_zoom), e.Width / e.Height, _near, _far);
 
             Shader.SetProjectionMatrix(matrix);
             _textDisplay.Projection = matrix;
@@ -584,11 +590,36 @@ namespace CSGL
             Framebuffer.PixelSize(mWidth, mHeight);
         }
 
+        private double _zoom = 60;
+        protected override void OnScroll(ScrollEventArgs e)
+        {
+            base.OnScroll(e);
+
+            _zoom -= e.YDelta;
+
+            if (_zoom < 1)
+            {
+                _zoom = 1;
+            }
+            else if (_zoom > 179)
+            {
+                _zoom = 179;
+            }
+
+            Matrix4 matrix = Matrix4.CreatePerspectiveFieldOfView(Radian.Degrees(_zoom), (double)Width / Height, _near, _far);
+
+            Shader.SetProjectionMatrix(matrix);
+            _textDisplay.Projection = matrix;
+        }
+
         private bool _mouseShow = false;
         private Vector2 mouseLocation;
         private void MouseMovement()
         {
             if (_mouseShow) { return; }
+
+            // Window focused? - shouldn't calculate mouse movement
+            if (GLFW.GetWindowAttrib(Handle, GLFW.Focused) == GLFW.False) { return; }
 
             GLFW.GetCursorPos(Handle, out double mX, out double mY);
 
@@ -609,10 +640,6 @@ namespace CSGL
             mouseLocation = newMPos;
 
             GLFW.SetCursorPos(Handle, newMPos.X, newMPos.Y);
-
-            //GLFW.GetCursorPos(Handle, out double cX, out double cY);
-
-            //mouseLocation = new Vector2(cX, cY);
         }
 
         protected override void OnFileDrop(FileDropEventArgs e)

@@ -32,6 +32,8 @@ namespace Zene.Graphics.Shaders
 
         private readonly DrawObject<Vector2I, byte> _drawingObject;
 
+        FramebufferProperties IFramebuffer.Properties => ((IFramebuffer)_multiSFramebuffer).Properties;
+
         public FrameTarget Binding => _multiSFramebuffer.Binding;
 
         public new Vector2I Size

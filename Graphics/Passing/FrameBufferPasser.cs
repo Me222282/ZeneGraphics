@@ -13,14 +13,17 @@ namespace Zene.Graphics.Passing
         public FrameBufferPasser(IFramebuffer frameBuffer)
         {
             Id = frameBuffer.Id;
+            Properties = frameBuffer.Properties;
         }
         public FrameBufferPasser(uint id)
         {
             Id = id;
+            Properties = new FramebufferProperties(this);
         }
 
         public uint Id { get; }
         public FrameTarget Binding { get; private set; } = FrameTarget.FrameBuffer;
+        public FramebufferProperties Properties { get; }
 
         public RectangleI View { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
         public Vector2I ViewSize { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }

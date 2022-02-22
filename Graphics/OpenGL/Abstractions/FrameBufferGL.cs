@@ -15,14 +15,20 @@ namespace Zene.Graphics.Base
         public FrameBufferGL()
         {
             Id = GL.GenFramebuffer();
+
+            Properties = new FramebufferProperties(this);
         }
         internal FrameBufferGL(uint id)
         {
             Id = id;
+
+            Properties = new FramebufferProperties(this);
         }
 
         public uint Id { get; }
         public FrameTarget Binding { get; private set; } = FrameTarget.FrameBuffer;
+
+        public FramebufferProperties Properties { get; }
 
         [OpenGLSupport(3.0)]
         public void Bind()
@@ -236,7 +242,7 @@ namespace Zene.Graphics.Base
         public FrameBufferStatus CheckStatus()
         {
             Bind();
-            return (FrameBufferStatus)GL.CheckFramebufferStatus(GLEnum.Framebuffer);
+            return (FrameBufferStatus)GL.CheckFramebufferStatus((uint)Binding);
         }
 
         /// <summary>
@@ -248,13 +254,7 @@ namespace Zene.Graphics.Base
         public void FramebufferRenderbuffer(IRenderbuffer renderbuffer, FrameAttachment attachment)
         {
             Bind();
-            if (renderbuffer == null)
-            {
-                GL.FramebufferRenderbuffer((uint)Binding, (uint)attachment, GLEnum.Renderbuffer, 0);
-                return;
-            }
-
-            GL.FramebufferRenderbuffer((uint)Binding, (uint)attachment, GLEnum.Renderbuffer, renderbuffer.Id);
+            GL.FramebufferRenderbuffer(this, (uint)attachment, GLEnum.Renderbuffer, renderbuffer);
         }
 
         /// <summary>
@@ -267,13 +267,7 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture(ITexture texture, int level, FrameAttachment attachment)
         {
             Bind();
-            if (texture == null)
-            {
-                GL.FramebufferTexture((uint)Binding, (uint)attachment, 0, level);
-                return;
-            }
-
-            GL.FramebufferTexture((uint)Binding, (uint)attachment, texture.Id, level);
+            GL.FramebufferTexture(this, (uint)attachment, texture, level);
         }
         /// <summary>
         /// Attach a level of a texture object as a logical buffer of this framebuffer object.
@@ -285,13 +279,7 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture1D(ITexture texture, int level, FrameAttachment attachment)
         {
             Bind();
-            if (texture == null)
-            {
-                GL.FramebufferTexture1D((uint)Binding, (uint)attachment, GLEnum.Texture1d, 0, level);
-                return;
-            }
-
-            GL.FramebufferTexture1D((uint)Binding, (uint)attachment, GLEnum.Texture1d, texture.Id, level);
+            GL.FramebufferTexture1D(this, (uint)attachment, GLEnum.Texture1d, texture, level);
         }
         /// <summary>
         /// Attach a level of a texture object as a logical buffer of this framebuffer object.
@@ -303,13 +291,7 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture2D(CubeMapFace textureTarget, ITexture texture, int level, FrameAttachment attachment)
         {
             Bind();
-            if (texture == null)
-            {
-                GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)textureTarget, 0, level);
-                return;
-            }
-
-            GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)textureTarget, texture.Id, level);
+            GL.FramebufferTexture2D(this, (uint)attachment, (uint)textureTarget, texture, level);
         }
         /// <summary>
         /// Attach a level of a texture object as a logical buffer of this framebuffer object.
@@ -321,13 +303,7 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture2D(ITexture texture, int level, FrameAttachment attachment)
         {
             Bind();
-            if (texture == null)
-            {
-                GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)texture.Target, 0, level);
-                return;
-            }
-
-            GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)texture.Target, texture.Id, level);
+            GL.FramebufferTexture2D(this, (uint)attachment, (uint)texture.Target, texture, level);
         }
         /// <summary>
         /// Attach a level of a texture object as a logical buffer of this framebuffer object.
@@ -340,13 +316,7 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture3D(ITexture texture, int level, FrameAttachment attachment, int offset)
         {
             Bind();
-            if (texture == null)
-            {
-                GL.FramebufferTexture3D((uint)Binding, (uint)attachment, (uint)texture.Target, 0, level, offset);
-                return;
-            }
-
-            GL.FramebufferTexture3D((uint)Binding, (uint)attachment, (uint)texture.Target, texture.Id, level, offset);
+            GL.FramebufferTexture3D(this, (uint)attachment, (uint)texture.Target, texture, level, offset);
         }
 
         /// <summary>
@@ -358,13 +328,7 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture(ITexture texture, FrameAttachment attachment)
         {
             Bind();
-            if (texture == null)
-            {
-                GL.FramebufferTexture((uint)Binding, (uint)attachment, 0, 0);
-                return;
-            }
-
-            GL.FramebufferTexture((uint)Binding, (uint)attachment, texture.Id, 0);
+            GL.FramebufferTexture(this, (uint)attachment, texture, 0);
         }
         /// <summary>
         /// Attach a texture object as a logical buffer of this framebuffer object.
@@ -375,13 +339,7 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture1D(ITexture texture, FrameAttachment attachment)
         {
             Bind();
-            if (texture == null)
-            {
-                GL.FramebufferTexture1D((uint)Binding, (uint)attachment, GLEnum.Texture1d, 0, 0);
-                return;
-            }
-
-            GL.FramebufferTexture1D((uint)Binding, (uint)attachment, GLEnum.Texture1d, texture.Id, 0);
+            GL.FramebufferTexture1D(this, (uint)attachment, GLEnum.Texture1d, texture, 0);
         }
         /// <summary>
         /// Attach a texture object as a logical buffer of this framebuffer object.
@@ -392,13 +350,7 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture2D(CubeMapFace textureTarget, ITexture texture, FrameAttachment attachment)
         {
             Bind();
-            if (texture == null)
-            {
-                GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)textureTarget, 0, 0);
-                return;
-            }
-
-            GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)textureTarget, texture.Id, 0);
+            GL.FramebufferTexture2D(this, (uint)attachment, (uint)textureTarget, texture, 0);
         }
         /// <summary>
         /// Attach a texture object as a logical buffer of this framebuffer object.
@@ -409,13 +361,8 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture2D(ITexture texture, FrameAttachment attachment)
         {
             Bind();
-            if (texture == null)
-            {
-                GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)texture.Target, 0, 0);
-                return;
-            }
 
-            GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)texture.Target, texture.Id, 0);
+            GL.FramebufferTexture2D(this, (uint)attachment, (uint)texture.Target, texture, 0);
         }
         /// <summary>
         /// Attach a texture object as a logical buffer of this framebuffer object.
@@ -427,13 +374,7 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture3D(ITexture texture, FrameAttachment attachment, int offset)
         {
             Bind();
-            if (texture == null)
-            {
-                GL.FramebufferTexture3D((uint)Binding, (uint)attachment, (uint)texture.Target, 0, 0, offset);
-                return;
-            }
-
-            GL.FramebufferTexture3D((uint)Binding, (uint)attachment, (uint)texture.Target, texture.Id, 0, offset);
+            GL.FramebufferTexture3D(this, (uint)attachment, (uint)texture.Target, texture, 0, offset);
         }
 
         /// <summary>
@@ -447,13 +388,7 @@ namespace Zene.Graphics.Base
         public void FramebufferTextureLayer(ITexture texture, int level, int layer, FrameAttachment attachment)
         {
             Bind();
-            if (texture == null)
-            {
-                GL.FramebufferTextureLayer((uint)Binding, (uint)attachment, 0, level, layer);
-                return;
-            }
-
-            GL.FramebufferTextureLayer((uint)Binding, (uint)attachment, texture.Id, level, layer);
+            GL.FramebufferTextureLayer(this, (uint)attachment, texture, level, layer);
         }
         /// <summary>
         /// Attach a single layer of a texture object as a logical buffer of a framebuffer object.
@@ -465,13 +400,7 @@ namespace Zene.Graphics.Base
         public void FramebufferTextureLayer(ITexture texture, int layer, FrameAttachment attachment)
         {
             Bind();
-            if (texture == null)
-            {
-                GL.FramebufferTextureLayer((uint)Binding, (uint)attachment, 0, 0, layer);
-                return;
-            }
-
-            GL.FramebufferTextureLayer((uint)Binding, (uint)attachment, texture.Id, 0, layer);
+            GL.FramebufferTextureLayer(this, (uint)attachment, texture, 0, layer);
         }
 
         /// <summary>

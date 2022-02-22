@@ -175,6 +175,11 @@ namespace Zene.Graphics
     public unsafe interface IFramebuffer : IBindable, IIdentifiable, IDisposable
     {
         /// <summary>
+        /// The properties for this framebuffer.
+        /// </summary>
+        public FramebufferProperties Properties { get; }
+
+        /// <summary>
         /// The framebuffer target this framebuffer was last bound to.
         /// </summary>
         public FrameTarget Binding { get; }

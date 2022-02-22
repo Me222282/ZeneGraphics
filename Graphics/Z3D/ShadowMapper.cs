@@ -31,6 +31,8 @@ namespace Zene.Graphics.Z3D
         public FrameTarget Binding => _framebuffer.Binding;
         public uint Program => _shader.Program;
 
+        FramebufferProperties IFramebuffer.Properties => ((IFramebuffer)_framebuffer).Properties;
+
         private readonly TextureRenderer _framebuffer;
         private readonly Texture2D _texture;
 

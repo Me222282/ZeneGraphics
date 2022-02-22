@@ -69,7 +69,7 @@ namespace Zene.Graphics.Base
         public void RenderbufferStorage(TextureFormat intFormat, int width, int height)
         {
             Bind();
-            GL.RenderbufferStorage(GLEnum.Renderbuffer, (uint)intFormat, width, height);
+            GL.RenderbufferStorage(this, (uint)intFormat, width, height);
 
             InternalFormat = intFormat;
         }
@@ -85,7 +85,7 @@ namespace Zene.Graphics.Base
         public void RenderbufferStorageMultisample(TextureFormat intFormat, int samples, int width, int height)
         {
             Bind();
-            GL.RenderbufferStorageMultisample(GLEnum.Renderbuffer, samples, (uint)intFormat, width, height);
+            GL.RenderbufferStorageMultisample(this, samples, (uint)intFormat, width, height);
 
             InternalFormat = intFormat;
         }

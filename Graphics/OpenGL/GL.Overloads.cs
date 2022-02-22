@@ -54,12 +54,6 @@ namespace Zene.Graphics.Base
         }
 
         [OpenGLSupport(3.0)]
-        public static void DeleteRenderbuffer(uint renderbuffer)
-        {
-            DeleteRenderbuffers(1, &renderbuffer);
-        }
-
-        [OpenGLSupport(3.0)]
         public static void DeleteVertexArray(uint vertexArray)
         {
             DeleteVertexArrays(1, &vertexArray);
@@ -77,14 +71,6 @@ namespace Zene.Graphics.Base
             uint buffer;
             GenBuffers(1, &buffer);
             return buffer;
-        }
-
-        [OpenGLSupport(3.0)]
-        public static uint GenRenderbuffer()
-        {
-            uint renderbuffer;
-            GenRenderbuffers(1, &renderbuffer);
-            return renderbuffer;
         }
 
         [OpenGLSupport(3.0)]

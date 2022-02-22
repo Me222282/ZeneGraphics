@@ -13,25 +13,28 @@ namespace Zene.Graphics
     {
         public Framebuffer()
         {
-            _frameBuffer = new FrameBufferGL();
+            _framebuffer = new FrameBufferGL();
 
             _colourAttachs = new ITexture[State.MaxColourAttach];
             MainAttachment = FrameAttachment.Colour0;
         }
 
-        public uint Id => _frameBuffer.Id;
-        public FrameTarget Binding => _frameBuffer.Binding;
+        public uint Id => _framebuffer.Id;
+        public FrameTarget Binding => _framebuffer.Binding;
 
-        private readonly FrameBufferGL _frameBuffer;
+        private readonly FrameBufferGL _framebuffer;
+
+        protected FramebufferProperties Properties => _framebuffer.Properties;
+        FramebufferProperties IFramebuffer.Properties => _framebuffer.Properties;
 
         [OpenGLSupport(3.0)]
-        public void Bind(FrameTarget target) => _frameBuffer.Bind(target);
+        public void Bind(FrameTarget target) => _framebuffer.Bind(target);
         [OpenGLSupport(3.0)]
-        public void Bind() => _frameBuffer.Bind();
+        public void Bind() => _framebuffer.Bind();
         [OpenGLSupport(3.0)]
         public void Unbind()
         {
-            _frameBuffer.Unbind();
+            _framebuffer.Unbind();
         }
 
         private bool _disposed = false;
@@ -40,7 +43,7 @@ namespace Zene.Graphics
         {
             if (_disposed) { return; }
 
-            _frameBuffer.Dispose();
+            _framebuffer.Dispose();
 
             _disposed = true;
             GC.SuppressFinalize(this);
@@ -48,43 +51,43 @@ namespace Zene.Graphics
 
         public bool Validate()
         {
-            return _frameBuffer.Validate();
+            return _framebuffer.Validate();
         }
         /// <summary>
         /// Gets the completion status of this framebuffer.
         /// </summary>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public FrameBufferStatus Status => _frameBuffer.CheckStatus();
+        public FrameBufferStatus Status => _framebuffer.CheckStatus();
 
         public RectangleI View
         {
-            get => _frameBuffer.View;
-            set => _frameBuffer.View = value;
+            get => _framebuffer.View;
+            set => _framebuffer.View = value;
         }
         public Vector2I ViewSize
         {
-            get => _frameBuffer.ViewSize;
-            set => _frameBuffer.ViewSize = value;
+            get => _framebuffer.ViewSize;
+            set => _framebuffer.ViewSize = value;
         }
         /// <summary>
         /// Sets the render location for the framebuffer.
         /// </summary>
         public Vector2I ViewLocation
         {
-            get => _frameBuffer.ViewLocation;
-            set => _frameBuffer.ViewLocation = value;
+            get => _framebuffer.ViewLocation;
+            set => _framebuffer.ViewLocation = value;
         }
 
         public FrameDrawTarget ReadBuffer
         {
-            get => _frameBuffer.ReadBuffer;
-            set => _frameBuffer.ReadBuffer = value;
+            get => _framebuffer.ReadBuffer;
+            set => _framebuffer.ReadBuffer = value;
         }
         public FrameDrawTarget[] DrawBuffers
         {
-            get => _frameBuffer.DrawBuffers;
-            set => _frameBuffer.DrawBuffers = value;
+            get => _framebuffer.DrawBuffers;
+            set => _framebuffer.DrawBuffers = value;
         }
 
         /// <summary>
@@ -95,7 +98,7 @@ namespace Zene.Graphics
         {
             set
             {
-                _frameBuffer.DrawBuffers = new FrameDrawTarget[] { value };
+                _framebuffer.DrawBuffers = new FrameDrawTarget[] { value };
             }
         }
 
@@ -140,12 +143,12 @@ namespace Zene.Graphics
         {
             if (texture.Target.Is1D())
             {
-                _frameBuffer.FramebufferTexture1D(texture, attachment);
+                _framebuffer.FramebufferTexture1D(texture, attachment);
                 return;
             }
             if (texture.Target.Is2D())
             {
-                _frameBuffer.FramebufferTexture2D(texture, attachment);
+                _framebuffer.FramebufferTexture2D(texture, attachment);
                 return;
             }
 
@@ -165,7 +168,7 @@ namespace Zene.Graphics
                 throw new FrameBufferException(this, "Can only attach 3d textures in FrameBuffer.Set3DAttachment(ITexture, FrameAttachment, int)");
             }
 
-            _frameBuffer.FramebufferTexture3D(texture, attachment, offset);
+            _framebuffer.FramebufferTexture3D(texture, attachment, offset);
 
             // Is depth attachment
             if (attachment == FrameAttachment.DepthStencil || attachment == FrameAttachment.Depth)
@@ -182,9 +185,6 @@ namespace Zene.Graphics
             // Is colour attachment
 
             _colourAttachs[(int)attachment - (int)FrameAttachment.Colour0] = texture;
-
-            Width = texture.Properties._width;
-            Height = texture.Properties._height;
         }
 
         /// <summary>
@@ -204,9 +204,6 @@ namespace Zene.Graphics
                 SetTextureAttach(value, (FrameAttachment)((int)FrameAttachment.Colour0 + index));
 
                 _colourAttachs[index] = value;
-
-                Width = value.Properties._width;
-                Height = value.Properties._height;
             }
         }
         /// <summary>
@@ -222,9 +219,6 @@ namespace Zene.Graphics
             set
             {
                 _depth = value;
-
-                Width = value.Properties._width;
-                Height = value.Properties._height;
 
                 // If value is a texture
                 if (!value.IsRenderbuffer)
@@ -250,12 +244,12 @@ namespace Zene.Graphics
 
                 if (renderbuffer.InternalFormat.HasStencil())
                 {
-                    _frameBuffer.FramebufferRenderbuffer(renderbuffer, FrameAttachment.DepthStencil);
+                    _framebuffer.FramebufferRenderbuffer(renderbuffer, FrameAttachment.DepthStencil);
                     return;
                 }
                 if (renderbuffer.InternalFormat.IsDepth())
                 {
-                    _frameBuffer.FramebufferRenderbuffer(renderbuffer, FrameAttachment.Depth);
+                    _framebuffer.FramebufferRenderbuffer(renderbuffer, FrameAttachment.Depth);
                     return;
                 }
 
@@ -275,9 +269,6 @@ namespace Zene.Graphics
             set
             {
                 _stencil = value;
-
-                Width = value.Properties._width;
-                Height = value.Properties._height;
 
                 if (_stencil.InternalFormat.HasStencil())
                 {
@@ -308,21 +299,21 @@ namespace Zene.Graphics
                     // 1d texture
                     if (textureD.Target.Is1D())
                     {
-                        _frameBuffer.FramebufferTexture1D(null, attachment);
+                        _framebuffer.FramebufferTexture1D(null, attachment);
                         return;
                     }
                     // 2d texture
                     if (textureD.Target.Is1D())
                     {
-                        _frameBuffer.FramebufferTexture2D(null, attachment);
+                        _framebuffer.FramebufferTexture2D(null, attachment);
                         return;
                     }
                     // 3d texture
-                    _frameBuffer.FramebufferTexture3D(null, attachment, 0);
+                    _framebuffer.FramebufferTexture3D(null, attachment, 0);
                     return;
                 }
                 // Depth is a renderbuffer
-                _frameBuffer.FramebufferRenderbuffer(null, attachment);
+                _framebuffer.FramebufferRenderbuffer(null, attachment);
 
                 _depth = null;
                 return;
@@ -335,17 +326,17 @@ namespace Zene.Graphics
                 // 1d texture
                 if (_stencil.Target.Is1D())
                 {
-                    _frameBuffer.FramebufferTexture1D(null, attachment);
+                    _framebuffer.FramebufferTexture1D(null, attachment);
                     return;
                 }
                 // 2d texture
                 if (_stencil.Target.Is1D())
                 {
-                    _frameBuffer.FramebufferTexture2D(null, attachment);
+                    _framebuffer.FramebufferTexture2D(null, attachment);
                     return;
                 }
                 // 3d texture
-                _frameBuffer.FramebufferTexture3D(null, attachment, 0);
+                _framebuffer.FramebufferTexture3D(null, attachment, 0);
                 return;
             }
 
@@ -356,17 +347,17 @@ namespace Zene.Graphics
             // 1d texture
             if (texture.Target.Is1D())
             {
-                _frameBuffer.FramebufferTexture1D(null, attachment);
+                _framebuffer.FramebufferTexture1D(null, attachment);
                 return;
             }
             // 2d texture
             if (texture.Target.Is1D())
             {
-                _frameBuffer.FramebufferTexture2D(null, attachment);
+                _framebuffer.FramebufferTexture2D(null, attachment);
                 return;
             }
             // 3d texture
-            _frameBuffer.FramebufferTexture3D(null, attachment, 0);
+            _framebuffer.FramebufferTexture3D(null, attachment, 0);
         }
 
         /// <summary>
@@ -375,13 +366,13 @@ namespace Zene.Graphics
         public FrameAttachment MainAttachment { get; set; }
 
         /// <summary>
-        /// Gets the width of the framebuffer attachments.
+        /// The width of the framebuffer attachments.
         /// </summary>
-        public int Width { get; private set; }
+        public int Width => Properties.Width;
         /// <summary>
-        /// Gets the height of the framebuffer attachments.
+        /// The height of the framebuffer attachments.
         /// </summary>
-        public int Height { get; private set; }
+        public int Height => Properties.Height;
 
         private static void SetEmptyTexture(ITexture texture, int width, int height, int level)
         {
@@ -440,9 +431,6 @@ namespace Zene.Graphics
                 throw new FrameBufferException(this, "Framebuffers must have a width and heihgt greater that 0.");
             }
 
-            Width = width;
-            Height = height;
-
             // Colour attachments
             foreach (ITexture texture in _colourAttachs)
             {
@@ -496,7 +484,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void CopyFrameBuffer(IFramebuffer destination, IBox dstBox, BufferBit mask, TextureSampling filter)
         {
-            _frameBuffer.BlitBuffer(destination, new Rectangle(0, 0, Width, Height), dstBox, mask, filter);
+            _framebuffer.BlitBuffer(destination, new Rectangle(0, 0, Width, Height), dstBox, mask, filter);
         }
         /// <summary>
         /// Copies the data from this framebuffer to <paramref name="destination"/>.
@@ -509,7 +497,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void CopyFrameBuffer(IFramebuffer destination, IBox dstBox, IBox box, BufferBit mask, TextureSampling filter)
         {
-            _frameBuffer.BlitBuffer(destination, box, dstBox, mask, filter);
+            _framebuffer.BlitBuffer(destination, box, dstBox, mask, filter);
         }
         /// <summary>
         /// Copies the data from this framebuffer to <paramref name="destination"/>.
@@ -518,31 +506,9 @@ namespace Zene.Graphics
         /// <param name="mask">The attachments to copy.</param>
         /// <param name="filter">The quality of the copy.</param>
         [OpenGLSupport(3.0)]
-        public void CopyFrameBuffer(Framebuffer destination, BufferBit mask, TextureSampling filter)
+        public void CopyFrameBuffer(IFramebuffer destination, BufferBit mask, TextureSampling filter)
         {
-            _frameBuffer.BlitBuffer(destination, new Rectangle(0, 0, Width, Height), new Rectangle(0, 0, destination.Width, destination.Height), mask, filter);
-        }
-        /// <summary>
-        /// Copies the data from this framebuffer to <paramref name="destination"/>.
-        /// </summary>
-        /// <param name="destination">The framebuffer to copy to.</param>
-        /// <param name="mask">The attachments to copy.</param>
-        /// <param name="filter">The quality of the copy.</param>
-        [OpenGLSupport(3.0)]
-        public void CopyFrameBuffer(TextureRenderer destination, BufferBit mask, TextureSampling filter)
-        {
-            _frameBuffer.BlitBuffer(destination, new Rectangle(0, 0, Width, Height), new Rectangle(0, 0, destination.Width, destination.Height), mask, filter);
-        }
-        /// <summary>
-        /// Copies the data from this framebuffer to <paramref name="destination"/>.
-        /// </summary>
-        /// <param name="destination">The framebuffer to copy to.</param>
-        /// <param name="mask">The attachments to copy.</param>
-        /// <param name="filter">The quality of the copy.</param>
-        [OpenGLSupport(3.0)]
-        public void CopyFrameBuffer(TextureRendererMS destination, BufferBit mask, TextureSampling filter)
-        {
-            _frameBuffer.BlitBuffer(destination, new Rectangle(0, 0, Width, Height), new Rectangle(0, 0, destination.Width, destination.Height), mask, filter);
+            _framebuffer.BlitBuffer(destination, new Rectangle(0, 0, Width, Height), new Rectangle(0, 0, destination.Properties.Width, destination.Properties.Height), mask, filter);
         }
 
         /// <summary>
@@ -554,7 +520,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void CopyFrameBuffer(IBox dstBox, BufferBit mask, TextureSampling filter)
         {
-            _frameBuffer.BlitBuffer(null, new Rectangle(0, 0, Width, Height), dstBox, mask, filter);
+            _framebuffer.BlitBuffer(null, new Rectangle(0, 0, Width, Height), dstBox, mask, filter);
         }
         /// <summary>
         /// Copies the data from this framebuffer to OpenGL Context's framebuffer.
@@ -566,7 +532,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void CopyFrameBuffer(IBox dstBox, IBox box, BufferBit mask, TextureSampling filter)
         {
-            _frameBuffer.BlitBuffer(null, box, dstBox, mask, filter);
+            _framebuffer.BlitBuffer(null, box, dstBox, mask, filter);
         }
 
         /// <summary>
@@ -579,7 +545,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetAlphaSize(MainAttachment);
+                return _framebuffer.GetAlphaSize(MainAttachment);
             }
         }
         /// <summary>
@@ -592,7 +558,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetBlueSize(MainAttachment);
+                return _framebuffer.GetBlueSize(MainAttachment);
             }
         }
         /// <summary>
@@ -605,7 +571,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetColourEncoding(MainAttachment);
+                return _framebuffer.GetColourEncoding(MainAttachment);
             }
         }
         /// <summary>
@@ -618,7 +584,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetComponentType(MainAttachment);
+                return _framebuffer.GetComponentType(MainAttachment);
             }
         }
         /// <summary>
@@ -631,7 +597,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetDepthSize(MainAttachment);
+                return _framebuffer.GetDepthSize(MainAttachment);
             }
         }
         /// <summary>
@@ -644,7 +610,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetGreenSize(MainAttachment);
+                return _framebuffer.GetGreenSize(MainAttachment);
             }
         }
         /// <summary>
@@ -657,7 +623,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetLayered(MainAttachment);
+                return _framebuffer.GetLayered(MainAttachment);
             }
         }
         /// <summary>
@@ -670,7 +636,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetRedSize(MainAttachment);
+                return _framebuffer.GetRedSize(MainAttachment);
             }
         }
         /// <summary>
@@ -683,7 +649,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetStencilSize(MainAttachment);
+                return _framebuffer.GetStencilSize(MainAttachment);
             }
         }
         /// <summary>
@@ -696,7 +662,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetTextureCubeMapFace(MainAttachment);
+                return _framebuffer.GetTextureCubeMapFace(MainAttachment);
             }
         }
         /// <summary>
@@ -709,7 +675,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetTextureLayer(MainAttachment);
+                return _framebuffer.GetTextureLayer(MainAttachment);
             }
         }
         /// <summary>
@@ -722,7 +688,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetTextureLevel(MainAttachment);
+                return _framebuffer.GetTextureLevel(MainAttachment);
             }
         }
 
@@ -736,7 +702,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetColourReadFormat();
+                return _framebuffer.GetColourReadFormat();
             }
         }
         /// <summary>
@@ -749,7 +715,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetColourReadType();
+                return _framebuffer.GetColourReadType();
             }
         }
         /// <summary>
@@ -762,7 +728,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetDoubleBuffer();
+                return _framebuffer.GetDoubleBuffer();
             }
         }
         /// <summary>
@@ -775,7 +741,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetSamples();
+                return _framebuffer.GetSamples();
             }
         }
         /// <summary>
@@ -788,7 +754,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetSampleBuffers();
+                return _framebuffer.GetSampleBuffers();
             }
         }
         /// <summary>
@@ -801,7 +767,7 @@ namespace Zene.Graphics
             {
                 
 
-                return _frameBuffer.GetStereo();
+                return _framebuffer.GetStereo();
             }
         }
     }

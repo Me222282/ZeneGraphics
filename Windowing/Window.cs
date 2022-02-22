@@ -43,6 +43,12 @@ namespace Zene.Windowing
 
             Core.SetInitProperties(properties);
             RefreshRate = properties.RefreshRate;
+            _baseFramebuffer = new BaseFramebuffer(
+                properties.Stereoscopic,
+                properties.DoubleBuffered,
+                properties.Samples,
+                width, height);
+            _baseFramebuffer.Size(width, height);
 
             _window = GLFW.CreateWindow(width, height, title, properties.Monitor.Handle, properties.SharedWindow.Handle);
 
@@ -121,7 +127,8 @@ namespace Zene.Windowing
             GLFW.SetWindowShouldClose(_window, 1);
         }
 
-        public virtual IFramebuffer Framebuffer { get; } = new GLFWFrameBuffer();
+        private readonly BaseFramebuffer _baseFramebuffer;
+        public virtual IFramebuffer Framebuffer => _baseFramebuffer;
 
         private int _normalWidth;
         private int _normalHeight;
@@ -134,8 +141,12 @@ namespace Zene.Windowing
             set
             {
                 _refreshRate = value;
-                // Resets window's monitor - thus changing refresh rate
-                FullScreen = _fullScreen;
+
+                // Resets window's monitor if none - thus changing refresh rate
+                if (!_fullScreen)
+                {
+                    FullScreen = _fullScreen;
+                }
             }
         }
 
@@ -429,6 +440,8 @@ namespace Zene.Windowing
         protected virtual void OnSizePixelChange(SizeChangeEventArgs e)
         {
             SizePixelChange?.Invoke(this, e);
+
+            _baseFramebuffer.Size((int)e.Width, (int)e.Height);
         }
 
         /// <summary>
