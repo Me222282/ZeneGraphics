@@ -182,6 +182,9 @@ namespace Zene.Graphics
             // Is colour attachment
 
             _colourAttachs[(int)attachment - (int)FrameAttachment.Colour0] = texture;
+
+            Width = texture.Properties._width;
+            Height = texture.Properties._height;
         }
 
         /// <summary>
@@ -201,6 +204,9 @@ namespace Zene.Graphics
                 SetTextureAttach(value, (FrameAttachment)((int)FrameAttachment.Colour0 + index));
 
                 _colourAttachs[index] = value;
+
+                Width = value.Properties._width;
+                Height = value.Properties._height;
             }
         }
         /// <summary>
@@ -217,8 +223,11 @@ namespace Zene.Graphics
             {
                 _depth = value;
 
+                Width = value.Properties._width;
+                Height = value.Properties._height;
+
                 // If value is a texture
-                if (typeof(ITexture).IsAssignableFrom(value.GetType()))
+                if (!value.IsRenderbuffer)
                 {
                     ITexture texture = (ITexture)value;
 
@@ -235,26 +244,22 @@ namespace Zene.Graphics
 
                     throw new FrameBufferException(this, "Depth attachment value must be stored as a depth component type.");
                 }
-                // If value is a renderbuffer
-                if (typeof(IRenderbuffer).IsAssignableFrom(value.GetType()))
+
+                // value is a renderbuffer
+                IRenderbuffer renderbuffer = (IRenderbuffer)value;
+
+                if (renderbuffer.InternalFormat.HasStencil())
                 {
-                    IRenderbuffer renderbuffer = (IRenderbuffer)value;
-
-                    if (renderbuffer.InternalFormat.HasStencil())
-                    {
-                        _frameBuffer.FramebufferRenderbuffer(renderbuffer, FrameAttachment.DepthStencil);
-                        return;
-                    }
-                    if (renderbuffer.InternalFormat.IsDepth())
-                    {
-                        _frameBuffer.FramebufferRenderbuffer(renderbuffer, FrameAttachment.Depth);
-                        return;
-                    }
-
-                    throw new FrameBufferException(this, "Depth attachment value must be stored as a depth component type.");
+                    _frameBuffer.FramebufferRenderbuffer(renderbuffer, FrameAttachment.DepthStencil);
+                    return;
+                }
+                if (renderbuffer.InternalFormat.IsDepth())
+                {
+                    _frameBuffer.FramebufferRenderbuffer(renderbuffer, FrameAttachment.Depth);
+                    return;
                 }
 
-                throw new FrameBufferException(this, "Depth attachment value must be a texture or renderbuffer.");
+                throw new FrameBufferException(this, "Depth attachment value must be stored as a depth component type.");
             }
         }
         /// <summary>
@@ -270,6 +275,9 @@ namespace Zene.Graphics
             set
             {
                 _stencil = value;
+
+                Width = value.Properties._width;
+                Height = value.Properties._height;
 
                 if (_stencil.InternalFormat.HasStencil())
                 {
@@ -292,7 +300,7 @@ namespace Zene.Graphics
             if (attachment == FrameAttachment.DepthStencil || attachment == FrameAttachment.Depth)
             {
                 // Depth is a texture
-                if (typeof(ITexture).IsAssignableFrom(_depth.GetType()))
+                if (!_depth.IsRenderbuffer)
                 {
                     ITexture textureD = (ITexture)_depth;
                     _depth = null;
@@ -300,21 +308,21 @@ namespace Zene.Graphics
                     // 1d texture
                     if (textureD.Target.Is1D())
                     {
-                        _frameBuffer.FramebufferTexture1D(default, attachment);
+                        _frameBuffer.FramebufferTexture1D(null, attachment);
                         return;
                     }
                     // 2d texture
                     if (textureD.Target.Is1D())
                     {
-                        _frameBuffer.FramebufferTexture2D(default, attachment);
+                        _frameBuffer.FramebufferTexture2D(null, attachment);
                         return;
                     }
                     // 3d texture
-                    _frameBuffer.FramebufferTexture3D(default, attachment, 0);
+                    _frameBuffer.FramebufferTexture3D(null, attachment, 0);
                     return;
                 }
                 // Depth is a renderbuffer
-                _frameBuffer.FramebufferRenderbuffer(default, attachment);
+                _frameBuffer.FramebufferRenderbuffer(null, attachment);
 
                 _depth = null;
                 return;
@@ -327,17 +335,17 @@ namespace Zene.Graphics
                 // 1d texture
                 if (_stencil.Target.Is1D())
                 {
-                    _frameBuffer.FramebufferTexture1D(default, attachment);
+                    _frameBuffer.FramebufferTexture1D(null, attachment);
                     return;
                 }
                 // 2d texture
                 if (_stencil.Target.Is1D())
                 {
-                    _frameBuffer.FramebufferTexture2D(default, attachment);
+                    _frameBuffer.FramebufferTexture2D(null, attachment);
                     return;
                 }
                 // 3d texture
-                _frameBuffer.FramebufferTexture3D(default, attachment, 0);
+                _frameBuffer.FramebufferTexture3D(null, attachment, 0);
                 return;
             }
 
@@ -348,17 +356,17 @@ namespace Zene.Graphics
             // 1d texture
             if (texture.Target.Is1D())
             {
-                _frameBuffer.FramebufferTexture1D(default, attachment);
+                _frameBuffer.FramebufferTexture1D(null, attachment);
                 return;
             }
             // 2d texture
             if (texture.Target.Is1D())
             {
-                _frameBuffer.FramebufferTexture2D(default, attachment);
+                _frameBuffer.FramebufferTexture2D(null, attachment);
                 return;
             }
             // 3d texture
-            _frameBuffer.FramebufferTexture3D(default, attachment, 0);
+            _frameBuffer.FramebufferTexture3D(null, attachment, 0);
         }
 
         /// <summary>
@@ -367,51 +375,13 @@ namespace Zene.Graphics
         public FrameAttachment MainAttachment { get; set; }
 
         /// <summary>
-        /// Gets the width of the <see cref="MainAttachment"/> at level 0.
+        /// Gets the width of the framebuffer attachments.
         /// </summary>
-        [OpenGLSupport(3.0)]
-        public int Width
-        {
-            get
-            {
-                // Referance from depth component
-                if (MainAttachment == FrameAttachment.DepthStencil || MainAttachment == FrameAttachment.Depth)
-                {
-                    if (_depth.IsTexture())
-                    {
-                        return ((ITexture)_depth).GetWidth(0);
-                    }
-
-                    // _depth is a renderbuffer
-                    return ((IRenderbuffer)_depth).GetWidth();
-                }
-
-                return _colourAttachs[(int)MainAttachment - (int)FrameAttachment.Colour0].GetWidth(0);
-            }
-        }
+        public int Width { get; private set; }
         /// <summary>
-        /// Gets the height of the <see cref="MainAttachment"/> at level 0.
+        /// Gets the height of the framebuffer attachments.
         /// </summary>
-        [OpenGLSupport(3.0)]
-        public int Height
-        {
-            get
-            {
-                // Referance from depth component
-                if (MainAttachment == FrameAttachment.DepthStencil || MainAttachment == FrameAttachment.Depth)
-                {
-                    if (_depth.IsTexture())
-                    {
-                        return ((ITexture)_depth).GetHeight(0);
-                    }
-
-                    // _depth is a renderbuffer
-                    return ((IRenderbuffer)_depth).GetHeight();
-                }
-
-                return _colourAttachs[(int)MainAttachment - (int)FrameAttachment.Colour0].GetHeight(0);
-            }
-        }
+        public int Height { get; private set; }
 
         private static void SetEmptyTexture(ITexture texture, int width, int height, int level)
         {
@@ -469,6 +439,9 @@ namespace Zene.Graphics
             {
                 throw new FrameBufferException(this, "Framebuffers must have a width and heihgt greater that 0.");
             }
+
+            Width = width;
+            Height = height;
 
             // Colour attachments
             foreach (ITexture texture in _colourAttachs)
@@ -754,7 +727,7 @@ namespace Zene.Graphics
         }
 
         /// <summary>
-        /// The prefered pixel format for this framebuffer
+        /// The prefered pixel format for this framebuffer.
         /// </summary>
         [OpenGLSupport(4.5)]
         public BaseFormat ColourReadFormat
@@ -806,7 +779,7 @@ namespace Zene.Graphics
             }
         }
         /// <summary>
-        /// The number of sample buffers apart of this framebuffer.
+        /// The number of sample buffers a part of this framebuffer.
         /// </summary>
         [OpenGLSupport(4.5)]
         public int SampleBuffers

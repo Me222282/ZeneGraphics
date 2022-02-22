@@ -104,7 +104,11 @@ namespace Zene.Graphics
         {
             get
             {
-                
+                if (GL.Version >= 4.5)
+                {
+                    return _texture.GetTextureSubImage<Colour>(0, x, y, 0, 1, 1, 1, BaseFormat.Rgba, TextureData.Byte)[0];
+                }
+
                 return _texture.GetTexImage<Colour>(0, BaseFormat.Rgba, TextureData.Byte)[x, y];
             }
             set
@@ -126,7 +130,11 @@ namespace Zene.Graphics
         {
             get
             {
-                
+                if (GL.Version >= 4.5)
+                {
+                    return _texture.GetTextureSubImage<Colour>(0, x, y, 0, width, height, 1, BaseFormat.Rgba, TextureData.Byte);
+                }
+
                 return _texture.GetTexImage<Colour>(0, BaseFormat.Rgba, TextureData.Byte).SubSection(x, y, width, height);
             }
             set

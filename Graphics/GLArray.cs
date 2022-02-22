@@ -106,7 +106,7 @@ namespace Zene.Graphics
         /// The depth of the array.
         /// </summary>
         public int Depth { get; }
-        private readonly int _zSize;
+        protected readonly int _zSize;
 
         /// <summary>
         /// The raw data of the array.
@@ -133,7 +133,7 @@ namespace Zene.Graphics
             }
         }
 
-        public T this[int index]
+        public virtual T this[int index]
         {
             get
             {
@@ -144,7 +144,7 @@ namespace Zene.Graphics
                 Data[index] = value;
             }
         }
-        public T this[int x, int y]
+        public virtual T this[int x, int y]
         {
             get
             {
@@ -155,7 +155,7 @@ namespace Zene.Graphics
                 Data[x + ((Height - y - 1) * Width)] = value;
             }
         }
-        public T this[int x, int y, int z]
+        public virtual T this[int x, int y, int z]
         {
             get
             {

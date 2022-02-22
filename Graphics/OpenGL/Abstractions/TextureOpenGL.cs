@@ -712,10 +712,11 @@ namespace Zene.Graphics.Base.Extensions
         public static GLArray<T> GetTexImage<T>(this ITexture texture, int level, BaseFormat format, TextureData type) where T : unmanaged
         {
             texture.Bind();
+            Vector3I size = texture.Properties.GetMipMapSize(level);
             GLArray<T> output = new GLArray<T>(
-                (texture.GetWidth(level) * format.GetSize() * type.GetSize()) / sizeof(T),
-                texture.GetHeight(level),
-                texture.GetDepth(level));
+                (size.X * format.GetSize() * type.GetSize()) / sizeof(T),
+                size.Y,
+                size.Z);
 
             GL.GetTexImage((uint)texture.Target, level, (uint)format, (uint)type, output);
 
@@ -734,10 +735,11 @@ namespace Zene.Graphics.Base.Extensions
         public static GLArray<T> GetTexImage<T>(this ITexture texture, CubeMapFace face, int level, BaseFormat format, TextureData type) where T : unmanaged
         {
             texture.Bind();
+            Vector3I size = texture.Properties.GetMipMapSize(level);
             GLArray<T> output = new GLArray<T>(
-                (texture.GetWidth(level) * format.GetSize() * type.GetSize()) / sizeof(T),
-                texture.GetHeight(level),
-                texture.GetDepth(level));
+                (size.X * format.GetSize() * type.GetSize()) / sizeof(T),
+                size.Y,
+                size.Z);
 
             GL.GetTexImage((uint)face, level, (uint)format, (uint)type, output);
 

@@ -248,6 +248,12 @@ namespace Zene.Graphics.Base
         public void FramebufferRenderbuffer(IRenderbuffer renderbuffer, FrameAttachment attachment)
         {
             Bind();
+            if (renderbuffer == null)
+            {
+                GL.FramebufferRenderbuffer((uint)Binding, (uint)attachment, GLEnum.Renderbuffer, 0);
+                return;
+            }
+
             GL.FramebufferRenderbuffer((uint)Binding, (uint)attachment, GLEnum.Renderbuffer, renderbuffer.Id);
         }
 
@@ -261,6 +267,12 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture(ITexture texture, int level, FrameAttachment attachment)
         {
             Bind();
+            if (texture == null)
+            {
+                GL.FramebufferTexture((uint)Binding, (uint)attachment, 0, level);
+                return;
+            }
+
             GL.FramebufferTexture((uint)Binding, (uint)attachment, texture.Id, level);
         }
         /// <summary>
@@ -273,6 +285,12 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture1D(ITexture texture, int level, FrameAttachment attachment)
         {
             Bind();
+            if (texture == null)
+            {
+                GL.FramebufferTexture1D((uint)Binding, (uint)attachment, GLEnum.Texture1d, 0, level);
+                return;
+            }
+
             GL.FramebufferTexture1D((uint)Binding, (uint)attachment, GLEnum.Texture1d, texture.Id, level);
         }
         /// <summary>
@@ -285,6 +303,12 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture2D(CubeMapFace textureTarget, ITexture texture, int level, FrameAttachment attachment)
         {
             Bind();
+            if (texture == null)
+            {
+                GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)textureTarget, 0, level);
+                return;
+            }
+
             GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)textureTarget, texture.Id, level);
         }
         /// <summary>
@@ -297,6 +321,12 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture2D(ITexture texture, int level, FrameAttachment attachment)
         {
             Bind();
+            if (texture == null)
+            {
+                GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)texture.Target, 0, level);
+                return;
+            }
+
             GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)texture.Target, texture.Id, level);
         }
         /// <summary>
@@ -310,6 +340,12 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture3D(ITexture texture, int level, FrameAttachment attachment, int offset)
         {
             Bind();
+            if (texture == null)
+            {
+                GL.FramebufferTexture3D((uint)Binding, (uint)attachment, (uint)texture.Target, 0, level, offset);
+                return;
+            }
+
             GL.FramebufferTexture3D((uint)Binding, (uint)attachment, (uint)texture.Target, texture.Id, level, offset);
         }
 
@@ -322,6 +358,12 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture(ITexture texture, FrameAttachment attachment)
         {
             Bind();
+            if (texture == null)
+            {
+                GL.FramebufferTexture((uint)Binding, (uint)attachment, 0, 0);
+                return;
+            }
+
             GL.FramebufferTexture((uint)Binding, (uint)attachment, texture.Id, 0);
         }
         /// <summary>
@@ -333,6 +375,12 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture1D(ITexture texture, FrameAttachment attachment)
         {
             Bind();
+            if (texture == null)
+            {
+                GL.FramebufferTexture1D((uint)Binding, (uint)attachment, GLEnum.Texture1d, 0, 0);
+                return;
+            }
+
             GL.FramebufferTexture1D((uint)Binding, (uint)attachment, GLEnum.Texture1d, texture.Id, 0);
         }
         /// <summary>
@@ -344,6 +392,12 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture2D(CubeMapFace textureTarget, ITexture texture, FrameAttachment attachment)
         {
             Bind();
+            if (texture == null)
+            {
+                GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)textureTarget, 0, 0);
+                return;
+            }
+
             GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)textureTarget, texture.Id, 0);
         }
         /// <summary>
@@ -355,6 +409,12 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture2D(ITexture texture, FrameAttachment attachment)
         {
             Bind();
+            if (texture == null)
+            {
+                GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)texture.Target, 0, 0);
+                return;
+            }
+
             GL.FramebufferTexture2D((uint)Binding, (uint)attachment, (uint)texture.Target, texture.Id, 0);
         }
         /// <summary>
@@ -367,6 +427,12 @@ namespace Zene.Graphics.Base
         public void FramebufferTexture3D(ITexture texture, FrameAttachment attachment, int offset)
         {
             Bind();
+            if (texture == null)
+            {
+                GL.FramebufferTexture3D((uint)Binding, (uint)attachment, (uint)texture.Target, 0, 0, offset);
+                return;
+            }
+
             GL.FramebufferTexture3D((uint)Binding, (uint)attachment, (uint)texture.Target, texture.Id, 0, offset);
         }
 
@@ -381,6 +447,12 @@ namespace Zene.Graphics.Base
         public void FramebufferTextureLayer(ITexture texture, int level, int layer, FrameAttachment attachment)
         {
             Bind();
+            if (texture == null)
+            {
+                GL.FramebufferTextureLayer((uint)Binding, (uint)attachment, 0, level, layer);
+                return;
+            }
+
             GL.FramebufferTextureLayer((uint)Binding, (uint)attachment, texture.Id, level, layer);
         }
         /// <summary>
@@ -393,6 +465,12 @@ namespace Zene.Graphics.Base
         public void FramebufferTextureLayer(ITexture texture, int layer, FrameAttachment attachment)
         {
             Bind();
+            if (texture == null)
+            {
+                GL.FramebufferTextureLayer((uint)Binding, (uint)attachment, 0, 0, layer);
+                return;
+            }
+
             GL.FramebufferTextureLayer((uint)Binding, (uint)attachment, texture.Id, 0, layer);
         }
 
