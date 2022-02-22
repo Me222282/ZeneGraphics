@@ -216,8 +216,18 @@ namespace Zene.Graphics
         /// </summary>
         public WrapStyle WrapStyle
         {
-            set => Properties.WrapStyle = value;
+            set
+            {
+                Properties.WrapX = value;
+                Properties.WrapY = value;
+                Properties.WrapZ = value;
+            }
         }
+
+        /// <summary>
+        /// The number of samples in this multisample texture.
+        /// </summary>
+        public int Samples => Properties._samples;
 
         /// <summary>
         /// The offset into the data store of the buffer bound to a buffer texture

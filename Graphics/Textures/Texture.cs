@@ -150,14 +150,13 @@ namespace Zene.Graphics
         public GLArray<Colour> Data
         {
             get
-            {
-                
+            {   
                 return _texture.GetTexImage<Colour>(0, BaseFormat.Rgba, TextureData.Byte);
             }
             set
             {
-                
                 _texture.TexImage2D(0, InternalFormat, value.Width, value.Height, BaseFormat.Rgba, TextureData.Byte, value);
+                MipMaped = false;
             }
         }
 
@@ -172,248 +171,130 @@ namespace Zene.Graphics
             MipMaped = true;
         }
 
-        private const int _baseLevel = 0;
         /// <summary>
         /// The base texture mipmap level.
         /// </summary>
         public int BaseLevel
         {
-            get
-            {
-                
-
-                return _texture.GetBaseLevel();
-            }
+            get => Properties._baseLevel;
+            set => Properties.BaseLevel = value;
         }
         /// <summary>
         /// The border colour of the texture.
         /// </summary>
         public ColourF BorderColour
         {
-            get
-            {
-                
-
-                return _texture.GetBorderColour();
-            }
-            set
-            {
-                
-
-                _texture.SetBorderColour(value);
-            }
+            get => Properties.BorderColour;
+            set => Properties.BorderColour = value;
         }
         /// <summary>
         /// The comparison operator used when <see cref="ComparisonMode"/> is set to <see cref="ComparisonMode.CompareToDepth"/>.
         /// </summary>
         public ComparisonFunction ComparisonFunction
         {
-            get
-            {
-                
-
-                return _texture.GetComparisonFunction();
-            }
-            set
-            {
-                
-
-                _texture.SetComparisonFunction(value);
-            }
+            get => Properties.ComparisonFunction;
+            set => Properties.ComparisonFunction = value;
         }
         /// <summary>
         /// The texture comparison mode for depth textures.
         /// </summary>
         public ComparisonMode ComparisonMode
         {
-            get
-            {
-                
-
-                return _texture.GetComparisonMode();
-            }
-            set
-            {
-                
-
-                _texture.SetComparisonMode(value);
-            }
+            get => Properties.ComparisonMode;
+            set => Properties.ComparisonMode = value;
         }
         /// <summary>
         /// The height of the texture at base level.
         /// </summary>
-        public int Height
-        {
-            get
-            {
-                
-
-                return _texture.GetHeight(_baseLevel);
-            }
-        }
+        public int Height => Properties._height;
         /// <summary>
         /// A fixed bias that is to be added to the level-of-detail parameter before texture sampling.
         /// </summary>
         public double LodBias
         {
-            get
-            {
-                
-
-                return _texture.GetLodBias();
-            }
-            set
-            {
-                
-
-                _texture.SetLodBias((float)value);
-            }
+            get => Properties.LodBias;
+            set => Properties.LodBias = value;
+        }
+        /// <summary>
+        /// The maximum texture mipmap array level.
+        /// </summary>
+        public int MaxLevel
+        {
+            get => Properties.MaxLevel;
+            set => Properties.MaxLevel = value;
         }
         /// <summary>
         /// The maximum value for the level-of-detail parameter.
         /// </summary>
         public double MaxLod
         {
-            get
-            {
-                
-
-                return _texture.GetMaxLod();
-            }
-            set
-            {
-                
-
-                _texture.SetMaxLod((float)value);
-            }
+            get => Properties.MaxLod;
+            set => Properties.MaxLod = value;
         }
         /// <summary>
         /// The minimum value for the level-of-detail parameter.
         /// </summary>
         public double MinLod
         {
-            get
-            {
-                
-
-                return _texture.GetMinLod();
-            }
-            set
-            {
-                
-
-                _texture.SetMinLod((float)value);
-            }
+            get => Properties.MinLod;
+            set => Properties.MinLod = value;
         }
         /// <summary>
         /// The swizzle that will be applied to the red component of a texel before it is returned to the shader.
         /// </summary>
         public Swizzle RedSwizzle
         {
-            get
-            {
-                
-
-                return _texture.GetSwizzleRed();
-            }
-            set
-            {
-                
-
-                _texture.SetSwizzleRed(value);
-            }
+            get => Properties.RedSwizzle;
+            set => Properties.RedSwizzle = value;
         }
         /// <summary>
         /// The swizzle that will be applied to the green component of a texel before it is returned to the shader.
         /// </summary>
         public Swizzle GreenSwizzle
         {
-            get
-            {
-                
-
-                return _texture.GetSwizzleGreen();
-            }
-            set
-            {
-                
-
-                _texture.SetSwizzleGreen(value);
-            }
+            get => Properties.GreenSwizzle;
+            set => Properties.GreenSwizzle = value;
         }
         /// <summary>
         /// The swizzle that will be applied to the blue component of a texel before it is returned to the shader.
         /// </summary>
         public Swizzle BlueSwizzle
         {
-            get
-            {
-                
-
-                return _texture.GetSwizzleBlue();
-            }
-            set
-            {
-                
-
-                _texture.SetSwizzleBlue(value);
-            }
+            get => Properties.BlueSwizzle;
+            set => Properties.BlueSwizzle = value;
         }
         /// <summary>
         /// The swizzle that will be applied to the alpha component of a texel before it is returned to the shader.
         /// </summary>
         public Swizzle AlphaSwizzle
         {
-            get
-            {
-                
-
-                return _texture.GetSwizzleAlpha();
-            }
-            set
-            {
-                
-
-                _texture.SetSwizzleAlpha(value);
-            }
+            get => Properties.AlphaSwizzle;
+            set => Properties.AlphaSwizzle = value;
         }
         /// <summary>
         /// The width of the texture at base level.
         /// </summary>
-        public int Width
-        {
-            get
-            {
-                
-
-                return _texture.GetWidth(_baseLevel);
-            }
-        }
+        public int Width => Properties._width;
         /// <summary>
         /// The wrapping function used on when over sampled.
         /// </summary>
         public WrapStyle WrapStyle
         {
+            get => Properties.WrapX;
             set
             {
-                
-
-                _texture.SetWrapS(value);
-                _texture.SetWrapT(value);
-            }
-            get
-            {
-                return _texture.GetWrapS();
+                Properties.WrapX = value;
+                Properties.WrapY = value;
             }
         }
         /// <summary>
-        /// The smaple function used when the level-fo-detail dertermines that the texture should use minified or magnified sampleing.
+        /// The sample function used when the level-fo-detail dertermines that the texture should use minified or magnified sampling.
         /// </summary>
         public TextureSampling Filter
         {
             get
             {
-                return _texture.GetMinFilter();
+                return Properties.MinFilter;
             }
             set
             {
@@ -427,7 +308,7 @@ namespace Zene.Graphics
                 };
 
                 // Magnification filter
-                _texture.SetMagFilter(filter);
+                Properties.MagFilter = filter;
 
                 if (MipMaped)
                 {
@@ -438,11 +319,11 @@ namespace Zene.Graphics
                         TextureSampling.Nearest => TextureSampling.NearestMipMapNearest,
                         _ => value
                     };
-                    _texture.SetMinFilter(min);
+                    Properties.MinFilter = min;
                     return;
                 }
 
-                _texture.SetMinFilter(filter);
+                Properties.MinFilter = filter;
             }
         }
     }
