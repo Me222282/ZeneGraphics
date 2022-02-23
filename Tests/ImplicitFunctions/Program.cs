@@ -1,6 +1,7 @@
 ﻿using Zene.Windowing;
 using Zene.Windowing.Base;
 using Zene.Graphics;
+using Zene.Structs;
 
 namespace ImplicitFunctions
 {
@@ -56,7 +57,7 @@ namespace ImplicitFunctions
             {
                 GLFW.PollEvents();
                 // Clear screen black
-                IFramebuffer.Clear(BufferBit.Colour);
+                BaseFramebuffer.Clear(BufferBit.Colour);
 
                 // Use shader and render object
                 _shader.Bind();
@@ -72,7 +73,7 @@ namespace ImplicitFunctions
         {
             base.OnSizeChange(e);
 
-            IFramebuffer.View((int)e.Width, (int)e.Height);
+            BaseFramebuffer.ViewSize = new Vector2I((int)e.Width, (int)e.Height);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

@@ -20,7 +20,7 @@ namespace Zene.Physics
         /// <param name="dir">The direction of the boxes movement.</param>
         /// <param name="vel">The velocity the box is moving at.</param>
         /// <param name="compare">The boxes to compare to.</param>
-        public static bool Gird<T>(this T box, Vector2 dir, double vel, IEnumerable<IBox> compare) where T : IBox, new()
+        public static bool Grid<T>(this T box, Vector2 dir, double vel, IEnumerable<IBox> compare) where T : IBox, new()
         {
             return Grid(box, dir, dir * vel, compare);
         }

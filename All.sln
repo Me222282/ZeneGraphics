@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GUI", "Tests\GUI\GUI.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSGL", "Tests\CSGL\CSGL.csproj", "{6A7A72CD-6A34-4957-BD00-F38199EC204D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Collisions", "Tests\Collisions\Collisions.csproj", "{CCF75E98-46E9-4214-B13E-D539DA644E01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollisionsTest", "Tests\CollisionsTest\CollisionsTest.csproj", "{CCF75E98-46E9-4214-B13E-D539DA644E01}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvolutionTest", "Evolution\Tests\EvolutionTest.csproj", "{4399693C-175E-461B-B2D8-6C1A783D3356}"
 EndProject

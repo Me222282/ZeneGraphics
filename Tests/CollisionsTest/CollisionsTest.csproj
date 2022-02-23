@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <StartupObject>Collisions.Program</StartupObject>
+    <StartupObject>CollisionsTest.Program</StartupObject>
     <ApplicationIcon />
   </PropertyGroup>
 

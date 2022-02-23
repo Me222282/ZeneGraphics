@@ -164,7 +164,7 @@ namespace PhysicsTest
                 _shader.Matrix1 =
                     Matrix4.CreateRotationZ(-Math.Atan2(sprite.Velocity.Direction.X, sprite.Velocity.Direction.Y)) * 
                     Matrix4.CreateScale(sprite.Box.Width * multiplier, sprite.Box.Height * multiplier, 1) * 
-                    Matrix4.CreateTranslation((Vector3)sprite.Box.Center);
+                    Matrix4.CreateTranslation((Vector3)sprite.Box.Centre);
 
                 _shader.SetTextureSlot(0);
                 if (Arrow)

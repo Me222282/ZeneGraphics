@@ -362,7 +362,7 @@ namespace GUI
                 _shader.SetDrawColour(_tabColour);
 
                 _shader.Matrix1 = Matrix4.CreateScale(_bounds.Width, _tabBox.Height, depth)
-                    * Matrix4.CreateTranslation((Vector3)(_tabBox.Center - _bounds.Center));
+                    * Matrix4.CreateTranslation((Vector3)(_tabBox.Centre - _bounds.Centre));
                 _drawable.Draw();
 
                 _redraw = false;
@@ -379,7 +379,7 @@ namespace GUI
 
             Box bounds = Bounds;
             _shader.Matrix1 = Matrix4.CreateScale(bounds.Width, bounds.Height, depth) *
-                Matrix4.CreateTranslation((Vector3)bounds.Center);
+                Matrix4.CreateTranslation((Vector3)bounds.Centre);
 
             // Bind framebuffer colour texture
             _frame.GetTexture(FrameAttachment.Colour0).Bind(0);

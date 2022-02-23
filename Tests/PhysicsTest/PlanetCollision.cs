@@ -24,17 +24,17 @@ namespace PhysicsTest
             // Not inside planet bounds - no chance of collision
             if (!Planet.Box.Overlaps(properties.NextBox)) { return Velocity.Zero; }
 
-            Vector2 closeCorner = GetMinDist(Planet.Box.Center,
+            Vector2 closeCorner = GetMinDist(Planet.Box.Centre,
                 new Vector2(properties.NextBox.Left, properties.NextBox.Top), // Top left
                 new Vector2(properties.NextBox.Left, properties.NextBox.Bottom), // Bottom left
                 new Vector2(properties.NextBox.Right, properties.NextBox.Top), // Top right
                 new Vector2(properties.NextBox.Right, properties.NextBox.Bottom)); // Bottom right
 
             // Not overlapping planet - no collision
-            if (Planet.Box.Center.Distance(closeCorner) > Planet.Radius) { return Velocity.Zero; }
+            if (Planet.Box.Centre.Distance(closeCorner) > Planet.Radius) { return Velocity.Zero; }
 
             // Calculate location offset
-            Vector2 difference = Planet.Box.Center - closeCorner;
+            Vector2 difference = Planet.Box.Centre - closeCorner;
             Vector2 offset = difference.Normalized() * Planet.Radius;
             return new Velocity(-(offset - difference) / frameTime);
         }
@@ -43,14 +43,14 @@ namespace PhysicsTest
             // Not inside planet bounds - no chance of collision
             if (!Planet.Box.Overlaps(box)) { return false; }
 
-            Vector2 closeCorner = GetMinDist(Planet.Box.Center,
+            Vector2 closeCorner = GetMinDist(Planet.Box.Centre,
                 new Vector2(box.Left, box.Top), // Top left
                 new Vector2(box.Left, box.Bottom), // Bottom left
                 new Vector2(box.Right, box.Top), // Top right
                 new Vector2(box.Right, box.Bottom)); // Bottom right
 
             // Overlapping planet - collision
-            return Planet.Box.Center.Distance(closeCorner) !> Planet.Radius;
+            return Planet.Box.Centre.Distance(closeCorner) !> Planet.Radius;
         }
 
         private static Vector2 GetMinDist(Vector2 source, Vector2 a, Vector2 b, Vector2 c, Vector2 d)

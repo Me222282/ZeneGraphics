@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Collisions
+namespace CollisionsTest
 {
     public unsafe class Program
     {

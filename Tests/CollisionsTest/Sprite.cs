@@ -2,9 +2,9 @@
 using Zene.Sprites;
 using Zene.Structs;
 
-namespace Collisions
+namespace CollisionsTest
 {
-    public struct Sprite : IBoxSprite
+    public struct Sprite : ISprite
     {
         public Sprite(Box box)
         {
@@ -17,7 +17,7 @@ namespace Collisions
         }
 
         public Box Box { get; set; }
-        IBox IBoxSprite.Box => Box;
+        IBox ISprite.Bounds => Box;
 
         public Display Display { get; set; }
         IDisplay ISprite.Display => Display;
@@ -30,7 +30,7 @@ namespace Collisions
         public double Velocity { get; set; }
     }
 
-    public class BoxSprite : IBoxSprite
+    public class BoxSprite : ISprite
     {
         public BoxSprite(Vector2 loc, Vector2 size)
         {
@@ -41,7 +41,7 @@ namespace Collisions
         }
 
         public Box Box { get; set; }
-        IBox IBoxSprite.Box => Box;
+        IBox ISprite.Bounds => Box;
 
         public IDisplay Display { get; set; }
 

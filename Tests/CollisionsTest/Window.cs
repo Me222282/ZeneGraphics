@@ -1,11 +1,11 @@
 ﻿using System;
 using Zene.Structs;
 using System.Windows.Forms;
-using Zene.Physics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Zene.Physics;
 
-namespace Collisions
+namespace CollisionsTest
 {
     public class Window : Form
     {
@@ -53,7 +53,7 @@ namespace Collisions
             _collider.Direction = (_mousePos - _collider.Box.Location).Normalized();
             _collider.Velocity = _collider.Box.Location.Distance(_mousePos);
 
-            if (GridCollisions.Collision(_collider.Box, _collider.Direction, _collider.Velocity, GetBoxes(_boxes)))
+            if (Collisions.Grid(_collider.Box, _collider.Direction, _collider.Velocity, GetBoxes(_boxes)))
             {
                 _collider.Colour = Color.Aqua;
             }
@@ -99,9 +99,9 @@ namespace Collisions
 
         private const double FPS = 30;
 
-        private static Box[] GetBoxes(BoxSprite[] sprites)
+        private static IBox[] GetBoxes(BoxSprite[] sprites)
         {
-            Box[] boxes = new Box[sprites.Length];
+            IBox[] boxes = new IBox[sprites.Length];
 
             for (int i = 0; i < sprites.Length; i++)
             {

@@ -3,7 +3,7 @@ using System.Drawing;
 using Zene.Sprites;
 using Zene.Structs;
 
-namespace Collisions
+namespace CollisionsTest
 {
     public struct Display : IDisplay
     {
