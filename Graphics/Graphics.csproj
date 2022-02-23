@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp5.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Zene.Graphics</RootNamespace>
   </PropertyGroup>
 
@@ -19,17 +19,6 @@
       None
     </ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Remove="C:\Users\Owen\.nuget\packages\triangulation\1.0.0\contentFiles\any\netcoreapp3.1\third_party\Microsoft.Solver.Foundation.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="GL\Abstractions\TextureGL.cs~RF9e2bdfe.TMP" />
-    <None Remove="GL\Abstractions\TextureOpenGL.cs~RF148ca519.TMP" />
-    <None Remove="GL\Abstractions\TextureOpenGL.cs~RFd7976ed.TMP" />
-    <None Remove="GL\GL.cs~RF82eb96a9.TMP" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Update="glfw\win64\glfw3.dll">
