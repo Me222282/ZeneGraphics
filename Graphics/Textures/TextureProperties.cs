@@ -95,7 +95,7 @@ namespace Zene.Graphics
         }
         private ColourF _border = ColourF.Zero;
         /// <summary>
-        /// The border colour of the texture.
+        /// The border colour of <see cref="Handle"/>.
         /// </summary>
         /// <remarks>
         /// This stores the value as a float.
@@ -117,7 +117,7 @@ namespace Zene.Graphics
             }
         }
         /// <summary>
-        /// The border colour of the texture.
+        /// The border colour of <see cref="Handle"/>.
         /// </summary>
         /// <remarks>
         /// This stores the value as a integer.
@@ -170,7 +170,7 @@ namespace Zene.Graphics
         }
         internal int _depth = 0;
         /// <summary>
-        /// The depth of the texture at base level.
+        /// The depth of <see cref="Handle"/> at base level.
         /// </summary>
         public int Depth => _depth;
         private DepthStencilMode _dsMode = DepthStencilMode.Depth;
@@ -220,7 +220,7 @@ namespace Zene.Graphics
         }
         private TextureSampling _magFilter = TextureSampling.Blend;
         /// <summary>
-        /// The texture magnification function used when the level-of-detail function determines that the texture should be magified.
+        /// The texture magnification function used when the level-of-detail function determines that <see cref="Handle"/> should be magified.
         /// </summary>
         public TextureSampling MagFilter
         {
@@ -265,7 +265,7 @@ namespace Zene.Graphics
         }
         private TextureSampling _minFilter = TextureSampling.Blend;
         /// <summary>
-        /// The texture minification function used when the level-of-detail function determines that the texture should be minified.
+        /// The texture minification function used when the level-of-detail function determines that <see cref="Handle"/> should be minified.
         /// </summary>
         public TextureSampling MinFilter
         {
@@ -776,7 +776,7 @@ namespace Zene.Graphics
         }
 
         /// <summary>
-        /// The number of bytes that make up the texture's data.
+        /// The number of bytes that make up <see cref="Handle"/>'s data.
         /// </summary>
         public int CompressedImageSize
         {
@@ -792,8 +792,25 @@ namespace Zene.Graphics
         }
         internal bool _immutableFormat = false;
         /// <summary>
-        /// Returns <see cref="true"/> if the texture has an immutable format, otherwise <see cref="false"/>.
+        /// Returns <see cref="true"/> if <see cref="Handle"/> has an immutable format, otherwise <see cref="false"/>.
         /// </summary>
-        public bool ImmutableFormat => _immutableFormat;
+        public bool Immutable => _immutableFormat;
+
+        /// <summary>
+        /// Determines whether <see cref="Handle"/> is a layered texture.
+        /// </summary>
+        public bool Layered
+        {
+            get
+            {
+                return Handle.Target switch
+                {
+                    TextureTarget.CubeMap or TextureTarget.CubeMapArray or
+                        TextureTarget.MultisampleArray2D or TextureTarget.Texture1DArray or
+                        TextureTarget.Texture2DArray => true,
+                    _ => false,
+                };
+            }
+        }
     }
 }

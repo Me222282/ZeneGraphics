@@ -377,7 +377,7 @@ namespace Zene.Graphics
         private static void SetEmptyTexture(ITexture texture, int width, int height, int level)
         {
             // TexImage function dones't work on texture
-            if (texture.IsImmutable())
+            if (texture.Properties.Immutable)
             {
                 // 1d texture
                 if (texture.Target.Is1D())

@@ -11,12 +11,12 @@
 
         internal int _width = 0;
         /// <summary>
-        /// The width of the texture at base level.
+        /// The width of <see cref="Handle"/> at base level.
         /// </summary>
         public int Width => _width;
         internal int _height = 0;
         /// <summary>
-        /// The height of the texture at base level.
+        /// The height of <see cref="Handle"/> at base level.
         /// </summary>
         public int Height => _height;
         internal int _samples = 0;

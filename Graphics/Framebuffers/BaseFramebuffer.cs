@@ -11,11 +11,10 @@ namespace Zene.Graphics
     {
         public BaseFramebuffer(bool stereo, bool doubleBuffered, int samples, int width, int height)
         {
-            _properties = new FramebufferProperties(this, width, height)
+            _properties = new FramebufferProperties(this, width, height, samples)
             {
                 Stereo = stereo,
-                DoubleBuffered = doubleBuffered,
-                Samples = samples
+                DoubleBuffered = doubleBuffered
             };
         }
 

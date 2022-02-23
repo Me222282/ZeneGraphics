@@ -230,13 +230,22 @@ namespace Zene.Graphics
             return texture.InternalFormat.IsCompressed();
         }
         /// <summary>
-        /// Determines whether <paramref name="texture"/> is immutable.
+        /// Returns the layer that <paramref name="face"/> would represent in a cubemap texture.
         /// </summary>
-        /// <param name="texture">Teh texture to check.</param>
+        /// <param name="face"></param>
         /// <returns></returns>
-        public static bool IsImmutable(this ITexture texture)
+        public static int ToLayer(this CubeMapFace face)
         {
-            return texture.IsImmutableFormat();
+            return face switch
+            {
+                CubeMapFace.Right => 0,
+                CubeMapFace.Left => 1,
+                CubeMapFace.Top => 2,
+                CubeMapFace.Bottom => 3,
+                CubeMapFace.Front => 4,
+                CubeMapFace.Back => 5,
+                _ => (int)face
+            };
         }
 
         /// <summary>

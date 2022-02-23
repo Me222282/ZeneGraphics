@@ -125,8 +125,7 @@ namespace Zene.Graphics.Base
 
 			Functions.FramebufferRenderbuffer((uint)target.Binding, attachment, renderbuffertarget, renderbuffer.Id);
 
-			target.Properties._attachments.Add(renderbuffer, attachment);
-			target.Properties._samples = renderbuffer.Properties.Samples;
+			target.Properties._attachments.Add(new FramebufferAttachment(renderbuffer, 0, 0), attachment);
 		}
 		[OpenGLSupport(4.5)]
 		public static void NamedFramebufferRenderbuffer(IFramebuffer framebuffer, uint attachment, uint renderbuffertarget, IRenderbuffer renderbuffer)
@@ -140,8 +139,7 @@ namespace Zene.Graphics.Base
 
 			Functions.NamedFramebufferRenderbuffer(framebuffer.Id, attachment, renderbuffertarget, renderbuffer.Id);
 
-			framebuffer.Properties._attachments.Add(renderbuffer, attachment);
-			framebuffer.Properties._samples = renderbuffer.Properties.Samples;
+			framebuffer.Properties._attachments.Add(new FramebufferAttachment(renderbuffer, 0, 0), attachment);
 		}
 
 		[OpenGLSupport(4.5)]
@@ -156,8 +154,7 @@ namespace Zene.Graphics.Base
 
 			Functions.NamedFramebufferTexture(framebuffer.Id, attachment, texture.Id, level);
 
-			framebuffer.Properties._attachments.Add(texture, attachment);
-			framebuffer.Properties._samples = texture.Properties.Samples;
+			framebuffer.Properties._attachments.Add(new FramebufferAttachment(texture, 0, level), attachment);
 		}
 		[OpenGLSupport(3.2)]
 		public static void FramebufferTexture(IFramebuffer target, uint attachment, ITexture texture, int level)
@@ -171,8 +168,7 @@ namespace Zene.Graphics.Base
 
 			Functions.FramebufferTexture((uint)target.Binding, attachment, texture.Id, level);
 
-			target.Properties._attachments.Add(texture, attachment);
-			target.Properties._samples = texture.Properties.Samples;
+			target.Properties._attachments.Add(new FramebufferAttachment(texture, 0, level), attachment);
 		}
 
 		[OpenGLSupport(3.0)]
@@ -187,9 +183,20 @@ namespace Zene.Graphics.Base
 
 			Functions.FramebufferTexture1D((uint)target.Binding, attachment, textarget, texture.Id, level);
 
-			target.Properties._attachments.Add(texture, attachment);
-			target.Properties._samples = texture.Properties.Samples;
+			target.Properties._attachments.Add(new FramebufferAttachment(texture, 0, level), attachment);
 		}
+
+		private static CubeMapFace GetFaceFromTarget(uint target)
+        {
+            return target switch
+            {
+                GLEnum.TextureCubeMapPositiveX or GLEnum.TextureCubeMapNegativeX or
+					GLEnum.TextureCubeMapPositiveY or GLEnum.TextureCubeMapNegativeY or
+					GLEnum.TextureCubeMapPositiveZ or GLEnum.TextureCubeMapNegativeZ => (CubeMapFace)target,
+                _ => 0,
+            };
+        }
+
 
 		[OpenGLSupport(3.0)]
 		public static void FramebufferTexture2D(IFramebuffer target, uint attachment, uint textarget, ITexture texture, int level)
@@ -203,8 +210,7 @@ namespace Zene.Graphics.Base
 
 			Functions.FramebufferTexture2D((uint)target.Binding, attachment, textarget, texture.Id, level);
 
-			target.Properties._attachments.Add(texture, attachment);
-			target.Properties._samples = texture.Properties.Samples;
+			target.Properties._attachments.Add(new FramebufferAttachment(texture, GetFaceFromTarget(textarget), level), attachment);
 		}
 
 		[OpenGLSupport(3.0)]
@@ -219,8 +225,7 @@ namespace Zene.Graphics.Base
 
 			Functions.FramebufferTexture3D((uint)target.Binding, attachment, textarget, texture.Id, level, zoffset);
 
-			target.Properties._attachments.Add(texture, attachment);
-			target.Properties._samples = texture.Properties.Samples;
+			target.Properties._attachments.Add(new FramebufferAttachment(texture, GetFaceFromTarget(textarget), zoffset, level), attachment);
 		}
 
 		[OpenGLSupport(3.0)]
@@ -235,8 +240,7 @@ namespace Zene.Graphics.Base
 
 			Functions.FramebufferTextureLayer((uint)target.Binding, attachment, texture.Id, level, layer);
 
-			target.Properties._attachments.Add(texture, attachment);
-			target.Properties._samples = texture.Properties.Samples;
+			target.Properties._attachments.Add(new FramebufferAttachment(texture, layer, level), attachment);
 		}
 		[OpenGLSupport(4.5)]
 		public static void NamedFramebufferTextureLayer(IFramebuffer framebuffer, uint attachment, ITexture texture, int level, int layer)
@@ -250,8 +254,7 @@ namespace Zene.Graphics.Base
 
 			Functions.NamedFramebufferTextureLayer(framebuffer.Id, attachment, texture.Id, level, layer);
 
-			framebuffer.Properties._attachments.Add(texture, attachment);
-			framebuffer.Properties._samples = texture.Properties.Samples;
+			framebuffer.Properties._attachments.Add(new FramebufferAttachment(texture, layer, level), attachment);
 		}
 
 		[OpenGLSupport(4.3)]
