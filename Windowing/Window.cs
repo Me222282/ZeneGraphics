@@ -85,8 +85,33 @@ namespace Zene.Windowing
         {
             if (type == GLEnum.DebugTypeError && message != null)
             {
+                if (State.OutputDebugSynchronous && ReportStackTrace)
+                {
+                    Console.WriteLine(ErrorStackTrace());
+                }
                 Debugger.PushError($"GL Error: {message}");
             }
+        }
+
+        /// <summary>
+        /// Determines whether the stack trace should be outputed before pushing OpenGL errors.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="State.OutputDebugSynchronous"/> needs to be True for the stack trace to be outputed.
+        /// </remarks>
+        public bool ReportStackTrace { get; set; } = true;
+
+        private string ErrorStackTrace()
+        {
+            string str = Environment.StackTrace;
+
+            int i = str.IndexOf("Zene.Windowing.Window.<.ctor>b__2_0(UInt32 source, UInt32 type, UInt32 _, UInt32 _, Int32 _, String message, IntPtr _)");
+
+            if (i < 0) { return str; }
+
+            str = str.Remove(0, i);
+
+            return str.Remove(0, str.IndexOf("at"));
         }
 
         private readonly IntPtr _window;

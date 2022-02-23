@@ -19,15 +19,15 @@ namespace Zene.Graphics
             /// <summary>
             /// Errors are added to alist which can be emptied to the console with <see cref="FlushErrors"/>.
             /// </summary>
-            AddToList = 1,
+            Stack = 1,
             /// <summary>
             /// Errors are outputed to the console strait away.
             /// </summary>
-            CallConsole = 3,
+            Console = 3,
             /// <summary>
             /// Errors are thrown as exceptions.
             /// </summary>
-            ThrowException = 4
+            Exception = 4
         }
 
         private static readonly List<string> _errors = new List<string>();
@@ -35,7 +35,7 @@ namespace Zene.Graphics
         /// <summary>
         /// The type of which pushed errors should be managed.
         /// </summary>
-        public static Type Manager { get; set; } = Type.CallConsole;
+        public static Type Manager { get; set; } = Type.Console;
 
         private const string _unknownError = "An unknown error has occurred.";
 
@@ -47,7 +47,7 @@ namespace Zene.Graphics
         {
             if (Manager == Type.None) { return Task.CompletedTask; }
 
-            if (Manager == Type.ThrowException)
+            if (Manager == Type.Exception)
             {
                 throw e;
             }
@@ -56,11 +56,11 @@ namespace Zene.Graphics
             {
                 switch (Manager)
                 {
-                    case Type.CallConsole:
+                    case Type.Console:
                         Console.WriteLine(e.Message);
                         return;
 
-                    case Type.AddToList:
+                    case Type.Stack:
                         _errors.Add(e.Message);
                         return;
                 }
@@ -74,7 +74,7 @@ namespace Zene.Graphics
         {
             if (Manager == Type.None) { return Task.CompletedTask; }
 
-            if (Manager == Type.ThrowException)
+            if (Manager == Type.Exception)
             {
                 throw new Exception(message);
             }
@@ -83,11 +83,11 @@ namespace Zene.Graphics
             {
                 switch (Manager)
                 {
-                    case Type.CallConsole:
+                    case Type.Console:
                         Console.WriteLine(message);
                         return;
 
-                    case Type.AddToList:
+                    case Type.Stack:
                         _errors.Add(message);
                         return;
                 }
@@ -100,7 +100,7 @@ namespace Zene.Graphics
         {
             if (Manager == Type.None) { return Task.CompletedTask; }
 
-            if (Manager == Type.ThrowException)
+            if (Manager == Type.Exception)
             {
                 throw new Exception(_unknownError);
             }
@@ -109,11 +109,11 @@ namespace Zene.Graphics
             {
                 switch (Manager)
                 {
-                    case Type.CallConsole:
+                    case Type.Console:
                         Console.WriteLine(_unknownError);
                         return;
 
-                    case Type.AddToList:
+                    case Type.Stack:
                         _errors.Add(_unknownError);
                         return;
                 }
@@ -121,6 +121,14 @@ namespace Zene.Graphics
         }
 
         private static readonly Random _random = new Random();
+
+        /// <summary>
+        /// Determines whether OpenGL errors should be passed to the debug manager from OpenGL 4.3.
+        /// </summary>
+        /// <remarks>
+        /// This property only affests error handling when using OpenGL version 4.3 or higher.
+        /// </remarks>
+        public static bool ResolveGLError { get; set; } = true;
 
         /// <summary>
         /// Manages the last unmanged OpenGL error base on <see cref="Manager"/>.
@@ -131,29 +139,28 @@ namespace Zene.Graphics
 
             uint error = GL.GetError();
 
-            if (Manager == Type.ThrowException)
+            if (Manager == Type.Exception)
             {
                 throw new Exception($"{GetGLError(error)}");
             }
 
             string message = $"{GetGLError(error)} thrown at {Environment.StackTrace}.";
 
-            if (GL.Version >= 4.3)
+            if ((GL.Version >= 4.3) && State.OutputDebug && !ResolveGLError)
             {
                 GL.DebugMessageInsert(GLEnum.DebugSourceApplication, GLEnum.DebugTypeError, (uint)_random.Next(), GLEnum.DebugSeverityNotification, message.Length, message);
+                return;
             }
-            else
-            {
-                switch (Manager)
-                {
-                    case Type.CallConsole:
-                        Console.WriteLine(message);
-                        return;
 
-                    case Type.AddToList:
-                        _errors.Add(message);
-                        return;
-                }
+            switch (Manager)
+            {
+                case Type.Console:
+                    Console.WriteLine(message);
+                    return;
+
+                case Type.Stack:
+                    _errors.Add(message);
+                    return;
             }
         }
 
@@ -161,7 +168,7 @@ namespace Zene.Graphics
         /// Outputs all recorded errors to console.
         /// </summary>
         /// <remarks>
-        /// For this method to perform anything, errors must have been recorded when <see cref="Manager"/> is <see cref="Type.AddToList"/>.
+        /// For this method to perform anything, errors must have been recorded when <see cref="Manager"/> is <see cref="Type.Stack"/>.
         /// </remarks>
         public static Task FlushErrors()
         {
