@@ -1,5 +1,6 @@
 ﻿using System;
 using Zene.Graphics.Base;
+using Zene.Graphics.Base.Extensions;
 
 namespace Zene.Graphics
 {
@@ -86,19 +87,17 @@ namespace Zene.Graphics
         }
         public IFramebuffer Handle { get; }
 
-        internal FramebufferProperties(IFramebuffer source, int w, int h, int s)
+        internal FramebufferProperties(IFramebuffer source, int w, int h)
         {
             Handle = source;
             _fromAttach = false;
             _width = w;
             _height = h;
-            _samples = s;
         }
 
         private readonly bool _fromAttach = true;
         private int _width = 0;
         private int _height = 0;
-        private readonly int _samples = 0;
 
         internal void Size(int width, int height)
         {
@@ -136,21 +135,6 @@ namespace Zene.Graphics
                 return _height;
             }
         }
-        /// <summary>
-        /// The coverage mask size for this framebuffer.
-        /// </summary>
-        public int Samples
-        {
-            get
-            {
-                if (_fromAttach)
-                {
-                    return _attachments.AttahcObject.Properties._samples;
-                }
-
-                return _samples;
-            }
-        }
 
         /// <summary>
         /// Gets the <see cref="FramebufferAttachment"/> associated with <paramref name="attachment"/>.
@@ -169,16 +153,21 @@ namespace Zene.Graphics
             }
         }
 
-        /*
-        internal int _samples;
+        /// <summary>
+        /// The prefered pixel format for this framebuffer.
+        /// </summary>
+        [OpenGLSupport(4.5)]
+        public BaseFormat ColourReadFormat => Handle.GetColourReadFormat();
+        /// <summary>
+        /// The prefered pixel data type for this framebuffer.
+        /// </summary>
+        [OpenGLSupport(4.5)]
+        public TextureData ColourReadType => Handle.GetColourReadType();
         /// <summary>
         /// The coverage mask size for this framebuffer.
         /// </summary>
-        public int Samples
-        {
-            get => _samples;
-            init => _samples = value;
-        }*/
+        [OpenGLSupport(4.5)]
+        public int Samples => Handle.GetSamples();
 
         internal AttachList _attachments;
 
