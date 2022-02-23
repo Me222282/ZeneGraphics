@@ -12,7 +12,7 @@ namespace CSGL
         static void Main()
         {
             Core.Init();
-
+            
             //TestTextureParam();
 
 

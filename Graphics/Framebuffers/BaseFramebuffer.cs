@@ -9,9 +9,9 @@ namespace Zene.Graphics
     /// </summary>
     public sealed class BaseFramebuffer : IFramebuffer
     {
-        public BaseFramebuffer(bool stereo, bool doubleBuffered, int samples, int width, int height)
+        public BaseFramebuffer(bool stereo, bool doubleBuffered, int width, int height)
         {
-            _properties = new FramebufferProperties(this, width, height, samples)
+            _properties = new FramebufferProperties(this, width, height)
             {
                 Stereo = stereo,
                 DoubleBuffered = doubleBuffered

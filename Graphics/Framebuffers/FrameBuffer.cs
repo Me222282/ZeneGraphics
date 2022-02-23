@@ -190,7 +190,7 @@ namespace Zene.Graphics
         /// <summary>
         /// Gets or sets a colour attachment at <paramref name="index"/>.
         /// </summary>
-        /// <param name="index">The colour attachment. Must be greater thatn or equal to 0 and less than <see cref="IFramebuffer.MaxColourAttach()"/>.</param>
+        /// <param name="index">The colour attachment. Must be greater than or equal to 0 and less than <see cref="IFramebuffer.MaxColourAttach()"/>.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
         public ITexture this[int index]

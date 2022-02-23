@@ -46,7 +46,6 @@ namespace Zene.Windowing
             _baseFramebuffer = new BaseFramebuffer(
                 properties.Stereoscopic,
                 properties.DoubleBuffered,
-                properties.Samples,
                 width, height);
             _baseFramebuffer.Size(width, height);
 
@@ -86,7 +85,7 @@ namespace Zene.Windowing
         {
             if (type == GLEnum.DebugTypeError && message != null)
             {
-                Console.WriteLine($"GL Error: {message}");
+                Debugger.PushError($"GL Error: {message}");
             }
         }
 

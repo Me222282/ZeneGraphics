@@ -94,6 +94,15 @@ namespace Zene.Graphics
             _zSize = Width * Height;
         }
 
+        private GLArray()
+        {
+            Data = Array.Empty<T>();
+            Width = 0;
+            Height = 0;
+            Depth = 0;
+            _zSize = 0;
+        }
+
         /// <summary>
         /// The width of the array.
         /// </summary>
@@ -360,10 +369,17 @@ namespace Zene.Graphics
 
         public static implicit operator T*(GLArray<T> glArray)
         {
+            if (glArray.Data.Length == 0)
+            {
+                return (T*)IntPtr.Zero;
+            }
+
             fixed (T* ptr = &glArray.Data[0])
             {
                 return ptr;
             }
         }
+
+        public static GLArray<T> Empty { get; } = new GLArray<T>();
     }
 }

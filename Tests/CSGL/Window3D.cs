@@ -633,9 +633,7 @@ namespace CSGL
             rotateY += Radian.Degrees(distanceX * 0.1);
             rotateX += Radian.Degrees(distanceY * 0.1);
 
-            GLFW.GetWindowPos(Handle, out int x, out int y);
-
-            Vector2 newMPos = new Vector2(x + (Width / 2), y + (Height / 2));
+            Vector2 newMPos = new Vector2(Width / 2.0, Height / 2.0);
 
             mouseLocation = newMPos;
 
