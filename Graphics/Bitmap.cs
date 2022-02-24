@@ -167,23 +167,23 @@ namespace Zene.Graphics
             switch (format)
             {
                 case ImageEncoding.Png:
-                    writer.WritePng(this, Width, Height, storeType, stream);
+                    writer.WritePng(GetVerticalFlip(), Width, Height, storeType, stream);
                     break;
 
                 case ImageEncoding.Jpeg:
-                    writer.WriteJpg(this, Width, Height, storeType, stream, 100);
+                    writer.WriteJpg(GetVerticalFlip(), Width, Height, storeType, stream, 100);
                     break;
 
                 case ImageEncoding.Bmp:
-                    writer.WriteBmp(this, Width, Height, storeType, stream);
+                    writer.WriteBmp(GetVerticalFlip(), Width, Height, storeType, stream);
                     break;
 
                 case ImageEncoding.Tga:
-                    writer.WriteTga(this, Width, Height, storeType, stream);
+                    writer.WriteTga(GetVerticalFlip(), Width, Height, storeType, stream);
                     break;
 
                 case ImageEncoding.Hdr:
-                    writer.WriteHdr(this, Bytes, Width, Height, storeType, stream);
+                    writer.WriteHdr(GetVerticalFlip(), Bytes, Width, Height, storeType, stream);
                     break;
             }
 
@@ -334,7 +334,7 @@ namespace Zene.Graphics
         public static bool AutoFlipTextures
         {
             get => StbImage.stbi__vertically_flip_on_load == 1;
-            set => StbImage.stbi__vertically_flip_on_load = value ? 0 : 1;
+            set => StbImage.stbi__vertically_flip_on_load = value ? 1 : 0;
         }
     }
 }

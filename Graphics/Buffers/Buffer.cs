@@ -45,6 +45,15 @@ namespace Zene.Graphics
 
         public uint Id { get; protected set; }
 
+        public BufferTarget BindRead()
+        {
+            throw new NotImplementedException();
+        }
+        public BufferTarget BindWrite()
+        {
+            throw new NotImplementedException();
+        }
+
         protected bool _dataCreated;
         public bool DataCreated
         {

@@ -160,7 +160,7 @@ namespace Zene.Graphics
         /// <summary>
         /// The depth value that is used when <see cref="Clear(BufferBit)"/> is called.
         /// </summary>
-        public static double ClearDepth { get; set; } = 0.0;
+        public static double ClearDepth { get; set; } = 1.0;
         /// <summary>
         /// The stencil value that is used when <see cref="Clear(BufferBit)"/> is called.
         /// </summary>

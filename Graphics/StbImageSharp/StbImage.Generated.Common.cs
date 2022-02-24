@@ -200,7 +200,6 @@ namespace StbImageSharp
 			{
 				var channels = req_comp != 0 ? req_comp : *comp;
 				stbi__vertical_flip(result, *x, *y, channels * sizeof(byte));
-				System.Console.WriteLine("Flipped");
 			}
 
 			return (byte*)result;

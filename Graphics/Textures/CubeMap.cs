@@ -863,6 +863,160 @@ namespace Zene.Graphics
             return texture;
         }
 
+        public static CubeMap LoadSync(string[] paths, int size, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap)
+        {
+            CubeMap texture = new CubeMap(TextureFormat.Rgba8, TextureData.Byte);
+
+            if (paths.Length < 6)
+            {
+                throw new Exception($"{nameof(paths)} must have a length of at least 6.");
+            }
+
+            KeyValuePair<GLArray<Colour>, bool> defaultPair = new KeyValuePair<GLArray<Colour>, bool>(null, mipmap);
+            bool added = false;
+
+            // Right face
+            KeyValuePair<CubeMap, CubeMapFace> keyR = new KeyValuePair<CubeMap, CubeMapFace>(texture, CubeMapFace.Right);
+            added = _loadingTextures.TryAdd(keyR, defaultPair);
+            _textures.Add(keyR);
+            if (!added)
+            {
+                throw new Exception("Couldn't add texture temperarerly to collection.");
+            }
+
+            // Left face
+            KeyValuePair<CubeMap, CubeMapFace> keyL = new KeyValuePair<CubeMap, CubeMapFace>(texture, CubeMapFace.Left);
+            added = _loadingTextures.TryAdd(keyL, defaultPair);
+            _textures.Add(keyL);
+            if (!added)
+            {
+                throw new Exception("Couldn't add texture temperarerly to collection.");
+            }
+
+            // Top face
+            KeyValuePair<CubeMap, CubeMapFace> keyT = new KeyValuePair<CubeMap, CubeMapFace>(texture, CubeMapFace.Top);
+            added = _loadingTextures.TryAdd(keyT, defaultPair);
+            _textures.Add(keyT);
+            if (!added)
+            {
+                throw new Exception("Couldn't add texture temperarerly to collection.");
+            }
+
+            // Bottom face
+            KeyValuePair<CubeMap, CubeMapFace> keyBo = new KeyValuePair<CubeMap, CubeMapFace>(texture, CubeMapFace.Bottom);
+            added = _loadingTextures.TryAdd(keyBo, defaultPair);
+            _textures.Add(keyBo);
+            if (!added)
+            {
+                throw new Exception("Couldn't add texture temperarerly to collection.");
+            }
+
+            // Front face
+            KeyValuePair<CubeMap, CubeMapFace> keyF = new KeyValuePair<CubeMap, CubeMapFace>(texture, CubeMapFace.Front);
+            added = _loadingTextures.TryAdd(keyF, defaultPair);
+            _textures.Add(keyF);
+            if (!added)
+            {
+                throw new Exception("Couldn't add texture temperarerly to collection.");
+            }
+
+            // Back face
+            KeyValuePair<CubeMap, CubeMapFace> keyBa = new KeyValuePair<CubeMap, CubeMapFace>(texture, CubeMapFace.Back);
+            added = _loadingTextures.TryAdd(keyBa, defaultPair);
+            _textures.Add(keyBa);
+            if (!added)
+            {
+                throw new Exception("Couldn't add texture temperarerly to collection.");
+            }
+
+            byte[] dataR = File.ReadAllBytes(paths[0]);
+            byte[] dataL = File.ReadAllBytes(paths[1]);
+            byte[] dataT = File.ReadAllBytes(paths[2]);
+            byte[] dataBo = File.ReadAllBytes(paths[3]);
+            byte[] dataF = File.ReadAllBytes(paths[4]);
+            byte[] dataBa = File.ReadAllBytes(paths[5]);
+
+            Task.Run(() =>
+            {
+                KeyValuePair<GLArray<Colour>, bool> value;
+
+                // Right face
+                value = new KeyValuePair<GLArray<Colour>, bool>(
+                    new Bitmap(new MemoryStream(dataR)), mipmap);
+
+                while (!_loadingTextures.TryUpdate(keyR, value, defaultPair))
+                {
+                    // Content in condition statment
+                }
+
+                // Left face
+                value = new KeyValuePair<GLArray<Colour>, bool>(
+                    new Bitmap(new MemoryStream(dataL)), mipmap);
+
+                while (!_loadingTextures.TryUpdate(keyL, value, defaultPair))
+                {
+                    // Content in condition statment
+                }
+
+                // Top face
+                value = new KeyValuePair<GLArray<Colour>, bool>(
+                    new Bitmap(new MemoryStream(dataT)), mipmap);
+
+                while (!_loadingTextures.TryUpdate(keyT, value, defaultPair))
+                {
+                    // Content in condition statment
+                }
+
+                // Bottom face
+                value = new KeyValuePair<GLArray<Colour>, bool>(
+                    new Bitmap(new MemoryStream(dataBo)), mipmap);
+
+                while (!_loadingTextures.TryUpdate(keyBo, value, defaultPair))
+                {
+                    // Content in condition statment
+                }
+
+                // Font face
+                value = new KeyValuePair<GLArray<Colour>, bool>(
+                    new Bitmap(new MemoryStream(dataF)), mipmap);
+
+                while (!_loadingTextures.TryUpdate(keyF, value, defaultPair))
+                {
+                    // Content in condition statment
+                }
+
+                // Back face
+                value = new KeyValuePair<GLArray<Colour>, bool>(
+                    new Bitmap(new MemoryStream(dataBa)), mipmap);
+
+                while (!_loadingTextures.TryUpdate(keyBa, value, defaultPair))
+                {
+                    // Content in condition statment
+                }
+            });
+
+            // Temperarerly set data to null
+            texture.SetData(CubeMapFace.Right,  size, size, BaseFormat.Rgba, GLArray<byte>.Empty);
+            texture.SetData(CubeMapFace.Left,   size, size, BaseFormat.Rgba, GLArray<byte>.Empty);
+            texture.SetData(CubeMapFace.Top,    size, size, BaseFormat.Rgba, GLArray<byte>.Empty);
+            texture.SetData(CubeMapFace.Bottom, size, size, BaseFormat.Rgba, GLArray<byte>.Empty);
+            texture.SetData(CubeMapFace.Front,  size, size, BaseFormat.Rgba, GLArray<byte>.Empty);
+            texture.SetData(CubeMapFace.Back,   size, size, BaseFormat.Rgba, GLArray<byte>.Empty);
+
+            texture.WrapStyle = wrapStyle;
+            texture.MinFilter = textureQuality;
+            texture.MagFilter = textureQuality switch
+            {
+                TextureSampling.BlendMipMapBlend => TextureSampling.Blend,
+                TextureSampling.BlendMipMapNearest => TextureSampling.Blend,
+                TextureSampling.NearestMipMapBlend => TextureSampling.Nearest,
+                TextureSampling.NearestMipMapNearest => TextureSampling.Nearest,
+                _ => textureQuality
+            };
+
+            return texture;
+        }
+
         public static bool CheckSyncLoading()
         {
             foreach (KeyValuePair<KeyValuePair<CubeMap, CubeMapFace>, KeyValuePair<GLArray<Colour>, bool>> face in _loadingTextures)

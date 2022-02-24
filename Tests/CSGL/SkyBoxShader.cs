@@ -73,9 +73,20 @@ namespace CSGL
                 SetMatrices();
             }
         }
+        private Matrix4 _m1 = Matrix4.Identity;
+        public Matrix4 Model
+        {
+            get => _m1;
+            set
+            {
+                _m1 = value;
+
+                SetMatrices();
+            }
+        }
         private void SetMatrices()
         {
-            GL.ProgramUniformMatrix4fv(Program, _uniformMatrix, false, (_m2 * _m3).GetGLData());
+            GL.ProgramUniformMatrix4fv(Program, _uniformMatrix, false, (_m1 * _m2 * _m3).GetGLData());
         }
     }
 }
