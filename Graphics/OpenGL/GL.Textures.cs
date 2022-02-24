@@ -166,7 +166,7 @@ namespace Zene.Graphics.Base
 					case TextureTarget.Multisample2D:
 						BoundTextures[unit].Texture2DMS = texture.Id;
 						return;
-					case TextureTarget.MultisampleArray2D:
+					case TextureTarget.Multisample2DArray:
 						BoundTextures[unit].Texture2DArrayMS = texture.Id;
 						return;
 					case TextureTarget.Texture3D:
@@ -216,7 +216,7 @@ namespace Zene.Graphics.Base
 					case TextureTarget.Multisample2D:
 						BoundTextures[unit].Texture2DMS = texture.Id;
 						return;
-					case TextureTarget.MultisampleArray2D:
+					case TextureTarget.Multisample2DArray:
 						BoundTextures[unit].Texture2DArrayMS = texture.Id;
 						return;
 					case TextureTarget.Texture3D:

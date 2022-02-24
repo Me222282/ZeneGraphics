@@ -11,7 +11,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="obj">The object to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport(this PropertyInfo prop)
+        public static double GetSupport(this PropertyInfo prop)
         {
             if (prop == null) { return double.NaN; }
 
@@ -26,7 +26,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="type">The type to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport(this Type type)
+        public static double GetSupport(this Type type)
         {
             if (type == null) { return double.NaN; }
 
@@ -41,18 +41,18 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="prop"></param>
         /// <returns></returns>
-        public static bool GLSupported(this PropertyInfo prop)
+        public static bool IsSupported(this PropertyInfo prop)
         {
-            return prop.GetVersionSupport() <= GL.Version;
+            return prop.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="type"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="prop"></param>
         /// <returns></returns>
-        public static bool GLSupported(this Type type)
+        public static bool IsSupported(this Type type)
         {
-            return type.GetVersionSupport() <= GL.Version;
+            return type.GetSupport() <= GL.Version;
         }
 
         //
@@ -66,7 +66,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport(this Action action)
+        public static double GetSupport(this Action action)
         {
             if (action == null) { return double.NaN; }
 
@@ -81,7 +81,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1>(this Action<T1> action)
+        public static double GetSupport<T1>(this Action<T1> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -96,7 +96,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2>(this Action<T1, T2> action)
+        public static double GetSupport<T1, T2>(this Action<T1, T2> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -111,7 +111,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3>(this Action<T1, T2, T3> action)
+        public static double GetSupport<T1, T2, T3>(this Action<T1, T2, T3> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -126,7 +126,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4>(this Action<T1, T2, T3, T4> action)
+        public static double GetSupport<T1, T2, T3, T4>(this Action<T1, T2, T3, T4> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -141,7 +141,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5>(this Action<T1, T2, T3, T4, T5> action)
+        public static double GetSupport<T1, T2, T3, T4, T5>(this Action<T1, T2, T3, T4, T5> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -156,7 +156,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5,T6>(this Action<T1, T2, T3, T4, T5, T6> action)
+        public static double GetSupport<T1, T2, T3, T4, T5,T6>(this Action<T1, T2, T3, T4, T5, T6> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -171,7 +171,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7>(this Action<T1, T2, T3, T4, T5, T6, T7> action)
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7>(this Action<T1, T2, T3, T4, T5, T6, T7> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -186,7 +186,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8>(this Action<T1, T2, T3, T4, T5, T6, T7, T8> action)
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8>(this Action<T1, T2, T3, T4, T5, T6, T7, T8> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -201,7 +201,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9>(this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action)
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9>(this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -216,7 +216,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
             this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> action)
         {
             if (action == null) { return double.NaN; }
@@ -232,7 +232,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
             this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> action)
         {
             if (action == null) { return double.NaN; }
@@ -248,7 +248,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
             this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> action)
         {
             if (action == null) { return double.NaN; }
@@ -264,7 +264,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
             this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> action)
         {
             if (action == null) { return double.NaN; }
@@ -280,7 +280,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
             this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> action)
         {
             if (action == null) { return double.NaN; }
@@ -296,7 +296,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
             this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> action)
         {
             if (action == null) { return double.NaN; }
@@ -312,7 +312,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(
             this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> action)
         {
             if (action == null) { return double.NaN; }
@@ -331,160 +331,160 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported(this Action action)
+        public static bool IsSupported(this Action action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1>(this Action<T1> action)
+        public static bool IsSupported<T1>(this Action<T1> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2>(this Action<T1, T2> action)
+        public static bool IsSupported<T1, T2>(this Action<T1, T2> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3>(this Action<T1, T2, T3> action)
+        public static bool IsSupported<T1, T2, T3>(this Action<T1, T2, T3> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4>(this Action<T1, T2, T3, T4> action)
+        public static bool IsSupported<T1, T2, T3, T4>(this Action<T1, T2, T3, T4> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5>(this Action<T1, T2, T3, T4, T5> action)
+        public static bool IsSupported<T1, T2, T3, T4, T5>(this Action<T1, T2, T3, T4, T5> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6>(this Action<T1, T2, T3, T4, T5, T6> action)
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6>(this Action<T1, T2, T3, T4, T5, T6> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7>(this Action<T1, T2, T3, T4, T5, T6, T7> action)
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7>(this Action<T1, T2, T3, T4, T5, T6, T7> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8>(this Action<T1, T2, T3, T4, T5, T6, T7, T8> action)
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8>(this Action<T1, T2, T3, T4, T5, T6, T7, T8> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9>(this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action)
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9>(this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
             this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
             this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
             this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
             this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
             this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
             this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(
             this Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
 
         // Func get
@@ -494,7 +494,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<TResult>(this Func<TResult> action)
+        public static double GetSupport<TResult>(this Func<TResult> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -509,7 +509,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, TResult>(this Func<T1, TResult> action)
+        public static double GetSupport<T1, TResult>(this Func<T1, TResult> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -524,7 +524,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, TResult>(this Func<T1, T2, TResult> action)
+        public static double GetSupport<T1, T2, TResult>(this Func<T1, T2, TResult> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -539,7 +539,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, TResult>(this Func<T1, T2, T3, TResult> action)
+        public static double GetSupport<T1, T2, T3, TResult>(this Func<T1, T2, T3, TResult> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -554,7 +554,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, TResult>(this Func<T1, T2, T3, T4, TResult> action)
+        public static double GetSupport<T1, T2, T3, T4, TResult>(this Func<T1, T2, T3, T4, TResult> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -569,7 +569,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, TResult>(this Func<T1, T2, T3, T4, T5, TResult> action)
+        public static double GetSupport<T1, T2, T3, T4, T5, TResult>(this Func<T1, T2, T3, T4, T5, TResult> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -584,7 +584,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, TResult>(this Func<T1, T2, T3, T4, T5, T6, TResult> action)
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, TResult>(this Func<T1, T2, T3, T4, T5, T6, TResult> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -599,7 +599,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, TResult>(this Func<T1, T2, T3, T4, T5, T6, T7, TResult> action)
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, TResult>(this Func<T1, T2, T3, T4, T5, T6, T7, TResult> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -614,7 +614,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(this Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> action)
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(this Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -629,7 +629,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> action)
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> action)
         {
             if (action == null) { return double.NaN; }
 
@@ -644,7 +644,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(
             this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> action)
         {
             if (action == null) { return double.NaN; }
@@ -660,7 +660,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(
             this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> action)
         {
             if (action == null) { return double.NaN; }
@@ -676,7 +676,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(
             this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> action)
         {
             if (action == null) { return double.NaN; }
@@ -692,7 +692,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(
             this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> action)
         {
             if (action == null) { return double.NaN; }
@@ -708,7 +708,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(
             this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> action)
         {
             if (action == null) { return double.NaN; }
@@ -724,7 +724,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(
             this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> action)
         {
             if (action == null) { return double.NaN; }
@@ -740,7 +740,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action">The method to source verion info from.</param>
         /// <returns></returns>
-        public static double GetVersionSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(
+        public static double GetSupport<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(
             this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> action)
         {
             if (action == null) { return double.NaN; }
@@ -759,160 +759,160 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<TResult>(this Func<TResult> action)
+        public static bool IsSupported<TResult>(this Func<TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, TResult>(this Func<T1, TResult> action)
+        public static bool IsSupported<T1, TResult>(this Func<T1, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, TResult>(this Func<T1, T2, TResult> action)
+        public static bool IsSupported<T1, T2, TResult>(this Func<T1, T2, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, TResult>(this Func<T1, T2, T3, TResult> action)
+        public static bool IsSupported<T1, T2, T3, TResult>(this Func<T1, T2, T3, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, TResult>(this Func<T1, T2, T3, T4, TResult> action)
+        public static bool IsSupported<T1, T2, T3, T4, TResult>(this Func<T1, T2, T3, T4, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, TResult>(this Func<T1, T2, T3, T4, T5, TResult> action)
+        public static bool IsSupported<T1, T2, T3, T4, T5, TResult>(this Func<T1, T2, T3, T4, T5, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, TResult>(this Func<T1, T2, T3, T4, T5, T6, TResult> action)
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, TResult>(this Func<T1, T2, T3, T4, T5, T6, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, TResult>(this Func<T1, T2, T3, T4, T5, T6, T7, TResult> action)
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, TResult>(this Func<T1, T2, T3, T4, T5, T6, T7, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(this Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> action)
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, TResult>(this Func<T1, T2, T3, T4, T5, T6, T7, T8, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> action)
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(
             this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(
             this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(
             this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(
             this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(
             this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(
             this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
         /// <summary>
         /// Determines whether <paramref name="action"/> is supported in the current OpenGL context.
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static bool GLSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(
+        public static bool IsSupported<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult>(
             this Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TResult> action)
         {
-            return action.GetVersionSupport() <= GL.Version;
+            return action.GetSupport() <= GL.Version;
         }
     }
 }

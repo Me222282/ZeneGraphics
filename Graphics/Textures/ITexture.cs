@@ -262,7 +262,7 @@ namespace Zene.Graphics
         /// <summary>
         /// An array of two-dimensional textures with multiple samples.
         /// </summary>
-        MultisampleArray2D = GLEnum.Texture2dMultisampleArray
+        Multisample2DArray = GLEnum.Texture2dMultisampleArray
     }
     public enum CubeMapFace : uint
     {

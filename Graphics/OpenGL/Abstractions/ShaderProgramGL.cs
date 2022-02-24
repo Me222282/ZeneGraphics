@@ -14,6 +14,8 @@ namespace Zene.Graphics.Base
 
         public void Bind()
         {
+            if (this.Bound()) { return; }
+
             GL.UseProgram(Id);
         }
         private bool _disposed = false;
@@ -31,17 +33,6 @@ namespace Zene.Graphics.Base
             if (!this.Bound()) { return; }
 
             GL.UseProgram(0);
-        }
-
-        /// <summary>
-        /// Sets the OpenGL context to referance this object.
-        /// </summary>
-        public void SetGLContext()
-        {
-            if (!this.Bound())
-            {
-                Bind();
-            }
         }
 
         /// <summary>
@@ -114,15 +105,12 @@ namespace Zene.Graphics.Base
             int length = 0;
             GL.GetProgramiv(program.Id, GLEnum.ProgramBinaryLength, &length);
 
-            byte[] data = new byte[length];
+            byte* data = stackalloc byte[length];
             uint format = 0;
 
-            fixed (byte* ptr = &data[0])
-            {
-                GL.GetProgramBinary(program.Id, length, null, &format, ptr);
+            GL.GetProgramBinary(program.Id, length, null, &format, data);
 
-                GL.ProgramBinary(Id, format, ptr, length);
-            }
+            GL.ProgramBinary(Id, format, data, length);
         }
 
         /// <summary>
@@ -151,7 +139,7 @@ namespace Zene.Graphics.Base
         /// <param name="indices">Specifies an array holding the indices to load into the shader subroutine variables.</param>
         public void UniformSubroutines(ShaderType type, uint[] indices)
         {
-            SetGLContext();
+            Bind();
 
             fixed (uint* ptr = &indices[0])
             {
@@ -170,7 +158,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, double value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform1f(location, (float)value);
         }
@@ -181,7 +169,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, float value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform1f(location, value);
         }
@@ -192,7 +180,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, int value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform1i(location, value);
         }
@@ -203,7 +191,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, uint value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform1ui(location, value);
         }
@@ -215,19 +203,16 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, double[] values)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[values.Length];
+            float* data = stackalloc float[values.Length];
 
             for (int i = 0; i < values.Length; i++)
             {
                 data[i] = (float)values[i];
             }
 
-            fixed (float* ptr = &data[0])
-            {
-                GL.Uniform1fv(location, values.Length, ptr);
-            }
+            GL.Uniform1fv(location, values.Length, data);
         }
         /// <summary>
         /// Specify the values of a float array uniform variable.
@@ -236,7 +221,7 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, float[] values)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = &values[0])
             {
@@ -250,7 +235,7 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, int[] values)
         {
-            SetGLContext();
+            Bind();
 
             fixed (int* ptr = &values[0])
             {
@@ -264,7 +249,7 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, uint[] values)
         {
-            SetGLContext();
+            Bind();
 
             fixed (uint* ptr = &values[0])
             {
@@ -279,7 +264,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, Vector2 value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform2f(location, (float)value.X, (float)value.Y);
         }
@@ -290,7 +275,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, Vector2<float> value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform2f(location, value.X, value.Y);
         }
@@ -301,7 +286,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, Vector2I value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform2i(location, value.X, value.Y);
         }
@@ -312,7 +297,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, Vector2<uint> value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform2ui(location, value.X, value.Y);
         }
@@ -324,20 +309,18 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, Vector2[] values)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[values.Length * 2];
+            int size = values.Length * 2;
+            float* data = stackalloc float[size];
 
-            for (int i = 0; i < data.Length; i += 2)
+            for (int i = 0; i < size; i += 2)
             {
                 data[i] = (float)values[i].X;
                 data[i + 1] = (float)values[i].Y;
             }
 
-            fixed (float* ptr = &data[0])
-            {
-                GL.Uniform1fv(location, values.Length, ptr);
-            }
+            GL.Uniform1fv(location, values.Length, data);
         }
         /// <summary>
         /// Specify the values of a float vector2 array uniform variable.
@@ -346,7 +329,7 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, Vector2<float>[] values)
         {
-            SetGLContext();
+            Bind();
 
             fixed (Vector2<float>* ptr = &values[0])
             {
@@ -360,7 +343,7 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, Vector2I[] values)
         {
-            SetGLContext();
+            Bind();
 
             fixed (Vector2I* ptr = &values[0])
             {
@@ -374,7 +357,7 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, Vector2<uint>[] values)
         {
-            SetGLContext();
+            Bind();
 
             fixed (Vector2<uint>* ptr = &values[0])
             {
@@ -389,7 +372,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, Vector3 value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform3f(location, (float)value.X, (float)value.Y, (float)value.Z);
         }
@@ -400,7 +383,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, Vector3<float> value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform3f(location, value.X, value.Y, value.Z);
         }
@@ -411,7 +394,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, Vector3I value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform3i(location, value.X, value.Y, value.Z);
         }
@@ -422,7 +405,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, Vector3<uint> value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform3ui(location, value.X, value.Y, value.Z);
         }
@@ -434,21 +417,19 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, Vector3[] values)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[values.Length * 3];
+            int size = values.Length * 3;
+            float* data = stackalloc float[size];
 
-            for (int i = 0; i < data.Length; i += 3)
+            for (int i = 0; i < size; i += 3)
             {
                 data[i] = (float)values[i].X;
                 data[i + 1] = (float)values[i].Y;
                 data[i + 2] = (float)values[i].Z;
             }
 
-            fixed (float* ptr = &data[0])
-            {
-                GL.Uniform1fv(location, values.Length, ptr);
-            }
+            GL.Uniform1fv(location, values.Length, data);
         }
         /// <summary>
         /// Specify the values of a float vector3 array uniform variable.
@@ -457,7 +438,7 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, Vector3<float>[] values)
         {
-            SetGLContext();
+            Bind();
 
             fixed (Vector3<float>* ptr = &values[0])
             {
@@ -471,7 +452,7 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, Vector3I[] values)
         {
-            SetGLContext();
+            Bind();
 
             fixed (Vector3I* ptr = &values[0])
             {
@@ -485,7 +466,7 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, Vector3<uint>[] values)
         {
-            SetGLContext();
+            Bind();
 
             fixed (Vector3<uint>* ptr = &values[0])
             {
@@ -500,7 +481,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, Vector4 value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform4f(location, (float)value.X, (float)value.Y, (float)value.Z, (float)value.W);
         }
@@ -511,7 +492,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, Vector4<float> value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform4f(location, value.X, value.Y, value.Z, value.W);
         }
@@ -522,7 +503,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, Vector4I value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform4i(location, value.X, value.Y, value.Z, value.W);
         }
@@ -533,7 +514,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set the uniform to.</param>
         public void SetUniform(int location, Vector4<uint> value)
         {
-            SetGLContext();
+            Bind();
 
             GL.Uniform4ui(location, value.X, value.Y, value.Z, value.W);
         }
@@ -545,11 +526,12 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, Vector4[] values)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[values.Length * 4];
+            int size = values.Length * 4;
+            float* data = stackalloc float[size];
 
-            for (int i = 0; i < data.Length; i += 4)
+            for (int i = 0; i < size; i += 4)
             {
                 data[i] = (float)values[i].X;
                 data[i + 1] = (float)values[i].Y;
@@ -557,10 +539,7 @@ namespace Zene.Graphics.Base
                 data[i + 3] = (float)values[i].W;
             }
 
-            fixed (float* ptr = &data[0])
-            {
-                GL.Uniform1fv(location, values.Length, ptr);
-            }
+            GL.Uniform1fv(location, values.Length, data);
         }
         /// <summary>
         /// Specify the values of a float vector4 array uniform variable.
@@ -569,7 +548,7 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, Vector4<float>[] values)
         {
-            SetGLContext();
+            Bind();
 
             fixed (Vector4<float>* ptr = &values[0])
             {
@@ -583,7 +562,7 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, Vector4I[] values)
         {
-            SetGLContext();
+            Bind();
 
             fixed (Vector4I* ptr = &values[0])
             {
@@ -597,7 +576,7 @@ namespace Zene.Graphics.Base
         /// <param name="values">The values to set the uniform to.</param>
         public void SetUniform(int location, Vector4<uint>[] values)
         {
-            SetGLContext();
+            Bind();
 
             fixed (Vector4<uint>* ptr = &values[0])
             {
@@ -616,18 +595,15 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix2 matrix)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[2 * 2]
+            float* data = stackalloc float[2 * 2]
             {
                 (float)matrix[0, 0], (float)matrix[0, 1],
                 (float)matrix[1, 0], (float)matrix[1, 1]
             };
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix2fv(location, 1, false, ptr);
-            }
+            GL.UniformMatrix2fv(location, 1, false, data);
         }
         /// <summary>
         /// Specify the value of a float matrix2x3 uniform variable.
@@ -636,19 +612,16 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix2x3 matrix)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[2 * 3]
+            float* data = stackalloc float[2 * 3]
             {
                 (float)matrix[0, 0], (float)matrix[0, 1],
                 (float)matrix[1, 0], (float)matrix[1, 1],
                 (float)matrix[2, 0], (float)matrix[2, 1]
             };
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix2x3fv(location, 1, false, ptr);
-            }
+            GL.UniformMatrix2x3fv(location, 1, false, data);
         }
         /// <summary>
         /// Specify the value of a float matrix2x4 uniform variable.
@@ -657,9 +630,9 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix2x4 matrix)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[2 * 4]
+            float* data = stackalloc float[2 * 4]
             {
                 (float)matrix[0, 0], (float)matrix[0, 1],
                 (float)matrix[1, 0], (float)matrix[1, 1],
@@ -667,10 +640,7 @@ namespace Zene.Graphics.Base
                 (float)matrix[3, 0], (float)matrix[3, 1]
             };
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix2x4fv(location, 1, false, ptr);
-            }
+            GL.UniformMatrix2x4fv(location, 1, false, data);
         }
 
         /// <summary>
@@ -680,19 +650,16 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix3 matrix)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[3 * 3]
+            float* data = stackalloc float[3 * 3]
             {
                 (float)matrix[0, 0], (float)matrix[0, 1], (float)matrix[0, 2],
                 (float)matrix[1, 0], (float)matrix[1, 1], (float)matrix[1, 2],
                 (float)matrix[2, 0], (float)matrix[2, 1], (float)matrix[2, 2]
             };
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix3fv(location, 1, false, ptr);
-            }
+            GL.UniformMatrix3fv(location, 1, false, data);
         }
         /// <summary>
         /// Specify the value of a float matrix3x2 uniform variable.
@@ -701,18 +668,15 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix3x2 matrix)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[3 * 2]
+            float* data = stackalloc float[3 * 2]
             {
                 (float)matrix[0, 0], (float)matrix[0, 1], (float)matrix[0, 2],
                 (float)matrix[1, 0], (float)matrix[1, 1], (float)matrix[1, 2]
             };
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix3x2fv(location, 1, false, ptr);
-            }
+            GL.UniformMatrix3x2fv(location, 1, false, data);
         }
         /// <summary>
         /// Specify the value of a float matrix3x4 uniform variable.
@@ -721,9 +685,9 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix3x4 matrix)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[3 * 4]
+            float* data = stackalloc float[3 * 4]
             {
                 (float)matrix[0, 0], (float)matrix[0, 1], (float)matrix[0, 2],
                 (float)matrix[1, 0], (float)matrix[1, 1], (float)matrix[1, 2],
@@ -731,10 +695,7 @@ namespace Zene.Graphics.Base
                 (float)matrix[3, 0], (float)matrix[3, 1], (float)matrix[3, 2]
             };
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix3x4fv(location, 1, false, ptr);
-            }
+            GL.UniformMatrix3x4fv(location, 1, false, data);
         }
 
         /// <summary>
@@ -744,9 +705,9 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix4 matrix)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[4 * 4]
+            float* data = stackalloc float[4 * 4]
             {
                 (float)matrix[0, 0], (float)matrix[0, 1], (float)matrix[0, 2], (float)matrix[0, 3],
                 (float)matrix[1, 0], (float)matrix[1, 1], (float)matrix[1, 2], (float)matrix[1, 3],
@@ -754,10 +715,7 @@ namespace Zene.Graphics.Base
                 (float)matrix[3, 0], (float)matrix[3, 1], (float)matrix[3, 2], (float)matrix[3, 3]
             };
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix4fv(location, 1, false, ptr);
-            }
+            GL.UniformMatrix4fv(location, 1, false, data);
         }
         /// <summary>
         /// Specify the value of a float matrix4x3 uniform variable.
@@ -766,19 +724,16 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix4x3 matrix)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[4 * 3]
+            float* data = stackalloc float[4 * 3]
             {
                 (float)matrix[0, 0], (float)matrix[0, 1], (float)matrix[0, 2], (float)matrix[0, 3],
                 (float)matrix[1, 0], (float)matrix[1, 1], (float)matrix[1, 2], (float)matrix[1, 3],
                 (float)matrix[2, 0], (float)matrix[2, 1], (float)matrix[2, 2], (float)matrix[2, 3]
             };
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix4x3fv(location, 1, false, ptr);
-            }
+            GL.UniformMatrix4x3fv(location, 1, false, data);
         }
         /// <summary>
         /// Specify the value of a float matrix4x2 uniform variable.
@@ -787,18 +742,15 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix4x2 matrix)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[4 * 2]
+            float* data = stackalloc float[4 * 2]
             {
                 (float)matrix[0, 0], (float)matrix[0, 1], (float)matrix[0, 2], (float)matrix[0, 3],
                 (float)matrix[1, 0], (float)matrix[1, 1], (float)matrix[1, 2], (float)matrix[1, 3]
             };
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix4x2fv(location, 1, false, ptr);
-            }
+            GL.UniformMatrix4x2fv(location, 1, false, data);
         }
 
         /// <summary>
@@ -808,9 +760,9 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix2[] matrices)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[2 * 2 * matrices.Length];
+            float* data = stackalloc float[2 * 2 * matrices.Length];
             
             for (int i = 0; i < matrices.Length; i++)
             {
@@ -821,10 +773,7 @@ namespace Zene.Graphics.Base
                 data[(i * 4) + 3] = (float)matrices[i][1, 1];
             }
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix2fv(location, matrices.Length, false, ptr);
-            }
+            GL.UniformMatrix2fv(location, matrices.Length, false, data);
         }
         /// <summary>
         /// Specify the value of a float matrix2x3 array uniform variable.
@@ -833,9 +782,9 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix2x3[] matrices)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[2 * 3 * matrices.Length];
+            float* data = stackalloc float[2 * 3 * matrices.Length];
 
             for (int i = 0; i < matrices.Length; i++)
             {
@@ -849,10 +798,7 @@ namespace Zene.Graphics.Base
                 data[(i * 6) + 5] = (float)matrices[i][2, 1];
             }
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix2x3fv(location, matrices.Length, false, ptr);
-            }
+            GL.UniformMatrix2x3fv(location, matrices.Length, false, data);
         }
         /// <summary>
         /// Specify the value of a float matrix2x4 array uniform variable.
@@ -861,9 +807,9 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix2x4[] matrices)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[2 * 4 * matrices.Length];
+            float* data = stackalloc float[2 * 4 * matrices.Length];
 
             for (int i = 0; i < matrices.Length; i++)
             {
@@ -880,10 +826,7 @@ namespace Zene.Graphics.Base
                 data[(i * 8) + 7] = (float)matrices[i][3, 1];
             }
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix2x4fv(location, matrices.Length, false, ptr);
-            }
+            GL.UniformMatrix2x4fv(location, matrices.Length, false, data);
         }
 
         /// <summary>
@@ -893,9 +836,9 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix3[] matrices)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[3 * 3 * matrices.Length];
+            float* data = stackalloc float[3 * 3 * matrices.Length];
 
             for (int i = 0; i < matrices.Length; i++)
             {
@@ -912,10 +855,7 @@ namespace Zene.Graphics.Base
                 data[(i * 9) + 8] = (float)matrices[i][2, 2];
             }
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix3fv(location, matrices.Length, false, ptr);
-            }
+            GL.UniformMatrix3fv(location, matrices.Length, false, data);
         }
         /// <summary>
         /// Specify the value of a float matrix3x2 array uniform variable.
@@ -924,9 +864,9 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix3x2[] matrices)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[3 * 2 * matrices.Length];
+            float* data = stackalloc float[3 * 2 * matrices.Length];
 
             for (int i = 0; i < matrices.Length; i++)
             {
@@ -939,10 +879,7 @@ namespace Zene.Graphics.Base
                 data[(i * 6) + 5] = (float)matrices[i][1, 2];
             }
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix3x2fv(location, matrices.Length, false, ptr);
-            }
+            GL.UniformMatrix3x2fv(location, matrices.Length, false, data);
         }
         /// <summary>
         /// Specify the value of a float matrix3x4 array uniform variable.
@@ -951,9 +888,9 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix3x4[] matrices)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[3 * 4 * matrices.Length];
+            float* data = stackalloc float[3 * 4 * matrices.Length];
 
             for (int i = 0; i < matrices.Length; i++)
             {
@@ -974,10 +911,7 @@ namespace Zene.Graphics.Base
                 data[(i * 12) + 11] = (float)matrices[i][3, 2];
             }
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix3x4fv(location, matrices.Length, false, ptr);
-            }
+            GL.UniformMatrix3x4fv(location, matrices.Length, false, data);
         }
 
         /// <summary>
@@ -987,9 +921,9 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix4[] matrices)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[4 * 4 * matrices.Length];
+            float* data = stackalloc float[4 * 4 * matrices.Length];
 
             for (int i = 0; i < matrices.Length; i++)
             {
@@ -1014,10 +948,7 @@ namespace Zene.Graphics.Base
                 data[(i * 16) + 15] = (float)matrices[i][3, 3];
             }
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix4fv(location, matrices.Length, false, ptr);
-            }
+            GL.UniformMatrix4fv(location, matrices.Length, false, data);
         }
         /// <summary>
         /// Specify the value of a float matrix4x3 array uniform variable.
@@ -1026,9 +957,9 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix4x3[] matrices)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[4 * 3 * matrices.Length];
+            float* data = stackalloc float[4 * 3 * matrices.Length];
 
             for (int i = 0; i < matrices.Length; i++)
             {
@@ -1048,10 +979,7 @@ namespace Zene.Graphics.Base
                 data[(i * 16) + 11] = (float)matrices[i][2, 3];
             }
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix4x3fv(location, matrices.Length, false, ptr);
-            }
+            GL.UniformMatrix4x3fv(location, matrices.Length, false, data);
         }
         /// <summary>
         /// Specify the value of a float matrix4x2 array uniform variable.
@@ -1060,9 +988,9 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix4x2[] matrices)
         {
-            SetGLContext();
+            Bind();
 
-            float[] data = new float[4 * 2 * matrices.Length];
+            float* data = stackalloc float[4 * 2 * matrices.Length];
 
             for (int i = 0; i < matrices.Length; i++)
             {
@@ -1077,10 +1005,7 @@ namespace Zene.Graphics.Base
                 data[(i * 16) + 7] = (float)matrices[i][1, 3];
             }
 
-            fixed (float* ptr = data)
-            {
-                GL.UniformMatrix4x2fv(location, matrices.Length, false, ptr);
-            }
+            GL.UniformMatrix4x2fv(location, matrices.Length, false, data);
         }
 
         // Float input
@@ -1092,7 +1017,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix2<float> matrix)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrix.Data)
             {
@@ -1106,7 +1031,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix2x3<float> matrix)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrix.Data)
             {
@@ -1120,7 +1045,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix2x4<float> matrix)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrix.Data)
             {
@@ -1135,7 +1060,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix3<float> matrix)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrix.Data)
             {
@@ -1149,7 +1074,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix3x2<float> matrix)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrix.Data)
             {
@@ -1163,7 +1088,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix3x4<float> matrix)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrix.Data)
             {
@@ -1178,7 +1103,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix4<float> matrix)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrix.Data)
             {
@@ -1192,7 +1117,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix4x3<float> matrix)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrix.Data)
             {
@@ -1206,7 +1131,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrix">The matrix to set the uniform to.</param>
         public void SetUniform(int location, Matrix4x2<float> matrix)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrix.Data)
             {
@@ -1221,7 +1146,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix2<float>[] matrices)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrices[0].Data)
             {
@@ -1235,7 +1160,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix2x3<float>[] matrices)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrices[0].Data)
             {
@@ -1249,7 +1174,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix2x4<float>[] matrices)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrices[0].Data)
             {
@@ -1264,7 +1189,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix3<float>[] matrices)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrices[0].Data)
             {
@@ -1278,7 +1203,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix3x2<float>[] matrices)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrices[0].Data)
             {
@@ -1292,7 +1217,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix3x4<float>[] matrices)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrices[0].Data)
             {
@@ -1307,7 +1232,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix4<float>[] matrices)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrices[0].Data)
             {
@@ -1321,7 +1246,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix4x3<float>[] matrices)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrices[0].Data)
             {
@@ -1335,7 +1260,7 @@ namespace Zene.Graphics.Base
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
         public void SetUniform(int location, Matrix4x2<float>[] matrices)
         {
-            SetGLContext();
+            Bind();
 
             fixed (float* ptr = matrices[0].Data)
             {

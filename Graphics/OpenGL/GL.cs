@@ -32,7 +32,7 @@ namespace Zene.Graphics.Base
 			public uint CopyRead;
 			public uint CopyWrite;
 			public uint DispatchIndirect;
-			public uint Indirect;
+			public uint DrawIndirect;
 			public uint ElementArray;
 			public uint PixelPack;
 			public uint PixelUnpack;
@@ -112,7 +112,7 @@ namespace Zene.Graphics.Base
 					_boundBuffers.DispatchIndirect = buffer;
 					return;
 				case GLEnum.DrawIndirectBuffer:
-					_boundBuffers.Indirect = buffer;
+					_boundBuffers.DrawIndirect = buffer;
 					return;
 				case GLEnum.ElementArrayBuffer:
 					_boundBuffers.ElementArray = buffer;

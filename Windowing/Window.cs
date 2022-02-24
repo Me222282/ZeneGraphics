@@ -71,7 +71,7 @@ namespace Zene.Windowing
 
             // Setup debug callback - error output/display
             // If supported in current opengl version
-            if (((Action<GL.DebugProc, IntPtr>)GL.DebugMessageCallback).GLSupported())
+            if (((Action<GL.DebugProc, IntPtr>)GL.DebugMessageCallback).IsSupported())
             {
                 OnDebugCallBack = (source, type, _, _, _, message, _) => GLError(type, message);
 

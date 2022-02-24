@@ -8,6 +8,8 @@ namespace Zene.Graphics
         Framebuffer = GLEnum.Framebuffer,
         ReadFramebuffer = GLEnum.ReadFramebuffer,
         DrawFramebuffer = GLEnum.DrawFramebuffer,
+        Renderbuffer = GLEnum.Renderbuffer,
+
         Texture1D = GLEnum.Texture1d,
         Texture1DArray = GLEnum.Texture1dArray,
         Texture2D = GLEnum.Texture2d,
@@ -17,9 +19,23 @@ namespace Zene.Graphics
         Texture2DArrayMS = GLEnum.Texture2dMultisampleArray,
         TextureCubeMap = GLEnum.TextureCubeMap,
         TextureCubeMapArray = GLEnum.TextureCubeMapArray,
-        TextureBuffer = GLEnum.TextureBuffer,
         TextureRectangle = GLEnum.TextureRectangle,
-        Renderbuffer = GLEnum.Renderbuffer
+
+        TextureBuffer = GLEnum.TextureBuffer,
+
+        BufferArray = GLEnum.ArrayBuffer,
+        BufferAtomicCounter = GLEnum.AtomicCounterBuffer,
+        BufferCopyRead = GLEnum.CopyReadBuffer,
+        BufferCopyWrite = GLEnum.CopyWriteBuffer,
+        BufferDispatchIndirect = GLEnum.DispatchIndirectBuffer,
+        BufferDrawIndirect = GLEnum.DrawIndirectBuffer,
+        BufferElementArray = GLEnum.ElementArrayBuffer,
+        BufferPixelPack = GLEnum.PixelPackBuffer,
+        BufferPixelUnPack = GLEnum.PixelUnpackBuffer,
+        BufferQuery = GLEnum.QueryBuffer,
+        BufferShaderStorage = GLEnum.ShaderStorageBuffer,
+        BufferTransformFeedback = GLEnum.TransformFeedbackBuffer,
+        BufferUniform = GLEnum.UniformBuffer
     }
 
     public static unsafe class State
@@ -583,7 +599,7 @@ namespace Zene.Graphics
                 TextureTarget.CubeMap => GL.BoundTextures[unit].CubeMap,
                 TextureTarget.CubeMapArray => GL.BoundTextures[unit].CubeMapArray,
                 TextureTarget.Multisample2D => GL.BoundTextures[unit].Texture2DMS,
-                TextureTarget.MultisampleArray2D => GL.BoundTextures[unit].Texture2DArrayMS,
+                TextureTarget.Multisample2DArray => GL.BoundTextures[unit].Texture2DArrayMS,
                 TextureTarget.Buffer => GL.BoundTextures[unit].Buffer,
                 _ => 0
             };
@@ -632,7 +648,7 @@ namespace Zene.Graphics
                 BufferTarget.CopyRead => GL.BoundBuffers.CopyRead,
                 BufferTarget.CopyWrite => GL.BoundBuffers.CopyWrite,
                 BufferTarget.DispatchIndirect => GL.BoundBuffers.DispatchIndirect,
-                BufferTarget.DrawIndirect => GL.BoundBuffers.Indirect,
+                BufferTarget.DrawIndirect => GL.BoundBuffers.DrawIndirect,
                 BufferTarget.ElementArray => GL.BoundBuffers.ElementArray,
                 BufferTarget.PixelPack => GL.BoundBuffers.PixelPack,
                 BufferTarget.PixelUnPack => GL.BoundBuffers.PixelUnpack,
@@ -663,35 +679,229 @@ namespace Zene.Graphics
         /// <summary>
         /// Sets the binding for <paramref name="target"/> to 0.
         /// </summary>
-        /// <param name="target">Teh target to nullify.</param>
+        /// <param name="target">The target to nullify.</param>
         public static void NullBind(Target target)
         {
-            if (target == Target.Texture1D ||
-                target == Target.Texture1DArray ||
-                target == Target.Texture2D ||
-                target == Target.Texture2DArray ||
-                target == Target.Texture3D ||
-                target == Target.Texture2DMS ||
-                target == Target.Texture2DArrayMS ||
-                target == Target.TextureCubeMap ||
-                target == Target.TextureCubeMapArray ||
-                target == Target.TextureBuffer ||
-                target == Target.TextureRectangle)
+            switch (target)
             {
-                GL.BindTexture((uint)target, 0);
-                return;
+                case Target.Texture1D:
+                    if (GL.BoundTextures[GL.ActiveTextureUnit].Texture1D == 0) { return; }
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case Target.Texture1DArray:
+                    if (GL.BoundTextures[GL.ActiveTextureUnit].Texture1DArray == 0) { return; }
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case Target.Texture2D:
+                    if (GL.BoundTextures[GL.ActiveTextureUnit].Texture2D == 0) { return; }
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case Target.Texture2DArray:
+                    if (GL.BoundTextures[GL.ActiveTextureUnit].Texture2DArray == 0) { return; }
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case Target.Texture3D:
+                    if (GL.BoundTextures[GL.ActiveTextureUnit].Texture3D == 0) { return; }
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case Target.Texture2DMS:
+                    if (GL.BoundTextures[GL.ActiveTextureUnit].Texture2DMS == 0) { return; }
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case Target.Texture2DArrayMS:
+                    if (GL.BoundTextures[GL.ActiveTextureUnit].Texture2DArrayMS == 0) { return; }
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case Target.TextureCubeMap:
+                    if (GL.BoundTextures[GL.ActiveTextureUnit].CubeMap == 0) { return; }
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case Target.TextureCubeMapArray:
+                    if (GL.BoundTextures[GL.ActiveTextureUnit].CubeMapArray == 0) { return; }
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case Target.TextureRectangle:
+                    if (GL.BoundTextures[GL.ActiveTextureUnit].Rectangle == 0) { return; }
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case Target.TextureBuffer:
+                    if (GL.BoundTextures[GL.ActiveTextureUnit].Buffer != 0)
+                    {
+                        GL.BindTexture(GLEnum.TextureBuffer, 0);
+                    }
+                    if (GL.BoundBuffers.Texture != 0)
+                    {
+                        GL.BindBuffer(GLEnum.TextureBuffer, 0);
+                    }
+                    return;
+
+                case Target.DrawFramebuffer:
+                case Target.ReadFramebuffer:
+                case Target.Framebuffer:
+                    BaseFramebuffer.Bind((FrameTarget)target);
+                    return;
+
+                case Target.Renderbuffer:
+                    if (GL.BoundRenderbuffer == 0) { return; }
+                    GL.BindRenderbuffer(GLEnum.Renderbuffer, 0);
+                    return;
+
+                case Target.BufferArray:
+                    if (GL.BoundBuffers.Array == 0) { return; }
+                    GL.BindBuffer(GLEnum.ArrayBuffer, 0);
+                    return;
+
+                case Target.BufferAtomicCounter:
+                    if (GL.BoundBuffers.AtomicCounter == 0) { return; }
+                    GL.BindBuffer(GLEnum.AtomicCounterBuffer, 0);
+                    return;
+
+                case Target.BufferCopyRead:
+                    if (GL.BoundBuffers.CopyRead == 0) { return; }
+                    GL.BindBuffer(GLEnum.CopyReadBuffer, 0);
+                    return;
+
+                case Target.BufferCopyWrite:
+                    if (GL.BoundBuffers.CopyWrite == 0) { return; }
+                    GL.BindBuffer(GLEnum.CopyWriteBuffer, 0);
+                    return;
+
+                case Target.BufferDispatchIndirect:
+                    if (GL.BoundBuffers.DispatchIndirect == 0) { return; }
+                    GL.BindBuffer(GLEnum.DispatchIndirectBuffer, 0);
+                    return;
+
+                case Target.BufferDrawIndirect:
+                    if (GL.BoundBuffers.DrawIndirect == 0) { return; }
+                    GL.BindBuffer(GLEnum.DrawIndirectBuffer, 0);
+                    return;
+
+                case Target.BufferElementArray:
+                    if (GL.BoundBuffers.ElementArray == 0) { return; }
+                    GL.BindBuffer(GLEnum.ElementArrayBuffer, 0);
+                    return;
+
+                case Target.BufferPixelPack:
+                    if (GL.BoundBuffers.PixelPack == 0) { return; }
+                    GL.BindBuffer(GLEnum.PixelPackBuffer, 0);
+                    return;
+
+                case Target.BufferPixelUnPack:
+                    if (GL.BoundBuffers.PixelUnpack == 0) { return; }
+                    GL.BindBuffer(GLEnum.PixelUnpackBuffer, 0);
+                    return;
+
+                case Target.BufferQuery:
+                    if (GL.BoundBuffers.Query == 0) { return; }
+                    GL.BindBuffer(GLEnum.QueryBuffer, 0);
+                    return;
+
+                case Target.BufferShaderStorage:
+                    if (GL.BoundBuffers.ShaderStorage == 0) { return; }
+                    GL.BindBuffer(GLEnum.ShaderStorageBuffer, 0);
+                    return;
+
+                case Target.BufferTransformFeedback:
+                    if (GL.BoundBuffers.TransformFeedback == 0) { return; }
+                    GL.BindBuffer(GLEnum.TransformFeedbackBuffer, 0);
+                    return;
+
+                case Target.BufferUniform:
+                    if (GL.BoundBuffers.Uniform == 0) { return; }
+                    GL.BindBuffer(GLEnum.UniformBuffer, 0);
+                    return;
             }
-            if (target == Target.Framebuffer ||
-                target == Target.ReadFramebuffer ||
-                target == Target.DrawFramebuffer)
+        }
+        /// <summary>
+        /// Sets the binding for <paramref name="target"/> to 0 at texture slot <paramref name="slot"/>.
+        /// </summary>
+        /// <param name="target">The texture target to nullify at <paramref name="slot"/>.</param>
+        /// <param name="slot">The texture slot to nullify <paramref name="target"/> at.</param>
+        public static void NullBind(TextureTarget target, uint slot)
+        {
+            switch (target)
             {
-                BaseFramebuffer.Bind((FrameTarget)target);
-                return;
-            }
-            if (target == Target.Renderbuffer)
-            {
-                GL.BindRenderbuffer(GLEnum.Renderbuffer, 0);
-                return;
+                case TextureTarget.Texture1D:
+                    if (GL.BoundTextures[slot].Texture1D == 0) { return; }
+                    GL.ActiveTexture(slot);
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case TextureTarget.Texture1DArray:
+                    if (GL.BoundTextures[slot].Texture1DArray == 0) { return; }
+                    GL.ActiveTexture(slot);
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case TextureTarget.Texture2D:
+                    if (GL.BoundTextures[slot].Texture2D == 0) { return; }
+                    GL.ActiveTexture(slot);
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case TextureTarget.Texture2DArray:
+                    if (GL.BoundTextures[slot].Texture2DArray == 0) { return; }
+                    GL.ActiveTexture(slot);
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case TextureTarget.Texture3D:
+                    if (GL.BoundTextures[slot].Texture3D == 0) { return; }
+                    GL.ActiveTexture(slot);
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case TextureTarget.Multisample2D:
+                    if (GL.BoundTextures[slot].Texture2DMS == 0) { return; }
+                    GL.ActiveTexture(slot);
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case TextureTarget.Multisample2DArray:
+                    if (GL.BoundTextures[slot].Texture2DArrayMS == 0) { return; }
+                    GL.ActiveTexture(slot);
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case TextureTarget.CubeMap:
+                    if (GL.BoundTextures[slot].CubeMap == 0) { return; }
+                    GL.ActiveTexture(slot);
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case TextureTarget.CubeMapArray:
+                    if (GL.BoundTextures[slot].CubeMapArray == 0) { return; }
+                    GL.ActiveTexture(slot);
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case TextureTarget.Rectangle:
+                    if (GL.BoundTextures[slot].Rectangle == 0) { return; }
+                    GL.ActiveTexture(slot);
+                    GL.BindTexture(GLEnum.Texture1d, 0);
+                    return;
+
+                case TextureTarget.Buffer:
+                    if (GL.BoundTextures[slot].Buffer != 0)
+                    {
+                        GL.ActiveTexture(slot);
+                        GL.BindTexture(GLEnum.TextureBuffer, 0);
+                    }
+                    if (GL.BoundBuffers.Texture != 0)
+                    {
+                        GL.BindBuffer(GLEnum.TextureBuffer, 0);
+                    }
+                    return;
             }
         }
         /// <summary>

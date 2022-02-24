@@ -51,7 +51,7 @@ namespace Zene.Graphics
 
                 case TextureTarget.CubeMap:
                 case TextureTarget.CubeMapArray:
-                case TextureTarget.MultisampleArray2D:
+                case TextureTarget.Multisample2DArray:
                 case TextureTarget.Texture2DArray:
                     size = new Vector3I(
                         (int)Math.Floor(_width / Math.Pow(2, i)),
@@ -108,12 +108,9 @@ namespace Zene.Graphics
                 _border = value;
 
                 Handle.Bind();
-                float[] colour = new float[] { value.R, value.G, value.B, value.A };
+                float* colour = stackalloc float[] { value.R, value.G, value.B, value.A };
 
-                fixed (float* parameter = &colour[0])
-                {
-                    GL.TexParameterfv((uint)Handle.Target, GLEnum.TextureBorderColour, parameter);
-                }
+                GL.TexParameterfv((uint)Handle.Target, GLEnum.TextureBorderColour, colour);
             }
         }
         /// <summary>
@@ -130,12 +127,9 @@ namespace Zene.Graphics
                 _border = value;
 
                 Handle.Bind();
-                int[] colour = new int[] { value.R, value.G, value.B, value.A };
+                int* colour = stackalloc int[] { value.R, value.G, value.B, value.A };
 
-                fixed (int* parameter = &colour[0])
-                {
-                    GL.TexParameteriv((uint)Handle.Target, GLEnum.TextureBorderColour, parameter);
-                }
+                GL.TexParameteriv((uint)Handle.Target, GLEnum.TextureBorderColour, colour);
             }
         }
         private ComparisonFunction _compareFunc = ComparisonFunction.LessEqual;
@@ -806,7 +800,7 @@ namespace Zene.Graphics
                 return Handle.Target switch
                 {
                     TextureTarget.CubeMap or TextureTarget.CubeMapArray or
-                        TextureTarget.MultisampleArray2D or TextureTarget.Texture1DArray or
+                        TextureTarget.Multisample2DArray or TextureTarget.Texture1DArray or
                         TextureTarget.Texture2DArray => true,
                     _ => false,
                 };

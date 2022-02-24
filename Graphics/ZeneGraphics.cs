@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Zene.Graphics.Base;
-using Zene.Graphics.Base.Extensions;
 using Zene.Structs;
 
 namespace Zene.Graphics
@@ -87,11 +86,21 @@ namespace Zene.Graphics
         {
             return buffer.Id == State.GetBoundBuffer(buffer.Target);
         }
+        /// <summary>
+        /// Determines whether <paramref name="buffer"/> is bound to <paramref name="target"/> in the current context.
+        /// </summary>
+        /// <param name="buffer">The buffer to query.</param>
+        /// <param name="target">The target that <paramref name="buffer"/> needs to be bound to to return True.</param>
+        /// <returns></returns>
+        public static bool Bound(this IBuffer buffer, BufferTarget target)
+        {
+            return buffer.Id == State.GetBoundBuffer(target);
+        }
 
         /// <summary>
         /// Dtermines whether the internal format <paramref name="format"/> represents a compressed format.
         /// </summary>
-        /// <param name="format">The format to check.</param>
+        /// <param name="format">The format to query.</param>
         /// <returns></returns>
         public static bool IsCompressed(this TextureFormat format)
         {
@@ -112,7 +121,7 @@ namespace Zene.Graphics
         /// <summary>
         /// Dtermines whether the internal format <paramref name="format"/> represents a depth component format.
         /// </summary>
-        /// <param name="format">The format to check.</param>
+        /// <param name="format">The format to query.</param>
         /// <returns></returns>
         public static bool IsDepth(this TextureFormat format)
         {
@@ -128,13 +137,28 @@ namespace Zene.Graphics
         /// <summary>
         /// Dtermines whether the internal format <paramref name="format"/> represents a format containing a stencil storage.
         /// </summary>
-        /// <param name="format">The format to check.</param>
+        /// <param name="format">The format to query.</param>
         /// <returns></returns>
         public static bool HasStencil(this TextureFormat format)
         {
             return format == TextureFormat.DepthStencil ||
                 format == TextureFormat.Depth24Stencil8 ||
                 format == TextureFormat.Depth32fStencil8;
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="usage"/> is an old buffer usage type or a new one.
+        /// </summary>
+        /// <param name="usage">The <see cref="BufferUsage"/> to query.</param>
+        /// <returns>True if <paramref name="usage"/> is an old usage, otherwise False.</returns>
+        public static bool IsOld(this BufferUsage usage)
+        {
+            return !(usage switch
+            {
+                BufferUsage.DynamicStorage or BufferUsage.ClientStorage or BufferUsage.Coherent or
+                    BufferUsage.Persistant or BufferUsage.Read or BufferUsage.Write => true,
+                _ => false
+            });
         }
 
         /// <summary>
@@ -206,7 +230,7 @@ namespace Zene.Graphics
         /// <returns></returns>
         public static bool Is3D(this TextureTarget target)
         {
-            return target == TextureTarget.MultisampleArray2D ||
+            return target == TextureTarget.Multisample2DArray ||
                 target == TextureTarget.Texture2DArray ||
                 target == TextureTarget.Texture3D;
         }
@@ -218,7 +242,7 @@ namespace Zene.Graphics
         public static bool IsMultisample(this TextureTarget target)
         {
             return target == TextureTarget.Multisample2D ||
-                target == TextureTarget.MultisampleArray2D;
+                target == TextureTarget.Multisample2DArray;
         }
 
         /// <summary>

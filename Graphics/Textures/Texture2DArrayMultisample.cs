@@ -14,18 +14,18 @@ namespace Zene.Graphics
         /// <param name="dataType">The type of data that is going to be passed to OpenGL.</param>
         public Texture2DArrayMultisample(TextureFormat format)
         {
-            _texture = new TextureGL(TextureTarget.MultisampleArray2D);
+            _texture = new TextureGL(TextureTarget.Multisample2DArray);
             InternalFormat = format;
         }
         internal Texture2DArrayMultisample(uint id, TextureFormat format)
         {
-            _texture = new TextureGL(id, TextureTarget.MultisampleArray2D, format);
+            _texture = new TextureGL(id, TextureTarget.Multisample2DArray, format);
             InternalFormat = format;
         }
 
         private readonly TextureGL _texture;
 
-        public TextureTarget Target => TextureTarget.MultisampleArray2D;
+        public TextureTarget Target => TextureTarget.Multisample2DArray;
 
         public TextureFormat InternalFormat { get; }
         protected TextureProperties Properties => _texture.Properties;
