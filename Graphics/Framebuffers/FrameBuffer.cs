@@ -543,9 +543,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetAlphaSize(MainAttachment);
+                return Properties[MainAttachment].Attachment.Properties.AlphaSize;
             }
         }
         /// <summary>
@@ -556,9 +554,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetBlueSize(MainAttachment);
+                return Properties[MainAttachment].Attachment.Properties.BlueSize;
             }
         }
         /// <summary>
@@ -569,8 +565,6 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
                 return _framebuffer.GetColourEncoding(MainAttachment);
             }
         }
@@ -582,8 +576,6 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
                 return _framebuffer.GetComponentType(MainAttachment);
             }
         }
@@ -595,9 +587,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetDepthSize(MainAttachment);
+                return Properties[MainAttachment].Attachment.Properties.DepthSize;
             }
         }
         /// <summary>
@@ -608,9 +598,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetGreenSize(MainAttachment);
+                return Properties[MainAttachment].Attachment.Properties.GreenSize;
             }
         }
         /// <summary>
@@ -621,9 +609,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetLayered(MainAttachment);
+                return Properties[MainAttachment].Layered;
             }
         }
         /// <summary>
@@ -634,9 +620,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetRedSize(MainAttachment);
+                return Properties[MainAttachment].Attachment.Properties.RedSize;
             }
         }
         /// <summary>
@@ -647,9 +631,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetStencilSize(MainAttachment);
+                return Properties[MainAttachment].Attachment.Properties.StencilSize;
             }
         }
         /// <summary>
@@ -660,9 +642,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetTextureCubeMapFace(MainAttachment);
+                return Properties[MainAttachment].Face;
             }
         }
         /// <summary>
@@ -673,9 +653,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetTextureLayer(MainAttachment);
+                return Properties[MainAttachment].Layer;
             }
         }
         /// <summary>
@@ -686,9 +664,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetTextureLevel(MainAttachment);
+                return Properties[MainAttachment].Level;
             }
         }
 
@@ -700,9 +676,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetColourReadFormat();
+                return Properties.ColourReadFormat;
             }
         }
         /// <summary>
@@ -713,9 +687,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetColourReadType();
+                return Properties.ColourReadType;
             }
         }
         /// <summary>
@@ -726,9 +698,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetDoubleBuffer();
+                return Properties.DoubleBuffered;
             }
         }
         /// <summary>
@@ -739,9 +709,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetSamples();
+                return Properties.Samples;
             }
         }
         /// <summary>
@@ -752,9 +720,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetSampleBuffers();
+                return Properties.SampleBuffers;
             }
         }
         /// <summary>
@@ -765,9 +731,7 @@ namespace Zene.Graphics
         {
             get
             {
-                
-
-                return _framebuffer.GetStereo();
+                return Properties.Stereo;
             }
         }
     }

@@ -1116,32 +1116,32 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(1.0)]
-		internal static void GetTexLevelParameterfv(uint target, int level, uint pname, float* @params)
+		public static void GetTexLevelParameterfv(uint target, int level, uint pname, float* @params)
 		{
 			Functions.GetTexLevelParameterfv(target, level, pname, @params);
 		}
 		[OpenGLSupport(1.0)]
-		internal static void GetTexLevelParameteriv(uint target, int level, uint pname, int* @params)
+		public static void GetTexLevelParameteriv(uint target, int level, uint pname, int* @params)
 		{
 			Functions.GetTexLevelParameteriv(target, level, pname, @params);
 		}
 		[OpenGLSupport(1.0)]
-		internal static void GetTexParameterfv(uint target, uint pname, float* @params)
+		public static void GetTexParameterfv(uint target, uint pname, float* @params)
 		{
 			Functions.GetTexParameterfv(target, pname, @params);
 		}
 		[OpenGLSupport(3.0)]
-		internal static void GetTexParameterIiv(uint target, uint pname, int* @params)
+		public static void GetTexParameterIiv(uint target, uint pname, int* @params)
 		{
 			Functions.GetTexParameterIiv(target, pname, @params);
 		}
 		[OpenGLSupport(3.0)]
-		internal static void GetTexParameterIuiv(uint target, uint pname, uint* @params)
+		public static void GetTexParameterIuiv(uint target, uint pname, uint* @params)
 		{
 			Functions.GetTexParameterIuiv(target, pname, @params);
 		}
 		[OpenGLSupport(1.0)]
-		internal static void GetTexParameteriv(uint target, uint pname, int* @params)
+		public static void GetTexParameteriv(uint target, uint pname, int* @params)
 		{
 			Functions.GetTexParameteriv(target, pname, @params);
 		}

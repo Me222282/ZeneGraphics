@@ -441,6 +441,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the number of bits in the red component of <paramref name="attachment"/>.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
@@ -457,6 +460,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the number of bits in the green component of <paramref name="attachment"/>.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
@@ -473,6 +479,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the number of bits in the blue component of <paramref name="attachment"/>.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
@@ -489,6 +498,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the number of bits in the alpha component of <paramref name="attachment"/>.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
@@ -505,6 +517,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the number of bits in the depth component of <paramref name="attachment"/>.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
@@ -521,6 +536,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the number of bits in the stencil component of <paramref name="attachment"/>.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
@@ -569,6 +587,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the storage type of <paramref name="attachment"/>.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
@@ -585,6 +606,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the name of the object which contains the attached image.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
@@ -601,6 +625,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the mipmap level of the texture object which contains the attached image.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
@@ -617,6 +644,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the cube map face of the cubemap texture object which contains the attached image.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
@@ -633,6 +663,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a value indicating whether the <paramref name="attachment"/> is attached as a layered object.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.2)]
@@ -649,6 +682,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the texture layer which contains the attached image.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
@@ -669,6 +705,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the defualt width of this framebuffer.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
         public int GetDefaultWidth()
@@ -684,6 +723,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the defualt height of this framebuffer.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
         public int GetDefaultHeight()
@@ -699,6 +741,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the defualt number of layers of this framebuffer.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
         public int GetDefaultLayers()
@@ -714,6 +759,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the defualt number of samples of this framebuffer.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
         public int GetDefaultSamples()
@@ -729,6 +777,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the defualt fixed sample location value of this framebuffer.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
         public bool GetDefaultFixedSampleLocations()
@@ -744,6 +795,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a value indicating whether double buffering is supported for this framebuffer object.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
         public bool GetDoubleBuffer()
@@ -759,6 +813,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a value indicating the coverage mask size for this framebuffer object.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
         public int GetSamples()
@@ -774,6 +831,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a value indicating the number of sample buffers associated with this framebuffer object.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
         public int GetSampleBuffers()
@@ -789,6 +849,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a value indicating whether stereo buffers (left and right) are supported for this framebuffer object.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
         public bool GetStereo()
@@ -804,6 +867,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a value indicating the preferred pixel data format for this framebuffer object.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
         public BaseFormat GetColourReadFormat()
@@ -819,6 +885,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a value indicating the implementation's preferred pixel data type for this framebuffer object.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="FramebufferProperties"/> for framebuffer related parameters.
+        /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
         public TextureData GetColourReadType()

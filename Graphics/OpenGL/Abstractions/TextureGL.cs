@@ -1674,415 +1674,15 @@ namespace Zene.Graphics.Base
         }
 
         //
-        // Parameter Sets
-        //
-
-        /// <summary>
-        /// Specifies the mode used to read from depth-stencil format textures.
-        /// </summary>
-        public void SetDepthStencilMode(DepthStencilMode value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.DepthStencilTextureMode, (int)value);
-        }
-
-        /// <summary>
-        /// Specifies the index of the lowest defined mipmap level.
-        /// </summary>
-        /// <param name="value"></param>
-        public void SetBaseLevel(int value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureBaseLevel, value);
-        }
-
-        /// <summary>
-        /// If a texel is sampled from the border of the texture, the values of 
-        /// <paramref name="r"/>, <paramref name="g"/>, <paramref name="b"/> and <paramref name="a"/> are used.
-        /// </summary>
-        /// <remarks>
-        /// This stores the value as an integer.
-        /// </remarks>
-        /// <param name="r">The red component.</param>
-        /// <param name="g">The green component.</param>
-        /// <param name="b">The blue component.</param>
-        /// <param name="a">The alpha component.</param>
-        public void SetBorderColourI(int r, int g, int b, int a)
-        {
-            Bind();
-            int[] colour = new int[] { r, g, b, a };
-
-            fixed (int* parameter = &colour[0])
-            {
-                GL.TexParameterIiv((uint)Target, GLEnum.TextureBorderColour, parameter);
-            }
-        }
-
-        /// <summary>
-        /// If a texel is sampled from the border of the texture, the values of 
-        /// <paramref name="r"/>, <paramref name="g"/>, <paramref name="b"/> and <paramref name="a"/> are used.
-        /// </summary>
-        /// <remarks>
-        /// This stores the value as an integer.
-        /// </remarks>
-        /// <param name="r">The red component.</param>
-        /// <param name="g">The green component.</param>
-        /// <param name="b">The blue component.</param>
-        /// <param name="a">The alpha component.</param>
-        public void SetBorderColourI(byte r, byte g, byte b, byte a)
-        {
-            Bind();
-            int[] colour = new int[] { r, g, b, a };
-
-            fixed (int* parameter = &colour[0])
-            {
-                GL.TexParameterIiv((uint)Target, GLEnum.TextureBorderColour, parameter);
-            }
-        }
-
-        /// <summary>
-        /// If a texel is sampled from the border of the texture, the value of <paramref name="colour"/> is used.
-        /// </summary>
-        /// <remarks>
-        /// This stores the value as an integer.
-        /// </remarks>
-        public void SetBorderColourI(Colour colour)
-        {
-            Bind();
-            int[] iColour = new int[] { colour.R, colour.G, colour.B, colour.A };
-
-            fixed (int* parameter = &iColour[0])
-            {
-                GL.TexParameterIiv((uint)Target, GLEnum.TextureBorderColour, parameter);
-            }
-        }
-
-        /// <summary>
-        /// If a texel is sampled from the border of the texture, the value of <paramref name="colour"/> is used.
-        /// </summary>
-        /// <remarks>
-        /// This stores the value as an integer.
-        /// </remarks>
-        public void SetBorderColourI(ColourF colour)
-        {
-            Bind();
-            // Convert to integer equivelents
-            Colour c = (Colour)colour;
-
-            int[] iColour = new int[] { c.R, c.G, c.B, c.A };
-
-            fixed (int* parameter = &iColour[0])
-            {
-                GL.TexParameterIiv((uint)Target, GLEnum.TextureBorderColour, parameter);
-            }
-        }
-
-        /// <summary>
-        /// If a texel is sampled from the border of the texture, the values of 
-        /// <paramref name="r"/>, <paramref name="g"/>, <paramref name="b"/> and <paramref name="a"/> are used.
-        /// </summary>
-        /// <remarks>
-        /// This stores the value as a float.
-        /// </remarks>
-        /// <param name="r">The red component.</param>
-        /// <param name="g">The green component.</param>
-        /// <param name="b">The blue component.</param>
-        /// <param name="a">The alpha component.</param>
-        public void SetBorderColour(int r, int g, int b, int a)
-        {
-            Bind();
-            int[] colour = new int[] { r, g, b, a };
-
-            fixed (int* parameter = &colour[0])
-            {
-                GL.TexParameteriv((uint)Target, GLEnum.TextureBorderColour, parameter);
-            }
-        }
-
-        /// <summary>
-        /// If a texel is sampled from the border of the texture, the values of 
-        /// <paramref name="r"/>, <paramref name="g"/>, <paramref name="b"/> and <paramref name="a"/> are used.
-        /// </summary>
-        /// <remarks>
-        /// This stores the value as a float.
-        /// </remarks>
-        /// <param name="r">The red component.</param>
-        /// <param name="g">The green component.</param>
-        /// <param name="b">The blue component.</param>
-        /// <param name="a">The alpha component.</param>
-        public void SetBorderColour(byte r, byte g, byte b, byte a)
-        {
-            Bind();
-            int[] colour = new int[] { r, g, b, a };
-
-            fixed (int* parameter = &colour[0])
-            {
-                GL.TexParameteriv((uint)Target, GLEnum.TextureBorderColour, parameter);
-            }
-        }
-
-        /// <summary>
-        /// If a texel is sampled from the border of the texture, the values of 
-        /// <paramref name="r"/>, <paramref name="g"/>, <paramref name="b"/> and <paramref name="a"/> are used.
-        /// </summary>
-        /// <remarks>
-        /// This stores the value as a float.
-        /// </remarks>
-        /// <param name="r">The red component.</param>
-        /// <param name="g">The green component.</param>
-        /// <param name="b">The blue component.</param>
-        /// <param name="a">The alpha component.</param>
-        public void SetBorderColour(float r, float g, float b, float a)
-        {
-            Bind();
-            float[] colour = new float[] { r, g, b, a };
-
-            fixed (float* parameter = &colour[0])
-            {
-                GL.TexParameterfv((uint)Target, GLEnum.TextureBorderColour, parameter);
-            }
-        }
-
-        /// <summary>
-        /// If a texel is sampled from the border of the texture, the value of <paramref name="colour"/> is used.
-        /// </summary>
-        /// <remarks>
-        /// This stores the value as a float.
-        /// </remarks>
-        public void SetBorderColour(Colour colour)
-        {
-            Bind();
-            int[] iColour = new int[] { colour.R, colour.G, colour.B, colour.A };
-
-            fixed (int* parameter = &iColour[0])
-            {
-                GL.TexParameteriv((uint)Target, GLEnum.TextureBorderColour, parameter);
-            }
-        }
-
-        /// <summary>
-        /// If a texel is sampled from the border of the texture, the value of <paramref name="colour"/> is used.
-        /// </summary>
-        /// <remarks>
-        /// This stores the value as a float.
-        /// </remarks>
-        public void SetBorderColour(ColourF colour)
-        {
-            Bind();
-            float[] iColour = new float[] { colour.R, colour.G, colour.B, colour.A };
-
-            fixed (float* parameter = &iColour[0])
-            {
-                GL.TexParameterfv((uint)Target, GLEnum.TextureBorderColour, parameter);
-            }
-        }
-
-        /// <summary>
-        /// Specifies a fixed bias value that is to be added to the level-of-detail parameter for the texture before texture sampling.
-        /// </summary>
-        public void SetLodBias(float value)
-        {
-            Bind();
-            GL.TexParameterf((uint)Target, GLEnum.TextureLodBias, value);
-        }
-
-        /// <summary>
-        /// The texture minifying function is used whenever the level-of-detail function used when sampling from the texture determines that the texture should be minified.
-        /// </summary>
-        public void SetMinFilter(TextureSampling value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureMinFilter, (int)value);
-        }
-
-        /// <summary>
-        /// The texture magnification function is used whenever the level-of-detail function used when sampling from the texture determines that the texture should be magified.
-        /// </summary>
-        public void SetMagFilter(TextureSampling value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureMagFilter, (int)value);
-        }
-
-        /// <summary>
-        /// Sets the minimum level-of-detail parameter. This floating-point value limits the selection of highest resolution mipmap (lowest mipmap level).
-        /// </summary>
-        public void SetMinLod(float value)
-        {
-            Bind();
-            GL.TexParameterf((uint)Target, GLEnum.TextureMinLod, value);
-        }
-
-        /// <summary>
-        /// Sets the maximum level-of-detail parameter. This floating-point value limits the selection of the lowest resolution mipmap (highest mipmap level).
-        /// </summary>
-        public void SetMaxLod(float value)
-        {
-            Bind();
-            GL.TexParameterf((uint)Target, GLEnum.TextureMaxLod, value);
-        }
-
-        /// <summary>
-        /// Sets the index of the highest defined mipmap level.
-        /// </summary>
-        public void SetMaxLevel(int value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureMaxLevel, value);
-        }
-
-        /// <summary>
-        /// Sets the swizzle that will be applied to the red component of a texel before it is returned to the shader.
-        /// </summary>
-        public void SetSwizzleRed(Swizzle value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureSwizzleR, (int)value);
-        }
-
-        /// <summary>
-        /// Sets the swizzle that will be applied to the green component of a texel before it is returned to the shader.
-        /// </summary>
-        public void SetSwizzleGreen(Swizzle value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureSwizzleG, (int)value);
-        }
-
-        /// <summary>
-        /// Sets the swizzle that will be applied to the blue component of a texel before it is returned to the shader.
-        /// </summary>
-        public void SetSwizzleBlue(Swizzle value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureSwizzleB, (int)value);
-        }
-
-        /// <summary>
-        /// Sets the swizzle that will be applied to the alpha component of a texel before it is returned to the shader.
-        /// </summary>
-        public void SetSwizzleAlpha(Swizzle value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureSwizzleA, (int)value);
-        }
-
-        /// <summary>
-        /// Sets the swizzle that will be applied to the red, green,e and alpha component of a texel before it is returned to the shader.
-        /// </summary>
-        public void SetSwizzle(Swizzle r, Swizzle g, Swizzle b, Swizzle a)
-        {
-            Bind();
-            int[] values = new int[] { (int)r, (int)g, (int)b, (int)a };
-
-            fixed (int* parameters = &values[0])
-            {
-                GL.TexParameteriv((uint)Target, GLEnum.TextureSwizzleA, parameters);
-            }
-        }
-
-        /// <summary>
-        /// Sets the wrap parameter for texture coordinate s.
-        /// </summary>
-        /// <param name="value"></param>
-        public void SetWrapS(WrapStyle value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureWrapS, (int)value);
-        }
-
-        /// <summary>
-        /// Sets the wrap parameter for texture coordinate t.
-        /// </summary>
-        /// <param name="value"></param>
-        public void SetWrapT(WrapStyle value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureWrapT, (int)value);
-        }
-
-        /// <summary>
-        /// Sets the wrap parameter for texture coordinate r.
-        /// </summary>
-        /// <param name="value"></param>
-        public void SetWrapR(WrapStyle value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureWrapR, (int)value);
-        }
-
-        /// <summary>
-        /// Sets the base level of a texture view relative to its parent.
-        /// </summary>
-        public void SetViewMinLevel(int value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureViewMinLevel, value);
-        }
-
-        /// <summary>
-        /// Sets the number of levels of detail of a texture view.
-        /// </summary>
-        public void SetViewNumLevels(int value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureViewNumLevels, value);
-        }
-
-        /// <summary>
-        /// Sets the first level of a texture array view relative to its parent.
-        /// </summary>
-        public void SetViewMinLayer(int value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureViewMinLayer, value);
-        }
-
-        /// <summary>
-        /// Sets the number of layers in a texture array view.
-        /// </summary>
-        public void SetViewNumLayers(int value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureViewNumLayers, value);
-        }
-
-        /// <summary>
-        /// Sets the number of immutable texture levels in a texture view.
-        /// </summary>
-        public void SetViewImmutableLevels(int value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureImmutableLevels, value);
-        }
-
-        /// <summary>
-        /// Specifies the comparison operator used when <see cref="SetComparisonMode(ComparisonMode)"/> is set to <see cref="ComparisonMode.CompareToDepth"/>.
-        /// </summary>
-        /// <param name="value"></param>
-        public void SetComparisonFunction(ComparisonFunction value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureCompareFunc, (int)value);
-        }
-
-        /// <summary>
-        /// Specifies the texture comparison mode for currently bound depth textures.
-        /// </summary>
-        public void SetComparisonMode(ComparisonMode value)
-        {
-            Bind();
-            GL.TexParameteri((uint)Target, GLEnum.TextureCompareMode, (int)value);
-        }
-
-        //
         // Parameter Gets
         //
-
 
         /// <summary>
         /// Returns the single-value depth stencil texture mode.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public DepthStencilMode GetDepthStencilMode()
         {
             Bind();
@@ -2096,6 +1696,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the single-valued base texture mipmap level.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public int GetBaseLevel()
         {
             Bind();
@@ -2111,6 +1714,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the RGBA colour of the texture border.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public Colour GetBorderColourI()
         {
             Bind();
@@ -2131,6 +1737,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the RGBA colour of the texture border.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public ColourF GetBorderColour()
         {
             Bind();
@@ -2147,6 +1756,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the single-value fixed bias that is added to the level-of-detail parameter for the texture before texture sampling.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public float GetLodBias()
         {
             Bind();
@@ -2160,6 +1772,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the single-valued texture minification filter.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public TextureSampling GetMinFilter()
         {
             Bind();
@@ -2173,6 +1788,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the single-valued texture magnification filter.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public TextureSampling GetMagFilter()
         {
             Bind();
@@ -2186,6 +1804,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the single-valued texture minimum level-of-detail value.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public float GetMinLod()
         {
             Bind();
@@ -2199,6 +1820,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the single-valued texture maximum level-of-detail value.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public float GetMaxLod()
         {
             Bind();
@@ -2212,6 +1836,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the single-valued maximum texture mipmap array level.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public int GetMaxLevel()
         {
             Bind();
@@ -2225,6 +1852,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the red component swizzle.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public Swizzle GetSwizzleRed()
         {
             Bind();
@@ -2238,6 +1868,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the green component swizzle.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public Swizzle GetSwizzleGreen()
         {
             Bind();
@@ -2251,6 +1884,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the blue component swizzle.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public Swizzle GetSwizzleBlue()
         {
             Bind();
@@ -2264,6 +1900,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the alpha component swizzle.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public Swizzle GetSwizzleAlpha()
         {
             Bind();
@@ -2277,6 +1916,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the component swizzle for all channels in a single query.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public void GetSwizzle(out Swizzle r, out Swizzle g, out Swizzle b, out Swizzle a)
         {
             Bind();
@@ -2296,6 +1938,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the single-valued wrapping function for texture coordinate s.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public WrapStyle GetWrapS()
         {
             Bind();
@@ -2309,6 +1954,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the single-valued wrapping function for texture coordinate t.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public WrapStyle GetWrapT()
         {
             Bind();
@@ -2322,6 +1970,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the single-valued wrapping function for texture coordinate r.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public WrapStyle GetWrapR()
         {
             Bind();
@@ -2335,6 +1986,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a single-valued base level of a texture view relative to its parent.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public int GetViewMinLevel()
         {
             Bind();
@@ -2348,6 +2002,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a single-valued number of levels of detail of a texture view.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public int GetViewNumLevels()
         {
             Bind();
@@ -2361,6 +2018,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a single-valued first level of a texture array view relative to its parent.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public int GetViewMinLayer()
         {
             Bind();
@@ -2374,6 +2034,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a single-valued number of layers in a texture array view.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public int GetViewNumLayers()
         {
             Bind();
@@ -2387,6 +2050,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a single-valued number of immutable texture levels in a texture view.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public int GetViewImmutableLevels()
         {
             Bind();
@@ -2400,6 +2066,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a single-valued texture comparison function.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public ComparisonFunction GetComparisonFunction()
         {
             Bind();
@@ -2413,6 +2082,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a single-valued texture comparison mode.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public ComparisonMode GetComparisonMode()
         {
             Bind();
@@ -2426,6 +2098,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns the matching criteria use for the texture when used as an image texture.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public FormatCompatibilityType GetFormatCompatibilityType()
         {
             Bind();
@@ -2439,6 +2114,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns <see cref="true"/> if the texture has an immutable format, otherwise <see cref="false"/>.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         public bool IsImmutableFormat()
         {
             Bind();
@@ -2452,6 +2130,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a single value, the width of the texture image.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetWidth(int level)
         {
@@ -2466,6 +2147,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a single value, the height of the texture image.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetHeight(int level)
         {
@@ -2480,6 +2164,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a single value, the depth of the texture image.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetDepth(int level)
         {
@@ -2494,6 +2181,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// The data type used to store the red component.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public ChannelType GetRedType(int level)
         {
@@ -2508,6 +2198,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// The data type used to store the green component.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public ChannelType GetGreenType(int level)
         {
@@ -2522,6 +2215,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// The data type used to store the blue component.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public ChannelType GetBlueType(int level)
         {
@@ -2536,6 +2232,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// The data type used to store the alpha component.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public ChannelType GetAlphaType(int level)
         {
@@ -2550,6 +2249,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// The data type used to store the depth component.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public ChannelType GetDepthType(int level)
         {
@@ -2564,6 +2266,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// The internal storage resolution of the red component.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetRedSize(int level)
         {
@@ -2578,6 +2283,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// The internal storage resolution of the green component.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetGreenSize(int level)
         {
@@ -2592,6 +2300,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// The internal storage resolution of the blue component.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetBlueSize(int level)
         {
@@ -2606,6 +2317,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// The internal storage resolution of the alpha component.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetAlphaSize(int level)
         {
@@ -2620,6 +2334,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// The internal storage resolution of the depth component.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetDepthSize(int level)
         {
@@ -2634,6 +2351,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a single boolean value indicating if the texture image is stored in a compressed internal format.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public bool GetIsCompressed(int level)
         {
@@ -2648,6 +2368,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a single integer value, the number of unsigned bytes of the compressed texture image that would be returned from <see cref="GetCompressedTexImage{T}(int)"/>.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetCompressedImageSize(int level)
         {
@@ -2662,6 +2385,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a single integer value, the offset into the data store of the buffer bound to a buffer texture.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetBufferOffset(int level)
         {
@@ -2676,6 +2402,9 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Returns a single integer value, the size of the range of a data store of the buffer bound to a buffer texture.
         /// </summary>
+        /// <remarks>
+        /// It is more advisable to use <see cref="TextureProperties"/> for texture related parameters.
+        /// </remarks>
         /// <param name="level">Specifies the level-of-detail number of the desired image. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         public int GetBufferSize(int level)
         {

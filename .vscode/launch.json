@@ -19,8 +19,8 @@
             //"cwd": "${workspaceFolder}/Tests/PhysicsTest",
             //"cwd": "${workspaceFolder}/Tests/GUI",
             //"cwd": "${workspaceFolder}/Tests/ImplicitFunctions",
-            "cwd": "${workspaceFolder}/Evolution/Tests",
-            //"cwd": "${workspaceFolder}/Tests/CSGL",
+            //"cwd": "${workspaceFolder}/Evolution/Tests",
+            "cwd": "${workspaceFolder}/Tests/CSGL",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             //"console": "externalTerminal",

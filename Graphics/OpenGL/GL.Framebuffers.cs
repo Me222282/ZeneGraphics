@@ -301,7 +301,7 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(4.3)]
-		public static void FramebufferParameteri(uint target, uint pname, int param)
+		internal static void FramebufferParameteri(uint target, uint pname, int param)
 		{
 			Functions.FramebufferParameteri(target, pname, param);
 		}
