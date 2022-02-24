@@ -127,6 +127,30 @@ namespace StbImageSharp
 			}
 		}
 
+		public void WriteHdr(void* data, int bufferSize, int width, int height, ColorComponents components, Stream dest)
+		{
+			try
+			{
+				byte* bytePtr = (byte*)data;
+
+				_stream = dest;
+				var f = new float[bufferSize];
+				for (var i = 0; i < bufferSize; ++i)
+				{
+					f[i] = bytePtr[i] / 255.0f;
+				}
+
+				fixed (float* fptr = f)
+				{
+					StbImageWrite.stbi_write_hdr_to_func(WriteCallback, null, width, height, (int)components, fptr);
+				}
+			}
+			finally
+			{
+				_stream = null;
+			}
+		}
+
 		public void WritePng(void* data, int width, int height, ColorComponents components, Stream dest)
 		{
 			try

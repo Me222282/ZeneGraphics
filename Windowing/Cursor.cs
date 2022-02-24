@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using Zene.Graphics;
-using Zene.Structs;
 using Zene.Windowing.Base;
 
 namespace Zene.Windowing
@@ -20,20 +19,15 @@ namespace Zene.Windowing
         public Cursor(Bitmap image, int hotX, int hotY)
         {
             _disposed = false;
-            // Creates a new bitmap and flips so it starts at top-left not bottom-left
-            Bitmap imageCopy = new Bitmap(image.Data);
-            imageCopy.FlipVertically();
+            // Creates a new bitmap that is fliped so it starts at top-left not bottom-left
+            Bitmap imageCopy = image.GetVerticalFlip();
 
             GLFW.Image imageData = new GLFW.Image
             {
                 Width = image.Width,
-                Height = image.Height
+                Height = image.Height,
+                Pixels = imageCopy
             };
-
-            fixed (Colour* pixelPtr = &imageCopy.Data[0, 0])
-            {
-                imageData.Pixels = (IntPtr)pixelPtr;
-            }
 
             // Converts imageData to a pointer
             IntPtr imagePtr = IntPtr.Zero;

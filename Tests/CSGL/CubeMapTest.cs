@@ -16,14 +16,15 @@ namespace CSGL
             _drawObject = new DrawObject<double, byte>(
                 new double[]
                 {
-                    -1.0, 1.0, 1.0,
-                    1.0, 1.0, 1.0,
-                    1.0, -1.0, 1.0,
-                    -1.0, -1.0, 1.0,
-                    -1.0, 1.0, -1.0,
-                    1.0, 1.0, -1.0,
-                    1.0, -1.0, -1.0,
-                    -1.0, -1.0, -1.0
+                    -1.0, 1.0, 1.0,     // 0
+                    1.0, 1.0, 1.0,      // 1
+                    1.0, -1.0, 1.0,     // 2
+                    -1.0, -1.0, 1.0,    // 3
+
+                    -1.0, 1.0, -1.0,    // 4
+                    1.0, 1.0, -1.0,     // 5
+                    1.0, -1.0, -1.0,    // 6
+                    -1.0, -1.0, -1.0    // 7
                 },
                 new byte[]
                 {
@@ -51,6 +52,9 @@ namespace CSGL
                     2, 3, 7,
                     7, 6, 2
                 }, 3, 0, AttributeSize.D3, BufferUsage.DrawFrequent);
+
+            //Bitmap.AutoFlipTextures = false;
+
             /*
             Bitmap skyBox = new Bitmap("Resources/StandardCubeMap.jpg");
             int faceSize = skyBox.Width / 4;
@@ -63,10 +67,11 @@ namespace CSGL
                 skyBox.SubBitmap(faceSize, faceSize, faceSize, faceSize),       // Front
                 skyBox.SubBitmap(faceSize * 3, faceSize, faceSize, faceSize)    // Back
             }, WrapStyle.EdgeClamp, TextureSampling.Nearest, false);
-            */
+            *//*
             Bitmap skyBox = new Bitmap("Resources/CubeMapHD.png");
             Console.WriteLine("Texture Decoded.");
-            int faceSize = skyBox.Width / 6;
+            Console.WriteLine(test[0, 0]);
+
             _cubeMap = CubeMap.Create(new Bitmap[]
             {
                 skyBox.SubBitmap(faceSize * 1, 0, faceSize, faceSize),      // Right
@@ -76,7 +81,20 @@ namespace CSGL
                 skyBox.SubBitmap(faceSize * 0, 0, faceSize, faceSize),      // Front
                 skyBox.SubBitmap(faceSize * 2, 0, faceSize, faceSize)       // Back
             }, WrapStyle.EdgeClamp, TextureSampling.Blend, false);
-            Console.WriteLine("Texture Loaded.");
+            Console.WriteLine("Texture Loaded.");*/
+            
+            int faceSize = 2048;
+            _cubeMap = CubeMap.LoadSync("Resources/CubeMapHD.png", new RectangleI[]
+            {
+                new RectangleI(faceSize * 1, faceSize, faceSize, faceSize),    // Right
+                new RectangleI(faceSize * 3, faceSize, faceSize, faceSize),    // Left
+                new RectangleI(faceSize * 4, faceSize, faceSize, faceSize),    // Top
+                new RectangleI(faceSize * 5, faceSize, faceSize, faceSize),    // Bottom
+                new RectangleI(faceSize * 0, faceSize, faceSize, faceSize),    // Front
+                new RectangleI(faceSize * 2, faceSize, faceSize, faceSize),    // Back
+            }, WrapStyle.EdgeClamp, TextureSampling.Blend, false);
+
+            Bitmap.AutoFlipTextures = true;
 
             State.SeamlessCubeMaps = true;
 
@@ -84,7 +102,6 @@ namespace CSGL
             GLFW.SetInputMode(Handle, GLFW.Cursor, GLFW.CursorHidden);
 
             OnSizeChange(new SizeChangeEventArgs(width, height));
-            FullScreen = true;
         }
 
         private readonly DrawObject<double, byte> _drawObject;
@@ -117,8 +134,14 @@ namespace CSGL
 
             Dispose();
         }
+        private bool _textureLoaded = false;
         private void Draw()
         {
+            if (!_textureLoaded)
+            {
+                _textureLoaded = CubeMap.CheckSyncLoading();
+            }
+
             Framebuffer.Clear(BufferBit.Colour);
 
             MouseMovement();
@@ -215,6 +238,8 @@ namespace CSGL
         private bool _mouseShow = false;
         private void MouseMovement()
         {
+            if (_mouseShow) { return; }
+
             GLFW.GetCursorPos(Handle, out double mX, out double mY);
 
             if (new Vector2(mX, mY) == mouseLocation) { return; }
@@ -227,20 +252,11 @@ namespace CSGL
             rotateY -= Radian.Degrees(distanceX * 0.1);
             rotateX += Radian.Degrees(distanceY * 0.1);
 
-            GLFW.GetWindowPos(Handle, out int x, out int y);
-
-            Vector2 newMPos = new Vector2(x + (_width / 2), y + (_height / 2));
+            Vector2 newMPos = new Vector2(_width / 2, _height / 2);
 
             mouseLocation = newMPos;
 
-            if (!_mouseShow)
-            {
-                GLFW.SetCursorPos(Handle, newMPos.X, newMPos.Y);
-            }
-
-            GLFW.GetCursorPos(Handle, out double cX, out double cY);
-
-            mouseLocation = new Vector2(cX, cY);
+            GLFW.SetCursorPos(Handle, newMPos.X, newMPos.Y);
         }
     }
 }

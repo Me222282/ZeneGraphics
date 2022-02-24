@@ -110,7 +110,7 @@
         {
             get
             {
-                return Left;
+                return X;
             }
             set
             {
@@ -135,7 +135,7 @@
         {
             get
             {
-                return Right;
+                return X + Width;
             }
             set
             {
@@ -161,7 +161,7 @@
         {
             get
             {
-                return Bottom;
+                return Y - Height;
             }
             set
             {
@@ -186,7 +186,7 @@
         {
             get
             {
-                return Top;
+                return Y;
             }
             set
             {

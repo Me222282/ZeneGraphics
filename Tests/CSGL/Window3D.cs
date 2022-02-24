@@ -266,8 +266,14 @@ namespace CSGL
 
         private double moveSpeed = 1;
 
+        //private bool _texturesLoaded = false;
         protected virtual void Draw()
         {
+            //if (!_texturesLoaded)
+            //{
+            //    _texturesLoaded = Bitmap.CheckTextures();
+            //}
+
             MouseMovement();
 
             rotationMatrix = Matrix3.CreateRotationY(rotateY) * Matrix3.CreateRotationX(rotateX);

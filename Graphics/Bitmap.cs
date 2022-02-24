@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using StbImageSharp;
 using Zene.Structs;
 
@@ -14,40 +17,34 @@ namespace Zene.Graphics
         Tga
     }
 
-    public class Bitmap
+    public unsafe class Bitmap : GLArray<Colour>
     {
         public Bitmap(int width, int height)
+            : base(width, height)
         {
-            Data = new Colour[height, width];
+            Width = width;
+            Height = height;
         }
-        public Bitmap(Colour[,] colours)
+        public Bitmap(int width, int height, Colour[] data)
+            : base(width, height, 1, data)
         {
-            Data = colours;
+            Width = width;
+            Height = height;
         }
         public Bitmap(string path)
+            : this(new FileStream(path, FileMode.Open))
         {
-            ImageResult imageData = ImageResult.FromMemory(File.ReadAllBytes(path), ColorComponents.RedGreenBlueAlpha);
-
-            Data = new Colour[imageData.Height, imageData.Width];
-
-            for (int x = 0; x < Width; x++)
-            {
-                for (int y = 0; y < Height; y++)
-                {
-                    byte r = imageData.Data[(x * 4) + (y * 4 * Width)];
-                    byte g = imageData.Data[(x * 4) + (y * 4 * Width) + 1];
-                    byte b = imageData.Data[(x * 4) + (y * 4 * Width) + 2];
-                    byte a = imageData.Data[(x * 4) + (y * 4 * Width) + 3];
-
-                    Data[y, x] = new Colour(r, g, b, a);
-                }
-            }
+            
         }
         public Bitmap(Stream stream)
+            : base(false)
         {
             ImageResult imageData = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
 
-            Data = new Colour[imageData.Width, imageData.Height];
+            Width = imageData.Width;
+            Height = imageData.Height;
+
+            SetData(new Colour[imageData.Height * imageData.Width]);
 
             for (int x = 0; x < Width; x++)
             {
@@ -58,182 +55,102 @@ namespace Zene.Graphics
                     byte b = imageData.Data[(x * 4) + (y * 4 * Width) + 2];
                     byte a = imageData.Data[(x * 4) + (y * 4 * Width) + 3];
 
-                    Data[x, Height - y - 1] = new Colour(r, g, b, a);
+                    Data[x + (y * Width)] = new Colour(r, g, b, a);
                 }
             }
         }
 
-        public int Width
-        {
-            get
-            {
-                return Data.GetLength(1);
-            }
-        }
-        public int Height
-        {
-            get
-            {
-                return Data.GetLength(0);
-            }
-        }
+        public override int Width { get; }
+        public override int Height { get; }
 
-        public Colour[,] Data { get; set; }
-        
-        public Colour[,] SubSection(int x, int y, int width, int height)
-        {
-            Colour[,] data = new Colour[width, height];
-
-            int ry = Height - y - 1;
-
-            for (int sx = 0; sx < width; sx++)
-            {
-                for (int sy = 0; sy < height; sy++)
-                {
-                    data[sx, sy] = Data[ry - sy, sx + x];
-                }
-            }
-
-            return data;
-        }
         public Bitmap SubBitmap(int x, int y, int width, int height)
         {
-            Bitmap b = new Bitmap(width, height);
+            Bitmap output = new Bitmap(width, height);
 
-            int ry = Height - y - 1;
-
-            for (int sx = 0; sx < width; sx++)
+            try
             {
-                for (int sy = 0; sy < height; sy++)
+                for (int sx = 0; sx < width; sx++)
                 {
-                    b.Data[sy, sx] = Data[ry - sy, sx + x];
+                    for (int sy = 0; sy < height; sy++)
+                    {
+                        output[sx, sy] = this[sx + x, sy + y];
+                    }
                 }
             }
+            catch { throw; }
 
-            return b;
+            return output;
         }
 
         public void FlipHorizontally()
         {
-            int width = Width;
-            int height = Height;
+            Colour[] data = new Colour[Height * Width];
 
-            Colour[,] data = new Colour[height, width];
+            int wm1 = Width - 1;
 
             // Create flip
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < Width; x++)
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < Height; y++)
                 {
-                    data[y, x] = Data[y, width - x - 1];
+                    data[x + (y * Width)] = Data[(wm1 - x) + (y * Width)];
                 }
             }
 
-            Data = data;
+            SetData(data);
         }
         public void FlipVertically()
         {
-            int width = Width;
-            int height = Height;
-
-            Colour[,] data = new Colour[width, height];
+            Colour[] data = new Colour[Width * Height];
 
             // Create flip
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < Width; x++)
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < Height; y++)
                 {
-                    data[y, x] = Data[height - y - 1, x];
+                    data[x + (y * Width)] = this[x, y];
                 }
             }
 
-            Data = data;
+            SetData(data);
         }
 
-        public Colour[,] GetHorizontalFlip()
+        public Bitmap GetHorizontalFlip()
         {
-            int width = Width;
-            int height = Height;
+            Bitmap data = new Bitmap(Width, Height);
 
-            Colour[,] data = new Colour[width, height];
+            int wm1 = Width - 1;
 
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < Width; x++)
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < Height; y++)
                 {
-                    data[x, y] = Data[height - y - 1, width - x - 1];
-                }
-            }
-
-            return data;
-        }
-        public Colour[,] GetVerticalFlip()
-        {
-            int width = Width;
-            int height = Height;
-
-            Colour[,] data = new Colour[width, height];
-
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    data[x, y] = Data[y, x];
+                    data[x, y] = this[wm1 - x, y];
                 }
             }
 
             return data;
         }
-
-        public Colour this[int x, int y]
+        public Bitmap GetVerticalFlip()
         {
-            get => Data[Height - y - 1, x];
-            set => Data[Height - y - 1, x] = value;
+            Bitmap data = new Bitmap(Width, Height);
+
+            int hm1 = Height - 1;
+
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    data[x, y] = this[x, hm1 - y];
+                }
+            }
+
+            return data;
         }
         
-        public byte[] ToBytes()
+        public Span<byte> AsBytes()
         {
-            int width = Width;
-            int height = Height;
-
-            byte[] data = new byte[width * height * 4];
-
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    Colour c = Data[y, x];
-
-                    data[(x * 4) + (y * 4 * width)] = c.R;
-                    data[(x * 4) + (y * 4 * width) + 1] = c.G;
-                    data[(x * 4) + (y * 4 * width) + 2] = c.B;
-                    data[(x * 4) + (y * 4 * width) + 3] = c.A;
-                }
-            }
-
-            return data;
-        }
-        public float[] ToFloats()
-        {
-            int width = Width;
-            int height = Height;
-
-            float[] data = new float[width * height * 4];
-
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    ColourF c = (ColourF)Data[y, x];
-
-                    data[(x * 4) + (y * 4 * width)] = c.R;
-                    data[(x * 4) + (y * 4 * width) + 1] = c.G;
-                    data[(x * 4) + (y * 4 * width) + 2] = c.B;
-                    data[(x * 4) + (y * 4 * width) + 3] = c.A;
-                }
-            }
-
-            return data;
+            return new Span<byte>(this, Bytes);
         }
 
         public void Export(string path, ImageEncoding format, bool alpha = true)
@@ -246,30 +163,27 @@ namespace Zene.Graphics
             // Does the data contain an alpha channel
             ColorComponents storeType = alpha ? ColorComponents.RedGreenBlueAlpha : ColorComponents.RedGreenBlue;
 
-            // Get image data
-            byte[] data = ToBytes();
-
             // Write data in given format
             switch (format)
             {
                 case ImageEncoding.Png:
-                    writer.WritePng(data, Width, Height, storeType, stream);
+                    writer.WritePng(this, Width, Height, storeType, stream);
                     break;
 
                 case ImageEncoding.Jpeg:
-                    writer.WriteJpg(data, Width, Height, storeType, stream, 100);
+                    writer.WriteJpg(this, Width, Height, storeType, stream, 100);
                     break;
 
                 case ImageEncoding.Bmp:
-                    writer.WriteBmp(data, Width, Height, storeType, stream);
+                    writer.WriteBmp(this, Width, Height, storeType, stream);
                     break;
 
                 case ImageEncoding.Tga:
-                    writer.WriteTga(data, Width, Height, storeType, stream);
+                    writer.WriteTga(this, Width, Height, storeType, stream);
                     break;
 
                 case ImageEncoding.Hdr:
-                    writer.WriteHdr(data, Width, Height, storeType, stream);
+                    writer.WriteHdr(this, Bytes, Width, Height, storeType, stream);
                     break;
             }
 
@@ -278,26 +192,42 @@ namespace Zene.Graphics
 
         public static Bitmap FromArray(int width, int height, byte[] data)
         {
-            Colour[,] cData = new Colour[height, width];
+            fixed (byte* ptr = &data[0])
+            {
+                return FromPointer(width, height, ptr);
+            }
+        }
+        public static Bitmap FromArray(int width, int height, Span<byte> data)
+        {
+            fixed (byte* ptr = &data[0])
+            {
+                return FromPointer(width, height, ptr);
+            }
+        }
+        public static Bitmap FromPointer(int width, int height, void* data)
+        {
+            Colour[] cData = new Colour[width * height];
+
+            byte* bytePtr = (byte*)data;
 
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
-                    byte r = data[(x * 4) + (y * 4 * width)];
-                    byte g = data[(x * 4) + (y * 4 * width) + 1];
-                    byte b = data[(x * 4) + (y * 4 * width) + 2];
-                    byte a = data[(x * 4) + (y * 4 * width) + 3];
+                    byte r = bytePtr[(x * 4) + (y * 4 * width)];
+                    byte g = bytePtr[(x * 4) + (y * 4 * width) + 1];
+                    byte b = bytePtr[(x * 4) + (y * 4 * width) + 2];
+                    byte a = bytePtr[(x * 4) + (y * 4 * width) + 3];
 
-                    cData[y, x] = new Colour(r, g, b, a);
+                    cData[x + (y * width)] = new Colour(r, g, b, a);
                 }
             }
 
-            return new Bitmap(cData);
+            return new Bitmap(width, height, cData);
         }
         public static Bitmap FromArray(int width, int height, float[] data)
         {
-            Colour[,] cData = new Colour[height, width];
+            Colour[] cData = new Colour[height * width];
 
             for (int x = 0; x < width; x++)
             {
@@ -308,11 +238,11 @@ namespace Zene.Graphics
                     float b = data[(x * 4) + (y * 4 * width) + 2];
                     float a = data[(x * 4) + (y * 4 * width) + 3];
 
-                    cData[y, x] = (Colour)new ColourF(r, g, b, a);
+                    cData[x + (y * width)] = (Colour)new ColourF(r, g, b, a);
                 }
             }
 
-            return new Bitmap(cData);
+            return new Bitmap(width, height, cData);
         }
 
         public static byte[] ExtractData(string path, out int width, out int height)
@@ -334,36 +264,77 @@ namespace Zene.Graphics
             return imageData.Data;
         }
 
-        public static implicit operator GLArray<Colour>(Bitmap b)
+        private static readonly ConcurrentDictionary<Texture2D, KeyValuePair<ImageResult, bool>> _loadingTextures =
+            new ConcurrentDictionary<Texture2D, KeyValuePair<ImageResult, bool>>();
+        private static readonly List<Texture2D> _textures = new List<Texture2D>();
+        public static void LoadTexture(Texture2D texture, Stream stream, bool mipmap)
         {
-            int width = b.Width;
-            int height = b.Height;
-
-            Colour[] data = new Colour[width * height];
-
-            for (int x = 0; x < width; x++)
+            if (_loadingTextures.ContainsKey(texture))
             {
-                for (int y = 0; y < height; y++)
-                {
-                    data[x + (y * width)] = b.Data[y, x];
-                }
+                throw new Exception($"{nameof(texture)} is already being worked on.");
             }
 
-            return new GLArray<Colour>(width, height, 1, data);
+            KeyValuePair<ImageResult, bool> defaultPair = new KeyValuePair<ImageResult, bool>(null, mipmap);
+            bool added = _loadingTextures.TryAdd(texture, defaultPair);
+            _textures.Add(texture);
+
+            if (!added)
+            {
+                throw new Exception("Couldn't add texture temperarerly to collection.");
+            }
+
+            byte[] data = stream.ReadAllBytes();
+
+            Task.Run(() =>
+            {
+                // Load image
+                //ImageResult imageData = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
+                ImageResult imageData = ImageResult.FromMemory(data, ColorComponents.RedGreenBlueAlpha);
+
+                KeyValuePair<ImageResult, bool> value = new KeyValuePair<ImageResult, bool>(imageData, mipmap);
+                
+                while (!_loadingTextures.TryUpdate(texture, value, defaultPair))
+                {
+                    // Content in condition statment
+                }
+            });
         }
-        public static implicit operator Bitmap(GLArray<Colour> glArray)
-        {
-            Bitmap b = new Bitmap(glArray.Width, glArray.Height);
 
-            for (int x = 0; x < glArray.Width; x++)
+        public static bool CheckTextures()
+        {
+            foreach (KeyValuePair<Texture2D, KeyValuePair<ImageResult, bool>> texture in _loadingTextures)
             {
-                for (int y = 0; y < glArray.Height; y++)
+                if (texture.Value.Key == null) { continue; }
+
+                texture.Key.SetData(texture.Value.Key.Width, texture.Value.Key.Height, BaseFormat.Rgba,
+                    new GLArray<byte>(texture.Value.Key.Width * 4, texture.Value.Key.Height, 1, texture.Value.Key.Data));
+
+                if (texture.Value.Value) { texture.Key.CreateMipMap(); }
+            }
+
+            foreach (Texture2D key in _textures)
+            {
+                if (_loadingTextures.TryGetValue(key, out KeyValuePair<ImageResult, bool> value))
                 {
-                    b.Data[y, x] = glArray[x + (y * glArray.Width)];
+                    if (value.Key == null) { continue; }
+
+                    while (!_loadingTextures.TryRemove(key, out _))
+                    {
+                        // Content in condition statment
+                    }
                 }
             }
 
-            return b;
+            return _loadingTextures.IsEmpty;
+        }
+
+        /// <summary>
+        /// Determines whether textures should be fliped on load. Since OpenGL expects textures to be upside down, this should stay be True.
+        /// </summary>
+        public static bool AutoFlipTextures
+        {
+            get => StbImage.stbi__vertically_flip_on_load == 1;
+            set => StbImage.stbi__vertically_flip_on_load = value ? 0 : 1;
         }
     }
 }

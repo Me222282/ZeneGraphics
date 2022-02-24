@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Zene.Structs;
 
 namespace Zene.Graphics
 {
@@ -34,7 +35,7 @@ namespace Zene.Graphics
             Depth = depth;
             _zSize = Width * Height;
 
-            Data = values;
+            _data = values;
         }
         /// <summary>
         /// Creates an empty 1 dimensional array.
@@ -42,7 +43,7 @@ namespace Zene.Graphics
         /// <param name="length">The width of the aray.</param>
         public GLArray(int length)
         {
-            Data = new T[length];
+            _data = new T[length];
 
             if (length < 1)
             {
@@ -61,7 +62,7 @@ namespace Zene.Graphics
         /// <param name="height">The height of the array.</param>
         public GLArray(int width, int height)
         {
-            Data = new T[width * height];
+            _data = new T[width * height];
 
             if (width < 1 || height < 1)
             {
@@ -81,7 +82,7 @@ namespace Zene.Graphics
         /// <param name="depth">The depth of the array.</param>
         public GLArray(int width, int height, int depth)
         {
-            Data = new T[width * height * depth];
+            _data = new T[width * height * depth];
 
             if (width < 1 || height < 1 || depth < 1)
             {
@@ -94,33 +95,37 @@ namespace Zene.Graphics
             _zSize = Width * Height;
         }
 
-        private GLArray()
+        protected GLArray(bool empty)
         {
-            Data = Array.Empty<T>();
-            Width = 0;
-            Height = 0;
-            Depth = 0;
-            _zSize = 0;
+            if (empty)
+            {
+                _data = Array.Empty<T>();
+                Width = 0;
+                Height = 0;
+                Depth = 0;
+                _zSize = 0;
+            }
         }
 
         /// <summary>
         /// The width of the array.
         /// </summary>
-        public int Width { get; }
+        public virtual int Width { get; } = 1;
         /// <summary>
         /// The height of the array.
         /// </summary>
-        public int Height { get; }
+        public virtual int Height { get; } = 1;
         /// <summary>
         /// The depth of the array.
         /// </summary>
-        public int Depth { get; }
+        public virtual int Depth { get; } = 1;
         protected readonly int _zSize;
 
+        private T[] _data;
         /// <summary>
         /// The raw data of the array.
         /// </summary>
-        public T[] Data { get; }
+        public T[] Data => _data;
         /// <summary>
         /// The length of the raw data in the array.
         /// </summary>
@@ -140,6 +145,16 @@ namespace Zene.Graphics
             {
                 return Data.Length * sizeof(T);
             }
+        }
+
+        protected void SetData(T[] values)
+        {
+            if (values.Length != Width * Height * Depth)
+            {
+                throw new Exception($"The data in {nameof(values)} doesn't match the given size.");
+            }
+
+            _data = values;
         }
 
         public virtual T this[int index]
@@ -224,6 +239,35 @@ namespace Zene.Graphics
             return output;
         }
         /// <summary>
+        /// Gets a 2 dimensional section of the array.
+        /// </summary>
+        /// <param name="box">The bounding box to source from.</param>
+        /// <returns></returns>
+        public GLArray<T> SubSection(IBox box)
+        {
+            int width = (int)box.Width;
+            int height = (int)box.Height;
+
+            GLArray<T> output = new GLArray<T>(width, height);
+
+            int x = (int)box.Left;
+            int y = (int)box.Bottom;
+
+            try
+            {
+                for (int sx = 0; sx < width; sx++)
+                {
+                    for (int sy = 0; sy < height; sy++)
+                    {
+                        output[sx, sy] = this[sx + x, sy + y];
+                    }
+                }
+            }
+            catch { throw; }
+
+            return output;
+        }
+        /// <summary>
         /// Gets a 3 dimensional section of the array.
         /// </summary>
         /// <param name="x">The x offset into the array.</param>
@@ -257,7 +301,7 @@ namespace Zene.Graphics
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator() => ((IEnumerable<T>)Data).GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => Data.GetEnumerator();
-
+        /*
         private int _current = 0;
         /// <summary>
         /// This is just for initialisation. <see cref="GLArray{T}"/> is not a dynamic array.
@@ -273,12 +317,12 @@ namespace Zene.Graphics
             Data[_current] = value;
             _current++;
         }
-
+        */
         public static implicit operator T[](GLArray<T> glArray)
         {
             return glArray.Data;
         }
-        public static implicit operator GLArray<T>(T[,] array)
+        public static explicit operator GLArray<T>(T[,] array)
         {
             int width = array.GetLength(0);
             int height = array.GetLength(1);
@@ -295,7 +339,7 @@ namespace Zene.Graphics
 
             return new GLArray<T>(width, height, 1, data);
         }
-        public static implicit operator GLArray<T>(T[,,] array)
+        public static explicit operator GLArray<T>(T[,,] array)
         {
             int width = array.GetLength(0);
             int height = array.GetLength(1);
@@ -318,7 +362,7 @@ namespace Zene.Graphics
 
             return new GLArray<T>(width, height, depth, data);
         }
-        public static implicit operator GLArray<T>(T[][,] array)
+        public static explicit operator GLArray<T>(T[][,] array)
         {
             int width = array[0].GetLength(0);
             int height = array[0].GetLength(1);
@@ -345,7 +389,7 @@ namespace Zene.Graphics
 
             return new GLArray<T>(width, height, depth, data);
         }
-        public static implicit operator GLArray<T>(T[][] array)
+        public static explicit operator GLArray<T>(T[][] array)
         {
             int width = array[0].Length;
             int height = array.Length;
@@ -379,7 +423,19 @@ namespace Zene.Graphics
                 return ptr;
             }
         }
+        public static implicit operator IntPtr(GLArray<T> glArray)
+        {
+            if (glArray.Data.Length == 0)
+            {
+                return IntPtr.Zero;
+            }
 
-        public static GLArray<T> Empty { get; } = new GLArray<T>();
+            fixed (T* ptr = &glArray.Data[0])
+            {
+                return (IntPtr)ptr;
+            }
+        }
+
+        public static GLArray<T> Empty { get; } = new GLArray<T>(true);
     }
 }

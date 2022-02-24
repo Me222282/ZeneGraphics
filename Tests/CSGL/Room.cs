@@ -9,7 +9,7 @@ namespace CSGL
 {
     public class Room : IDrawable, IDisposable
     {
-        public Room(LightingShader shader)
+        public unsafe Room(LightingShader shader)
         {
             _disposed = false;
 
@@ -53,8 +53,8 @@ namespace CSGL
 
             RoomMat = new Material(new Colour(106, 80, 93), Material.Source.None, Shine.None);
 
-            shader.SetLight(2, new Zene.Graphics.Shaders.Light(new Colour(120, 100, 120), Colour.Zero, 0.007, 0.00014, new Vector3(5008, -2, -8)));
-            shader.SetLight(3, new Zene.Graphics.Shaders.Light(new Colour(120, 100, 120), Colour.Zero, 0.007, 0.00014, new Vector3(5008, -2, -28)));
+            shader.SetLight(2, new Zene.Graphics.Shaders.Light(new Colour(120, 100, 120), Colour.Zero, 0.007, 0.00014, new Vector3(8008, -3, -8)));
+            shader.SetLight(3, new Zene.Graphics.Shaders.Light(new Colour(120, 100, 120), Colour.Zero, 0.007, 0.00014, new Vector3(8008, -3, -28)));
         }
 
         public Room()

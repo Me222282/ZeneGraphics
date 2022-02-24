@@ -1216,7 +1216,7 @@ namespace Zene.Graphics.Base
         public void TexImage2D<T>(int level, TextureFormat intFormat, int width, int height, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.TexImage2D(this, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, data);
+            GL.TexImage2D(this, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, (T*)data);
 
             InternalFormat = intFormat;
         }
@@ -1238,7 +1238,7 @@ namespace Zene.Graphics.Base
         public void TexImage2D<T>(CubeMapFace target, int level, TextureFormat intFormat, int width, int height, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.TexImage2D(this, target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, data);
+            GL.TexImage2D(this, target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, (T*)data);
 
             InternalFormat = intFormat;
         }

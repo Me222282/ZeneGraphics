@@ -18,9 +18,9 @@ namespace CSGL
 
             //ShadowLWindow window = new ShadowLWindow(800, 500, "Work");
 
-            //CubeMapTest window = new CubeMapTest(800, 500, "Work");
+            CubeMapTest window = new CubeMapTest(800, 500, "Work");
 
-            Window3D window = new Window3D(800, 500, "Work");
+            //Window3D window = new Window3D(800, 500, "Work");
 
             //WindowTest window = new WindowTest(800, 500, "Test");
 

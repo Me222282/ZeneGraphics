@@ -534,26 +534,6 @@ namespace Zene.Graphics
             return texture;
         }
 
-        public static Texture2D Create(Bitmap image, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap)
-        {
-            Texture2D texture = new Texture2D(TextureFormat.Rgba8, TextureData.Byte);
-
-            texture.SetData(image.Width, image.Height, BaseFormat.Rgba, (GLArray<Colour>)image);
-
-            texture.WrapStyle = wrapStyle;
-            texture.MinFilter = textureQuality;
-            texture.MagFilter = textureQuality switch
-            {
-                TextureSampling.BlendMipMapBlend => TextureSampling.Blend,
-                TextureSampling.BlendMipMapNearest => TextureSampling.Blend,
-                TextureSampling.NearestMipMapBlend => TextureSampling.Nearest,
-                TextureSampling.NearestMipMapNearest => TextureSampling.Nearest,
-                _ => textureQuality
-            };
-            if (mipmap) { texture.CreateMipMap(); }
-
-            return texture;
-        }
         public static Texture2D Create(Stream stream, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap)
         {
             Texture2D texture = new Texture2D(TextureFormat.Rgba8, TextureData.Byte);
@@ -575,6 +555,22 @@ namespace Zene.Graphics
             if (mipmap) { texture.CreateMipMap(); }
 
             return texture;
+            /*
+            Texture2D texture = new Texture2D(TextureFormat.Rgba8, TextureData.Byte);
+
+            Bitmap.LoadTexture(texture, stream, mipmap);
+            texture.WrapStyle = wrapStyle;
+            texture.MinFilter = textureQuality;
+            texture.MagFilter = textureQuality switch
+            {
+                TextureSampling.BlendMipMapBlend => TextureSampling.Blend,
+                TextureSampling.BlendMipMapNearest => TextureSampling.Blend,
+                TextureSampling.NearestMipMapBlend => TextureSampling.Nearest,
+                TextureSampling.NearestMipMapNearest => TextureSampling.Nearest,
+                _ => textureQuality
+            };
+
+            return texture;*/
         }
         public static Texture2D Create(string path, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap)
         {

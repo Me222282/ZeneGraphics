@@ -974,7 +974,7 @@ namespace Zene.Graphics.Base.Extensions
         public static void TexImage2D<T>(this ITexture texture, int level, int width, int height, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
             texture.Bind();
-            GL.TexImage2D(texture, level, (int)texture.InternalFormat, width, height, 0, (uint)format, (uint)type, data);
+            GL.TexImage2D(texture, level, (int)texture.InternalFormat, width, height, 0, (uint)format, (uint)type, (T*)data);
         }
         /// <summary>
         /// Specify a two-dimensional texture image.
@@ -994,7 +994,7 @@ namespace Zene.Graphics.Base.Extensions
         public static void TexImage2D<T>(this ITexture texture, CubeMapFace target, int level, int width, int height, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
         {
             texture.Bind();
-            GL.TexImage2D(texture, target, level, (int)texture.InternalFormat, width, height, 0, (uint)format, (uint)type, data);
+            GL.TexImage2D(texture, target, level, (int)texture.InternalFormat, width, height, 0, (uint)format, (uint)type, (T*)data);
         }
 
         /// <summary>

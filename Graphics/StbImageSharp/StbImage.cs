@@ -14,7 +14,8 @@ namespace StbImageSharp
 		static StbImage()
         {
 			// Load images flipped which is how OpenGL expects
-			stbi_set_flip_vertically_on_load(1);
+			//stbi_set_flip_vertically_on_load(1);
+			stbi__vertically_flip_on_load = 1;
 		}
 
 		public static string LastError;

@@ -32,16 +32,6 @@ namespace Zene.Graphics
             Data = data;
         }
         /// <summary>
-        /// Create a texture from <paramref name="data"/>.
-        /// </summary>
-        /// <param name="format">The internal format of the texture.</param>
-        /// <param name="data">The <see cref="Bitmap"/> containing the data for the texture.</param>
-        public Texture(TextureFormat format, Bitmap data)
-            : this(format, data.Data)
-        {
-
-        }
-        /// <summary>
         /// Creates a texture from the data inside <paramref name="stream"/>.
         /// </summary>
         /// <param name="format">The internal format of the texture.</param>

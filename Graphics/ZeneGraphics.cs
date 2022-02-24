@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Zene.Graphics.Base;
 using Zene.Graphics.Base.Extensions;
 using Zene.Structs;
@@ -388,6 +389,27 @@ namespace Zene.Graphics
                 framebuffer.View.Height);
 
             GL.ReadPixels(0, 0, framebuffer.View.Width, framebuffer.View.Height, (uint)format, (uint)type, data);
+
+            return data;
+        }
+
+        public static byte[] ReadAllBytes(this Stream stream)
+        {
+            if (!stream.CanRead)
+            {
+                throw new IOException($"Cannot read data from {nameof(stream)}.");
+            }
+
+            byte[] data = new byte[stream.Length];
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                int value = stream.ReadByte();
+
+                if (value < 0) { throw new IOException(); }
+
+                data[i] = (byte)value;
+            }
 
             return data;
         }
