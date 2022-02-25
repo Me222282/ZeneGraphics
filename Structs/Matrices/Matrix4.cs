@@ -741,7 +741,7 @@ namespace Zene.Structs
             {
                 throw new ArgumentOutOfRangeException(nameof(depthNear));
             }
-
+            /*
             double x = 2.0 * depthNear / (right - left);
             double y = 2.0 * depthNear / (top - bottom);
             double a = (right + left) / (right - left);
@@ -753,7 +753,18 @@ namespace Zene.Structs
                 new Vector4(x, 0, 0, 0),
                 new Vector4(0, y, 0, 0),
                 new Vector4(a, b, c, -1),
-                new Vector4(0, 0, d, 0));
+                new Vector4(0, 0, d, 0));*/
+
+            double widthMulti = 1 / (right - left);
+            double heightMulti = 1 / (bottom - top);
+            double depthMutli = 1 / (depthFar - depthNear);
+            double near2 = depthNear * 2;
+
+            return new Matrix4(
+                new Vector4(near2 * widthMulti, 0, 0, 0),
+                new Vector4(0, near2 * heightMulti, 0, 0),
+                new Vector4(-(right + left) * widthMulti, -(bottom + top) * heightMulti, depthFar * depthMutli, 1),
+                new Vector4(0, 0, -depthFar * depthNear * depthMutli, 0));
         }
 
         public static Matrix4 CreatePerspectiveFieldOfView(Radian fovy, double aspect, double depthNear, double depthFar)
@@ -777,13 +788,22 @@ namespace Zene.Structs
             {
                 throw new ArgumentOutOfRangeException(nameof(depthFar));
             }
-
+            /*
             double maxY = depthNear * Math.Tan(0.5 * fovy);
             double minY = -maxY;
             double minX = minY * aspect;
             double maxX = maxY * aspect;
 
-            return CreatePerspectiveOffCenter(minX, maxX, minY, maxY, depthNear, depthFar);
+            return CreatePerspectiveOffCenter(minX, maxX, minY, maxY, depthNear, depthFar);*/
+
+            double depthMutli = 1 / (depthFar - depthNear);
+            double degree = Math.Tan(fovy * 0.5);
+
+            return new Matrix4(
+                new Vector4(1 / (aspect * degree), 0, 0, 0),
+                new Vector4(0, 1 / degree, 0, 0),
+                new Vector4(0, 0, depthFar * depthMutli, 1),
+                new Vector4(0, 0, -depthFar * depthNear * depthMutli, 0));
         }
 
         public static Matrix4 LookAt(Vector3 eye, Vector3 target, Vector3 up)

@@ -256,7 +256,7 @@ namespace CSGL
 
         private Vector3 CameraPos = Vector3.Zero;
 
-        private Radian rotateX = 0;
+        private Radian rotateX = Radian.Percent(0.5);
         private Radian rotateY = 0;
         private Radian rotateZ = 0;
 
@@ -282,10 +282,10 @@ namespace CSGL
 
             if (_left)      { cameraMove.X += moveSpeed; }
             if (_right)     { cameraMove.X -= moveSpeed; }
-            if (_forward)   { cameraMove.Z += moveSpeed; }
-            if (_backward)  { cameraMove.Z -= moveSpeed; }
-            if (_up)        { cameraMove.Y += moveSpeed; }
-            if (_down)      { cameraMove.Y -= moveSpeed; }
+            if (_forward)   { cameraMove.Z -= moveSpeed; }
+            if (_backward)  { cameraMove.Z += moveSpeed; }
+            if (_up)        { cameraMove.Y -= moveSpeed; }
+            if (_down)      { cameraMove.Y += moveSpeed; }
 
             if (_lShift)    { cameraMove *= 2; }
 
@@ -308,7 +308,7 @@ namespace CSGL
 
             Shader.SetSpotLightPosition(0, -CameraPos);
             Shader.SetSpotLightDirection(0, new Vector3(0, 0, 1) *
-                Matrix3.CreateRotationX(rotateX) * Matrix3.CreateRotationY(rotateY) * Matrix3.CreateRotationZ(rotateZ));
+                Matrix3.CreateRotationX(rotateX - Radian.Percent(0.5)) * Matrix3.CreateRotationY(rotateY) * Matrix3.CreateRotationZ(rotateZ));
 
             State.DepthTesting = true;
 
@@ -453,7 +453,7 @@ namespace CSGL
             else if (e.Key == Keys.BackSpace)
             {
                 CameraPos = Vector3.Zero;
-                rotateX = 0;
+                rotateX = Radian.Percent(0.5);
                 rotateY = 0;
                 rotateZ = 0;
                 moveSpeed = 1;
@@ -464,7 +464,7 @@ namespace CSGL
             else if (e.Key == Keys.Enter)
             {
                 CameraPos = new Vector3(-8008, -2, 8);
-                rotateX = 0;
+                rotateX = Radian.Percent(0.5);
                 rotateY = 0;
                 rotateZ = 0;
                 moveSpeed = 0.125;

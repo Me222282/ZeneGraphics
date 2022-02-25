@@ -161,11 +161,11 @@ namespace CSGL
 
             if (_w)
             {
-                cameraMove.Z += 0.025;
+                cameraMove.Z -= 0.025;
             }
             if (_s)
             {
-                cameraMove.Z -= 0.025;
+                cameraMove.Z += 0.025;
             }
             if (_a)
             {
@@ -177,11 +177,11 @@ namespace CSGL
             }
             if (_space)
             {
-                cameraMove.Y += 0.025;
+                cameraMove.Y -= 0.025;
             }
             if (_ctrl)
             {
-                cameraMove.Y -= 0.025;
+                cameraMove.Y += 0.025;
             }
 
             Matrix3 rotationMatrix = Matrix3.CreateRotationY(rotateY) * Matrix3.CreateRotationX(rotateX);
@@ -350,7 +350,7 @@ namespace CSGL
         private bool _ctrl;
 
         private Vector2 mouseLocation;
-        private Radian rotateX = Radian.Percent(0.5);
+        private Radian rotateX = 0;
         private Radian rotateY = 0;
         private int _width;
         private int _height;

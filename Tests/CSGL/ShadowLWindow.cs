@@ -221,7 +221,7 @@ namespace CSGL
 
         private Player player;
 
-        private Radian rotateX = 0;
+        private Radian rotateX = Radian.Percent(0.5);
         private Radian rotateY = 0;
         private Radian rotateZ = 0;
 
@@ -338,7 +338,7 @@ namespace CSGL
             ShadowMapShader.Clear();
 
             Matrix4 smP = /*Matrix4.CreateOrthographic(100, 100, 0, 1000);*/ Matrix4.CreatePerspectiveFieldOfView(Radian.Degrees(110), 1, 0.1, 5000);
-            Matrix4 smV = Matrix4.LookAt(lightDir, Vector3.Zero, new Vector3(0, 1, 0));
+            Matrix4 smV = Matrix4.LookAt(lightDir, Vector3.Zero, new Vector3(0, 1, 0)) * Matrix4.CreateRotationX(Radian.Percent(0.5));
 
             ShadowMapShader.ProjectionMatrix = smP;
             ShadowMapShader.ViewMatrix = smV;
@@ -480,7 +480,7 @@ namespace CSGL
             else if (e.Key == Keys.BackSpace)
             {
                 CameraPos = Vector3.Zero;
-                rotateX = 0;
+                rotateX = Radian.Percent(0.5);
                 rotateY = 0;
                 rotateZ = 0;
             }

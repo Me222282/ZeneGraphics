@@ -47,10 +47,10 @@ namespace CSGL
 
         private readonly float[] vertData = new float[]
         {
-            /*Vertex*/ 0f, 5f, 5f,      /*Tex Coord*/ 0f, 1f,
-            /*Vertex*/ 0f, 5f, -5f,     /*Tex Coord*/ 1f, 1f,
-            /*Vertex*/ 0f, -5f, -5f,    /*Tex Coord*/ 1f, 0f,
-            /*Vertex*/ 0f, -5f, 5f,     /*Tex Coord*/ 0f, 0f
+            /*Vertex*/ 0f, 5f, 5f,      /*Tex Coord*/ 0f, 0f,
+            /*Vertex*/ 0f, 5f, -5f,     /*Tex Coord*/ 1f, 0f,
+            /*Vertex*/ 0f, -5f, -5f,    /*Tex Coord*/ 1f, 1f,
+            /*Vertex*/ 0f, -5f, 5f,     /*Tex Coord*/ 0f, 1f
         };
 
         private readonly byte[] indices = new byte[]
@@ -123,7 +123,7 @@ namespace CSGL
             _shader.Bind();
 
             _shader.Matrix2 = Matrix4.CreateTranslation(CameraPos) * Matrix4.CreateRotationY(rotateY) *
-                Matrix4.CreateRotationX(Radian.Percent(-0.125));
+                Matrix4.CreateRotationX(Radian.Percent(-0.125 + 0.5));
 
             BaseFramebuffer.Clear(BufferBit.Colour | BufferBit.Depth);
 
