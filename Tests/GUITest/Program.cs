@@ -7,7 +7,7 @@ using Zene.Structs;
 using Zene.Windowing;
 using Zene.Windowing.Base;
 
-namespace GUI
+namespace GUITest
 {
     class Program : Window
     {

@@ -6,7 +6,7 @@ The end goal is to have a collection of libraries that can be used together to m
 This isn't a professional project so development will be slow and inconsistent and there may be large changes to some of the core structures.</br>
 
 The main projects being worked on are **The Zene Graphics Library**, **The Zene Windowing Library** and **The Zene Structs Library**.</br>
-**The Zene Physics Library**, **The Zene Sprites Library** and **The Zene Forms Library** won't have many change until the main libraries are ready for a release, even if development is still due.
+**The Zene Physics Library**, **The Zene Sprites Library** and **The Zene GUI Library** won't have many change until the main libraries are ready for a release, even if development is still due.
 This is expected to happen around 2023.
 
 [Documentation](https://me222282.github.io/ZeneLibrary/)
@@ -18,7 +18,7 @@ This is expected to happen around 2023.
  - [The Zene Structs Library](./Structs)</br>
  - [The Zene Physics Library](./Physics)</br>
  - [The Zene Sprites Library](./Sprites)</br>
- - [The Zene Forms Library](./Forms)</br>
+ - [The Zene GUI Library](./GUI)</br>
  - [Zene Neural Networking](./Evolution)</br>
 
 ## Credits

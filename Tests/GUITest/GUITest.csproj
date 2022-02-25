@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Forms\Forms.csproj" />
+    <ProjectReference Include="..\..\GUI\GUI.csproj" />
     <ProjectReference Include="..\..\Graphics\Graphics.csproj" />
     <ProjectReference Include="..\..\Structs\Structs.csproj" />
     <ProjectReference Include="..\..\Windowing\Windowing.csproj" />

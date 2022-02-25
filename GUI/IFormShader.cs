@@ -1,7 +1,7 @@
 ﻿using Zene.Graphics;
 using Zene.Structs;
 
-namespace Zene.Forms
+namespace Zene.GUI
 {
     public interface IFormShader : IShader
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Zene.Graphics;
 using Zene.Structs;
 
-namespace Zene.Forms
+namespace Zene.GUI
 {
     public class FormPanel : IFormObject
     {

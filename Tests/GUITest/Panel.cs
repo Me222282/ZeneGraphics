@@ -5,7 +5,7 @@ using Zene.Graphics.Shaders;
 using Zene.Structs;
 using Zene.Windowing;
 
-namespace GUI
+namespace GUITest
 {
     internal class Panel : IDisposable
     {

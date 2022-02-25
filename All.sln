@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTKConverts", "OpenTKCon
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Evolution", "Evolution\Evolution\Evolution.csproj", "{35C2BFB5-B549-4267-9C71-91E62AC60497}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Forms", "Forms\Forms.csproj", "{79B95E2F-9660-4385-B810-DBF72DA57373}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GUI", "GUI\GUI.csproj", "{79B95E2F-9660-4385-B810-DBF72DA57373}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Windowing", "Windowing\Windowing.csproj", "{2FD9E938-A251-412F-933D-B75D4325AC5B}"
 EndProject
@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhysicsTest", "Tests\Physic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImplicitFunctions", "Tests\ImplicitFunctions\ImplicitFunctions.csproj", "{25B3B494-8BA8-4ECF-B25E-CE78C0324F11}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GUI", "Tests\GUI\GUI.csproj", "{01079548-CF18-4092-856D-115BC54A42BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GUITest", "Tests\GUITest\GUITest.csproj", "{01079548-CF18-4092-856D-115BC54A42BE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSGL", "Tests\CSGL\CSGL.csproj", "{6A7A72CD-6A34-4957-BD00-F38199EC204D}"
 EndProject

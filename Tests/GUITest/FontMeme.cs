@@ -2,7 +2,7 @@
 using Zene.Graphics;
 using Zene.Structs;
 
-namespace GUI
+namespace GUITest
 {
     public class FontMeme : Font
     {

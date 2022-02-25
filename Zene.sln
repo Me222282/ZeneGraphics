@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTKConverts", "OpenTKCon
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Evolution", "Evolution\Evolution\Evolution.csproj", "{35C2BFB5-B549-4267-9C71-91E62AC60497}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Forms", "Forms\Forms.csproj", "{79B95E2F-9660-4385-B810-DBF72DA57373}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GUI", "GUI\GUI.csproj", "{79B95E2F-9660-4385-B810-DBF72DA57373}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Windowing", "Windowing\Windowing.csproj", "{2FD9E938-A251-412F-933D-B75D4325AC5B}"
 EndProject
