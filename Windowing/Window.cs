@@ -99,19 +99,21 @@ namespace Zene.Windowing
         /// <remarks>
         /// <see cref="State.OutputDebugSynchronous"/> needs to be True for the stack trace to be outputed.
         /// </remarks>
-        public bool ReportStackTrace { get; set; } = true;
+        public bool ReportStackTrace { get; set; } = false;
 
-        private string ErrorStackTrace()
+        private static string ErrorStackTrace()
         {
             string str = Environment.StackTrace;
 
             int i = str.IndexOf("Zene.Windowing.Window.<.ctor>b__2_0(UInt32 source, UInt32 type, UInt32 _, UInt32 _, Int32 _, String message, IntPtr _)");
-
             if (i < 0) { return str; }
 
             str = str.Remove(0, i);
 
-            return str.Remove(0, str.IndexOf("at"));
+            i = str.IndexOf("at");
+            if (i < 0) { return str; }
+
+            return str.Remove(0, i);
         }
 
         private readonly IntPtr _window;
