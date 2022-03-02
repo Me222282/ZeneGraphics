@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Zene.Graphics;
 using Zene.Graphics.Base.Extensions;
 using Zene.Structs;
@@ -53,7 +49,7 @@ namespace TexelPhysics
         }
 
         private readonly World _world;
-        private Cell _addingCell;
+        private Cell.Type _addingCell;
         public void Run()
         {
             // Vsync
@@ -69,7 +65,7 @@ namespace TexelPhysics
                     {
                         for (int y = 0; y < _drawingSize.Y; y++)
                         {
-                            _world.SetCell(_worldMouse.X + x, _worldMouse.Y + y, _addingCell);
+                            _world.OverrideCell(_worldMouse.X + x, _worldMouse.Y + y, Cell.CreateType(_addingCell));
                         }
                     }
                 }
@@ -100,20 +96,20 @@ namespace TexelPhysics
             {
                 if (_sKey)
                 {
-                    _addingCell = Cell.Sand;
+                    _addingCell = Cell.Type.Sand;
                     return;
                 }
                 if (_wKey)
                 {
-                    _addingCell = Cell.Water;
+                    _addingCell = Cell.Type.Water;
                     return;
                 }
 
-                _addingCell = Cell.Static;
+                _addingCell = Cell.Type.Stone;
                 return;
             }
 
-            _addingCell = Cell.Empty;
+            _addingCell = Cell.Type.Empty;
         }
         protected override void OnMouseUp(MouseEventArgs e)
         {

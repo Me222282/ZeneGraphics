@@ -9,18 +9,37 @@ namespace TexelPhysics
             Width = width;
             Height = height;
 
-            _cells = new Cell[height * width];
+            _cells = new CellHolder[width * height];
+
+            for (int i = 0; i < _cells.Length; i++)
+            {
+                _cells[i] = new CellHolder(i % Width, i / Width);
+            }
         }
 
         public int Width { get; }
         public int Height { get; }
 
-        private Cell[] _cells;
+        private CellHolder[] _cells;
 
-        public Cell this[int x, int y]
+        public CellHolder this[int x, int y]
         {
             get => _cells[x + (y * Width)];
-            set => _cells[x + (y * Width)] = value;
+        }
+        public Cell this[int x, int y, int cell]
+        {
+            get => _cells[x + (y * Width)][cell];
+        }
+
+        public bool Push(int x, int y, Cell cell, double force) => _cells[x + (y * Width)].Push(cell, force);
+
+        public delegate void ForeachHandler(CellHolder cell);
+        public void Foreach(ForeachHandler method)
+        {
+            for (int i = 0; i < _cells.Length; i++)
+            {
+                method(_cells[i]);
+            }
         }
 
         public Bitmap ToBitmap()
@@ -31,7 +50,7 @@ namespace TexelPhysics
             {
                 for (int y = 0; y < Height; y++)
                 {
-                    b[x, y] = this[x, y].Colour;
+                    b[x, y] = this[x, y].CombinedColour;
                 }
             }
 
@@ -43,9 +62,11 @@ namespace TexelPhysics
         }
         public void Swap(CellMap map)
         {
-            Cell[] old = _cells;
+            CellHolder[] old = _cells;
             _cells = map._cells;
             map._cells = old;
         }
+
+        public void OverrideCell(int x, int y, Cell cell) => _cells[x + (y * Width)].Override(cell);
     }
 }
