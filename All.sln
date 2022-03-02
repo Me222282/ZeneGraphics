@@ -31,6 +31,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollisionsTest", "Tests\Col
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvolutionTest", "Evolution\Tests\EvolutionTest.csproj", "{4399693C-175E-461B-B2D8-6C1A783D3356}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TexelPhysics", "Tests\TexelPhysics\TexelPhysics.csproj", "{9EA5390A-57AE-43AF-A8C1-9C8493C321DA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BenchMark", "Tests\BenchMarking\BenchMark.csproj", "{1B49AB4B-0F53-4A29-BC36-88BF2195CEBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +97,14 @@ Global
 		{4399693C-175E-461B-B2D8-6C1A783D3356}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4399693C-175E-461B-B2D8-6C1A783D3356}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4399693C-175E-461B-B2D8-6C1A783D3356}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EA5390A-57AE-43AF-A8C1-9C8493C321DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EA5390A-57AE-43AF-A8C1-9C8493C321DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EA5390A-57AE-43AF-A8C1-9C8493C321DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EA5390A-57AE-43AF-A8C1-9C8493C321DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B49AB4B-0F53-4A29-BC36-88BF2195CEBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B49AB4B-0F53-4A29-BC36-88BF2195CEBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B49AB4B-0F53-4A29-BC36-88BF2195CEBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B49AB4B-0F53-4A29-BC36-88BF2195CEBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
