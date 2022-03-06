@@ -17,6 +17,9 @@ namespace Zene.Graphics
         Tga
     }
 
+    public delegate void ForeachBitmapHandler(Colour value, int x, int y);
+    public delegate void ForeachColourHandler(Colour value, int i);
+
     public unsafe class Bitmap : GLArray<Colour>
     {
         public Bitmap(int width, int height)
@@ -28,6 +31,14 @@ namespace Zene.Graphics
         public Bitmap(int width, int height, Colour[] data)
             : base(width, height, 1, data)
         {
+            Width = width;
+            Height = height;
+        }
+        public Bitmap(int width, int height, Colour value)
+            : base(width, height, 1)
+        {
+            Array.Fill(Data, value);
+
             Width = width;
             Height = height;
         }
@@ -188,6 +199,31 @@ namespace Zene.Graphics
             }
 
             stream.Close();
+        }
+
+        public void Foreach(ForeachBitmapHandler handler)
+        {
+            for (int i = 0; i < Data.Length; i++)
+            {
+                handler(Data[i], i % Width, i / Width);
+            }
+        }
+        public void Foreach(ForeachColourHandler handler)
+        {
+            for (int i = 0; i < Data.Length; i++)
+            {
+                handler(Data[i], i);
+            }
+        }
+
+        public Vector2I GetLocation(int index)
+        {
+            if (index >= Data.Length || index < 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            return new Vector2I(index % Width, index / Width);
         }
 
         public static Bitmap FromArray(int width, int height, byte[] data)

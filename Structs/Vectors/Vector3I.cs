@@ -119,14 +119,14 @@ namespace Zene.Structs
             return (this + ((b - this) * u)) + ((c - this) * v);
         }
 
-        public Vector3I Normalized()
+        public Vector3I Normalised()
         {
             if (Length == 0) { return Zero; }
 
             double scale = 1.0 / Length;
             return new Vector3I(X * scale, Y * scale, Z * scale);
         }
-        public void Normalize()
+        public void Normalise()
         {
             double scale = 1.0 / Length;
 

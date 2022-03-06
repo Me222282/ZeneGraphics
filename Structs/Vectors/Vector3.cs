@@ -119,14 +119,14 @@ namespace Zene.Structs
             return (this + ((b - this) * u)) + ((c - this) * v);
         }
 
-        public Vector3 Normalized()
+        public Vector3 Normalised()
         {
             if (Length == 0) { return Zero; }
 
             double scale = 1.0 / Length;
             return new Vector3(X * scale, Y * scale, Z * scale);
         }
-        public void Normalize()
+        public void Normalise()
         {
             double scale = 1.0 / Length;
 
@@ -312,7 +312,7 @@ namespace Zene.Structs
 
         public static Vector3 PlaneNormal(Vector3 a, Vector3 b, Vector3 c)
         {
-            return (b - a).Cross(c - a).Normalized();
+            return (b - a).Cross(c - a).Normalised();
         }
 
         public static Vector3 operator +(Vector3 a, Vector2 b)

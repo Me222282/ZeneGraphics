@@ -30,3 +30,5 @@ C# port of StbImageSharp by Roman Shapiro(rds1983) - [Source Page](https://githu
 C# port of StbImageWriteSharp by Roman Shapiro(rds1983) - [Source Page](https://github.com/StbSharp/StbImageWriteSharp)</br>
 
 Obj file Loader by Chris Jansson(chrisjansson) - [Source Page](https://github.com/chrisjansson/ObjLoader)</br>
+
+Rgb and Hsl converter from [This site](http://csharphelper.com/blog/2016/08/convert-between-rgb-and-hls-color-models-in-c/)</br>

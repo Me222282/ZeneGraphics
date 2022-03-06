@@ -129,23 +129,13 @@ namespace Zene.Graphics
         /// <summary>
         /// The length of the raw data in the array.
         /// </summary>
-        public int Size
-        {
-            get
-            {
-                return Data.Length;
-            }
-        }
+        public int Size => Data.Length;
         /// <summary>
         /// The size in bytes of the array.
         /// </summary>
-        public int Bytes
-        {
-            get
-            {
-                return Data.Length * sizeof(T);
-            }
-        }
+        public int Bytes => Data.Length * sizeof(T);
+
+        public void Fill(T value) => Array.Fill(_data, value);
 
         protected void SetData(T[] values)
         {
@@ -159,36 +149,18 @@ namespace Zene.Graphics
 
         public virtual T this[int index]
         {
-            get
-            {
-                return Data[index];
-            }
-            set
-            {
-                Data[index] = value;
-            }
+            get => Data[index];
+            set => Data[index] = value;
         }
         public virtual T this[int x, int y]
         {
-            get
-            {
-                return Data[x + ((Height - y - 1) * Width)];
-            }
-            set
-            {
-                Data[x + ((Height - y - 1) * Width)] = value;
-            }
+            get => Data[x + ((Height - y - 1) * Width)];
+            set => Data[x + ((Height - y - 1) * Width)] = value;
         }
         public virtual T this[int x, int y, int z]
         {
-            get
-            {
-                return Data[x + ((Height - y - 1) * Width) + (z * _zSize)];
-            }
-            set
-            {
-                Data[x + ((Height - y - 1) * Width) + (z * _zSize)] = value;
-            }
+            get => Data[x + ((Height - y - 1) * Width) + (z * _zSize)];
+            set => Data[x + ((Height - y - 1) * Width) + (z * _zSize)] = value;
         }
 
         /// <summary>

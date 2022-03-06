@@ -93,14 +93,14 @@ namespace Zene.Structs
             return (this + ((b - this) * u)) + ((c - this) * v);
         }
 
-        public Vector2 Normalized()
+        public Vector2 Normalised()
         {
             if (Length == 0) { return Zero; }
 
             double scale = 1.0 / Length;
             return new Vector2(X * scale, Y * scale);
         }
-        public void Normalize()
+        public void Normalise()
         {
             double scale = 1.0 / Length;
             X *= scale;
