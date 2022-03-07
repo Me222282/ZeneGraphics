@@ -15,7 +15,7 @@
         public Line3I(Segment3I seg)
         {
             Location = seg.A;
-            _direction = ((Vector3)seg.Change).Normalized();
+            _direction = ((Vector3)seg.Change).Normalised();
 
             _gradients = new Gradient3(_direction);
         }

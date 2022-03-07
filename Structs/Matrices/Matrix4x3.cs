@@ -573,9 +573,9 @@ namespace Zene.Structs
                 Vector3.Zero);
         }
 
-        public static Matrix4x3 CreateFromAxisAngle(Vector3 axis, Radian angle)
+        public static Matrix4x3 CreateRotation(Vector3 axis, Radian angle)
         {
-            axis.Normalize();
+            axis.Normalise();
             double axisX = axis.X, axisY = axis.Y, axisZ = axis.Z;
 
             double cos = Math.Cos(-angle);

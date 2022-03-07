@@ -477,10 +477,10 @@ namespace Zene.Structs
             return a.Multiply(b);
         }
 
-        public static Matrix3x4 CreateFromAxisAngle(Vector3 axis, Radian angle)
+        public static Matrix3x4 CreateRotation(Vector3 axis, Radian angle)
         {
             // normalize and create a local copy of the vector.
-            axis.Normalize();
+            axis.Normalise();
             double axisX = axis.X;
             double axisY = axis.Y;
             double axisZ = axis.Z;

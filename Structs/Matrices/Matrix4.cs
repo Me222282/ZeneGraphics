@@ -593,10 +593,10 @@ namespace Zene.Structs
 
         public static Matrix4 Identity { get; } = new Matrix4(new Vector4(1, 0, 0, 0), new Vector4(0, 1, 0, 0), new Vector4(0, 0, 1, 0), new Vector4(0, 0, 0, 1));
 
-        public static Matrix4 CreateFromAxisAngle(Vector3 axis, Radian angle)
+        public static Matrix4 CreateRotation(Vector3 axis, Radian angle)
         {
             // normalize and create a local copy of the vector.
-            axis.Normalize();
+            axis.Normalise();
             double axisX = axis.X;
             double axisY = axis.Y;
             double axisZ = axis.Z;
@@ -808,9 +808,9 @@ namespace Zene.Structs
 
         public static Matrix4 LookAt(Vector3 eye, Vector3 target, Vector3 up)
         {
-            Vector3 z = (eye - target).Normalized();
-            Vector3 x = up.Cross(z).Normalized();
-            Vector3 y = z.Cross(x).Normalized();
+            Vector3 z = (eye - target).Normalised();
+            Vector3 x = up.Cross(z).Normalised();
+            Vector3 y = z.Cross(x).Normalised();
 
             return new Matrix4(
                 new Vector4(x.X, y.X, z.X, 0),
