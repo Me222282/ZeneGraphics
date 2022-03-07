@@ -707,7 +707,7 @@ namespace Zene.Structs
             return CreateTranslation(xyz.X, xyz.Y, xyz.Z);
         }
 
-        public static Matrix4 CreateOrthographicOffCenter(double left, double right, double top, double bottom, double depthNear, double depthFar)
+        public static Matrix4 CreateOrthographicOffCentre(double left, double right, double top, double bottom, double depthNear, double depthFar)
         {
             double invRL = 1.0 / (right - left);
             double invTB = 1.0 / (top - bottom);
@@ -722,10 +722,10 @@ namespace Zene.Structs
 
         public static Matrix4 CreateOrthographic(double width, double height, double depthNear, double depthFar)
         {
-            return CreateOrthographicOffCenter(-width / 2, width / 2, height / 2, -height / 2, depthNear, depthFar);
+            return CreateOrthographicOffCentre(-width / 2, width / 2, height / 2, -height / 2, depthNear, depthFar);
         }
 
-        public static Matrix4 CreatePerspectiveOffCenter(double left, double right, double top, double bottom, double depthNear, double depthFar)
+        public static Matrix4 CreatePerspectiveOffCentre(double left, double right, double top, double bottom, double depthNear, double depthFar)
         {
             if (depthNear <= 0)
             {
