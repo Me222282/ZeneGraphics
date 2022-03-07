@@ -3,19 +3,19 @@
     public interface IBox
     {
         /// <summary>
-        /// The x position of the left side of the box.
+        /// The x position of the left side of the box. Negative.
         /// </summary>
         public double Left { get; set; }
         /// <summary>
-        /// The x position of the right side of the box.
+        /// The x position of the right side of the box. Positive.
         /// </summary>
         public double Right { get; set; }
         /// <summary>
-        /// The y position of the Bottom size of the box.
+        /// The y position of the Bottom size of the box. Negative.
         /// </summary>
         public double Bottom { get; set; }
         /// <summary>
-        /// The y position of the top side of the box.
+        /// The y position of the top side of the box. Positive.
         /// </summary>
         public double Top { get; set; }
 

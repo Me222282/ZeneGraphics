@@ -1,4 +1,6 @@
-﻿namespace Zene.Structs
+﻿using System;
+
+namespace Zene.Structs
 {
     /// <summary>
     /// Defines a line segment as two points.
@@ -63,6 +65,15 @@
             intersection = A + ((int)t * b);
 
             return true;
+        }
+
+        public RectangleI Bounds
+        {
+            get => new RectangleI(
+                    A.X < B.X ? A.X : B.X,
+                    A.Y > B.Y ? A.Y : B.Y,
+                    Math.Abs(A.X - B.X),
+                    Math.Abs(A.Y - B.Y));
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Zene.Structs
+﻿using System;
+
+namespace Zene.Structs
 {
     /// <summary>
     /// Defines a line segment as two points.
@@ -28,12 +30,17 @@
         /// <summary>
         /// The x distance and y distance between points <see cref="A"/> and <see cref="B"/>.
         /// </summary>
-        public Vector3I Change
+        public Vector3I Change => B - A;
+
+        public CuboidI Bounds
         {
-            get
-            {
-                return B - A;
-            }
+            get => new CuboidI(
+                    A.X < B.X ? A.X : B.X,
+                    A.Y > B.Y ? A.Y : B.Y,
+                    A.Z < B.Z ? A.Z : B.Z,
+                    Math.Abs(A.X - B.X),
+                    Math.Abs(A.Y - B.Y),
+                    Math.Abs(A.Z - B.Z));
         }
     }
 }

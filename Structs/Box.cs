@@ -42,10 +42,7 @@ namespace Zene.Structs
         /// </summary>
         public Vector2 Location
         {
-            get
-            {
-                return new Vector2(X, Y);
-            }
+            get => new Vector2(X, Y);
             set
             {
                 X = value.X;
@@ -57,10 +54,7 @@ namespace Zene.Structs
         /// </summary>
         public Vector2 Size
         {
-            get
-            {
-                return new Vector2(Width, Height);
-            }
+            get => new Vector2(Width, Height);
             set
             {
                 Width = value.X;
@@ -70,22 +64,13 @@ namespace Zene.Structs
 
         public Vector2 Centre
         {
-            get
-            {
-                return Location;
-            }
-            set
-            {
-                Location = value;
-            }
+            get => Location;
+            set => Location = value;
         }
 
         public double X
         {
-            get
-            {
-                return Left + (Width * 0.5);
-            }
+            get => Left + (Width * 0.5);
             set
             {
                 double offset = value - X;
@@ -96,10 +81,7 @@ namespace Zene.Structs
         }
         public double Y
         {
-            get
-            {
-                return Bottom + (Height * 0.5);
-            }
+            get => Bottom + (Height * 0.5);
             set
             {
                 double offset = value - Y;
@@ -110,10 +92,7 @@ namespace Zene.Structs
         }
         public double Width
         {
-            get
-            {
-                return Right - Left;
-            }
+            get => Right - Left;
             set
             {
                 double offset = (value - Width) * 0.5;
@@ -124,10 +103,7 @@ namespace Zene.Structs
         }
         public double Height
         {
-            get
-            {
-                return Top - Bottom;
-            }
+            get => Top - Bottom;
             set
             {
                 double offset = (value - Height) * 0.5;
@@ -137,9 +113,20 @@ namespace Zene.Structs
             }
         }
 
+#nullable enable
+        public override string ToString()
+        {
+            return $"Left:{Left}, Right:{Right}, Top:{Top}, Bottom:{Bottom}";
+        }
+        public string ToString(string? format)
+        {
+            return $"Left:{Left.ToString(format)}, Right:{Right.ToString(format)}, Top:{Top.ToString(format)}, Bottom:{Bottom.ToString(format)}";
+        }
+#nullable disable
+
         public override bool Equals(object obj)
         {
-            return obj is Box b &&
+            return obj is IBox b &&
                     Left == b.Left && Right == b.Right &&
                     Top == b.Top && Bottom == b.Bottom;
         }
@@ -163,5 +150,7 @@ namespace Zene.Structs
         }
 
         public static Box Infinity { get; } = new Box(double.NegativeInfinity, double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity);
+        public static Box Zero { get; } = new Box(0, 0, 0, 0);
+        public static Box One { get; } = new Box(-1, 1, 1, -1);
     }
 }

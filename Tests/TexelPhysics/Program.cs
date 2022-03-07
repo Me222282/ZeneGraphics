@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Zene.Graphics;
 using Zene.Graphics.Base.Extensions;
 using Zene.Structs;
@@ -23,6 +24,48 @@ namespace TexelPhysics
             window.Dispose();
 
             Core.Terminate();
+        }
+
+        private static Vector2I[] RasterizeLine(Segment2 segment, char unit)
+        {
+            Vector2I[] output;
+
+            Box b = segment.Bounds;
+
+            Line2 l = new Line2(segment);
+
+            if (b.Height > b.Width)
+            {
+                // One value per row
+                output = new Vector2I[(int)b.Height];
+
+                int top = (int)b.Top;
+
+                int i = 0;
+                for (int y = (int)b.Bottom; y < top; y++)
+                {
+                    int x = (int)l.GetX(y);
+                    output[i] = new Vector2I(x, y);
+                    i++;
+                }
+            }
+            else
+            {
+                // One value per column
+                output = new Vector2I[(int)b.Width];
+
+                int right = (int)b.Right;
+
+                int i = 0;
+                for (int x = (int)b.Left; x < right; x++)
+                {
+                    int y = (int)l.GetY(x);
+                    output[i] = new Vector2I(x, y);
+                    i++;
+                }
+            }
+
+            return output;
         }
 
         public Program(int width, int height, string title)

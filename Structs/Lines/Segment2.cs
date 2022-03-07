@@ -64,5 +64,14 @@
 
             return true;
         }
+
+        public Box Bounds
+        {
+            get => new Box(
+                    A.X < B.X ? A.X : B.X,
+                    A.X > B.X ? A.X : B.X,
+                    A.Y > B.Y ? A.Y : B.Y,
+                    A.Y < B.Y ? A.Y : B.Y);
+        }
     }
 }

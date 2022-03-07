@@ -1,4 +1,6 @@
-﻿namespace Zene.Structs
+﻿using System;
+
+namespace Zene.Structs
 {
     /// <summary>
     /// A box stored by the <see cref="X"/>, <see cref="Y"/>, <see cref="Width"/> and <see cref="Height"/> values as integers.
@@ -51,13 +53,7 @@
         /// <summary>
         /// The center location of the box.
         /// </summary>
-        public Vector2I Center
-        {
-            get
-            {
-                return new Vector2I(X + (Width * 0.5), Y - (Height * 0.5));
-            }
-        }
+        public Vector2I Center => new Vector2I(X + (Width * 0.5), Y - (Height * 0.5));
         Vector2 IBox.Centre => Center;
 
         /// <summary>
@@ -65,10 +61,7 @@
         /// </summary>
         public Vector2I Location
         {
-            get
-            {
-                return new Vector2I(X, Y);
-            }
+            get => new Vector2I(X, Y);
             set
             {
                 X = value.X;
@@ -80,10 +73,7 @@
         /// </summary>
         public Vector2I Size
         {
-            get
-            {
-                return new Vector2I(Width, Height);
-            }
+            get => new Vector2I(Width, Height);
             set
             {
                 Width = value.X;
@@ -96,10 +86,7 @@
         /// </summary>
         public int Left
         {
-            get
-            {
-                return X;
-            }
+            get => X;
             set
             {
                 Width += X - value;
@@ -108,49 +95,28 @@
         }
         double IBox.Left
         {
-            get
-            {
-                return X;
-            }
-            set
-            {
-                Left = (int)value;
-            }
+            get => X;
+            set => Left = (int)value;
         }
         /// <summary>
         /// The right side of the box.
         /// </summary>
         public int Right
         {
-            get
-            {
-                return X + Width;
-            }
-            set
-            {
-                Width = value - X;
-            }
+            get => X + Width;
+            set => Width = value - X;
         }
         double IBox.Right
         {
-            get
-            {
-                return X + Width;
-            }
-            set
-            {
-                Right = (int)value;
-            }
+            get => X + Width;
+            set => Right = (int)value;
         }
         /// <summary>
         /// The bottom side of the box.
         /// </summary>
         public int Bottom
         {
-            get
-            {
-                return Y - Height;
-            }
+            get => Y - Height;
             set
             {
                 Height = Y - value;
@@ -159,39 +125,52 @@
         }
         double IBox.Bottom
         {
-            get
-            {
-                return Y - Height;
-            }
-            set
-            {
-                Bottom = (int)value;
-            }
+            get => Y - Height;
+            set => Bottom = (int)value;
         }
         /// <summary>
         /// The top side of the box.
         /// </summary>
         public int Top
         {
-            get
-            {
-                return Y;
-            }
-            set
-            {
-                Height += value - Y;
-            }
+            get => Y;
+            set => Height += value - Y;
         }
         double IBox.Top
         {
-            get
-            {
-                return Y;
-            }
-            set
-            {
-                Top = (int)value;
-            }
+            get => Y;
+            set => Top = (int)value;
+        }
+
+#nullable enable
+        public override string ToString()
+        {
+            return $"X:{X}, Y:{X}, Width:{Width}, Height:{Height}";
+        }
+        public string ToString(string? format)
+        {
+            return $"X:{X.ToString(format)}, Y:{Y.ToString(format)}, Width:{Width.ToString(format)}, Height:{Height.ToString(format)}";
+        }
+#nullable disable
+
+        public override bool Equals(object obj)
+        {
+            return obj is IBox b &&
+                    X == b.Left && Width == b.Width &&
+                    Y == b.Top && Height == b.Height;
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(X, Y, Width, Height);
+        }
+
+        public static bool operator ==(RectangleI l, RectangleI r)
+        {
+            return l.Equals(r);
+        }
+        public static bool operator !=(RectangleI l, RectangleI r)
+        {
+            return !l.Equals(r);
         }
 
         public static explicit operator RectangleI(Box box)
@@ -202,5 +181,8 @@
         {
             return new RectangleI(rect);
         }
+
+        public static RectangleI Zero { get; } = new RectangleI(0, 0, 0, 0);
+        public static RectangleI One { get; } = new RectangleI(-1, 1, 2, 2);
     }
 }
