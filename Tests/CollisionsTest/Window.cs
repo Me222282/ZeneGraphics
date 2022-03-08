@@ -50,7 +50,7 @@ namespace CollisionsTest
         private void Frame(object sender, System.Timers.ElapsedEventArgs e)
         {
             // Update _collider movement to be distance from mouse position
-            _collider.Direction = (_mousePos - _collider.Box.Location).Normalized();
+            _collider.Direction = (_mousePos - _collider.Box.Location).Normalised();
             _collider.Velocity = _collider.Box.Location.Distance(_mousePos);
 
             if (Collisions.Grid(_collider.Box, _collider.Direction, _collider.Velocity, GetBoxes(_boxes)))

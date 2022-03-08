@@ -7,7 +7,7 @@ namespace Zene.Physics
     {
         public Velocity(Vector2 dir, double speed)
         {
-            _direction = dir.Normalized();
+            _direction = dir.Normalised();
             _speed = speed;
         }
         public Velocity(Vector2 velocity)
@@ -30,7 +30,7 @@ namespace Zene.Physics
             }
             set
             {
-                _direction = value.Normalized();
+                _direction = value.Normalised();
             }
         }
 

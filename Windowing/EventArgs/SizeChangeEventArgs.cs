@@ -1,16 +1,17 @@
 ﻿using System;
+using Zene.Structs;
 
 namespace Zene.Windowing
 {
     public class SizeChangeEventArgs : EventArgs
     {
-        public SizeChangeEventArgs(double w, double h)
+        public SizeChangeEventArgs(int w, int h)
         {
-            Width = w;
-            Height = h;
+            Size = new Vector2I(w, h);
         }
 
-        public double Width { get; }
-        public double Height { get; }
+        public int Width => Size.X;
+        public int Height => Size.Y;
+        public Vector2I Size { get; }
     }
 }

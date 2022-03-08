@@ -35,7 +35,7 @@ namespace PhysicsTest
 
             // Calculate location offset
             Vector2 difference = Planet.Box.Centre - closeCorner;
-            Vector2 offset = difference.Normalized() * Planet.Radius;
+            Vector2 offset = difference.Normalised() * Planet.Radius;
             return new Velocity(-(offset - difference) / frameTime);
         }
         public override bool IsCollision(IBox box)

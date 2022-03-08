@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using Zene.Graphics;
 using Zene.Graphics.Base.Extensions;
 using Zene.Structs;
@@ -10,7 +9,7 @@ namespace TexelPhysics
 {
     public class Program : Window
     {
-        private static Vector2I _worldSize = new Vector2I(200, 200);
+        private static Vector2I _worldSize = new Vector2I(100);
         private static Vector2I _drawingSize = new Vector2I(5);
 
         static void Main()
@@ -26,7 +25,7 @@ namespace TexelPhysics
             Core.Terminate();
         }
 
-        private static Vector2I[] RasterizeLine(Segment2 segment, char unit)
+        private static Vector2I[] CreateLine(Segment2 segment, char unit)
         {
             Vector2I[] output;
 
@@ -66,6 +65,75 @@ namespace TexelPhysics
             }
 
             return output;
+        }
+        private static void DrawLine(Segment2 segment, Colour colour, Bitmap canvas)
+        {
+            Box b = segment.Bounds;
+
+            Line2 l = new Line2(segment);
+
+            if (b.Height > b.Width)
+            {
+                // One value per row
+                int top = (int)b.Top;
+
+                for (int y = (int)b.Bottom; y < top; y++)
+                {
+                    int x = (int)l.GetX(y);
+                    canvas.Data[x + (y * canvas.Width)] = colour;
+                }
+            }
+            else
+            {
+                // One value per column
+                int right = (int)b.Right;
+
+                for (int x = (int)b.Left; x < right; x++)
+                {
+                    int y = (int)l.GetY(x);
+                    canvas.Data[x + (y * canvas.Width)] = colour;
+                }
+            }
+        }
+        private static void DrawLine(Segment2 segment, Colour colour, uint width, Bitmap canvas)
+        {
+            Box b = segment.Bounds;
+
+            Line2 l = new Line2(segment);
+
+            //int offset = (int)Math.Ceiling(width * 0.5);
+            int offset = (int)width / 2;
+
+            if (b.Height > b.Width)
+            {
+                // One value per row
+                int top = (int)b.Top;
+
+                for (int y = (int)b.Bottom; y < top; y++)
+                {
+                    int x = (int)l.GetX(y);
+                    int end = (x - offset) + (int)width;
+                    for (int x2 = x - offset; x2 < end; x2++)
+                    {
+                        canvas.Data[x2 + (y * canvas.Width)] = colour;
+                    }
+                }
+            }
+            else
+            {
+                // One value per column
+                int right = (int)b.Right;
+
+                for (int x = (int)b.Left; x < right; x++)
+                {
+                    int y = (int)l.GetY(x);
+                    int end = (y - offset) + (int)width;
+                    for (int y2 = y - offset; y2 < end; y2++)
+                    {
+                        canvas.Data[x + (y2 * canvas.Width)] = colour;
+                    }
+                }
+            }
         }
 
         public Program(int width, int height, string title)
@@ -116,6 +184,7 @@ namespace TexelPhysics
                 _world.UpdateCells();
 
                 base.Framebuffer.Clear(BufferBit.Colour);
+
 
                 // Set texture data to values of cellmap
                 _texture.TexSubImage2D(0, 0, 0, _texture.Width, _texture.Height, BaseFormat.Rgba, TextureData.Byte, _world.GetTextureData());

@@ -32,7 +32,7 @@ namespace Zene.Physics
         /// <param name="compare">The boxes to compare to.</param>
         public static bool Grid<T>(this T box, Vector2 offset, IEnumerable<IBox> compare) where T : IBox, new()
         {
-            return Grid(box, offset.Normalized(), offset, compare);
+            return Grid(box, offset.Normalised(), offset, compare);
         }
         /// <summary>
         /// Determines which <see cref="Box"/> from <paramref name="compare"/> <paramref name="box"/> has collided with.
@@ -55,7 +55,7 @@ namespace Zene.Physics
         /// <param name="collision">The box collided with.</param>
         public static bool Grid<T>(this T box, Vector2 offset, IEnumerable<IBox> compare, out IBox collision) where T : IBox, new()
         {
-            return Grid(box, offset.Normalized(), offset, compare, out collision);
+            return Grid(box, offset.Normalised(), offset, compare, out collision);
         }
 
         private static bool Grid<T>(T box, Vector2 dir, Vector2 offset, IEnumerable<IBox> compare) where T : IBox, new()
@@ -206,7 +206,7 @@ namespace Zene.Physics
         /// <param name="compare">The boxes to compare to.</param>
         public static bool Grid<T>(this T box, Vector2 offset, IEnumerable<T> compare) where T : IBox, new()
         {
-            return Grid(box, offset.Normalized(), offset, compare);
+            return Grid(box, offset.Normalised(), offset, compare);
         }
         /// <summary>
         /// Determines which <see cref="Box"/> from <paramref name="compare"/> <paramref name="box"/> has collided with.
@@ -229,7 +229,7 @@ namespace Zene.Physics
         /// <param name="collision">The box collided with.</param>
         public static bool Grid<T>(this T box, Vector2 offset, IEnumerable<T> compare, out T collision) where T : IBox, new()
         {
-            return Grid(box, offset.Normalized(), offset, compare, out collision);
+            return Grid(box, offset.Normalised(), offset, compare, out collision);
         }
 
         private static bool Grid<T>(T box, Vector2 dir, Vector2 offset, IEnumerable<T> compare) where T : IBox, new()

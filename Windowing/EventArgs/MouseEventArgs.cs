@@ -37,6 +37,9 @@ namespace Zene.Windowing
 
         public Vector2 Location { get; }
 
+        public double X => Location.X;
+        public double Y => Location.Y;
+
         public Mods Modifier { get; }
     }
 }

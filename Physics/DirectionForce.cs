@@ -6,7 +6,7 @@ namespace Zene.Physics
     {
         public DirectionForce(Vector2 dir, double strength)
         {
-            _direction = dir.Normalized();
+            _direction = dir.Normalised();
             Strength = strength;
         }
         public DirectionForce(Vector2 velocity)
@@ -29,7 +29,7 @@ namespace Zene.Physics
             }
             set
             {
-                _direction = value.Normalized();
+                _direction = value.Normalised();
             }
         }
         public double Strength { get; set; }

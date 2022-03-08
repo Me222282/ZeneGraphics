@@ -5,11 +5,13 @@ namespace Zene.Windowing
 {
     public class PositionEventArgs : EventArgs
     {
-        public PositionEventArgs(double x, double y)
+        public PositionEventArgs(int x, int y)
         {
-            Location = new Vector2(x, y);
+            Location = new Vector2I(x, y);
         }
 
-        public Vector2 Location { get; }
+        public int X => Location.X;
+        public int Y => Location.Y;
+        public Vector2I Location { get; }
     }
 }

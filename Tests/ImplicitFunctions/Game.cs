@@ -86,7 +86,7 @@ namespace ImplicitFunctions
                 {
                     // Use newtons equation g = G*M / r^2 to find the force of the gravity
                     double distance = Location.Distance(_player.Position);
-                    _velocity += (_player.Position - Location).Normalized() * frameTime * ((Player.PullStrength) / (distance * distance));
+                    _velocity += (_player.Position - Location).Normalised() * frameTime * ((Player.PullStrength) / (distance * distance));
                 }
 
                 Vector2 location = Location + (_velocity * frameTime);
