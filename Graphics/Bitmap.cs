@@ -43,14 +43,16 @@ namespace Zene.Graphics
             Height = height;
         }
         public Bitmap(string path)
-            : this(new FileStream(path, FileMode.Open))
+            : this(new FileStream(path, FileMode.Open), true)
         {
             
         }
-        public Bitmap(Stream stream)
+        public Bitmap(Stream stream, bool close = false)
             : base(false)
         {
             ImageResult imageData = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
+
+            if (close) { stream.Close(); }
 
             Width = imageData.Width;
             Height = imageData.Height;
@@ -77,6 +79,30 @@ namespace Zene.Graphics
         public Bitmap SubBitmap(int x, int y, int width, int height)
         {
             Bitmap output = new Bitmap(width, height);
+
+            try
+            {
+                for (int sx = 0; sx < width; sx++)
+                {
+                    for (int sy = 0; sy < height; sy++)
+                    {
+                        output[sx, sy] = this[sx + x, sy + y];
+                    }
+                }
+            }
+            catch { throw; }
+
+            return output;
+        }
+        public Bitmap SubBitmap(IBox box)
+        {
+            int width = (int)box.Width;
+            int height = (int)box.Height;
+
+            Bitmap output = new Bitmap(width, height);
+
+            int x = (int)box.Left;
+            int y = Height - (int)box.Top - 1;
 
             try
             {
@@ -164,12 +190,10 @@ namespace Zene.Graphics
             return new Span<byte>(this, Bytes);
         }
 
-        public void Export(string path, ImageEncoding format, bool alpha = true)
+        public void Export(string path, ImageEncoding format, bool alpha = true) => Export(new FileStream(path, FileMode.Open), format, alpha, true);
+        public void Export(Stream stream, ImageEncoding format, bool alpha = true, bool close = false)
         {
             ImageWriter writer = new ImageWriter();
-
-            // The stream to write to
-            Stream stream = new FileStream(path, FileMode.Open);
 
             // Does the data contain an alpha channel
             ColorComponents storeType = alpha ? ColorComponents.RedGreenBlueAlpha : ColorComponents.RedGreenBlue;
@@ -198,7 +222,7 @@ namespace Zene.Graphics
                     break;
             }
 
-            stream.Close();
+            if (close) { stream.Close(); }
         }
 
         public void Foreach(ForeachBitmapHandler handler)
@@ -281,18 +305,12 @@ namespace Zene.Graphics
             return new Bitmap(width, height, cData);
         }
 
-        public static byte[] ExtractData(string path, out int width, out int height)
-        {
-            ImageResult imageData = ImageResult.FromMemory(File.ReadAllBytes(path), ColorComponents.RedGreenBlueAlpha);
-
-            width = imageData.Width;
-            height = imageData.Height;
-
-            return imageData.Data;
-        }
-        public static byte[] ExtractData(Stream stream, out int width, out int height)
+        public static byte[] ExtractData(string path, out int width, out int height) => ExtractData(new FileStream(path, FileMode.Open), out width, out height, true);
+        public static byte[] ExtractData(Stream stream, out int width, out int height, bool close = false)
         {
             ImageResult imageData = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
+
+            if (close) { stream.Close(); }
 
             width = imageData.Width;
             height = imageData.Height;

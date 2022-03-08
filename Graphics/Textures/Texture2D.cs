@@ -534,12 +534,14 @@ namespace Zene.Graphics
             return texture;
         }
 
-        public static Texture2D Create(Stream stream, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap)
+        public static Texture2D Create(Stream stream, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap, bool close = false)
         {
             Texture2D texture = new Texture2D(TextureFormat.Rgba8, TextureData.Byte);
 
             // Load image
             ImageResult imageData = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
+
+            if (close) { stream.Close(); }
 
             texture.SetData(imageData.Width, imageData.Height, BaseFormat.Rgba, new GLArray<byte>(imageData.Width * 4, imageData.Height, 1, imageData.Data));
             texture.WrapStyle = wrapStyle;
@@ -572,14 +574,7 @@ namespace Zene.Graphics
 
             return texture;*/
         }
-        public static Texture2D Create(string path, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap)
-        {
-            FileStream stream = new FileStream(path, FileMode.Open);
-
-            Texture2D texture = Create(stream, wrapStyle, textureQuality, mipmap);
-            stream.Close();
-
-            return texture;
-        }
+        public static Texture2D Create(string path, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap) =>
+            Create(new FileStream(path, FileMode.Open), wrapStyle, textureQuality, mipmap, true);
     }
 }

@@ -36,12 +36,12 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="format">The internal format of the texture.</param>
         /// <param name="stream"></param>
-        public Texture(TextureFormat format, Stream stream)
+        public Texture(TextureFormat format, Stream stream, bool close = false)
         {
             _texture = new TextureGL(TextureTarget.Texture2D);
             InternalFormat = format;
 
-            byte[] data = Bitmap.ExtractData(stream, out int width, out int height);
+            byte[] data = Bitmap.ExtractData(stream, out int width, out int height, close);
             _texture.TexImage2D(0, InternalFormat, width, height, BaseFormat.Rgba, TextureData.Byte, new GLArray<byte>(width, height, 1, data));
         }
         /// <summary>
@@ -50,12 +50,9 @@ namespace Zene.Graphics
         /// <param name="format">The internal format of the texture.</param>
         /// <param name="path">The path to a file containing the textures data.</param>
         public Texture(TextureFormat format, string path)
+            : this(format, new FileStream(path, FileMode.Open), true)
         {
-            _texture = new TextureGL(TextureTarget.Texture2D);
-            InternalFormat = format;
-
-            byte[] data = Bitmap.ExtractData(path, out int width, out int height);
-            _texture.TexImage2D(0, InternalFormat, width, height, BaseFormat.Rgba, TextureData.Byte, new GLArray<byte>(width, height, 1, data));
+            
         }
 
         public uint Id => _texture.Id;

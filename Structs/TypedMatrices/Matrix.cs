@@ -39,10 +39,7 @@ namespace Zene.Structs
         }
 
         private readonly T[,] _matrix;
-        public T[,] Data
-        {
-            get => _matrix;
-        }
+        public T[,] Data => _matrix;
 
         public int RowSize { get; }
         public int ColumnSize { get; }
@@ -50,10 +47,7 @@ namespace Zene.Structs
         public T this[int x, int y]
         {
             get => _matrix[x, y];
-            set
-            {
-                _matrix[x, y] = value;
-            }
+            set => _matrix[x, y] = value;
         }
 
         public override bool Equals(object obj)

@@ -38,6 +38,30 @@ namespace Zene.Graphics
             _data = values;
         }
         /// <summary>
+        /// Creates an array from raw values.
+        /// </summary>
+        /// <param name="size">The size of all dimensions of the array.</param>
+        /// <param name="values">The raw data to be stored in the array.</param>
+        public GLArray(Vector3I size, params T[] values)
+        {
+            if (values.Length != size.X * size.Y * size.Z)
+            {
+                throw new Exception($"The data in {nameof(values)} doesn't match the given size.");
+            }
+
+            if (size.X < 1 || size.Y < 1 || size.Z < 1)
+            {
+                throw new Exception($"{nameof(size.X)}, {nameof(size.Y)} and {nameof(size.Z)} must be greater than 0.");
+            }
+
+            Width = size.X;
+            Height = size.Y;
+            Depth = size.Z;
+            _zSize = Width * Height;
+
+            _data = values;
+        }
+        /// <summary>
         /// Creates an empty 1 dimensional array.
         /// </summary>
         /// <param name="length">The width of the aray.</param>
@@ -54,6 +78,24 @@ namespace Zene.Graphics
             Height = 1;
             Depth = 1;
             _zSize = Width;
+        }
+        /// <summary>
+        /// Creates an empty 2 dimensional array.
+        /// </summary>
+        /// <param name="size">The size of both dimensions of the array.</param>
+        public GLArray(Vector2I size)
+        {
+            _data = new T[size.X * size.Y];
+
+            if (size.X < 1 || size.Y < 1)
+            {
+                throw new Exception($"{nameof(size.X)} and {nameof(size.Y)} must be greater than 0.");
+            }
+
+            Width = size.X;
+            Height = size.Y;
+            Depth = 1;
+            _zSize = Width * Height;
         }
         /// <summary>
         /// Creates an empty 2 dimensional array.
@@ -92,6 +134,24 @@ namespace Zene.Graphics
             Width = width;
             Height = height;
             Depth = depth;
+            _zSize = Width * Height;
+        }
+        /// <summary>
+        /// Creates an empty 3 dimensional array.
+        /// </summary>
+        /// <param name="size">The size of all dimensions of the array.</param>
+        public GLArray(Vector3I size)
+        {
+            _data = new T[size.X * size.Y * size.Z];
+
+            if (size.X < 1 || size.Y < 1 || size.Z < 1)
+            {
+                throw new Exception($"{nameof(size.X)}, {nameof(size.Y)} and {nameof(size.Z)} must be greater than 0.");
+            }
+
+            Width = size.X;
+            Height = size.Y;
+            Depth = size.Z;
             _zSize = Width * Height;
         }
 
@@ -162,6 +222,16 @@ namespace Zene.Graphics
             get => Data[x + ((Height - y - 1) * Width) + (z * _zSize)];
             set => Data[x + ((Height - y - 1) * Width) + (z * _zSize)] = value;
         }
+        public virtual T this[Vector2I location]
+        {
+            get => Data[location.X + ((Height - location.Y - 1) * Width)];
+            set => Data[location.X + ((Height - location.Y - 1) * Width)] = value;
+        }
+        public virtual T this[Vector3I location]
+        {
+            get => Data[location.X + ((Height - location.Y - 1) * Width) + (location.Z * _zSize)];
+            set => Data[location.X + ((Height - location.Y - 1) * Width) + (location.Z * _zSize)] = value;
+        }
 
         /// <summary>
         /// Gets a 1 dimensional section of the array.
@@ -223,7 +293,7 @@ namespace Zene.Graphics
             GLArray<T> output = new GLArray<T>(width, height);
 
             int x = (int)box.Left;
-            int y = (int)box.Bottom;
+            int y = Height - (int)box.Top - 1;
 
             try
             {
@@ -252,6 +322,40 @@ namespace Zene.Graphics
         public GLArray<T> SubSection(int x, int y, int z, int width, int height, int depth)
         {
             GLArray<T> output = new GLArray<T>(width, height, depth);
+
+            try
+            {
+                for (int sx = 0; sx < width; sx++)
+                {
+                    for (int sy = 0; sy < height; sy++)
+                    {
+                        for (int sz = 0; sz < depth; sz++)
+                        {
+                            output[sx, sy, sz] = this[sx + x, sy + y, sz + z];
+                        }
+                    }
+                }
+            }
+            catch { throw; }
+
+            return output;
+        }
+        /// <summary>
+        /// Gets a 3 dimensional section of the array.
+        /// </summary>
+        /// <param name="box">The bounding box to source from.</param>
+        /// <returns></returns>
+        public GLArray<T> SubSection(IBox3 box)
+        {
+            int width = (int)box.Width;
+            int height = (int)box.Height;
+            int depth = (int)box.Depth;
+
+            GLArray<T> output = new GLArray<T>(width, height, depth);
+
+            int x = (int)box.Left;
+            int y = Height - (int)box.Top - 1;
+            int z = (int)box.Front;
 
             try
             {

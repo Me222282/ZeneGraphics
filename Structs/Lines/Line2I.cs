@@ -1,4 +1,6 @@
-﻿namespace Zene.Structs
+﻿using System;
+
+namespace Zene.Structs
 {
     /// <summary>
     /// Defines an infinite line as a point and direction.
@@ -12,10 +14,24 @@
 
             _gradients = new Gradient2(_direction);
         }
+        public Line2I(double dirX, double dirY, int locX, int locY)
+        {
+            _direction = new Vector2(dirX, dirY);
+            Location = new Vector2I(locX, locY);
+
+            _gradients = new Gradient2(_direction);
+        }
         public Line2I(Segment2I seg)
         {
             Location = seg.A;
             _direction = ((Vector2)seg.Change).Normalised();
+
+            _gradients = new Gradient2(_direction);
+        }
+        public Line2I(Segment2 seg)
+        {
+            Location = (Vector2I)seg.A;
+            _direction = seg.Change.Normalised();
 
             _gradients = new Gradient2(_direction);
         }
@@ -85,6 +101,84 @@
             }
 
             return Location.Y + (int)(_gradients.YOverX * (x - Location.X));
+        }
+
+#nullable enable
+        public override string ToString()
+        {
+            double m = _gradients.YOverX;
+            double c = Location.Y - (m * Location.X);
+
+            if (double.IsInfinity(m))
+            {
+                return $"x = {Location.X}";
+            }
+            if (m == 0)
+            {
+                return $"y = {c}";
+            }
+            if (c < 0)
+            {
+                return $"y = {m}x - {-c}";
+            }
+            if (c == 0)
+            {
+                return $"y = {m}x";
+            }
+            if (m < 0)
+            {
+                return $"y = {c} - {-m}x";
+            }
+
+            return $"y = {m}x + {c}";
+        }
+        public string ToString(string? format)
+        {
+            double m = _gradients.YOverX;
+            double c = Location.Y - (m * Location.X);
+
+            if (double.IsInfinity(m))
+            {
+                return $"x = {Location.X.ToString(format)}";
+            }
+            if (m == 0)
+            {
+                return $"y = {c.ToString(format)}";
+            }
+            if (c < 0)
+            {
+                return $"y = {m.ToString(format)}x - {(-c).ToString(format)}";
+            }
+            if (c == 0)
+            {
+                return $"y = {(-m).ToString(format)}x";
+            }
+            if (m < 0)
+            {
+                return $"y = {c.ToString(format)} - {m.ToString(format)}x";
+            }
+
+            return $"y = {m.ToString(format)}x + {c.ToString(format)}";
+        }
+#nullable disable
+
+        public override bool Equals(object obj)
+        {
+            return obj is Line2I line &&
+                _direction == line.Direction &&
+                Location == line.Location;
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_direction, Location);
+        }
+
+        public static bool operator ==(Line2I l, Line2I r) => l.Equals(r);
+        public static bool operator !=(Line2I l, Line2I r) => !l.Equals(r);
+
+        public static implicit operator Line2(Line2I line)
+        {
+            return new Line2(line._direction, line.Location);
         }
     }
 }

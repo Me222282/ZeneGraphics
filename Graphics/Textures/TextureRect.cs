@@ -438,12 +438,14 @@ namespace Zene.Graphics
 
             return texture;
         }
-        public static TextureRect Create(Stream stream, WrapStyle wrapStyle, TextureSampling textureQuality)
+        public static TextureRect Create(Stream stream, WrapStyle wrapStyle, TextureSampling textureQuality, bool close = false)
         {
             TextureRect texture = new TextureRect(TextureFormat.Rgba8, TextureData.Byte);
 
             // Load image
             ImageResult imageData = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
+
+            if (close) { stream.Close(); }
 
             texture.SetData(imageData.Width, imageData.Height, BaseFormat.Rgba, new GLArray<byte>(imageData.Width * 4, imageData.Height, 1, imageData.Data));
             texture.WrapStyle = wrapStyle;
@@ -459,14 +461,7 @@ namespace Zene.Graphics
 
             return texture;
         }
-        public static TextureRect Create(string path, WrapStyle wrapStyle, TextureSampling textureQuality)
-        {
-            FileStream stream = new FileStream(path, FileMode.Open);
-
-            TextureRect texture = Create(stream, wrapStyle, textureQuality);
-            stream.Close();
-
-            return texture;
-        }
+        public static TextureRect Create(string path, WrapStyle wrapStyle, TextureSampling textureQuality) =>
+            Create(new FileStream(path, FileMode.Open), wrapStyle, textureQuality, true);
     }
 }

@@ -31,7 +31,7 @@ namespace TexelPhysics
 
             Box b = segment.Bounds;
 
-            Line2 l = new Line2(segment);
+            Line2I l = new Line2I(segment);
 
             if (b.Height > b.Width)
             {
@@ -43,7 +43,7 @@ namespace TexelPhysics
                 int i = 0;
                 for (int y = (int)b.Bottom; y < top; y++)
                 {
-                    int x = (int)l.GetX(y);
+                    int x = l.GetX(y);
                     output[i] = new Vector2I(x, y);
                     i++;
                 }
@@ -58,7 +58,7 @@ namespace TexelPhysics
                 int i = 0;
                 for (int x = (int)b.Left; x < right; x++)
                 {
-                    int y = (int)l.GetY(x);
+                    int y = l.GetY(x);
                     output[i] = new Vector2I(x, y);
                     i++;
                 }
@@ -70,7 +70,7 @@ namespace TexelPhysics
         {
             Box b = segment.Bounds;
 
-            Line2 l = new Line2(segment);
+            Line2I l = new Line2I(segment);
 
             if (b.Height > b.Width)
             {
@@ -79,7 +79,7 @@ namespace TexelPhysics
 
                 for (int y = (int)b.Bottom; y < top; y++)
                 {
-                    int x = (int)l.GetX(y);
+                    int x = l.GetX(y);
                     canvas.Data[x + (y * canvas.Width)] = colour;
                 }
             }
@@ -90,7 +90,7 @@ namespace TexelPhysics
 
                 for (int x = (int)b.Left; x < right; x++)
                 {
-                    int y = (int)l.GetY(x);
+                    int y = l.GetY(x);
                     canvas.Data[x + (y * canvas.Width)] = colour;
                 }
             }
@@ -99,7 +99,7 @@ namespace TexelPhysics
         {
             Box b = segment.Bounds;
 
-            Line2 l = new Line2(segment);
+            Line2I l = new Line2I(segment);
 
             //int offset = (int)Math.Ceiling(width * 0.5);
             int offset = (int)width / 2;
@@ -111,7 +111,7 @@ namespace TexelPhysics
 
                 for (int y = (int)b.Bottom; y < top; y++)
                 {
-                    int x = (int)l.GetX(y);
+                    int x = l.GetX(y);
                     int end = (x - offset) + (int)width;
                     for (int x2 = x - offset; x2 < end; x2++)
                     {
@@ -126,7 +126,7 @@ namespace TexelPhysics
 
                 for (int x = (int)b.Left; x < right; x++)
                 {
-                    int y = (int)l.GetY(x);
+                    int y = l.GetY(x);
                     int end = (y - offset) + (int)width;
                     for (int y2 = y - offset; y2 < end; y2++)
                     {

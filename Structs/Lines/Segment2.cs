@@ -1,4 +1,6 @@
-﻿namespace Zene.Structs
+﻿using System;
+
+namespace Zene.Structs
 {
     /// <summary>
     /// Defines a line segment as two points.
@@ -9,6 +11,11 @@
         {
             A = a;
             B = b;
+        }
+        public Segment2(double aX, double aY, double bX, double bY)
+        {
+            A = new Vector2(aX, aY);
+            B = new Vector2(bX, bY);
         }
         public Segment2(Line2 l, double distance)
         {
@@ -72,6 +79,33 @@
                     A.X > B.X ? A.X : B.X,
                     A.Y > B.Y ? A.Y : B.Y,
                     A.Y < B.Y ? A.Y : B.Y);
+        }
+
+#nullable enable
+        public override string ToString()
+        {
+            return $"A:{A}, B:{B}";
+        }
+        public string ToString(string? format)
+        {
+            return $"A:{A.ToString(format)}, B:{B.ToString(format)}";
+        }
+#nullable disable
+
+        public override bool Equals(object obj)
+        {
+            return obj is Segment2 seg &&
+                A == seg.A &&
+                B == seg.B;
+        }
+        public override int GetHashCode() => HashCode.Combine(A, B);
+
+        public static bool operator ==(Segment2 l,Segment2 r) => l.Equals(r);
+        public static bool operator !=(Segment2 l, Segment2 r) => l.Equals(r);
+
+        public static explicit operator Segment2I(Segment2 segment)
+        {
+            return new Segment2I((Vector2I)segment.A, (Vector2I)segment.B);
         }
     }
 }

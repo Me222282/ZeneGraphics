@@ -1,4 +1,6 @@
-﻿namespace Zene.Structs
+﻿using System;
+
+namespace Zene.Structs
 {
     /// <summary>
     /// Defines an infinite line as a point and direction.
@@ -9,6 +11,13 @@
         {
             _direction = dir;
             Location = loc;
+
+            _gradients = new Gradient3(_direction);
+        }
+        public Line3(double dirX, double dirY, double dirZ, double locX, double locY, double locZ)
+        {
+            _direction = new Vector3(dirX, dirY, dirZ);
+            Location = new Vector3(locX, locY, locZ);
 
             _gradients = new Gradient3(_direction);
         }
@@ -118,6 +127,30 @@
             }
 
             return Location.Z + (_gradients.ZOverY * (y - Location.Y));
+        }
+
+#nullable enable
+        public override string ToString() => $"Location:{Location}, Direction:{_direction}";
+        public string ToString(string? format) => $"Location:{Location.ToString(format)}, Direction:{_direction.ToString(format)}";
+#nullable disable
+
+        public override bool Equals(object obj)
+        {
+            return obj is Line3 line &&
+                _direction == line.Direction &&
+                Location == line.Location;
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_direction, Location);
+        }
+
+        public static bool operator ==(Line3 l, Line3 r) => l.Equals(r);
+        public static bool operator !=(Line3 l, Line3 r) => !l.Equals(r);
+
+        public static explicit operator Line3I(Line3 line)
+        {
+            return new Line3I(line._direction, (Vector2I)line.Location);
         }
     }
 }

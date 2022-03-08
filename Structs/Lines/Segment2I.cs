@@ -12,6 +12,11 @@ namespace Zene.Structs
             A = a;
             B = b;
         }
+        public Segment2I(int aX, int aY, int bX, int bY)
+        {
+            A = new Vector2I(aX, aY);
+            B = new Vector2I(bX, bY);
+        }
         public Segment2I(Line2I l, int distance)
         {
             A = l.Location;
@@ -75,5 +80,29 @@ namespace Zene.Structs
                     Math.Abs(A.X - B.X),
                     Math.Abs(A.Y - B.Y));
         }
+
+#nullable enable
+        public override string ToString()
+        {
+            return $"A:{A}, B:{B}";
+        }
+        public string ToString(string? format)
+        {
+            return $"A:{A.ToString(format)}, B:{B.ToString(format)}";
+        }
+#nullable disable
+
+        public override bool Equals(object obj)
+        {
+            return obj is Segment2I seg &&
+                A == seg.A &&
+                B == seg.B;
+        }
+        public override int GetHashCode() => HashCode.Combine(A, B);
+
+        public static bool operator ==(Segment2I l, Segment2I r) => l.Equals(r);
+        public static bool operator !=(Segment2I l, Segment2I r) => l.Equals(r);
+
+        public static implicit operator Segment2(Segment2I segment) => new Segment2I(segment.A, segment.B);
     }
 }

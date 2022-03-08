@@ -1,4 +1,6 @@
-﻿namespace Zene.Structs
+﻿using System;
+
+namespace Zene.Structs
 {
     /// <summary>
     /// Defines an infinite line as a point and direction.
@@ -12,10 +14,24 @@
 
             _gradients = new Gradient3(_direction);
         }
+        public Line3I(double dirX, double dirY, double dirZ, int locX, int locY, int locZ)
+        {
+            _direction = new Vector3(dirX, dirY, dirZ);
+            Location = new Vector3I(locX, locY, locZ);
+
+            _gradients = new Gradient3(_direction);
+        }
         public Line3I(Segment3I seg)
         {
             Location = seg.A;
             _direction = ((Vector3)seg.Change).Normalised();
+
+            _gradients = new Gradient3(_direction);
+        }
+        public Line3I(Segment3 seg)
+        {
+            Location = (Vector3I)seg.A;
+            _direction = seg.Change.Normalised();
 
             _gradients = new Gradient3(_direction);
         }
@@ -118,6 +134,30 @@
             }
 
             return Location.Z + (int)(_gradients.ZOverY * (y - Location.Y));
+        }
+
+#nullable enable
+        public override string ToString() => $"Location:{Location}, Direction:{_direction}";
+        public string ToString(string? format) => $"Location:{Location.ToString(format)}, Direction:{_direction.ToString(format)}";
+#nullable disable
+
+        public override bool Equals(object obj)
+        {
+            return obj is Line3I line &&
+                _direction == line.Direction &&
+                Location == line.Location;
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_direction, Location);
+        }
+
+        public static bool operator ==(Line3I l, Line3I r) => l.Equals(r);
+        public static bool operator !=(Line3I l, Line3I r) => !l.Equals(r);
+
+        public static implicit operator Line3(Line3I line)
+        {
+            return new Line3(line._direction, line.Location);
         }
     }
 }
