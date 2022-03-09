@@ -107,7 +107,6 @@ namespace Zene.Structs
         public override string ToString()
         {
             double m = _gradients.YOverX;
-            double c = Location.Y - (m * Location.X);
 
             if (double.IsInfinity(m))
             {
@@ -115,8 +114,10 @@ namespace Zene.Structs
             }
             if (m == 0)
             {
-                return $"y = {c}";
+                return $"y = {Location.Y}";
             }
+            double c = Location.Y - (m * Location.X);
+
             if (c < 0)
             {
                 return $"y = {m}x - {-c}";
@@ -135,7 +136,6 @@ namespace Zene.Structs
         public string ToString(string? format)
         {
             double m = _gradients.YOverX;
-            double c = Location.Y - (m * Location.X);
 
             if (double.IsInfinity(m))
             {
@@ -143,8 +143,10 @@ namespace Zene.Structs
             }
             if (m == 0)
             {
-                return $"y = {c.ToString(format)}";
+                return $"y = {Location.Y.ToString(format)}";
             }
+            double c = Location.Y - (m * Location.X);
+
             if (c < 0)
             {
                 return $"y = {m.ToString(format)}x - {(-c).ToString(format)}";
