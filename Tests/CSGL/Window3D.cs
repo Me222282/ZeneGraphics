@@ -80,7 +80,11 @@ namespace CSGL
 
                 Framebuffer.Bind();
 
+                GL.PolygonMode(GLEnum.FrontAndBack, _polygonMode);
+
                 Draw();
+
+                GL.PolygonMode(GLEnum.FrontAndBack, GLEnum.Fill);
 
                 Framebuffer.Draw();
 
@@ -325,7 +329,7 @@ namespace CSGL
             DrawObject.Draw();
 
             Shader.DrawLighting(doLight);
-            Shader.SetModelMatrix(Matrix4.CreateRotationY(Radian.Percent(0.25)) * Matrix4.CreateTranslation(100, 0, 0));
+            Shader.SetModelMatrix(Matrix4.CreateRotationZ(Radian.Percent(0.5)) * Matrix4.CreateRotationY(Radian.Percent(0.25)) * Matrix4.CreateTranslation(100, 0, 0));
             Shader.SetColourSource(ColourSource.UniformColour);
             Shader.SetDrawColour(new Colour(134, 94, 250));
 
@@ -405,6 +409,7 @@ namespace CSGL
         private Colour cameraLightCC;
 
         private bool _postProcess = false;
+        private uint _polygonMode = GLEnum.Fill;
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
@@ -516,6 +521,16 @@ namespace CSGL
                 GLFW.SetInputMode(Handle, GLFW.Cursor, GLFW.CursorHidden);
                 _mouseShow = false;
             }
+            else if (e.Key == Keys.J)
+            {
+                if (_polygonMode == GLEnum.Fill)
+                {
+                    _polygonMode = GLEnum.Line;
+                    return;
+                }
+
+                _polygonMode = GLEnum.Fill;
+            }
         }
         protected override void OnKeyUp(KeyEventArgs e)
         {
@@ -560,7 +575,7 @@ namespace CSGL
         {
             base.OnSizeChange(e);
 
-            Matrix4 matrix = Matrix4.CreatePerspectiveFieldOfView(Radian.Degrees(_zoom), e.Width / e.Height, _near, _far);
+            Matrix4 matrix = Matrix4.CreatePerspectiveFieldOfView(Radian.Degrees(_zoom), (double)e.Width / e.Height, _near, _far);
 
             Shader.SetProjectionMatrix(matrix);
             _textDisplay.Projection = matrix;

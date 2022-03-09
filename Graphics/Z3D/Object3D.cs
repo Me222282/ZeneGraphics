@@ -136,15 +136,35 @@ namespace Zene.Graphics.Z3D
                         {
                             result.Vertices[index.X].X,
                             result.Vertices[index.X].Y,
-                            result.Vertices[index.X].Z,
-
-                            result.Textures[index.Y].X,
-                            result.Textures[index.Y].Y,
-
-                            result.Normals[index.Z].X,
-                            result.Normals[index.Z].Y,
-                            result.Normals[index.Z].Z
+                            result.Vertices[index.X].Z
                         });
+                        // Tex coords
+                        if (result.Textures.Count != 0)
+                        {
+                            vertices.AddRange(new double[]
+                            {
+                                result.Textures[index.Y].X,
+                                result.Textures[index.Y].Y
+                            });
+                        }
+                        else
+                        {
+                            vertices.AddRange(new double[] { 0.0, 0.0 });
+                        }
+                        // Normals
+                        if (result.Normals.Count != 0)
+                        {
+                            vertices.AddRange(new double[]
+                            {
+                                result.Normals[index.Z].X,
+                                result.Normals[index.Z].Y,
+                                result.Normals[index.Z].Z
+                            });
+                        }
+                        else
+                        {
+                            vertices.AddRange(new double[] { 0.0, 0.0, 0.0 });
+                        }
                     }
                 }
             }
@@ -183,12 +203,22 @@ namespace Zene.Graphics.Z3D
                         {
                             result.Vertices[vi].X,
                             result.Vertices[vi].Y,
-                            result.Vertices[vi].Z,
-
-                            result.Normals[ni].X,
-                            result.Normals[ni].Y,
-                            result.Normals[ni].Z
+                            result.Vertices[vi].Z
                         });
+
+                        if (result.Normals.Count != 0)
+                        {
+                            vertices.AddRange(new double[]
+                            {
+                                result.Normals[ni].X,
+                                result.Normals[ni].Y,
+                                result.Normals[ni].Z
+                            });
+                        }
+                        else
+                        {
+                            vertices.AddRange(new double[] { 0.0, 0.0, 0.0 });
+                        }
                     }
                 }
             }
@@ -268,11 +298,21 @@ namespace Zene.Graphics.Z3D
                         {
                             result.Vertices[vi].X,
                             result.Vertices[vi].Y,
-                            result.Vertices[vi].Z,
-
-                            result.Textures[ti].X,
-                            result.Textures[ti].Y
+                            result.Vertices[vi].Z
                         });
+
+                        if (result.Textures.Count != 0)
+                        {
+                            vertices.AddRange(new double[]
+                            {
+                                result.Textures[ti].X,
+                                result.Textures[ti].Y
+                            });
+                        }
+                        else
+                        {
+                            vertices.AddRange(new double[] { 0.0, 0.0 });
+                        }
                     }
                 }
             }
@@ -322,12 +362,25 @@ namespace Zene.Graphics.Z3D
 
                         indices.Add((uint)(vertices.Count / 3));
 
-                        vertices.AddRange(new Vector3[]
+                        vertices.Add(result.Vertices[index.X]);
+                        // Tex coords
+                        if (result.Textures.Count != 0)
                         {
-                            result.Vertices[index.X],
-                            new Vector3(result.Textures[index.Y], 0),
-                            result.Normals[index.Z],
-                        });
+                            vertices.Add(new Vector3(result.Textures[index.Y], 0));
+                        }
+                        else
+                        {
+                            vertices.Add(Vector3.Zero);
+                        }
+                        // Normals
+                        if (result.Normals.Count != 0)
+                        {
+                            vertices.Add(result.Normals[index.Z]);
+                        }
+                        else
+                        {
+                            vertices.Add(Vector3.Zero);
+                        }
                     }
                 }
             }
@@ -362,11 +415,16 @@ namespace Zene.Graphics.Z3D
 
                         indices.Add((uint)(vertices.Count / 2));
 
-                        vertices.AddRange(new Vector3[]
+                        vertices.Add(result.Vertices[vi]);
+
+                        if (result.Normals.Count != 0)
                         {
-                            result.Vertices[vi],
-                            result.Normals[ni]
-                        });
+                            vertices.Add(result.Normals[ni]);
+                        }
+                        else
+                        {
+                            vertices.Add(Vector3.Zero);
+                        }
                     }
                 }
             }
@@ -437,11 +495,16 @@ namespace Zene.Graphics.Z3D
 
                         indices.Add((uint)(vertices.Count / 2));
 
-                        vertices.AddRange(new Vector3[]
+                        vertices.Add(result.Vertices[vi]);
+
+                        if (result.Textures.Count != 0)
                         {
-                            result.Vertices[vi],
-                            new Vector3(result.Textures[ti], 0)
-                        });
+                            vertices.Add(new Vector3(result.Textures[ti], 0));
+                        }
+                        else
+                        {
+                            vertices.Add(Vector3.Zero);
+                        }
                     }
                 }
             }

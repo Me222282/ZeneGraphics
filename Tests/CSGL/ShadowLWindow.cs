@@ -548,7 +548,7 @@ namespace CSGL
             _width = (int)e.Width;
             _height = (int)e.Height;
 
-            Matrix4 proj = Matrix4.CreatePerspectiveFieldOfView(Radian.Degrees(60), e.Width / e.Height, 1, 5000);
+            Matrix4 proj = Matrix4.CreatePerspectiveFieldOfView(Radian.Degrees(60), (double)e.Width / e.Height, 1, 5000);
 
             Shader.SetProjectionMatrix(proj);
         }

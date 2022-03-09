@@ -2,8 +2,18 @@
 
 namespace Zene.Structs
 {
+    /// <summary>
+    /// An object that manages a mathmatical matrix stored as doubles.
+    /// </summary>
+    /// <typeparam name="T">The type of value in each slot of the grid.</typeparam>
     public struct Matrix : IMatrix<double>
     {
+        /// <summary>
+        /// Creates a matrix from a size and array.
+        /// </summary>
+        /// <param name="row">The number of rows in the matrix.</param>
+        /// <param name="column">The number of columns in the matrix.</param>
+        /// <param name="matrix">The valeus to be stored in the matrix.</param>
         public Matrix(int row, int column, double[] matrix)
         {
             RowSize = row;
@@ -24,6 +34,10 @@ namespace Zene.Structs
                 }
             }
         }
+        /// <summary>
+        /// Creates a matrix from a 2d array.
+        /// </summary>
+        /// <param name="matrix">The array to crewate the matrix from.</param>
         public Matrix(double[,] matrix)
         {
             RowSize = matrix.GetLength(1);
@@ -31,6 +45,10 @@ namespace Zene.Structs
 
             _matrix = matrix;
         }
+        /// <summary>
+        /// Creates a matrix from another matrix.
+        /// </summary>
+        /// <param name="matrix">The matrix to reference from.</param>
         public Matrix(IMatrix<double> matrix)
         {
             RowSize = matrix.RowSize;
@@ -56,6 +74,11 @@ namespace Zene.Structs
             }
         }
 
+        /// <summary>
+        /// Adds this matrix to another matrix.
+        /// </summary>
+        /// <param name="matrix">The matrix to be added.</param>
+        /// <returns>The result of the addition.</returns>
         public Matrix Add(IMatrix<double> matrix)
         {
             if ((matrix.RowSize != RowSize) || (matrix.ColumnSize != ColumnSize))
@@ -75,6 +98,11 @@ namespace Zene.Structs
 
             return output;
         }
+        /// <summary>
+        /// Subtracts another matrix from this matrix.
+        /// </summary>
+        /// <param name="matrix">The matrix to be added.</param>
+        /// <returns>The result of the subtraction.</returns>
         public Matrix Subtract(IMatrix<double> matrix)
         {
             if ((matrix.RowSize != RowSize) || (matrix.ColumnSize != ColumnSize))
@@ -94,6 +122,11 @@ namespace Zene.Structs
 
             return output;
         }
+        /// <summary>
+        /// Multiplies this matrix by a value.
+        /// </summary>
+        /// <param name="value">The value to multiple by.</param>
+        /// <returns>The result of the addition.</returns>
         public Matrix Multiply(double value)
         {
             Matrix output = new Matrix(new double[RowSize, ColumnSize]);
@@ -108,7 +141,11 @@ namespace Zene.Structs
 
             return output;
         }
-
+        /// <summary>
+        /// Multiplies this matrix by another matrix.
+        /// </summary>
+        /// <param name="matrix">The matrix to multiple to this matrix.</param>
+        /// <returns>The result of the multiplication.</returns>
         public Matrix Multiply(IMatrix<double> matrix)
         {
             if (matrix.RowSize != ColumnSize)

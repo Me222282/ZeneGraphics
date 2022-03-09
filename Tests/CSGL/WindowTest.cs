@@ -243,7 +243,7 @@ namespace CSGL
             _width = (int)e.Width;
             _height = (int)e.Height;
 
-            _shader.Matrix3 = Matrix4.CreatePerspectiveFieldOfView(Radian.Degrees(65), e.Width / e.Height, 0.1, 1000);
+            _shader.Matrix3 = Matrix4.CreatePerspectiveFieldOfView(Radian.Degrees(65), (double)e.Width / e.Height, 0.1, 1000);
         }
 
         protected override void OnSizePixelChange(SizeChangeEventArgs e)

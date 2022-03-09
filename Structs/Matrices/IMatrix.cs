@@ -2,13 +2,32 @@
 
 namespace Zene.Structs
 {
+    /// <summary>
+    /// An object that manages a mathmatical matrix stored as a given type.
+    /// </summary>
+    /// <typeparam name="T">The type of value in each slot of the grid.</typeparam>
     public interface IMatrix<T> where T : unmanaged
     {
+        /// <summary>
+        /// An 2d array storing the values of the matrix.
+        /// </summary>
         public T[,] Data { get; }
 
+        /// <summary>
+        /// The number of rows in the matrix.
+        /// </summary>
         public int RowSize { get; }
+        /// <summary>
+        /// The number of columns in the matrix
+        /// </summary>
         public int ColumnSize { get; }
 
+        /// <summary>
+        /// Gets or sets a value in the matrix.
+        /// </summary>
+        /// <param name="x">The column to reference.</param>
+        /// <param name="y">The row to reference.</param>
+        /// <returns></returns>
         public T this[int x, int y] { get; set; }
 
         public static Matrix<T> operator +(IMatrix<T> a, IMatrix<T> b)

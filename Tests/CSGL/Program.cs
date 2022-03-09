@@ -26,6 +26,8 @@ namespace CSGL
 
             //Window2D window = new Window2D(800, 500, "Work");
 
+            window.Run();
+            /*
             try
             {
                 window.Run();
@@ -34,7 +36,7 @@ namespace CSGL
             {
                 Console.WriteLine(ex);
                 Console.ReadLine();
-            }
+            }*/
 
             Core.Terminate();
         }
