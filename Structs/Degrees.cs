@@ -4,7 +4,7 @@ namespace Zene.Structs
 {
     public struct Degrees
     {
-        internal const double _overPI = 1 / Math.PI;
+        private const double _overPI = 1 / Math.PI;
 
         public Degrees(double degrees)
         {
@@ -54,7 +54,7 @@ namespace Zene.Structs
 
         public static implicit operator double(Degrees d) => d._degrees;
         public static implicit operator Degrees(double d) => new Degrees(d);
-        public static implicit operator Radian(Degrees deg) => new Radian(deg._degrees * Structs.Radian._over180 * Math.PI);
+        public static implicit operator Degrees(Radian r) => new Degrees(r * 180 * _overPI);
 
         public static Degrees operator -(Degrees d) => new Degrees(-d._degrees);
     }
