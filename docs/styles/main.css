@@ -7,7 +7,7 @@
     --colour5: #2a584f;
     --colour6: #999999;
     --colour7: #748594;
-    --colourFoot: #b6b6b6;
+    --colourFoot: #cbcfce;
 }
 
 /* Code for Firefox */
@@ -140,4 +140,24 @@ li
 {
     margin: 2.5px;
     font-size: 115%;
+}
+
+/*Scroll bar styling*/
+::-webkit-scrollbar
+{
+    width: 10px;
+}
+::-webkit-scrollbar-track
+{
+    background: var(--colour1);
+    margin: 1px;
+}
+::-webkit-scrollbar-thumb
+{
+    background: #888;
+    border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover
+{
+    background: rgb(105, 105, 105);
 }
