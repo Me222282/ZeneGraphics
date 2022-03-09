@@ -3,20 +3,42 @@
 namespace Zene.Structs
 {
     /// <summary>
-    /// Defines a line segment as two points.
+    /// Defines a line segment as two points in 3 dimensional space stored as integers.
     /// </summary>
     public struct Segment3I
     {
+        /// <summary>
+        /// Creates a segment from two points.
+        /// </summary>
+        /// <param name="a">The first point to reference.</param>
+        /// <param name="b">The second point to reference.</param>
         public Segment3I(Vector3I a, Vector3I b)
         {
             A = a;
             B = b;
         }
+        /// <summary>
+        /// Creates a segment from two points.
+        /// </summary>
+        /// <param name="aX">The x value of the first point to reference.</param>
+        /// <param name="aY">The y value of the first point to reference.</param>
+        /// <param name="aZ">The z value of the first point to reference.</param>
+        /// <param name="bX">The x value of the second point to reference.</param>
+        /// <param name="bY">The y value of the second point to reference.</param>
+        /// <param name="bZ">The z value of the second point to reference.</param>
         public Segment3I(int aX, int aY, int aZ, int bX, int bY, int bZ)
         {
             A = new Vector3I(aX, aY, aZ);
             B = new Vector3I(bX, bY, bZ);
         }
+        /// <summary>
+        /// Creates a segment from a line and distance.
+        /// </summary>
+        /// <remarks>
+        /// Uses the reference point of the line as the value of <see cref="A"/>.
+        /// </remarks>
+        /// <param name="l">The line to use as a reference.</param>
+        /// <param name="distance">THe distance along the line to bee used as the segment.</param>
         public Segment3I(Line3I l, int distance)
         {
             A = l.Location;
@@ -36,7 +58,9 @@ namespace Zene.Structs
         /// The x distance and y distance between points <see cref="A"/> and <see cref="B"/>.
         /// </summary>
         public Vector3I Change => B - A;
-
+        /// <summary>
+        /// The smallest box that can fit around this segment.
+        /// </summary>
         public CuboidI Bounds
         {
             get => new CuboidI(

@@ -3,20 +3,40 @@
 namespace Zene.Structs
 {
     /// <summary>
-    /// Defines a line segment as two points.
+    /// Defines a line segment as two points in 2 dimensional space.
     /// </summary>
     public struct Segment2
     {
+        /// <summary>
+        /// Creates a segment from two points.
+        /// </summary>
+        /// <param name="a">The first point to reference.</param>
+        /// <param name="b">The second point to reference.</param>
         public Segment2(Vector2 a, Vector2 b)
         {
             A = a;
             B = b;
         }
+        /// <summary>
+        /// Creates a segment from two points.
+        /// </summary>
+        /// <param name="aX">The x value of the first point to reference.</param>
+        /// <param name="aY">The y value of the first point to reference.</param>
+        /// <param name="bX">The x value of the second point to reference.</param>
+        /// <param name="bY">The y value of the second point to reference.</param>
         public Segment2(double aX, double aY, double bX, double bY)
         {
             A = new Vector2(aX, aY);
             B = new Vector2(bX, bY);
         }
+        /// <summary>
+        /// Creates a segment from a line and distance.
+        /// </summary>
+        /// <remarks>
+        /// Uses the reference point of the line as the value of <see cref="A"/>.
+        /// </remarks>
+        /// <param name="l">The line to use as a reference.</param>
+        /// <param name="distance">THe distance along the line to bee used as the segment.</param>
         public Segment2(Line2 l, double distance)
         {
             A = l.Location;
@@ -35,16 +55,10 @@ namespace Zene.Structs
         /// <summary>
         /// The x distance and y distance between points <see cref="A"/> and <see cref="B"/>.
         /// </summary>
-        public Vector2 Change
-        {
-            get
-            {
-                return B - A;
-            }
-        }
+        public Vector2 Change => B - A;
 
         /// <summary>
-        /// Checks whether two line segments would intersect and outputs the intersection point.
+        /// Determines whether two line segments would intersect and outputs the intersection point.
         /// </summary>
         /// <param name="seg">The line segment to compare to.</param>
         /// <param name="intersection">The point at which the two lines will intersect. If false, this is <see cref="Vector2.Zero"/>.</param>
@@ -72,6 +86,9 @@ namespace Zene.Structs
             return true;
         }
 
+        /// <summary>
+        /// The smallest box that can fit around this segment.
+        /// </summary>
         public Box Bounds
         {
             get => new Box(

@@ -3,20 +3,42 @@
 namespace Zene.Structs
 {
     /// <summary>
-    /// Defines a line segment as two points.
+    /// Defines a line segment as two points in 3 dimensional space.
     /// </summary>
     public struct Segment3
     {
+        /// <summary>
+        /// Creates a segment from two points.
+        /// </summary>
+        /// <param name="a">The first point to reference.</param>
+        /// <param name="b">The second point to reference.</param>
         public Segment3(Vector3 a, Vector3 b)
         {
             A = a;
             B = b;
         }
+        /// <summary>
+        /// Creates a segment from two points.
+        /// </summary>
+        /// <param name="aX">The x value of the first point to reference.</param>
+        /// <param name="aY">The y value of the first point to reference.</param>
+        /// <param name="aZ">The z value of the first point to reference.</param>
+        /// <param name="bX">The x value of the second point to reference.</param>
+        /// <param name="bY">The y value of the second point to reference.</param>
+        /// <param name="bZ">The z value of the second point to reference.</param>
         public Segment3(double aX, double aY, double aZ, double bX, double bY, double bZ)
         {
             A = new Vector3(aX, aY, aZ);
             B = new Vector3(bX, bY, bZ);
         }
+        /// <summary>
+        /// Creates a segment from a line and distance.
+        /// </summary>
+        /// <remarks>
+        /// Uses the reference point of the line as the value of <see cref="A"/>.
+        /// </remarks>
+        /// <param name="l">The line to use as a reference.</param>
+        /// <param name="distance">THe distance along the line to bee used as the segment.</param>
         public Segment3(Line3 l, double distance)
         {
             A = l.Location;
@@ -35,14 +57,10 @@ namespace Zene.Structs
         /// <summary>
         /// The x distance and y distance between points <see cref="A"/> and <see cref="B"/>.
         /// </summary>
-        public Vector3 Change
-        {
-            get
-            {
-                return B - A;
-            }
-        }
-
+        public Vector3 Change => B - A;
+        /// <summary>
+        /// The smallest box that can fit around this segment.
+        /// </summary>
         public Box3 Bounds
         {
             get => new Box3(

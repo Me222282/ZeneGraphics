@@ -3,10 +3,15 @@
 namespace Zene.Structs
 {
     /// <summary>
-    /// Defines an infinite line as a point and direction.
+    /// Defines an infinite line as a point and direction in 3 dimensional space.
     /// </summary>
     public struct Line3I
     {
+        /// <summary>
+        /// Create a line from a position and direction.
+        /// </summary>
+        /// <param name="dir">The direction of the line.</param>
+        /// <param name="loc">The reference location for the line.</param>
         public Line3I(Vector3 dir, Vector3I loc)
         {
             _direction = dir;
@@ -14,6 +19,15 @@ namespace Zene.Structs
 
             _gradients = new Gradient3(_direction);
         }
+        /// <summary>
+        /// Create a line from a position and direction.
+        /// </summary>
+        /// <param name="dirX">The x value for the direction of the line.</param>
+        /// <param name="dirY">The y value for the direction of the line.</param>
+        /// <param name="dirZ">The z value for the direction of the line.</param>
+        /// <param name="locX">The x value for the reference location for the line.</param>
+        /// <param name="locY">The y value for the reference location for the line.</param>
+        /// <param name="locZ">The z value for the reference location for the line.</param>
         public Line3I(double dirX, double dirY, double dirZ, int locX, int locY, int locZ)
         {
             _direction = new Vector3(dirX, dirY, dirZ);
@@ -21,6 +35,10 @@ namespace Zene.Structs
 
             _gradients = new Gradient3(_direction);
         }
+        /// <summary>
+        /// Creates a line based off a segment.
+        /// </summary>
+        /// <param name="seg">The segment to reference from.</param>
         public Line3I(Segment3I seg)
         {
             Location = seg.A;
@@ -28,6 +46,10 @@ namespace Zene.Structs
 
             _gradients = new Gradient3(_direction);
         }
+        /// <summary>
+        /// Creates a line based off a segment.
+        /// </summary>
+        /// <param name="seg">The segment to reference from.</param>
         public Line3I(Segment3 seg)
         {
             Location = (Vector3I)seg.A;
