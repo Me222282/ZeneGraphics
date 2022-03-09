@@ -2,8 +2,20 @@
 
 namespace Zene.Structs
 {
+    /// <summary>
+    /// An object that holds a RGBA colour value as integers.
+    /// </summary>
     public struct ColourI
     {
+        /// <summary>
+        /// Creates a colour from RGB values.
+        /// </summary>
+        /// <remarks>
+        /// Alpha has a value of 255.
+        /// </remarks>
+        /// <param name="r">The red component of the colour.</param>
+        /// <param name="g">The green component of the colour.</param>
+        /// <param name="b">The blue component of the colour.</param>
         public ColourI(int r, int g, int b)
         {
             R = r;
@@ -11,6 +23,13 @@ namespace Zene.Structs
             B = b;
             A = 255;
         }
+        /// <summary>
+        /// Creates a colour from RGBA values.
+        /// </summary>
+        /// <param name="r">The red component of the colour.</param>
+        /// <param name="g">The green component of the colour.</param>
+        /// <param name="b">The blue component of the colour.</param>
+        /// <param name="a">The alpha component of the colour.</param>
         public ColourI(int r, int g, int b, int a)
         {
             R = r;
@@ -19,6 +38,23 @@ namespace Zene.Structs
             A = a;
         }
 
+        /// <summary>
+        /// Create a colour from an already defined colour with an opacity.
+        /// </summary>
+        /// <param name="colour">The colour containing the RGB values.</param>
+        /// <param name="alpha">The alpha component of the colour.</param>
+        public ColourI(ColourI3 colour, int alpha)
+        {
+            R = colour.R;
+            G = colour.G;
+            B = colour.B;
+            A = alpha;
+        }
+        /// <summary>
+        /// Create a colour from an already defined colour stored as bytes with an opacity.
+        /// </summary>
+        /// <param name="colour">The colour containing the RGB values as bytes.</param>
+        /// <param name="alpha">The alpha component of the colour.</param>
         public ColourI(Colour3 colour, int alpha)
         {
             R = colour.R;
@@ -26,6 +62,11 @@ namespace Zene.Structs
             B = colour.B;
             A = alpha;
         }
+        /// <summary>
+        /// Create a colour from an already defined colour stored as floats with an opacity.
+        /// </summary>
+        /// <param name="colour">The colour containing the RGB values as floats.</param>
+        /// <param name="alpha">The alpha component of the colour.</param>
         public ColourI(ColourF3 colour, int alpha)
         {
             R = (int)(colour.R * 255);
@@ -34,11 +75,26 @@ namespace Zene.Structs
             A = alpha;
         }
 
+        /// <summary>
+        /// The red component of the colour.
+        /// </summary>
         public int R { get; set; }
+        /// <summary>
+        /// The green component of the colour.
+        /// </summary>
         public int G { get; set; }
+        /// <summary>
+        /// The blue component of the colour.
+        /// </summary>
         public int B { get; set; }
+        /// <summary>
+        /// The alpha component of the colour.
+        /// </summary>
         public int A { get; set; }
 
+        /// <summary>
+        /// Returns this colour stored as HSL values.
+        /// </summary>
         public Vector3 ToHsl()
         {
             double h;
@@ -85,6 +141,15 @@ namespace Zene.Structs
 
             return new Vector3(h, s, l);
         }
+        /// <summary>
+        /// Creates a colour from HLS values.
+        /// </summary>
+        /// <remarks>
+        /// Alpha has a value of 255.
+        /// </remarks>
+        /// <param name="h">The hue of the colour.</param>
+        /// <param name="s">The saturation of the colour.</param>
+        /// <param name="l">The luminosity of the colour.</param>
         public static ColourI FromHsl(double h, double s, double l)
         {
             double p2;
@@ -110,6 +175,40 @@ namespace Zene.Structs
                 (int)(r * 255.0),
                 (int)(g * 255.0),
                 (int)(b * 255.0));
+        }
+        /// <summary>
+        /// Creates a colour from HLS values.
+        /// </summary>
+        /// <param name="h">The hue of the colour.</param>
+        /// <param name="s">The saturation of the colour.</param>
+        /// <param name="l">The luminosity of the colour.</param>
+        /// <param name="a">THe alpha component of the colour.</param>
+        public static ColourI FromHsl(double h, double s, double l, int a)
+        {
+            double p2;
+            if (l <= 0.5) p2 = l * (1 + s);
+            else p2 = l + s - l * s;
+
+            double p1 = 2 * l - p2;
+            double r, g, b;
+            if (s == 0)
+            {
+                r = l;
+                g = l;
+                b = l;
+            }
+            else
+            {
+                r = Colour.QqhToRgb(p1, p2, h + 120);
+                g = Colour.QqhToRgb(p1, p2, h);
+                b = Colour.QqhToRgb(p1, p2, h - 120);
+            }
+
+            return new ColourI(
+                (int)(r * 255.0),
+                (int)(g * 255.0),
+                (int)(b * 255.0),
+                a);
         }
 
 #nullable enable
@@ -232,6 +331,9 @@ namespace Zene.Structs
             return new ColourI((int)(v.X * 255), (int)(v.Y * 255), (int)(v.Z * 255), (int)(v.W * 255));
         }
 
+        /// <summary>
+        /// A colour that has all components set to 0.
+        /// </summary>
         public static ColourI Zero { get; } = new ColourI(0, 0, 0, 0);
     }
 }

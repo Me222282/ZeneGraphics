@@ -3,7 +3,7 @@
 namespace Zene.Structs
 {
     /// <summary>
-    /// An object that holds a RGBA colour value in Bytes.
+    /// An object that holds a RGBA colour value as bytes.
     /// </summary>
     public struct Colour
     {
@@ -147,6 +147,9 @@ namespace Zene.Structs
         /// <remarks>
         /// Alpha has a value of 255.
         /// </remarks>
+        /// <param name="h">The hue of the colour.</param>
+        /// <param name="s">The saturation of the colour.</param>
+        /// <param name="l">The luminosity of the colour.</param>
         public static Colour FromHsl(double h, double s, double l)
         {
             double p2;
@@ -176,6 +179,10 @@ namespace Zene.Structs
         /// <summary>
         /// Creates a colour from HLS values and opacity.
         /// </summary>
+        /// <param name="h">The hue of the colour.</param>
+        /// <param name="s">The saturation of the colour.</param>
+        /// <param name="l">The luminosity of the colour.</param>
+        /// <param name="a">THe alpha component of the colour.</param>
         public static Colour FromHsl(double h, double s, double l, byte a)
         {
             double p2;

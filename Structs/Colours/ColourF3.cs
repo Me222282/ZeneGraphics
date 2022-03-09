@@ -2,8 +2,17 @@
 
 namespace Zene.Structs
 {
+    /// <summary>
+    /// An object that holds a RGB colour value as floats.
+    /// </summary>
     public struct ColourF3
     {
+        /// <summary>
+        /// Creates a colour from RGB values.
+        /// </summary>
+        /// <param name="r">The red component of the colour.</param>
+        /// <param name="g">The green component of the colour.</param>
+        /// <param name="b">The blue component of the colour.</param>
         public ColourF3(float r, float g, float b)
         {
             R = r;
@@ -11,10 +20,22 @@ namespace Zene.Structs
             B = b;
         }
 
+        /// <summary>
+        /// The red component of the colour.
+        /// </summary>
         public float R { get; set; }
+        /// <summary>
+        /// The green component of the colour.
+        /// </summary>
         public float G { get; set; }
+        /// <summary>
+        /// The blue component of the colour.
+        /// </summary>
         public float B { get; set; }
 
+        /// <summary>
+        /// Returns this colour stored as HSL values.
+        /// </summary>
         public Vector3 ToHsl()
         {
             double h;
@@ -56,6 +77,12 @@ namespace Zene.Structs
 
             return new Vector3(h, s, l);
         }
+        /// <summary>
+        /// Creates a colour from HLS values.
+        /// </summary>
+        /// <param name="h">The hue of the colour.</param>
+        /// <param name="s">The saturation of the colour.</param>
+        /// <param name="l">The luminosity of the colour.</param>
         public static ColourF3 FromHsl(double h, double s, double l)
         {
             double p2;
@@ -199,6 +226,9 @@ namespace Zene.Structs
             return new ColourF3((float)v.X, (float)v.Y, (float)v.Z);
         }
 
+        /// <summary>
+        /// A colour that has all components set to 0.
+        /// </summary>
         public static ColourF3 Zero { get; } = new ColourF3(0, 0, 0);
     }
 }
