@@ -112,6 +112,48 @@ namespace Zene.Structs
                 (int)(b * 255.0));
         }
 
+#nullable enable
+        public override string ToString()
+        {
+            return $"R:{R}, G:{G}, B:{B}, A:{A}";
+        }
+        public string ToString(string? format)
+        {
+            return $"R:{R.ToString(format)}, G:{G.ToString(format)}, B:{B.ToString(format)}, A:{A.ToString(format)}";
+        }
+#nullable disable
+
+        public override bool Equals(object obj)
+        {
+            return (obj is ColourI i &&
+                R == i.R &&
+                G == i.G &&
+                B == i.B &&
+                A == i.A) ||
+                (obj is Colour c &&
+                R == c.R &&
+                G == c.G &&
+                B == c.B &&
+                A == c.A) ||
+                (obj is ColourF f &&
+                (R * 255f) == f.R &&
+                (G * 255f) == f.G &&
+                (B * 255f) == f.B &&
+                (A * 255f) == f.A);
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(R, G, B, A);
+        }
+
+        public static bool operator ==(ColourI l, ColourI r) => l.Equals(r);
+        public static bool operator !=(ColourI l, ColourI r) => !l.Equals(r);
+
+        public static bool operator ==(ColourI l, Colour r) => l.Equals(r);
+        public static bool operator !=(ColourI l, Colour r) => !l.Equals(r);
+        public static bool operator ==(ColourI l, ColourF r) => l.Equals(r);
+        public static bool operator !=(ColourI l, ColourF r) => !l.Equals(r);
+
         public static implicit operator ColourF(ColourI c)
         {
             return new ColourF(
@@ -190,27 +232,6 @@ namespace Zene.Structs
             return new ColourI((int)(v.X * 255), (int)(v.Y * 255), (int)(v.Z * 255), (int)(v.W * 255));
         }
 
-        public override string ToString()
-        {
-            return $"R:{R}, G:{G}, B:{B}, A:{A}";
-        }
-
         public static ColourI Zero { get; } = new ColourI(0, 0, 0, 0);
-
-        public static ColourI Random(Random r)
-        {
-            return new ColourI(
-                r.Next(0, 256),
-                r.Next(0, 256),
-                r.Next(0, 256));
-        }
-        public static ColourI RandomA(Random r)
-        {
-            return new ColourI(
-                r.Next(0, 256),
-                r.Next(0, 256),
-                r.Next(0, 256),
-                r.Next(0, 256));
-        }
     }
 }

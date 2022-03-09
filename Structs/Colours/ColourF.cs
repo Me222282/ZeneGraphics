@@ -114,6 +114,48 @@ namespace Zene.Structs
             return new ColourF((float)r, (float)g, (float)b);
         }
 
+#nullable enable
+        public override string ToString()
+        {
+            return $"R:{R}, G:{G}, B:{B}, A:{A}";
+        }
+        public string ToString(string? format)
+        {
+            return $"R:{R.ToString(format)}, G:{G.ToString(format)}, B:{B.ToString(format)}, A:{A.ToString(format)}";
+        }
+#nullable disable
+
+        public override bool Equals(object obj)
+        {
+            return (obj is ColourF f &&
+                R == f.R &&
+                G == f.G &&
+                B == f.B &&
+                A == f.A) ||
+                (obj is Colour c &&
+                R == (c.R * 255f) &&
+                G == (c.G * 255f) &&
+                B == (c.B * 255f) &&
+                A == (c.A * 255f)) ||
+                (obj is ColourI i &&
+                R == (i.R * 255f) &&
+                G == (i.G * 255f) &&
+                B == (i.B * 255f) &&
+                A == (i.A * 255f));
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(R, G, B, A);
+        }
+
+        public static bool operator ==(ColourF l, ColourF r) => l.Equals(r);
+        public static bool operator !=(ColourF l, ColourF r) => !l.Equals(r);
+
+        public static bool operator ==(ColourF l, Colour r) => l.Equals(r);
+        public static bool operator !=(ColourF l, Colour r) => !l.Equals(r);
+        public static bool operator ==(ColourF l, ColourI r) => l.Equals(r);
+        public static bool operator !=(ColourF l, ColourI r) => !l.Equals(r);
+
         public static explicit operator Colour(ColourF c)
         {
             return new Colour(
@@ -196,29 +238,8 @@ namespace Zene.Structs
             return new ColourF((float)v.X, (float)v.Y, (float)v.Z, (float)v.W);
         }
 
-        public override string ToString()
-        {
-            return $"R:{R}, G:{G}, B:{B}, A:{A}";
-        }
-
         internal const float ByteToFloat = /*0.00392156862745098f*/ (float)1 / 255;
 
         public static ColourF Zero { get; } = new ColourF(0, 0, 0, 0);
-
-        public static ColourF Random(Random r)
-        {
-            return new ColourF(
-                (float)r.NextDouble(),
-                (float)r.NextDouble(),
-                (float)r.NextDouble());
-        }
-        public static ColourF RandomA(Random r)
-        {
-            return new ColourF(
-                (float)r.NextDouble(),
-                (float)r.NextDouble(),
-                (float)r.NextDouble(),
-                (float)r.NextDouble());
-        }
     }
 }

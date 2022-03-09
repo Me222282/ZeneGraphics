@@ -2,6 +2,9 @@
 
 namespace Zene.Structs
 {
+    /// <summary>
+    /// The class containing extensions included in the library.
+    /// </summary>
     public static class StructExt
     {
         /// <summary>
@@ -41,10 +44,98 @@ namespace Zene.Structs
         public static Colour NextColourA(this Random random)
         {
             return new Colour(
-                (byte)r.Next(0, 256),
-                (byte)r.Next(0, 256),
-                (byte)r.Next(0, 256),
-                (byte)r.Next(0, 256));
+                (byte)random.Next(0, 256),
+                (byte)random.Next(0, 256),
+                (byte)random.Next(0, 256),
+                (byte)random.Next(0, 256));
+        }
+
+        /// <summary>
+        /// Returns a colour with random values for the RGB components.
+        /// </summary>
+        /// <param name="random"></param>
+        public static Colour3 NextColour3(this Random random)
+        {
+            return new Colour3(
+                (byte)random.Next(0, 256),
+                (byte)random.Next(0, 256),
+                (byte)random.Next(0, 256));
+        }
+        /// <summary>
+        /// Returns a colour in SDR stored as floats with random values for the RGB components.
+        /// </summary>
+        /// <param name="random"></param>
+        public static ColourF3 NextColourF3(this Random random)
+        {
+            return new ColourF3(
+                (float)random.NextDouble(),
+                (float)random.NextDouble(),
+                (float)random.NextDouble());
+        }
+        /// <summary>
+        /// Returns a colour in SDR stored as integers with random values for the RGB components.
+        /// </summary>
+        /// <param name="random"></param>
+        public static ColourI3 NextColourI3(this Random random)
+        {
+            return new ColourI3(
+                random.Next(0, 256),
+                random.Next(0, 256),
+                random.Next(0, 256));
+        }
+
+        /// <summary>
+        /// Returns a colour in SDR stored as floats with random values for the RGB components.
+        /// </summary>
+        /// <remarks>
+        /// Alpha has a value of 1.0f.
+        /// </remarks>
+        /// <param name="random"></param>
+        public static ColourF NextColourF(this Random random)
+        {
+            return new ColourF(
+                (float)random.NextDouble(),
+                (float)random.NextDouble(),
+                (float)random.NextDouble());
+        }
+        /// <summary>
+        /// Returns a colour in SDR stored as floats with random values for the RGBA components.
+        /// </summary>
+        /// <param name="random"></param>
+        public static ColourF NextColourFA(this Random random)
+        {
+            return new ColourF(
+                (float)random.NextDouble(),
+                (float)random.NextDouble(),
+                (float)random.NextDouble(),
+                (float)random.NextDouble());
+        }
+
+        /// <summary>
+        /// Returns a colour in SDR stored as integers with random values for the RGB components.
+        /// </summary>
+        /// <remarks>
+        /// Alpha has a value of 255.
+        /// </remarks>
+        /// <param name="random"></param>
+        public static ColourI NextColourI(this Random random)
+        {
+            return new ColourI(
+                random.Next(0, 256),
+                random.Next(0, 256),
+                random.Next(0, 256));
+        }
+        /// <summary>
+        /// Returns a colour in SDR stored as integers with random values for the RGBA components.
+        /// </summary>
+        /// <param name="random"></param>
+        public static ColourI NextColourIA(this Random random)
+        {
+            return new ColourI(
+                random.Next(0, 256),
+                random.Next(0, 256),
+                random.Next(0, 256),
+                random.Next(0, 256));
         }
     }
 }

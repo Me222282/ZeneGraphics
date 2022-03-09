@@ -88,6 +88,45 @@ namespace Zene.Structs
                 (int)(b * 255.0));
         }
 
+#nullable enable
+        public override string ToString()
+        {
+            return $"R:{R}, G:{G}, B:{B}";
+        }
+        public string ToString(string? format)
+        {
+            return $"R:{R.ToString(format)}, G:{G.ToString(format)}, B:{B.ToString(format)}";
+        }
+#nullable disable
+
+        public override bool Equals(object obj)
+        {
+            return (obj is ColourI3 i &&
+                R == i.R &&
+                G == i.G &&
+                B == i.B) ||
+                (obj is Colour3 c &&
+                R == c.R &&
+                G == c.G &&
+                B == c.B) ||
+                (obj is ColourF3 f &&
+                (R * 255f) == f.R &&
+                (G * 255f) == f.G &&
+                (B * 255f) == f.B);
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(R, G, B);
+        }
+
+        public static bool operator ==(ColourI3 l, ColourI3 r) => l.Equals(r);
+        public static bool operator !=(ColourI3 l, ColourI3 r) => !l.Equals(r);
+
+        public static bool operator ==(ColourI3 l, Colour3 r) => l.Equals(r);
+        public static bool operator !=(ColourI3 l, Colour3 r) => !l.Equals(r);
+        public static bool operator ==(ColourI3 l, ColourF3 r) => l.Equals(r);
+        public static bool operator !=(ColourI3 l, ColourF3 r) => !l.Equals(r);
+
         public static implicit operator ColourF3(ColourI3 c)
         {
             return new ColourF3(
@@ -165,19 +204,6 @@ namespace Zene.Structs
             return new ColourI3((int)(v.X * 255), (int)(v.Y * 255), (int)(v.Z * 255));
         }
 
-        public override string ToString()
-        {
-            return $"R:{R}, G:{G}, B:{B}";
-        }
-
         public static ColourI3 Zero { get; } = new ColourI3(0, 0, 0);
-
-        public static ColourI Random(Random r)
-        {
-            return new ColourI(
-                r.Next(0, 256),
-                r.Next(0, 256),
-                r.Next(0, 256));
-        }
     }
 }

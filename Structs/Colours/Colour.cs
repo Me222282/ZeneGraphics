@@ -214,6 +214,48 @@ namespace Zene.Structs
             return q1;
         }
 
+#nullable enable
+        public override string ToString()
+        {
+            return $"R:{R}, G:{G}, B:{B}, A:{A}";
+        }
+        public string ToString(string? format)
+        {
+            return $"R:{R.ToString(format)}, G:{G.ToString(format)}, B:{B.ToString(format)}, A:{A.ToString(format)}";
+        }
+#nullable disable
+
+        public override bool Equals(object obj)
+        {
+            return (obj is Colour c &&
+                R == c.R &&
+                G == c.G &&
+                B == c.B &&
+                A == c.A) ||
+                (obj is ColourF f &&
+                (R * 255f) == f.R &&
+                (G * 255f) == f.G &&
+                (B * 255f) == f.B &&
+                (A * 255f) == f.A) ||
+                (obj is ColourI i &&
+                R == i.R &&
+                G == i.G &&
+                B == i.B &&
+                A == i.A);
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(R, G, B, A);
+        }
+
+        public static bool operator ==(Colour l, Colour r) => l.Equals(r);
+        public static bool operator !=(Colour l, Colour r) => !l.Equals(r);
+
+        public static bool operator ==(Colour l, ColourF r) => l.Equals(r);
+        public static bool operator !=(Colour l, ColourF r) => !l.Equals(r);
+        public static bool operator ==(Colour l, ColourI r) => l.Equals(r);
+        public static bool operator !=(Colour l, ColourI r) => !l.Equals(r);
+
         public static implicit operator ColourF(Colour c)
         {
             return new ColourF(
@@ -290,11 +332,6 @@ namespace Zene.Structs
         public static explicit operator Colour(Vector4 v)
         {
             return new Colour((byte)(v.X * 255), (byte)(v.Y * 255), (byte)(v.Z * 255), (byte)(v.W * 255));
-        }
-
-        public override string ToString()
-        {
-            return $"R:{R}, G:{G}, B:{B}, A:{A}";
         }
 
         /// <summary>

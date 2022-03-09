@@ -88,6 +88,45 @@ namespace Zene.Structs
                 (byte)(b * 255.0));
         }
 
+#nullable enable
+        public override string ToString()
+        {
+            return $"R:{R}, G:{G}, B:{B}";
+        }
+        public string ToString(string? format)
+        {
+            return $"R:{R.ToString(format)}, G:{G.ToString(format)}, B:{B.ToString(format)}";
+        }
+#nullable disable
+
+        public override bool Equals(object obj)
+        {
+            return (obj is Colour3 c &&
+                R == c.R &&
+                G == c.G &&
+                B == c.B) ||
+                (obj is ColourF3 f &&
+                (R * 255f) == f.R &&
+                (G * 255f) == f.G &&
+                (B * 255f) == f.B) ||
+                (obj is ColourI3 i &&
+                R == i.R &&
+                G == i.G &&
+                B == i.B);
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(R, G, B);
+        }
+
+        public static bool operator ==(Colour3 l, Colour3 r) => l.Equals(r);
+        public static bool operator !=(Colour3 l, Colour3 r) => !l.Equals(r);
+
+        public static bool operator ==(Colour3 l, ColourF3 r) => l.Equals(r);
+        public static bool operator !=(Colour3 l, ColourF3 r) => !l.Equals(r);
+        public static bool operator ==(Colour3 l, ColourI3 r) => l.Equals(r);
+        public static bool operator !=(Colour3 l, ColourI3 r) => !l.Equals(r);
+
         public static implicit operator ColourF3(Colour3 c)
         {
             return new ColourF3(
@@ -165,19 +204,6 @@ namespace Zene.Structs
             return new Colour3((byte)(v.X * 255), (byte)(v.Y * 255), (byte)(v.Z * 255));
         }
 
-        public override string ToString()
-        {
-            return $"R:{R}, G:{G}, B:{B}";
-        }
-
         public static Colour3 Zero { get; } = new Colour3(0, 0, 0);
-
-        public static Colour3 Random(Random r)
-        {
-            return new Colour3(
-                (byte)r.Next(0, 256),
-                (byte)r.Next(0, 256),
-                (byte)r.Next(0, 256));
-        }
     }
 }

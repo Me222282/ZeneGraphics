@@ -80,6 +80,45 @@ namespace Zene.Structs
             return new ColourF3((float)r, (float)g, (float)b);
         }
 
+#nullable enable
+        public override string ToString()
+        {
+            return $"R:{R}, G:{G}, B:{B}";
+        }
+        public string ToString(string? format)
+        {
+            return $"R:{R.ToString(format)}, G:{G.ToString(format)}, B:{B.ToString(format)}";
+        }
+#nullable disable
+
+        public override bool Equals(object obj)
+        {
+            return (obj is ColourF3 f &&
+                R == f.R &&
+                G == f.G &&
+                B == f.B) ||
+                (obj is Colour3 c &&
+                R == (c.R * 255f) &&
+                G == (c.G * 255f) &&
+                B == (c.B * 255f)) ||
+                (obj is ColourI3 i &&
+                R == (i.R * 255f) &&
+                G == (i.G * 255f) &&
+                B == (i.B * 255f));
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(R, G, B);
+        }
+
+        public static bool operator ==(ColourF3 l, ColourF3 r) => l.Equals(r);
+        public static bool operator !=(ColourF3 l, ColourF3 r) => !l.Equals(r);
+
+        public static bool operator ==(ColourF3 l, Colour3 r) => l.Equals(r);
+        public static bool operator !=(ColourF3 l, Colour3 r) => !l.Equals(r);
+        public static bool operator ==(ColourF3 l, ColourI3 r) => l.Equals(r);
+        public static bool operator !=(ColourF3 l, ColourI3 r) => !l.Equals(r);
+
         public static explicit operator Colour3(ColourF3 c)
         {
             return new Colour3(
@@ -160,19 +199,6 @@ namespace Zene.Structs
             return new ColourF3((float)v.X, (float)v.Y, (float)v.Z);
         }
 
-        public override string ToString()
-        {
-            return $"R:{R}, G:{G}, B:{B}";
-        }
-
         public static ColourF3 Zero { get; } = new ColourF3(0, 0, 0);
-
-        public static ColourF3 Random(Random r)
-        {
-            return new ColourF3(
-                (float)r.NextDouble(),
-                (float)r.NextDouble(),
-                (float)r.NextDouble());
-        }
     }
 }
