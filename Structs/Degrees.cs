@@ -49,6 +49,9 @@ namespace Zene.Structs
         public static bool operator ==(Degrees l, Degrees r) => l.Equals(r);
         public static bool operator !=(Degrees l, Degrees r) => !l.Equals(r);
 
+        public static bool operator ==(Degrees l, Radian r) => l.Equals(r);
+        public static bool operator !=(Degrees l, Radian r) => !l.Equals(r);
+
         public static implicit operator double(Degrees d) => d._degrees;
         public static implicit operator Degrees(double d) => new Degrees(d);
         public static implicit operator Radian(Degrees deg) => new Radian(deg._degrees * Structs.Radian._over180 * Math.PI);

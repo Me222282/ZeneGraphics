@@ -43,6 +43,9 @@ namespace Zene.Structs
         public static bool operator ==(Radian l, Radian r) => l.Equals(r);
         public static bool operator !=(Radian l, Radian r) => !l.Equals(r);
 
+        public static bool operator ==(Radian l, Degrees r) => l.Equals(r);
+        public static bool operator !=(Radian l, Degrees r) => !l.Equals(r);
+
         public static implicit operator double(Radian r) => r._radian;
         public static implicit operator Radian(double d) => new Radian(d);
         public static implicit operator Degrees(Radian r) => new Degrees(r._radian * 180 * Structs.Degrees._overPI);
