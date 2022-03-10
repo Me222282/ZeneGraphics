@@ -21,6 +21,20 @@ namespace Zene.Structs
             Width = size.X;
             Height = size.Y;
         }
+        public RectangleI(double x, double y, double w, double h)
+        {
+            X = (int)x;
+            Y = (int)y;
+            Width = (int)w;
+            Height = (int)h;
+        }
+        public RectangleI(Vector2 location, Vector2 size)
+        {
+            X = (int)location.X;
+            Y = (int)location.Y;
+            Width = (int)size.X;
+            Height = (int)size.Y;
+        }
         public RectangleI(IBox box)
         {
             X = (int)box.Left;

@@ -25,6 +25,24 @@ namespace Zene.Structs
             Height = size.Y;
             Depth = size.Z;
         }
+        public CuboidI(double x, double y, double z, double w, double h, double d)
+        {
+            X = (int)x;
+            Y = (int)y;
+            Z = (int)z;
+            Width = (int)w;
+            Height = (int)h;
+            Depth = (int)d;
+        }
+        public CuboidI(Vector3 location, Vector3 size)
+        {
+            X = (int)location.X;
+            Y = (int)location.Y;
+            Z = (int)location.Z;
+            Width = (int)size.X;
+            Height = (int)size.Y;
+            Depth = (int)size.Z;
+        }
         public CuboidI(IBox3 box)
         {
             X = (int)box.Left;
