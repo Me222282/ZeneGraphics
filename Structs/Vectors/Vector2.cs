@@ -354,15 +354,7 @@ namespace Zene.Structs
         {
             return new Vector2(a.X + b.X, a.Y + b.Y);
         }
-        public static Vector2 operator +(Vector2I a, Vector2 b)
-        {
-            return new Vector2(a.X + b.X, a.Y + b.Y);
-        }
         public static Vector2 operator -(Vector2 a, Vector2I b)
-        {
-            return new Vector2(a.X - b.X, a.Y - b.Y);
-        }
-        public static Vector2 operator -(Vector2I a, Vector2 b)
         {
             return new Vector2(a.X - b.X, a.Y - b.Y);
         }
@@ -370,15 +362,7 @@ namespace Zene.Structs
         {
             return new Vector2(a.X / b.X, a.Y / b.Y);
         }
-        public static Vector2 operator /(Vector2I a, Vector2 b)
-        {
-            return new Vector2(a.X / b.X, a.Y / b.Y);
-        }
         public static Vector2 operator *(Vector2 a, Vector2I b)
-        {
-            return new Vector2(a.X * b.X, a.Y * b.Y);
-        }
-        public static Vector2 operator *(Vector2I a, Vector2 b)
         {
             return new Vector2(a.X * b.X, a.Y * b.Y);
         }

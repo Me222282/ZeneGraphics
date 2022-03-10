@@ -309,37 +309,21 @@ namespace Zene.Structs
         public static Vector2I Zero { get; } = new Vector2I(0, 0);
         public static Vector2I One { get; } = new Vector2I(1, 1);
 
-        public static Vector2I operator +(Vector2 a, Vector2I b)
+        public static Vector2 operator +(Vector2I a, Vector2 b)
         {
-            return new Vector2I(a.X + b.X, a.Y + b.Y);
+            return new Vector2(a.X + b.X, a.Y + b.Y);
         }
-        public static Vector2I operator +(Vector2I a, Vector2 b)
+        public static Vector2 operator -(Vector2I a, Vector2 b)
         {
-            return new Vector2I(a.X + b.X, a.Y + b.Y);
+            return new Vector2(a.X - b.X, a.Y - b.Y);
         }
-        public static Vector2I operator -(Vector2 a, Vector2I b)
+        public static Vector2 operator /(Vector2I a, Vector2 b)
         {
-            return new Vector2I(a.X - b.X, a.Y - b.Y);
+            return new Vector2(a.X / b.X, a.Y / b.Y);
         }
-        public static Vector2I operator -(Vector2I a, Vector2 b)
+        public static Vector2 operator *(Vector2I a, Vector2 b)
         {
-            return new Vector2I(a.X - b.X, a.Y - b.Y);
-        }
-        public static Vector2I operator *(Vector2 a, Vector2I b)
-        {
-            return new Vector2I(a.X * b.X, a.Y * b.Y);
-        }
-        public static Vector2I operator *(Vector2I a, Vector2 b)
-        {
-            return new Vector2I(a.X * b.X, a.Y * b.Y);
-        }
-        public static Vector2I operator /(Vector2 a, Vector2I b)
-        {
-            return new Vector2I(a.X / b.X, a.Y / b.Y);
-        }
-        public static Vector2I operator /(Vector2I a, Vector2 b)
-        {
-            return new Vector2I(a.X / b.X, a.Y / b.Y);
+            return new Vector2(a.X * b.X, a.Y * b.Y);
         }
 
         public static Vector2I Random(Random r)

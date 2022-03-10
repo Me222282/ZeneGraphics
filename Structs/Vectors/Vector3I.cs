@@ -325,37 +325,21 @@ namespace Zene.Structs
             return new Vector3I(a.X - b.X, a.Y - b.Y, a.Z);
         }
 
-        public static Vector3I operator +(Vector3I a, Vector3 b)
+        public static Vector3 operator +(Vector3 a, Vector3I b)
         {
-            return new Vector3I(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
+            return new Vector3(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
         }
-        public static Vector3I operator +(Vector3 a, Vector3I b)
+        public static Vector3 operator -(Vector3 a, Vector3I b)
         {
-            return new Vector3I(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
+            return new Vector3(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
         }
-        public static Vector3I operator -(Vector3 a, Vector3I b)
+        public static Vector3 operator *(Vector3 a, Vector3I b)
         {
-            return new Vector3I(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
+            return new Vector3(a.X * b.X, a.Y * b.Y, a.Z * b.Z);
         }
-        public static Vector3I operator -(Vector3I a, Vector3 b)
+        public static Vector3 operator /(Vector3 a, Vector3I b)
         {
-            return new Vector3I(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
-        }
-        public static Vector3I operator *(Vector3 a, Vector3I b)
-        {
-            return new Vector3I(a.X * b.X, a.Y * b.Y, a.Z * b.Z);
-        }
-        public static Vector3I operator *(Vector3I a, Vector3 b)
-        {
-            return new Vector3I(a.X * b.X, a.Y * b.Y, a.Z * b.Z);
-        }
-        public static Vector3I operator /(Vector3 a, Vector3I b)
-        {
-            return new Vector3I(a.X / b.X, a.Y / b.Y, a.Z / b.Z);
-        }
-        public static Vector3I operator /(Vector3I a, Vector3 b)
-        {
-            return new Vector3I(a.X / b.X, a.Y / b.Y, a.Z / b.Z);
+            return new Vector3(a.X / b.X, a.Y / b.Y, a.Z / b.Z);
         }
 
         public static Vector3I Random(Random r)
