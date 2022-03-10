@@ -197,8 +197,8 @@ namespace Zene.Graphics
 
             Texture2D texture = new Texture2D(intFormat, TextureData.Byte);
             texture.TexImage2D(0, _targetWidth, _targetHeight, BaseFormat.Rgb, texture.DataType, IntPtr.Zero);
-            texture.MinFilter = TextureSampling.Nearest;
-            texture.MagFilter = TextureSampling.Nearest;
+            texture.MinFilter = TextureSampling.Blend;
+            texture.MagFilter = TextureSampling.Blend;
 
             _framebuffer.FramebufferTexture2D(texture, (FrameAttachment)((int)FrameAttachment.Colour0 + attachment));
             _colourAttachs[attachment] = texture;
