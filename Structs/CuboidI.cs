@@ -77,6 +77,7 @@ namespace Zene.Structs
 
         public Vector3I Centre => new Vector3I(X + (Width * 0.5), Y - (Height * 0.5), Z + (Depth * 0.5));
         Vector3 IBox3.Centre => new Vector3(X + (Width * 0.5), Y - (Height * 0.5), Z + (Depth * 0.5));
+        Vector3 IBox3.Size => new Vector3(Width, Height, Depth);
 
         /// <summary>
         /// The top-left-front location of the box.

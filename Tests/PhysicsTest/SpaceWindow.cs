@@ -40,7 +40,7 @@ namespace PhysicsTest
                         r.NextDouble(0, _worldSize.Y) - (_worldSize.Y * 0.5)),
                     size,
                     r.NextDouble(PlanetGroup.MinDensity, PlanetGroup.MaxDensity),
-                    Colour3.Random(r));
+                    r.NextColour3());
             }
             _planets = new PlanetGroup(planets, Box.Infinity, _planetShader);
             // Add planet gravity forces to _rocket

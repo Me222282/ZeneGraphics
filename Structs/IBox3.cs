@@ -18,6 +18,12 @@
         Vector2 IBox.Centre => (Vector2)Centre;
 
         /// <summary>
+        /// The width and height of the box.
+        /// </summary>
+        public new Vector3 Size { get; }
+        Vector2 IBox.Size => (Vector2)Size;
+
+        /// <summary>
         /// The z location of the box.
         /// </summary>
         public double Z { get; }

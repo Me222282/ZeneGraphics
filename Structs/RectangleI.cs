@@ -68,7 +68,8 @@ namespace Zene.Structs
         /// The center location of the box.
         /// </summary>
         public Vector2I Center => new Vector2I(X + (Width * 0.5), Y - (Height * 0.5));
-        Vector2 IBox.Centre => Center;
+        Vector2 IBox.Centre => new Vector2(X + (Width * 0.5), Y - (Height * 0.5));
+        Vector2 IBox.Size => Size;
 
         /// <summary>
         /// The top-left location of the box.

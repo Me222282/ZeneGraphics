@@ -25,6 +25,11 @@
         public Vector2 Centre { get; }
 
         /// <summary>
+        /// The width and height of the box.
+        /// </summary>
+        public Vector2 Size { get; }
+
+        /// <summary>
         /// The x location of the box.
         /// </summary>
         public double X { get; }
