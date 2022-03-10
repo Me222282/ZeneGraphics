@@ -73,6 +73,7 @@ namespace Zene.Graphics
         }
 
         private readonly int _uniformTexSlot;
+        private readonly int _uniformColourSource;
 
         void IBindable.Bind()
         {
@@ -82,6 +83,8 @@ namespace Zene.Graphics
         {
             GL.UseProgram(0);
         }
+
+        private const int _blockSize = 4;
 
         public TextRenderer(int capacity)
         {
@@ -98,7 +101,7 @@ namespace Zene.Graphics
             _drawable.AddAttribute(1, 1, AttributeSize.D2); // Texture Coordinates
 
             // Setup instance offsets ready for drawing
-            _instanceData = new ArrayBuffer<Vector2>(new Vector2[capacity * 4], 4, BufferUsage.DrawRepeated);
+            _instanceData = new ArrayBuffer<Vector2>(new Vector2[capacity * _blockSize], _blockSize, BufferUsage.DrawRepeated);
 
             _drawable.Vao.Bind();
             // Add instance reference
@@ -106,11 +109,14 @@ namespace Zene.Graphics
             _drawable.Vao.AddBuffer(_instanceData, 3, 1, DataType.Double, AttributeSize.D2);
             _drawable.Vao.AddBuffer(_instanceData, 4, 2, DataType.Double, AttributeSize.D2);
             _drawable.Vao.AddBuffer(_instanceData, 5, 3, DataType.Double, AttributeSize.D2);
+            // Colour
+            //_drawable.Vao.AddBuffer(_instanceData, 6, 4, DataType.Double, AttributeSize.D4);
             // Set indexes as instance referances
             GL.VertexAttribDivisor(2, 1);
             GL.VertexAttribDivisor(3, 1);
             GL.VertexAttribDivisor(4, 1);
             GL.VertexAttribDivisor(5, 1);
+            //GL.VertexAttribDivisor(6, 1);
 
             _drawable.Vao.Unbind();
 
@@ -124,6 +130,7 @@ namespace Zene.Graphics
             _uniformMatrix = GL.GetUniformLocation(ShaderId, "matrix");
             _uniformColour = GL.GetUniformLocation(ShaderId, "uColour");
             _uniformTexSlot = GL.GetUniformLocation(ShaderId, "uTextureSlot");
+            _uniformColourSource = GL.GetUniformLocation(ShaderId, "uColourSource");
 
             // Set matrices in shader to default
             SetMatrices();
@@ -144,7 +151,7 @@ namespace Zene.Graphics
             {
                 _capacity = value;
 
-                _instanceData = new ArrayBuffer<Vector2>(new Vector2[_capacity * 4], 4, BufferUsage.DrawRepeated);
+                _instanceData = new ArrayBuffer<Vector2>(new Vector2[_capacity * _blockSize], _blockSize, BufferUsage.DrawRepeated);
 
                 _drawable.Vao.Bind();
                 // Add instance reference
@@ -194,7 +201,7 @@ namespace Zene.Graphics
             // The current character offset
             Vector2 offsetCurrent = Vector2.Zero;
             // The instance data containing offsets for each character
-            Vector2[] data = new Vector2[compText.Length * 4];
+            Vector2[] data = new Vector2[compText.Length * _blockSize];
 
             // Special for loop with two counters
             int i = 0;
@@ -254,10 +261,10 @@ namespace Zene.Graphics
                 }
 
                 // Set drawing offset data
-                data[count * 4] = offsetCurrent + charData.ExtraOffset;
-                data[(count * 4) + 1] = charData.TextureCoordOffset;
-                data[(count * 4) + 2] = charData.TextureRefSize;
-                data[(count * 4) + 3] = charData.Size;
+                data[count * _blockSize] = offsetCurrent + charData.ExtraOffset;
+                data[(count * _blockSize) + 1] = charData.TextureCoordOffset;
+                data[(count * _blockSize) + 2] = charData.TextureRefSize;
+                data[(count * _blockSize) + 3] = charData.Size;
 
                 // Adjust offset for next character
                 offsetCurrent.X += charData.Size.X + charSpace;
@@ -277,6 +284,7 @@ namespace Zene.Graphics
 
             // Set texture slot
             GL.ProgramUniform1i(ShaderId, _uniformTexSlot, 0);
+            //GL.ProgramUniform1i(ShaderId, _uniformColourSource, 1);
 
             font.BindTexture(0);
 
@@ -284,7 +292,139 @@ namespace Zene.Graphics
         }
         public void DrawLeftBound(ReadOnlySpan<char> text, Font font) => DrawLeftBound(text, font, 0, 0);
 
-        public void DrawCentred(ReadOnlySpan<char> text, Font font, double charSpace, double lineSpace)
+        /*
+        public void DrawLeftBound(ReadOnlySpan<char> text, ReadOnlySpan<Colour> colours, Font font, double charSpace, double lineSpace)
+        {
+            if (font == null)
+            {
+                throw new ArgumentNullException(nameof(font));
+            }
+            // No text is to be drawn
+            if (text == null || text == "") { return; }
+            
+            // Remove all whitespace and null values
+            string compText = new string(text).Replace(" ", "");
+            compText = compText.Replace("\n", "");
+            compText = compText.Replace("\r", "");
+            compText = compText.Replace("\t", "");
+            compText = compText.Replace("\0", "");
+            compText = compText.Replace("\a", "");
+            compText = compText.Replace("\u0027", "");
+            
+            if (compText.Length != colours.Length)
+            {
+                throw new ArgumentException($"There must be a colour in {nameof(colours)} for every drawable charater in {nameof(text)}.", nameof(colours));
+            }
+            
+            // No visable characters are drawn
+            if (compText == "") { return; }
+
+            if (compText.Length > _capacity && !AutoIncreaseCapacity)
+            {
+                throw new Exception($"{nameof(text)} has too many drawable characters. Must be less than, or equal to, {nameof(Capacity)} (White space doesn't count).");
+            }
+            else if (compText.Length > _capacity)
+            {
+                Capacity = compText.Length;
+            }
+
+            // The current character offset
+            Vector2 offsetCurrent = Vector2.Zero;
+            // The instance data containing offsets for each character
+            Vector2[] data = new Vector2[compText.Length * _blockSize];
+
+            // Special for loop with two counters
+            int i = 0;
+            int count = 0;
+            while (count < compText.Length)
+            {
+                // No character - it is null
+                if (text[i] == '\0' || text[i] == '\a' || text[i] == '\u0027')
+                {
+                    i++;
+                    // Index in compressed text shouldn't be changed - it has no null characters
+                    continue;
+                }
+                // Character should be skipped to add space
+                if (text[i] == ' ')
+                {
+                    offsetCurrent.X += font.SpaceWidth + charSpace;
+                    i++;
+                    // Index in compressed text shouldn't be changed - it has no white space
+                    continue;
+                }
+                if (text[i] == '\t')
+                {
+                    offsetCurrent.X += (font.SpaceWidth * TabSize) + charSpace;
+                    i++;
+                    // Index in compressed text shouldn't be changed - it has no white space
+                    continue;
+                }
+                // Character should be skipped - offsetCurrent adjusted for new line
+                if (text[i] == '\n')
+                {
+                    offsetCurrent.Y -= font.LineHeight + lineSpace;
+                    offsetCurrent.X = 0;
+                    i++;
+                    // Index in compressed text shouldn't be changed - it has no white space
+                    continue;
+                }
+                // New lines for some operating systems
+                if (text[i] == '\r')
+                {
+                    // Sometimes there is both
+                    if (text.Length > (i + 1) && text[i + 1] != '\n')
+                    {
+                        offsetCurrent.Y -= font.LineHeight + lineSpace;
+                        offsetCurrent.X = 0;
+                    }
+
+                    i++;
+                    // Index in compressed text shouldn't be changed - it has no white space
+                    continue;
+                }
+                CharFontData charData = font.GetCharacterData(text[i]);
+
+                if (!charData.Supported)
+                {
+                    throw new UnsupportedCharacterException(text[i], font);
+                }
+
+                // Set drawing offset data
+                data[count * _blockSize] = offsetCurrent + charData.ExtraOffset;
+                data[(count * _blockSize) + 1] = charData.TextureCoordOffset;
+                data[(count * _blockSize) + 2] = charData.TextureRefSize;
+                data[(count * _blockSize) + 3] = charData.Size;
+                // Colour
+                ColourF cf = colours[count];
+                data[(count * _blockSize) + 4] = new Vector2(cf.R, cf.G);
+                data[(count * _blockSize) + 5] = new Vector2(cf.B, cf.A);
+
+                // Adjust offset for next character
+                offsetCurrent.X += charData.Size.X + charSpace;
+                // Continue counters
+                count++;
+                i++;
+            }
+            // Pass instance data to gpu
+            _instanceData.SetData(data);
+
+            //
+            // Draw object
+            //
+
+            // Bind shader
+            GL.UseProgram(ShaderId);
+
+            // Set texture slot
+            GL.ProgramUniform1i(ShaderId, _uniformTexSlot, 0);
+            GL.ProgramUniform1i(ShaderId, _uniformColourSource, 2);
+
+            font.BindTexture(0);
+
+            _drawable.DrawMultiple(compText.Length);
+        }
+        public void DrawCentred(ReadOnlySpan<char> text, ReadOnlySpan<Colour> colours, Font font, double charSpace, double lineSpace)
         {
             if (font == null)
             {
@@ -301,7 +441,12 @@ namespace Zene.Graphics
             compText = compText.Replace("\0", "");
             compText = compText.Replace("\a", "");
             compText = compText.Replace("\u0027", "");
-
+            
+            if (compText.Length != colours.Length)
+            {
+                throw new ArgumentException($"There must be a colour in {nameof(colours)} for every drawable charater in {nameof(text)}.", nameof(colours));
+            }
+            
             // No visable characters are drawn
             if (compText == "") { return; }
 
@@ -326,7 +471,7 @@ namespace Zene.Graphics
                     ((lineWidths.Count - 1) * lineSpace)
                 ) * 0.5);
             // The instance data containing offsets for each character
-            Vector2[] data = new Vector2[compText.Length * 4];
+            Vector2[] data = new Vector2[compText.Length * _blockSize];
 
             // Special for loop with two counters
             int i = 0;
@@ -390,10 +535,14 @@ namespace Zene.Graphics
                 }
 
                 // Set drawing offset data
-                data[count * 4] = offsetCurrent + charData.ExtraOffset;
-                data[(count * 4) + 1] = charData.TextureCoordOffset;
-                data[(count * 4) + 2] = charData.TextureRefSize;
-                data[(count * 4) + 3] = charData.Size;
+                data[count * _blockSize] = offsetCurrent + charData.ExtraOffset;
+                data[(count * _blockSize) + 1] = charData.TextureCoordOffset;
+                data[(count * _blockSize) + 2] = charData.TextureRefSize;
+                data[(count * _blockSize) + 3] = charData.Size;
+                // Colour
+                ColourF cf = colours[count];
+                data[(count * _blockSize) + 4] = new Vector2(cf.R, cf.G);
+                data[(count * _blockSize) + 5] = new Vector2(cf.B, cf.A);
 
                 // Adjust offset for next character
                 offsetCurrent.X += charData.Size.X + charSpace;
@@ -413,6 +562,144 @@ namespace Zene.Graphics
 
             // Set texture slot
             GL.ProgramUniform1i(ShaderId, _uniformTexSlot, 0);
+            GL.ProgramUniform1i(ShaderId, _uniformColourSource, 2);
+
+            font.BindTexture(0);
+
+            _drawable.DrawMultiple(compText.Length);
+        }
+        */
+
+        public void DrawCentred(ReadOnlySpan<char> text, Font font, double charSpace, double lineSpace)
+        {
+            if (font == null)
+            {
+                throw new ArgumentNullException(nameof(font));
+            }
+            // No text is to be drawn
+            if (text == null || text == "") { return; }
+
+            // Remove all whitespace and null values
+            string compText = new string(text).Replace(" ", "");
+            compText = compText.Replace("\n", "");
+            compText = compText.Replace("\r", "");
+            compText = compText.Replace("\t", "");
+            compText = compText.Replace("\0", "");
+            compText = compText.Replace("\a", "");
+            compText = compText.Replace("\u0027", "");
+
+            // No visable characters are drawn
+            if (compText == "") { return; }
+
+            if (compText.Length > _capacity && !AutoIncreaseCapacity)
+            {
+                throw new Exception($"{nameof(text)} has too many drawable characters. Must be less than, or equal to, {nameof(Capacity)} (White space doesn't count).");
+            }
+            else if (compText.Length > _capacity)
+            {
+                Capacity = compText.Length;
+            }
+
+            // The widths of each line in text
+            List<double> lineWidths = font.GetLineWidths(text, charSpace, TabSize);
+
+            // The current character offset
+            Vector2 offsetCurrent = new Vector2(
+                lineWidths[0] * -0.5,
+                // The offset for Y
+                (
+                    (font.LineHeight * lineWidths.Count) +
+                    ((lineWidths.Count - 1) * lineSpace)
+                ) * 0.5);
+            // The instance data containing offsets for each character
+            Vector2[] data = new Vector2[compText.Length * _blockSize];
+
+            // Special for loop with two counters
+            int i = 0;
+            int count = 0;
+            // The current line in the text that is being calculated
+            int lineCurrent = 0;
+            while (count < compText.Length)
+            {
+                // No character
+                if (text[i] == '\0' || text[i] == '\a' || text[i] == '\u0027')
+                {
+                    i++;
+                    // Index in compressed text shouldn't be changed - it has no null characters
+                    continue;
+                }
+                // Character should be skipped to add space
+                if (text[i] == ' ')
+                {
+                    offsetCurrent.X += font.SpaceWidth + charSpace;
+                    i++;
+                    // Index in compressed text shouldn't be changed - it has no white space
+                    continue;
+                }
+                if (text[i] == '\t')
+                {
+                    offsetCurrent.X += (font.SpaceWidth * TabSize) + charSpace;
+                    i++;
+                    // Index in compressed text shouldn't be changed - it has no white space
+                    continue;
+                }
+                // Character should be skipped - offsetCurrent adjusted for new line
+                if (text[i] == '\n')
+                {
+                    offsetCurrent.Y -= font.LineHeight + lineSpace;
+                    lineCurrent++;
+                    offsetCurrent.X = lineWidths[lineCurrent] * -0.5;
+                    i++;
+                    // Index in compressed text shouldn't be changed - it has no white space
+                    continue;
+                }
+                // New lines for some operating systems
+                if (text[i] == '\r')
+                {
+                    // Sometimes there is both
+                    if (text.Length > (i + 1) && text[i + 1] != '\n')
+                    {
+                        offsetCurrent.Y -= font.LineHeight + lineSpace;
+                        lineCurrent++;
+                        offsetCurrent.X = lineWidths[lineCurrent] * -0.5;
+                    }
+
+                    i++;
+                    // Index in compressed text shouldn't be changed - it has no white space
+                    continue;
+                }
+                CharFontData charData = font.GetCharacterData(text[i]);
+
+                if (!charData.Supported)
+                {
+                    throw new UnsupportedCharacterException(text[i], font);
+                }
+
+                // Set drawing offset data
+                data[count * _blockSize] = offsetCurrent + charData.ExtraOffset;
+                data[(count * _blockSize) + 1] = charData.TextureCoordOffset;
+                data[(count * _blockSize) + 2] = charData.TextureRefSize;
+                data[(count * _blockSize) + 3] = charData.Size;
+
+                // Adjust offset for next character
+                offsetCurrent.X += charData.Size.X + charSpace;
+                // Continue counters
+                count++;
+                i++;
+            }
+            // Pass instance data to gpu
+            _instanceData.SetData(data);
+
+            //
+            // Draw object
+            //
+
+            // Bind shader
+            GL.UseProgram(ShaderId);
+
+            // Set texture slot
+            GL.ProgramUniform1i(ShaderId, _uniformTexSlot, 0);
+            //GL.ProgramUniform1i(ShaderId, _uniformColourSource, 1);
 
             font.BindTexture(0);
 
