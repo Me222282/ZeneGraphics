@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Physics", "Physics\Physics.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTKConverts", "OpenTKConverts\OpenTKConverts.csproj", "{0AA47645-19C0-4E53-90CF-2F61AE905F95}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Evolution", "Evolution\Evolution\Evolution.csproj", "{35C2BFB5-B549-4267-9C71-91E62AC60497}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GUI", "GUI\GUI.csproj", "{79B95E2F-9660-4385-B810-DBF72DA57373}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Windowing", "Windowing\Windowing.csproj", "{2FD9E938-A251-412F-933D-B75D4325AC5B}"
@@ -28,8 +26,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSGL", "Tests\CSGL\CSGL.csproj", "{6A7A72CD-6A34-4957-BD00-F38199EC204D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollisionsTest", "Tests\CollisionsTest\CollisionsTest.csproj", "{CCF75E98-46E9-4214-B13E-D539DA644E01}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvolutionTest", "Evolution\Tests\EvolutionTest.csproj", "{4399693C-175E-461B-B2D8-6C1A783D3356}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TexelPhysics", "Tests\TexelPhysics\TexelPhysics.csproj", "{9EA5390A-57AE-43AF-A8C1-9C8493C321DA}"
 EndProject

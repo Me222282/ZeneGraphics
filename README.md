@@ -19,7 +19,6 @@ This is expected to happen around 2023.
  - [The Zene Physics Library](./Physics)</br>
  - [The Zene Sprites Library](./Sprites)</br>
  - [The Zene GUI Library](./GUI)</br>
- - [Zene Neural Networking](./Evolution)</br>
 
 ## Credits
 
