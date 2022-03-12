@@ -42,7 +42,10 @@ namespace Zene.Graphics
             InternalFormat = format;
 
             byte[] data = Bitmap.ExtractData(stream, out int width, out int height, close);
-            _texture.TexImage2D(0, InternalFormat, width, height, BaseFormat.Rgba, TextureData.Byte, new GLArray<byte>(width, height, 1, data));
+            fixed (byte* ptr = &data[0])
+            {
+                _texture.TexImage2D(0, InternalFormat, width, height, BaseFormat.Rgba, TextureData.Byte, ptr);
+            }
         }
         /// <summary>
         /// Create a texture from the data in the file located at <paramref name="path"/>.
