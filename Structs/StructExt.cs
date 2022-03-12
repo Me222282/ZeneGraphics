@@ -137,5 +137,7 @@ namespace Zene.Structs
                 random.Next(0, 256),
                 random.Next(0, 256));
         }
+
+        public static double Lerp(this double a, double b, double blend) => (blend * (b - a)) + a;
     }
 }
