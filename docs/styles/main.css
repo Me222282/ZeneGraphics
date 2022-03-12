@@ -78,7 +78,7 @@ h1
     margin: auto;
     text-align: center;
     font-weight: 800;
-    font-size: 47pt;
+    font-size: 46pt;
     text-shadow: 2px 2px 2px var(--colour4);
 }
 /* Code for Firefox */
@@ -101,7 +101,7 @@ h2
     margin: 0 0 0 20px;
     text-align: left;
     font-weight: 800;
-    font-size: 37pt;
+    font-size: 38pt;
     text-shadow: 1.25px 1.25px 2px var(--colour4);
 }
 /* Code for Firefox */
@@ -142,7 +142,7 @@ ul
 li
 {
     margin: 2.5px;
-    font-size: 13.5pt;
+    font-size: 13pt;
 }
 
 /*Scroll bar styling*/
