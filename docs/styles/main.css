@@ -28,6 +28,7 @@ body
     font-family: Nunito;
     background-color: var(--colour1);
     font-size: 12pt;
+    font-weight: 400;
 }
 
 header
