@@ -1,0 +1,27 @@
+:root
+{
+    --dropdown-px: 15pt;
+    --dropdown-py: 5pt;
+}
+
+.nav-dropdown
+{
+    position: relative;
+    display: inline-block;
+}
+
+.nav-dropdown-content
+{
+    display: none;
+    position: absolute;
+    background-color: var(--colour1);
+    box-shadow: 0pt 3pt 3pt 0pt rgba(0,0,0,0.2);
+    margin: 0pt 0pt 0pt calc(0pt - var(--dropdown-px));
+    padding: var(--dropdown-py) var(--dropdown-px);
+    z-index: 1;
+}
+
+.nav-dropdown:hover .nav-dropdown-content
+{
+    display: block;
+}

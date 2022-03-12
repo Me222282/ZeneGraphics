@@ -63,6 +63,7 @@ hr
     border-width: 2px;
     border-style: solid;
     border-radius: 1px;
+    background-color: var(--colour7);
 }
 
 .preHeading
@@ -132,6 +133,25 @@ a:active
 {
     color: var(--colour3);
     text-decoration: none;
+}
+
+.title-link
+{
+    color: var(--colour3);
+    font-weight: 800;
+    margin: 0%;
+}
+.title-link:hover
+{
+    color: var(--colour3);
+    font-weight: 800;
+    margin: 0%;
+}
+.title-link:active
+{
+    color: var(--colour3);
+    font-weight: 800;
+    margin: 0%;
 }
 
 ul
