@@ -124,6 +124,25 @@ h2::selection
     text-shadow: 1.25px 1.25px 2px var(--colour2);
 }
 
+a.unstyled-link
+{
+    all: inherit;
+    cursor: pointer;
+    margin: 0%;
+}
+a.unstyled-link:hover
+{
+    all: inherit;
+    cursor: pointer;
+    margin: 0%;
+}
+a.unstyled-link:active
+{
+    all: inherit;
+    cursor: pointer;
+    margin: 0%;
+}
+
 a
 {
     color: var(--colour5);
@@ -138,25 +157,6 @@ a:active
 {
     color: var(--colour3);
     text-decoration: none;
-}
-
-a.unstyled-link
-{
-    color: inherit !important;
-    font-weight: inherit !important;
-    margin: 0%;
-}
-a.unstyled-link:hover
-{
-    color: inherit !important;
-    font-weight: inherit !important;
-    margin: 0%;
-}
-a.unstyled-link:active
-{
-    color: inherit !important;
-    font-weight: inherit !important;
-    margin: 0%;
 }
 
 ul
