@@ -31,6 +31,11 @@ body
     font-weight: 400;
 }
 
+.hidden
+{
+    display: none !important;
+}
+
 header
 {
     background-color: var(--colour2);
@@ -163,11 +168,6 @@ li
 {
     margin: 2.5px;
     font-size: 13pt;
-}
-
-.hidden
-{
-    display: none !important;
 }
 
 /*Scroll bar styling*/
