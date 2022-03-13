@@ -135,22 +135,22 @@ a:active
     text-decoration: none;
 }
 
-.title-link
+a.unstyled-link
 {
-    color: var(--colour3);
-    font-weight: 800;
+    color: inherit;
+    font-weight: inherit;
     margin: 0%;
 }
-.title-link:hover
+a.unstyled-link:hover
 {
-    color: var(--colour3);
-    font-weight: 800;
+    color: inherit;
+    font-weight: inherit;
     margin: 0%;
 }
-.title-link:active
+a.unstyled-link:active
 {
-    color: var(--colour3);
-    font-weight: 800;
+    color: inherit;
+    font-weight: inherit;
     margin: 0%;
 }
 
