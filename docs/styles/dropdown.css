@@ -25,6 +25,7 @@ li.dropdown
 {
     margin: 0px;
     font-size: 12pt;
+    white-space: nowrap;
 }
 
 .nav-dropdown:hover ul.nav-dropdown-content
