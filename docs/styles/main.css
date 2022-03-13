@@ -135,19 +135,19 @@ a:active
     text-decoration: none;
 }
 
-a.unstyled-link
+.unstyled-link
 {
     color: inherit;
     font-weight: inherit;
     margin: 0%;
 }
-a.unstyled-link:hover
+.unstyled-link:hover
 {
     color: inherit;
     font-weight: inherit;
     margin: 0%;
 }
-a.unstyled-link:active
+.unstyled-link:active
 {
     color: inherit;
     font-weight: inherit;
