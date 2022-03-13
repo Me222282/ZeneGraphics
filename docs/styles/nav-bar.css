@@ -1,11 +1,11 @@
-#nav-bar
+nav
 {
     display: flex;
     justify-content: space-evenly;
     margin-bottom: 2pt;
 }
 
-.nav-line
+hr.nav-line
 {
     margin: 40px;
     margin-top: 2pt;

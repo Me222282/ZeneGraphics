@@ -10,7 +10,7 @@
     display: inline-block;
 }
 
-.nav-dropdown-content
+ul.nav-dropdown-content
 {
     display: none;
     position: absolute;
@@ -19,9 +19,15 @@
     margin: 0pt 0pt 0pt calc(0pt - var(--dropdown-px));
     padding: var(--dropdown-py) var(--dropdown-px);
     z-index: 1;
+    list-style-type: none;
+}
+li.dropdown
+{
+    margin: 0px;
+    font-size: 12pt;
 }
 
-.nav-dropdown:hover .nav-dropdown-content
+.nav-dropdown:hover ul.nav-dropdown-content
 {
     display: block;
 }
