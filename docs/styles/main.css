@@ -135,22 +135,22 @@ a:active
     text-decoration: none;
 }
 
-.unstyled-link
+a.unstyled-link
 {
-    color: inherit;
-    font-weight: inherit;
+    color: inherit !important;
+    font-weight: inherit !important;
     margin: 0%;
 }
-.unstyled-link:hover
+a.unstyled-link:hover
 {
-    color: inherit;
-    font-weight: inherit;
+    color: inherit !important;
+    font-weight: inherit !important;
     margin: 0%;
 }
-.unstyled-link:active
+a.unstyled-link:active
 {
-    color: inherit;
-    font-weight: inherit;
+    color: inherit !important;
+    font-weight: inherit !important;
     margin: 0%;
 }
 
