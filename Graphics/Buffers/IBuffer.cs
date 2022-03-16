@@ -113,6 +113,13 @@ namespace Zene.Graphics
         Patches = GLEnum.Patches
     }
 
+    public enum IndexType : uint
+    {
+        Byte = GLEnum.Byte,
+        Ushort = GLEnum.UShort,
+        Uint = GLEnum.UInt
+    }
+
     /// <summary>
     /// Object that encapsulate an OpenGL buffer object.
     /// </summary>
