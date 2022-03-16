@@ -2637,6 +2637,11 @@ namespace Zene.Graphics.Base
 
 		}
 
+		private static void UnsupportedMethod()
+        {
+			throw new OpenGLSupportException("Method not supported");
+        }
+
 		public static void Init(Func<string, IntPtr> getProcAddress, double version)
 		{
 			// Setup version acessor
@@ -2698,6 +2703,10 @@ namespace Zene.Graphics.Base
 				Functions.TexParameteriv = getProc<Delegates.TexParameteriv>("TexParameteriv");
 				Functions.Viewport = getProc<Delegates.Viewport>("Viewport");
 			}
+			else
+            {
+				throw new OpenGLSupportException("OpenGL must at least support version 1.0");
+            }
 
 			if (version >= 1.1)
 			{
@@ -2716,6 +2725,28 @@ namespace Zene.Graphics.Base
 				Functions.TexSubImage1D = getProc<Delegates.TexSubImage1D>("TexSubImage1D");
 				Functions.TexSubImage2D = getProc<Delegates.TexSubImage2D>("TexSubImage2D");
 			}
+			else
+            {
+				Functions.BindTexture = (_, _) => UnsupportedMethod();
+				Functions.CopyTexImage1D = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CopyTexImage2D = (_, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CopyTexSubImage1D = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CopyTexSubImage2D = (_, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.DeleteTextures = (_, _) => UnsupportedMethod();
+				Functions.DrawArrays = (_, _, _) => UnsupportedMethod();
+				Functions.DrawElements = (_, _, _, _) => UnsupportedMethod();
+				Functions.GenTextures = (_, _) => UnsupportedMethod();
+				Functions.GetPointerv = (_, _) => UnsupportedMethod();
+				Functions.IsTexture = (_) =>
+				{
+					UnsupportedMethod();
+
+					return false;
+				};
+				Functions.PolygonOffset = (_, _) => UnsupportedMethod();
+				Functions.TexSubImage1D = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.TexSubImage2D = (_, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+			}
 
 			if (version >= 1.2)
 			{
@@ -2723,6 +2754,13 @@ namespace Zene.Graphics.Base
 				Functions.DrawRangeElements = getProc<Delegates.DrawRangeElements>("DrawRangeElements");
 				Functions.TexImage3D = getProc<Delegates.TexImage3D>("TexImage3D");
 				Functions.TexSubImage3D = getProc<Delegates.TexSubImage3D>("TexSubImage3D");
+			}
+			else
+            {
+				Functions.CopyTexSubImage3D = (_, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.DrawRangeElements = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.TexImage3D = (_, _, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.TexSubImage3D = (_, _, _, _, _, _, _, _, _, _, _) => UnsupportedMethod();
 			}
 
 			if (version >= 1.3)
@@ -2737,6 +2775,18 @@ namespace Zene.Graphics.Base
 				Functions.GetCompressedTexImage = getProc<Delegates.GetCompressedTexImage>("GetCompressedTexImage");
 				Functions.SampleCoverage = getProc<Delegates.SampleCoverage>("SampleCoverage");
 			}
+			else
+            {
+				Functions.ActiveTexture = (_) => UnsupportedMethod();
+				Functions.CompressedTexImage1D = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CompressedTexImage2D = (_, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CompressedTexImage3D = (_, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CompressedTexSubImage1D = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CompressedTexSubImage2D = (_, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CompressedTexSubImage3D = (_, _, _, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.GetCompressedTexImage = (_, _, _) => UnsupportedMethod();
+				Functions.SampleCoverage = (_, _) => UnsupportedMethod();
+			}
 
 			if (version >= 1.4)
 			{
@@ -2749,6 +2799,18 @@ namespace Zene.Graphics.Base
 				Functions.PointParameterfv = getProc<Delegates.PointParameterfv>("PointParameterfv");
 				Functions.PointParameteri = getProc<Delegates.PointParameteri>("PointParameteri");
 				Functions.PointParameteriv = getProc<Delegates.PointParameteriv>("PointParameteriv");
+			}
+			else
+            {
+				Functions.BlendColour = (_, _, _, _) => UnsupportedMethod();
+				Functions.BlendEquation = (_) => UnsupportedMethod();
+				Functions.BlendFuncSeparate = (_, _, _, _) => UnsupportedMethod();
+				Functions.MultiDrawArrays = (_, _, _, _) => UnsupportedMethod();
+				Functions.MultiDrawElements = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.PointParameterf = (_, _) => UnsupportedMethod();
+				Functions.PointParameterfv = (_, _) => UnsupportedMethod();
+				Functions.PointParameteri = (_, _) => UnsupportedMethod();
+				Functions.PointParameteriv = (_, _) => UnsupportedMethod();
 			}
 
 			if (version >= 1.5)
@@ -2772,6 +2834,44 @@ namespace Zene.Graphics.Base
 				Functions.IsQuery = getProc<Delegates.IsQuery>("IsQuery");
 				Functions.MapBuffer = getProc<Delegates.MapBuffer>("MapBuffer");
 				Functions.UnmapBuffer = getProc<Delegates.UnmapBuffer>("UnmapBuffer");
+			}
+			else
+            {
+				Functions.BeginQuery = (_, _) => UnsupportedMethod();
+				Functions.BindBuffer = (_, _) => UnsupportedMethod();
+				Functions.BufferData = (_, _, _, _) => UnsupportedMethod();
+				Functions.BufferSubData = (_, _, _, _) => UnsupportedMethod();
+				Functions.DeleteBuffers = (_, _) => UnsupportedMethod();
+				Functions.DeleteQueries = (_, _) => UnsupportedMethod();
+				Functions.EndQuery = (_) => UnsupportedMethod();
+				Functions.GenBuffers = (_, _) => UnsupportedMethod();
+				Functions.GenQueries = (_, _) => UnsupportedMethod();
+				Functions.GetBufferParameteriv = (_, _, _) => UnsupportedMethod();
+				Functions.GetBufferPointerv = (_, _, _) => UnsupportedMethod();
+				Functions.GetBufferSubData = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetQueryiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetQueryObjectiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetQueryObjectuiv = (_, _, _) => UnsupportedMethod();
+				Functions.IsBuffer = (_) =>
+				{
+					UnsupportedMethod();
+					return false;
+				};
+				Functions.IsQuery = (_) =>
+				{
+					UnsupportedMethod();
+					return false;
+				};
+				Functions.MapBuffer = (_, _) =>
+				{
+					UnsupportedMethod();
+					return IntPtr.Zero;
+				};
+				Functions.UnmapBuffer = (_) =>
+				{
+					UnsupportedMethod();
+					return false;
+				};
 			}
 
 			if (version >= 2.0)
@@ -2870,6 +2970,126 @@ namespace Zene.Graphics.Base
 				Functions.VertexAttrib4usv = getProc<Delegates.VertexAttrib4usv>("VertexAttrib4usv");
 				Functions.VertexAttribPointer = getProc<Delegates.VertexAttribPointer>("VertexAttribPointer");
 			}
+			else
+            {
+				Functions.AttachShader = (_, _) => UnsupportedMethod();
+				Functions.BindAttribLocation = (_, _, _) => UnsupportedMethod();
+				Functions.BlendEquationSeparate = (_, _) => UnsupportedMethod();
+				Functions.CompileShader = (_) => UnsupportedMethod(); ;
+				Functions.CreateProgram = () =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.CreateShader = (_) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.DeleteProgram = (_) => UnsupportedMethod();
+				Functions.DeleteShader = (_) => UnsupportedMethod();
+				Functions.DetachShader = (_, _) => UnsupportedMethod();
+				Functions.DisableVertexAttribArray = (_) => UnsupportedMethod();
+				Functions.DrawBuffers = (_, _) => UnsupportedMethod();
+				Functions.EnableVertexAttribArray = (_) => UnsupportedMethod();
+				Functions.GetActiveAttrib = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.GetActiveUniform = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.GetAttachedShaders = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetAttribLocation = (_, _) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.GetProgramInfoLog = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetProgramiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetShaderInfoLog = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetShaderiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetShaderSource = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetUniformfv = (_, _, _) => UnsupportedMethod();
+				Functions.GetUniformiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetUniformLocation = (_, _) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.GetVertexAttribdv = (_, _, _) => UnsupportedMethod();
+				Functions.GetVertexAttribfv = (_, _, _) => UnsupportedMethod();
+				Functions.GetVertexAttribiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetVertexAttribPointerv = (_, _, _) => UnsupportedMethod();
+				Functions.IsProgram = (_) =>
+				{
+					UnsupportedMethod();
+					return false;
+				};
+				Functions.IsShader = (_) =>
+				{
+					UnsupportedMethod();
+					return false;
+				};
+				Functions.LinkProgram = (_) => UnsupportedMethod();
+				Functions.ShaderSource = (_, _, _, _) => UnsupportedMethod();
+				Functions.StencilFuncSeparate = (_, _, _, _) => UnsupportedMethod();
+				Functions.StencilMaskSeparate = (_, _) => UnsupportedMethod();
+				Functions.StencilOpSeparate = (_, _, _, _) => UnsupportedMethod();
+				Functions.Uniform1f = (_, _) => UnsupportedMethod();
+				Functions.Uniform1fv = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform1i = (_, _) => UnsupportedMethod();
+				Functions.Uniform1iv = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform2f = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform2fv = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform2i = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform2iv = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform3f = (_, _, _, _) => UnsupportedMethod();
+				Functions.Uniform3fv = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform3i = (_, _, _, _) => UnsupportedMethod();
+				Functions.Uniform3iv = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform4f = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.Uniform4fv = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform4i = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.Uniform4iv = (_, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix2fv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix3fv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix4fv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UseProgram = (_) => UnsupportedMethod();
+				Functions.ValidateProgram = (_) => UnsupportedMethod();
+				Functions.VertexAttrib1d = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib1dv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib1f = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib1fv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib1s = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib1sv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib2d = (_, _, _) => UnsupportedMethod();
+				Functions.VertexAttrib2dv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib2f = (_, _, _) => UnsupportedMethod();
+				Functions.VertexAttrib2fv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib2s = (_, _, _) => UnsupportedMethod();
+				Functions.VertexAttrib2sv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib3d = (_, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttrib3dv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib3f = (_, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttrib3fv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib3s = (_, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttrib3sv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib4bv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib4d = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttrib4dv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib4f = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttrib4fv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib4iv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib4Nbv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib4Niv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib4Nsv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib4Nub = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttrib4Nubv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib4Nuiv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib4Nusv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib4s = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttrib4sv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib4ubv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib4uiv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttrib4usv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribPointer = (_, _, _, _, _, _) => UnsupportedMethod();
+			}
 
 			if (version >= 2.1)
 			{
@@ -2879,6 +3099,15 @@ namespace Zene.Graphics.Base
 				Functions.UniformMatrix3x4fv = getProc<Delegates.UniformMatrix3x4fv>("UniformMatrix3x4fv");
 				Functions.UniformMatrix4x2fv = getProc<Delegates.UniformMatrix4x2fv>("UniformMatrix4x2fv");
 				Functions.UniformMatrix4x3fv = getProc<Delegates.UniformMatrix4x3fv>("UniformMatrix4x3fv");
+			}
+			else
+            {
+				Functions.UniformMatrix2x3fv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix2x4fv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix3x2fv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix3x4fv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix4x2fv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix4x3fv = (_, _, _, _) => UnsupportedMethod();
 			}
 
 			if (version >= 3.0)
@@ -2968,6 +3197,125 @@ namespace Zene.Graphics.Base
 				Functions.VertexAttribI4usv = getProc<Delegates.VertexAttribI4usv>("VertexAttribI4usv");
 				Functions.VertexAttribIPointer = getProc<Delegates.VertexAttribIPointer>("VertexAttribIPointer");
 			}
+			else
+            {
+				Functions.BeginConditionalRender = (_, _) => UnsupportedMethod();
+				Functions.BeginTransformFeedback = (_) => UnsupportedMethod();
+				Functions.BindBufferBase = (_, _, _) => UnsupportedMethod();
+				Functions.BindBufferRange = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.BindFragDataLocation = (_, _, _) => UnsupportedMethod();
+				Functions.BindFramebuffer = (_, _) => UnsupportedMethod();
+				Functions.BindRenderbuffer = (_, _) => UnsupportedMethod();
+				Functions.BindVertexArray = (_) => UnsupportedMethod();
+				Functions.BlitFramebuffer = (_, _, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CheckFramebufferStatus = (_) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.ClampColour = (_, _) => UnsupportedMethod();
+				Functions.ClearBufferfi = (_, _, _, _) => UnsupportedMethod();
+				Functions.ClearBufferfv = (_, _, _) => UnsupportedMethod();
+				Functions.ClearBufferiv = (_, _, _) => UnsupportedMethod();
+				Functions.ClearBufferuiv = (_, _, _) => UnsupportedMethod();
+				Functions.ColourMaski = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.DeleteFramebuffers = (_, _) => UnsupportedMethod();
+				Functions.DeleteRenderbuffers = (_, _) => UnsupportedMethod();
+				Functions.DeleteVertexArrays = (_, _) => UnsupportedMethod();
+				Functions.Disablei = (_, _) => UnsupportedMethod();
+				Functions.Enablei = (_, _) => UnsupportedMethod();
+				Functions.EndConditionalRender = () => UnsupportedMethod();
+				Functions.EndTransformFeedback = () => UnsupportedMethod();
+				Functions.FlushMappedBufferRange = (_, _, _) => UnsupportedMethod();
+				Functions.FramebufferRenderbuffer = (_, _, _, _) => UnsupportedMethod();
+				Functions.FramebufferTexture1D = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.FramebufferTexture2D = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.FramebufferTexture3D = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.FramebufferTextureLayer = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.GenerateMipmap = (_) => UnsupportedMethod();
+				Functions.GenFramebuffers = (_, _) => UnsupportedMethod();
+				Functions.GenRenderbuffers = (_, _) => UnsupportedMethod();
+				Functions.GenVertexArrays = (_, _) => UnsupportedMethod();
+				Functions.GetBooleani_v = (_, _, _) => UnsupportedMethod();
+				Functions.GetFragDataLocation = (_, _) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.GetFramebufferAttachmentParameteriv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetIntegeri_v = (_, _, _) => UnsupportedMethod();
+				Functions.GetRenderbufferParameteriv = (_, _, _) => UnsupportedMethod();
+				Functions.GetStringi = (_, _) =>
+				{
+					UnsupportedMethod();
+					return IntPtr.Zero;
+				};
+				Functions.GetTexParameterIiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetTexParameterIuiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetTransformFeedbackVarying = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.GetUniformuiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetVertexAttribIiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetVertexAttribIuiv = (_, _, _) => UnsupportedMethod();
+				Functions.IsEnabledi = (_, _) =>
+				{
+					UnsupportedMethod();
+					return false;
+				};
+				Functions.IsFramebuffer = (_) =>
+				{
+					UnsupportedMethod();
+					return false;
+				};
+				Functions.IsRenderbuffer = (_) =>
+				{
+					UnsupportedMethod();
+					return false;
+				};
+				Functions.IsVertexArray = (_) =>
+				{
+					UnsupportedMethod();
+					return false;
+				};
+				Functions.MapBufferRange = (_, _, _, _) =>
+				{
+					UnsupportedMethod();
+					return IntPtr.Zero;
+				};
+				Functions.RenderbufferStorage = (_, _, _, _) => UnsupportedMethod();
+				Functions.RenderbufferStorageMultisample = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.TexParameterIiv = (_, _, _) => UnsupportedMethod();
+				Functions.TexParameterIuiv = (_, _, _) => UnsupportedMethod();
+				Functions.TransformFeedbackVaryings = (_, _, _, _) => UnsupportedMethod();
+				Functions.Uniform1ui = (_, _) => UnsupportedMethod();
+				Functions.Uniform1uiv = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform2ui = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform2uiv = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform3ui = (_, _, _, _) => UnsupportedMethod();
+				Functions.Uniform3uiv = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform4ui = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.Uniform4uiv = (_, _, _) => UnsupportedMethod();
+				Functions.VertexAttribI1i = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribI1iv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribI1ui = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribI1uiv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribI2i = (_, _, _) => UnsupportedMethod();
+				Functions.VertexAttribI2iv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribI2ui = (_, _, _) => UnsupportedMethod();
+				Functions.VertexAttribI2uiv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribI3i = (_, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribI3iv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribI3ui = (_, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribI3uiv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribI4bv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribI4i = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribI4iv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribI4sv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribI4ubv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribI4ui = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribI4uiv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribI4usv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribIPointer = (_, _, _, _, _) => UnsupportedMethod();
+			}
 
 			if (version >= 3.1)
 			{
@@ -2983,6 +3331,25 @@ namespace Zene.Graphics.Base
 				Functions.PrimitiveRestartIndex = getProc<Delegates.PrimitiveRestartIndex>("PrimitiveRestartIndex");
 				Functions.TexBuffer = getProc<Delegates.TexBuffer>("TexBuffer");
 				Functions.UniformBlockBinding = getProc<Delegates.UniformBlockBinding>("UniformBlockBinding");
+			}
+			else
+            {
+				Functions.CopyBufferSubData = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.DrawArraysInstanced = (_, _, _, _) => UnsupportedMethod();
+				Functions.DrawElementsInstanced = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.GetActiveUniformBlockiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetActiveUniformBlockName = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.GetActiveUniformName = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.GetActiveUniformsiv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.GetUniformBlockIndex = (_, _) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.GetUniformIndices = (_, _, _, _) => UnsupportedMethod();
+				Functions.PrimitiveRestartIndex = (_) => UnsupportedMethod();
+				Functions.TexBuffer = (_, _, _) => UnsupportedMethod();
+				Functions.UniformBlockBinding = (_, _, _) => UnsupportedMethod();
 			}
 
 			if (version >= 3.2)
@@ -3006,6 +3373,40 @@ namespace Zene.Graphics.Base
 				Functions.TexImage2DMultisample = getProc<Delegates.TexImage2DMultisample>("TexImage2DMultisample");
 				Functions.TexImage3DMultisample = getProc<Delegates.TexImage3DMultisample>("TexImage3DMultisample");
 				Functions.WaitSync = getProc<Delegates.WaitSync>("WaitSync");
+			}
+			else
+            {
+				Functions.ClientWaitSync = (_, _, _) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.DeleteSync = (_) => UnsupportedMethod();
+				Functions.DrawElementsBaseVertex = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.DrawElementsInstancedBaseVertex = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.DrawRangeElementsBaseVertex = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.FenceSync = (_, _) =>
+				{
+					UnsupportedMethod();
+					return IntPtr.Zero;
+				};
+				Functions.FramebufferTexture = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetBufferParameteri64v = (_, _, _) => UnsupportedMethod();
+				Functions.GetInteger64i_v = (_, _, _) => UnsupportedMethod();
+				Functions.GetInteger64v = (_, _) => UnsupportedMethod();
+				Functions.GetMultisamplefv = (_, _, _) => UnsupportedMethod();
+				Functions.GetSynciv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.IsSync = (_) =>
+				{
+					UnsupportedMethod();
+					return false;
+				};
+				Functions.MultiDrawElementsBaseVertex = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.ProvokingVertex = (_) => UnsupportedMethod();
+				Functions.SampleMaski = (_, _) => UnsupportedMethod();
+				Functions.TexImage2DMultisample = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.TexImage3DMultisample = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.WaitSync = (_, _, _) => UnsupportedMethod();
 			}
 
 			if (version >= 3.3)
@@ -3038,6 +3439,45 @@ namespace Zene.Graphics.Base
 				Functions.VertexAttribP3uiv = getProc<Delegates.VertexAttribP3uiv>("VertexAttribP3uiv");
 				Functions.VertexAttribP4ui = getProc<Delegates.VertexAttribP4ui>("VertexAttribP4ui");
 				Functions.VertexAttribP4uiv = getProc<Delegates.VertexAttribP4uiv>("VertexAttribP4uiv");
+			}
+			else
+            {
+				Functions.BindFragDataLocationIndexed = (_, _, _, _) => UnsupportedMethod();
+				Functions.BindSampler = (_, _) => UnsupportedMethod();
+				Functions.DeleteSamplers = (_, _) => UnsupportedMethod();
+				Functions.GenSamplers = (_, _) => UnsupportedMethod();
+				Functions.GetFragDataIndex = (_, _) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.GetQueryObjecti64v = (_, _, _) => UnsupportedMethod();
+				Functions.GetQueryObjectui64v = (_, _, _) => UnsupportedMethod();
+				Functions.GetSamplerParameterfv = (_, _, _) => UnsupportedMethod();
+				Functions.GetSamplerParameterIiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetSamplerParameterIuiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetSamplerParameteriv = (_, _, _) => UnsupportedMethod();
+				Functions.IsSampler = (_) =>
+				{
+					UnsupportedMethod();
+					return false;
+				};
+				Functions.QueryCounter = (_, _) => UnsupportedMethod();
+				Functions.SamplerParameterf = (_, _, _) => UnsupportedMethod();
+				Functions.SamplerParameterfv = (_, _, _) => UnsupportedMethod();
+				Functions.SamplerParameteri = (_, _, _) => UnsupportedMethod();
+				Functions.SamplerParameterIiv = (_, _, _) => UnsupportedMethod();
+				Functions.SamplerParameterIuiv = (_, _, _) => UnsupportedMethod();
+				Functions.SamplerParameteriv = (_, _, _) => UnsupportedMethod();
+				Functions.VertexAttribDivisor = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribP1ui = (_, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribP1uiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribP2ui = (_, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribP2uiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribP3ui = (_, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribP3uiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribP4ui = (_, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribP4uiv = (_, _, _, _) => UnsupportedMethod();
 			}
 
 			if (version >= 4.0)
@@ -3088,6 +3528,67 @@ namespace Zene.Graphics.Base
 				Functions.UniformMatrix4x2dv = getProc<Delegates.UniformMatrix4x2dv>("UniformMatrix4x2dv");
 				Functions.UniformMatrix4x3dv = getProc<Delegates.UniformMatrix4x3dv>("UniformMatrix4x3dv");
 				Functions.UniformSubroutinesuiv = getProc<Delegates.UniformSubroutinesuiv>("UniformSubroutinesuiv");
+			}
+			else
+            {
+				Functions.BeginQueryIndexed = (_, _, _) => UnsupportedMethod();
+				Functions.BindTransformFeedback = (_, _) => UnsupportedMethod();
+				Functions.BlendEquationi = (_, _) => UnsupportedMethod();
+				Functions.BlendEquationSeparatei = (_, _, _) => UnsupportedMethod();
+				Functions.BlendFunci = (_, _, _) => UnsupportedMethod();
+				Functions.BlendFuncSeparatei = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.DeleteTransformFeedbacks = (_, _) => UnsupportedMethod();
+				Functions.DrawArraysIndirect = (_, _) => UnsupportedMethod();
+				Functions.DrawElementsIndirect = (_, _, _) => UnsupportedMethod();
+				Functions.DrawTransformFeedback = (_, _) => UnsupportedMethod();
+				Functions.DrawTransformFeedbackStream = (_, _, _) => UnsupportedMethod();
+				Functions.EndQueryIndexed = (_, _) => UnsupportedMethod();
+				Functions.GenTransformFeedbacks = (_, _) => UnsupportedMethod();
+				Functions.GetActiveSubroutineName = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.GetActiveSubroutineUniformiv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.GetActiveSubroutineUniformName = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.GetProgramStageiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetQueryIndexediv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetSubroutineIndex = (_, _, _) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.GetSubroutineUniformLocation = (_, _, _) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.GetUniformdv = (_, _, _) => UnsupportedMethod();
+				Functions.GetUniformSubroutineuiv = (_, _, _) => UnsupportedMethod();
+				Functions.IsTransformFeedback = (_) =>
+				{
+					UnsupportedMethod();
+					return false;
+				};
+				Functions.MinSampleShading = (_) => UnsupportedMethod();
+				Functions.PatchParameterfv = (_, _) => UnsupportedMethod();
+				Functions.PatchParameteri = (_, _) => UnsupportedMethod();
+				Functions.PauseTransformFeedback = () => UnsupportedMethod();
+				Functions.ResumeTransformFeedback = () => UnsupportedMethod();
+				Functions.Uniform1d = (_, _) => UnsupportedMethod();
+				Functions.Uniform1dv = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform2d = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform2dv = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform3d = (_, _, _, _) => UnsupportedMethod();
+				Functions.Uniform3dv = (_, _, _) => UnsupportedMethod();
+				Functions.Uniform4d = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.Uniform4dv = (_, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix2dv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix2x3dv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix2x4dv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix3dv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix3x2dv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix3x4dv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix4dv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix4x2dv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformMatrix4x3dv = (_, _, _, _) => UnsupportedMethod();
+				Functions.UniformSubroutinesuiv = (_, _, _) => UnsupportedMethod();
 			}
 
 			if (version >= 4.1)
@@ -3181,6 +3682,105 @@ namespace Zene.Graphics.Base
 				Functions.ViewportIndexedf = getProc<Delegates.ViewportIndexedf>("ViewportIndexedf");
 				Functions.ViewportIndexedfv = getProc<Delegates.ViewportIndexedfv>("ViewportIndexedfv");
 			}
+			else
+            {
+				Functions.ActiveShaderProgram = (_, _) => UnsupportedMethod();
+				Functions.BindProgramPipeline = (_) => UnsupportedMethod();
+				Functions.ClearDepthf = (_) => UnsupportedMethod();
+				Functions.CreateShaderProgramv = (_, _, _) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.DeleteProgramPipelines = (_, _) => UnsupportedMethod();
+				Functions.DepthRangeArrayv = (_, _, _) => UnsupportedMethod();
+				Functions.DepthRangef = (_, _) => UnsupportedMethod();
+				Functions.DepthRangeIndexed = (_, _, _) => UnsupportedMethod();
+				Functions.GenProgramPipelines = (_, _) => UnsupportedMethod();
+				Functions.GetDoublei_v = (_, _, _) => UnsupportedMethod();
+				Functions.GetFloati_v = (_, _, _) => UnsupportedMethod();
+				Functions.GetProgramBinary = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.GetProgramPipelineInfoLog = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetProgramPipelineiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetShaderPrecisionFormat = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetVertexAttribLdv = (_, _, _) => UnsupportedMethod();
+				Functions.IsProgramPipeline = (_) =>
+				{
+					UnsupportedMethod();
+					return false;
+				};
+				Functions.ProgramBinary = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramParameteri = (_, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform1d = (_, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform1dv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform1f = (_, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform1fv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform1i = (_, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform1iv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform1ui = (_, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform1uiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform2d = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform2dv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform2f = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform2fv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform2i = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform2iv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform2ui = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform2uiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform3d = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform3dv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform3f = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform3fv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform3i = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform3iv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform3ui = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform3uiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform4d = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform4dv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform4f = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform4fv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform4i = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform4iv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform4ui = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniform4uiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix2dv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix2fv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix2x3dv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix2x3fv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix2x4dv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix2x4fv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix3dv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix3fv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix3x2dv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix3x2fv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix3x4dv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix3x4fv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix4dv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix4fv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix4x2dv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix4x2fv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix4x3dv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ProgramUniformMatrix4x3fv = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ReleaseShaderCompiler = () => UnsupportedMethod();
+				Functions.ScissorArrayv = (_, _, _) => UnsupportedMethod();
+				Functions.ScissorIndexed = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ScissorIndexedv = (_, _) => UnsupportedMethod();
+				Functions.ShaderBinary = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.UseProgramStages = (_, _, _) => UnsupportedMethod();
+				Functions.ValidateProgramPipeline = (_) => UnsupportedMethod();
+				Functions.VertexAttribL1d = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribL1dv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribL2d = (_, _, _) => UnsupportedMethod();
+				Functions.VertexAttribL2dv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribL3d = (_, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribL3dv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribL4d = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribL4dv = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribLPointer = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ViewportArrayv = (_, _, _) => UnsupportedMethod();
+				Functions.ViewportIndexedf = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ViewportIndexedfv = (_, _) => UnsupportedMethod();
+			}
 
 			if (version >= 4.2)
 			{
@@ -3196,6 +3796,21 @@ namespace Zene.Graphics.Base
 				Functions.TexStorage1D = getProc<Delegates.TexStorage1D>("TexStorage1D");
 				Functions.TexStorage2D = getProc<Delegates.TexStorage2D>("TexStorage2D");
 				Functions.TexStorage3D = getProc<Delegates.TexStorage3D>("TexStorage3D");
+			}
+			else
+            {
+				Functions.BindImageTexture = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.DrawArraysInstancedBaseInstance = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.DrawElementsInstancedBaseInstance = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.DrawElementsInstancedBaseVertexBaseInstance = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.DrawTransformFeedbackInstanced = (_, _, _) => UnsupportedMethod();
+				Functions.DrawTransformFeedbackStreamInstanced = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetActiveAtomicCounterBufferiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetInternalformativ = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.MemoryBarrier = (_) => UnsupportedMethod();
+				Functions.TexStorage1D = (_, _, _, _) => UnsupportedMethod();
+				Functions.TexStorage2D = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.TexStorage3D = (_, _, _, _, _, _) => UnsupportedMethod();
 			}
 
 			if (version >= 4.3)
@@ -3244,6 +3859,68 @@ namespace Zene.Graphics.Base
 				Functions.VertexAttribLFormat = getProc<Delegates.VertexAttribLFormat>("VertexAttribLFormat");
 				Functions.VertexBindingDivisor = getProc<Delegates.VertexBindingDivisor>("VertexBindingDivisor");
 			}
+			else
+            {
+				Functions.BindVertexBuffer = (_, _, _, _) => UnsupportedMethod();
+				Functions.ClearBufferData = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ClearBufferSubData = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CopyImageSubData = (_, _, _, _, _, _, _, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.DebugMessageCallback = (_, _) => UnsupportedMethod();
+				Functions.DebugMessageControl = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.DebugMessageInsert = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.DispatchCompute = (_, _, _) => UnsupportedMethod();
+				Functions.DispatchComputeIndirect = (_) => UnsupportedMethod();
+				Functions.FramebufferParameteri = (_, _, _) => UnsupportedMethod();
+				Functions.GetDebugMessageLog = (_, _, _, _, _, _, _, _) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.GetFramebufferParameteriv = (_, _, _) => UnsupportedMethod();
+				Functions.GetInternalformati64v = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.GetObjectLabel = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.GetObjectPtrLabel = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetProgramInterfaceiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetProgramResourceIndex = (_, _, _) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.GetProgramResourceiv = (_, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.GetProgramResourceLocation = (_, _, _) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.GetProgramResourceLocationIndex = (_, _, _) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.GetProgramResourceName = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.InvalidateBufferData = (_) => UnsupportedMethod();
+				Functions.InvalidateBufferSubData = (_, _, _) => UnsupportedMethod();
+				Functions.InvalidateFramebuffer = (_, _, _) => UnsupportedMethod();
+				Functions.InvalidateSubFramebuffer = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.InvalidateTexImage = (_, _) => UnsupportedMethod();
+				Functions.InvalidateTexSubImage = (_, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.MultiDrawArraysIndirect = (_, _, _, _) => UnsupportedMethod();
+				Functions.MultiDrawElementsIndirect = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ObjectLabel = (_, _, _, _) => UnsupportedMethod();
+				Functions.ObjectPtrLabel = (_, _, _) => UnsupportedMethod();
+				Functions.PopDebugGroup = () => UnsupportedMethod();
+				Functions.PushDebugGroup = (_, _, _, _) => UnsupportedMethod();
+				Functions.ShaderStorageBlockBinding = (_, _, _) => UnsupportedMethod();
+				Functions.TexBufferRange = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.TexStorage2DMultisample = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.TexStorage3DMultisample = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.TextureView = (_, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribBinding = (_, _) => UnsupportedMethod();
+				Functions.VertexAttribFormat = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribIFormat = (_, _, _, _) => UnsupportedMethod();
+				Functions.VertexAttribLFormat = (_, _, _, _) => UnsupportedMethod();
+				Functions.VertexBindingDivisor = (_, _) => UnsupportedMethod();
+			}
 
 			if (version >= 4.4)
 			{
@@ -3254,6 +3931,16 @@ namespace Zene.Graphics.Base
 				Functions.BufferStorage = getProc<Delegates.BufferStorage>("BufferStorage");
 				Functions.ClearTexImage = getProc<Delegates.ClearTexImage>("ClearTexImage");
 				Functions.ClearTexSubImage = getProc<Delegates.ClearTexSubImage>("ClearTexSubImage");
+			}
+			else
+            {
+				Functions.BindBuffersBase = (_, _, _, _) => UnsupportedMethod();
+				Functions.BindBuffersRange = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.BindSamplers = (_, _, _) => UnsupportedMethod();
+				Functions.BindVertexBuffers = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.BufferStorage = (_, _, _, _) => UnsupportedMethod();
+				Functions.ClearTexImage = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ClearTexSubImage = (_, _, _, _, _, _, _, _, _, _, _) => UnsupportedMethod();
 			}
 
 			if (version >= 4.5)
@@ -3369,6 +4056,139 @@ namespace Zene.Graphics.Base
 				Functions.VertexArrayVertexBuffer = getProc<Delegates.VertexArrayVertexBuffer>("VertexArrayVertexBuffer");
 				Functions.VertexArrayVertexBuffers = getProc<Delegates.VertexArrayVertexBuffers>("VertexArrayVertexBuffers");
 			}
+			else
+            {
+				Functions.BindTextureUnit = (_, _) => UnsupportedMethod();
+				Functions.BlitNamedFramebuffer = (_, _, _, _, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CheckNamedFramebufferStatus = (_, _) =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.ClearNamedBufferData = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ClearNamedBufferSubData = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.ClearNamedFramebufferfi = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ClearNamedFramebufferfv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ClearNamedFramebufferiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ClearNamedFramebufferuiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.ClipControl = (_, _) => UnsupportedMethod();
+				Functions.CompressedTextureSubImage1D = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CompressedTextureSubImage2D = (_, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CompressedTextureSubImage3D = (_, _, _, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CopyNamedBufferSubData = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.CopyTextureSubImage1D = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CopyTextureSubImage2D = (_, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CopyTextureSubImage3D = (_, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.CreateBuffers = (_, _) => UnsupportedMethod();
+				Functions.CreateFramebuffers = (_, _) => UnsupportedMethod();
+				Functions.CreateProgramPipelines = (_, _) => UnsupportedMethod();
+				Functions.CreateQueries = (_, _, _) => UnsupportedMethod();
+				Functions.CreateRenderbuffers = (_, _) => UnsupportedMethod();
+				Functions.CreateSamplers = (_, _) => UnsupportedMethod();
+				Functions.CreateTextures = (_, _, _) => UnsupportedMethod();
+				Functions.CreateTransformFeedbacks = (_, _) => UnsupportedMethod();
+				Functions.CreateVertexArrays = (_, _) => UnsupportedMethod();
+				Functions.DisableVertexArrayAttrib = (_, _) => UnsupportedMethod();
+				Functions.EnableVertexArrayAttrib = (_, _) => UnsupportedMethod();
+				Functions.FlushMappedNamedBufferRange = (_, _, _) => UnsupportedMethod();
+				Functions.GenerateTextureMipmap = (_) => UnsupportedMethod();
+				Functions.GetCompressedTextureImage = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetCompressedTextureSubImage = (_, _, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.GetGraphicsResetStatus = () =>
+				{
+					UnsupportedMethod();
+					return 0;
+				};
+				Functions.GetNamedBufferParameteri64v = (_, _, _) => UnsupportedMethod();
+				Functions.GetNamedBufferParameteriv = (_, _, _) => UnsupportedMethod();
+				Functions.GetNamedBufferPointerv = (_, _, _) => UnsupportedMethod();
+				Functions.GetNamedBufferSubData = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetNamedFramebufferAttachmentParameteriv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetNamedFramebufferParameteriv = (_, _, _) => UnsupportedMethod();
+				Functions.GetNamedRenderbufferParameteriv = (_, _, _) => UnsupportedMethod();
+				Functions.GetnCompressedTexImage = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetnTexImage = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.GetnUniformdv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetnUniformfv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetnUniformiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetnUniformuiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetQueryBufferObjecti64v = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetQueryBufferObjectiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetQueryBufferObjectui64v = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetQueryBufferObjectuiv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetTextureImage = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.GetTextureLevelParameterfv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetTextureLevelParameteriv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetTextureParameterfv = (_, _, _) => UnsupportedMethod();
+				Functions.GetTextureParameterIiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetTextureParameterIuiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetTextureParameteriv = (_, _, _) => UnsupportedMethod();
+				Functions.GetTextureSubImage = (_, _, _, _, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.GetTransformFeedbacki_v = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetTransformFeedbacki64_v = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetTransformFeedbackiv = (_, _, _) => UnsupportedMethod();
+				Functions.GetVertexArrayIndexed64iv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetVertexArrayIndexediv = (_, _, _, _) => UnsupportedMethod();
+				Functions.GetVertexArrayiv = (_, _, _) => UnsupportedMethod();
+				Functions.InvalidateNamedFramebufferData = (_, _, _) => UnsupportedMethod();
+				Functions.InvalidateNamedFramebufferSubData = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.MapNamedBuffer = (_, _) =>
+				{
+					UnsupportedMethod();
+					return IntPtr.Zero;
+				};
+				Functions.MapNamedBufferRange = (_, _, _, _) =>
+				{
+					UnsupportedMethod();
+					return IntPtr.Zero;
+				};
+				Functions.MemoryBarrierByRegion = (_) => UnsupportedMethod();
+				Functions.NamedBufferData = (_, _, _, _) => UnsupportedMethod();
+				Functions.NamedBufferStorage = (_, _, _, _) => UnsupportedMethod();
+				Functions.NamedBufferSubData = (_, _, _, _) => UnsupportedMethod();
+				Functions.NamedFramebufferDrawBuffer = (_, _) => UnsupportedMethod();
+				Functions.NamedFramebufferDrawBuffers = (_, _, _) => UnsupportedMethod();
+				Functions.NamedFramebufferParameteri = (_, _, _) => UnsupportedMethod();
+				Functions.NamedFramebufferReadBuffer = (_, _) => UnsupportedMethod();
+				Functions.NamedFramebufferRenderbuffer = (_, _, _, _) => UnsupportedMethod();
+				Functions.NamedFramebufferTexture = (_, _, _, _) => UnsupportedMethod();
+				Functions.NamedFramebufferTextureLayer = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.NamedRenderbufferStorage = (_, _, _, _) => UnsupportedMethod();
+				Functions.NamedRenderbufferStorageMultisample = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.ReadnPixels = (_, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.TextureBarrier = () => UnsupportedMethod();
+				Functions.TextureBuffer = (_, _, _) => UnsupportedMethod();
+				Functions.TextureBufferRange = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.TextureParameterf = (_, _, _) => UnsupportedMethod();
+				Functions.TextureParameterfv = (_, _, _) => UnsupportedMethod();
+				Functions.TextureParameteri = (_, _, _) => UnsupportedMethod();
+				Functions.TextureParameterIiv = (_, _, _) => UnsupportedMethod();
+				Functions.TextureParameterIuiv = (_, _, _) => UnsupportedMethod();
+				Functions.TextureParameteriv = (_, _, _) => UnsupportedMethod();
+				Functions.TextureStorage1D = (_, _, _, _) => UnsupportedMethod();
+				Functions.TextureStorage2D = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.TextureStorage2DMultisample = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.TextureStorage3D = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.TextureStorage3DMultisample = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.TextureSubImage1D = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.TextureSubImage2D = (_, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.TextureSubImage3D = (_, _, _, _, _, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.TransformFeedbackBufferBase = (_, _, _) => UnsupportedMethod();
+				Functions.TransformFeedbackBufferRange = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.UnmapNamedBuffer = (_) =>
+				{
+					UnsupportedMethod();
+					return false;
+				};
+				Functions.VertexArrayAttribBinding = (_, _, _) => UnsupportedMethod();
+				Functions.VertexArrayAttribFormat = (_, _, _, _, _, _) => UnsupportedMethod();
+				Functions.VertexArrayAttribIFormat = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.VertexArrayAttribLFormat = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.VertexArrayBindingDivisor = (_, _, _) => UnsupportedMethod();
+				Functions.VertexArrayElementBuffer = (_, _) => UnsupportedMethod();
+				Functions.VertexArrayVertexBuffer = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.VertexArrayVertexBuffers = (_, _, _, _, _, _) => UnsupportedMethod();
+			}
 			/*
 			if (versionMajor > 4 || (versionMajor == 4 && versionMinor >= 6))
 			{
@@ -3381,6 +4201,11 @@ namespace Zene.Graphics.Base
 			if (version > 4.5)
 			{
 				Console.WriteLine($"OpenGL version {version} is not properly supported. The Zene Graphics Library was made for OpenGL version 4.5 and below.");
+			}
+			else if (version < 2.0)
+            {
+				Console.WriteLine("The Zene Graphics Library will have extremely limited functionality below OpenGL version 2.0.");
+				Console.WriteLine("To get the most out of The Zene Graphics Library, use versions 3.2 and above.");
 			}
 
 			// Setup texture binding referance
