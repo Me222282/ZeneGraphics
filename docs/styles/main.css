@@ -124,7 +124,7 @@ h2::selection
     text-shadow: 1.25px 1.25px 2px var(--colour2);
 }
 
-a#skip-nav
+#skip-nav
 {
     position: absolute;
     
@@ -135,7 +135,7 @@ a#skip-nav
     transform: translateY(-120%);
     transition: transform 120ms ease-out;
 }
-a#skip-nav:focus
+#skip-nav:focus
 {
     transform: translateY(0%);
 }
