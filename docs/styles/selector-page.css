@@ -1,0 +1,22 @@
+h1
+{
+    color: var(--colour3);
+    margin: 0 0 0 20px;
+    text-align: left;
+    font-weight: 800;
+    font-size: 38pt;
+    text-shadow: 1.25px 1.25px 2px var(--colour4);
+}
+/* Code for Firefox */
+h1::-moz-selection
+{
+    color: var(--colour1);
+    background: var(--colour6);
+    text-shadow: 1.25px 1.25px 2px var(--colour2);
+}
+h1::selection
+{
+    color: var(--colour1);
+    background: var(--colour6);
+    text-shadow: 1.25px 1.25px 2px var(--colour2);
+}
