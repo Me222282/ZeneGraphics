@@ -333,12 +333,6 @@ namespace Zene.Graphics.Base
 			Functions.ClearBufferuiv(buffer, drawbuffer, value);
 		}
 
-		[OpenGLSupport(1.0)]
-		public static void ClearColour(float red, float green, float blue, float alpha)
-		{
-			Functions.ClearColour(red, green, blue, alpha);
-		}
-
 		[OpenGLSupport(4.5)]
 		public static void ClearNamedBufferData(uint buffer, uint internalformat, uint format, uint type, void* data)
 		{

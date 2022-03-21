@@ -354,6 +354,11 @@ namespace Zene.Graphics.Base
 			Functions.Clear(mask);
 		}
 		[OpenGLSupport(1.0)]
+		public static void ClearColour(float red, float green, float blue, float alpha)
+		{
+			Functions.ClearColour(red, green, blue, alpha);
+		}
+		[OpenGLSupport(1.0)]
 		public static void ClearDepth(double depth)
 		{
 			Functions.ClearDepth(depth);
