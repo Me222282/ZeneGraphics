@@ -142,20 +142,14 @@ h2::selection
 
 a.unstyled-link
 {
-    all: inherit;
-    cursor: pointer;
     margin: 0%;
 }
 a.unstyled-link:hover
 {
-    all: inherit;
-    cursor: pointer;
     margin: 0%;
 }
 a.unstyled-link:active
 {
-    all: inherit;
-    cursor: pointer;
     margin: 0%;
 }
 

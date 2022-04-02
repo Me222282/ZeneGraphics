@@ -28,9 +28,9 @@ li.dropdown
     font-size: 12pt;
     white-space: nowrap;
 }
-
+/*
 .nav-dropdown:hover ul.nav-dropdown-content
 {
-    /*display: block;*/
+    /*display: block;*//*
     transform: scaleY(100%);
-}
+}*/
