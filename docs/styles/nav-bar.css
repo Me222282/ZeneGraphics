@@ -2,12 +2,12 @@ nav
 {
     display: flex;
     justify-content: space-evenly;
-    margin-bottom: 2pt;
+    margin-bottom: 0.16em;
 }
 
 hr.nav-line
 {
-    margin: 40px;
-    margin-top: 2pt;
-    margin-bottom: 5pt;
+    margin: 2.5em;
+    margin-top: 0.16em;
+    margin-bottom: 0.416em;
 }

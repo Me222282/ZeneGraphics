@@ -1,7 +1,7 @@
 :root
 {
-    --dropdown-px: 15pt;
-    --dropdown-py: 5pt;
+    --dropdown-px: 1.25em;
+    --dropdown-py: 0.416em;
 }
 
 .nav-dropdown
@@ -25,7 +25,7 @@ ul.nav-dropdown-content
 li.dropdown
 {
     margin: 0px;
-    font-size: 12pt;
+    font-size: 1rem;
     white-space: nowrap;
 }
 /*
