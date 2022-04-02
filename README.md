@@ -19,6 +19,15 @@ This is expected to happen around 2023.
  - [The Zene Physics Library](./Physics)</br>
  - [The Zene Sprites Library](./Sprites)</br>
  - [The Zene GUI Library](./GUI)</br>
+ 
+## Individual Downloads
+
+ - [The Zene Graphics Library](https://me222282.github.io/ZeneLibrary/downloads/ZeneGraphics.zip)</br>
+ - [The Zene Windowing Library](https://me222282.github.io/ZeneLibrary/downloads/ZeneWindowing.zip)</br>
+ - [The Zene Structs Library](https://me222282.github.io/ZeneLibrary/downloads/ZeneStructs.zip)</br>
+ - [The Zene Physics Library](https://me222282.github.io/ZeneLibrary/downloads/ZenePhysics.zip)</br>
+ - [The Zene Sprites Library](https://me222282.github.io/ZeneLibrary/downloads/ZeneSprites.zip)</br>
+ - [The Zene GUI Library](https://me222282.github.io/ZeneLibrary/downloads/ZeneGUI.zip)</br>
 
 ## Credits
 
