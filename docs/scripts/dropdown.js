@@ -1,9 +1,13 @@
+var mediaQuery = window.matchMedia("(max-width: 80ch)");
+
 function addFocusEvent(target)
 {
     target.addEventListener("focusin", function(event)
     {
-        target.children[1].style.transform = "scaleY(100%)";
+        // There should be no dropdown
+        if (mediaQuery.matches) { return; }
         
+        target.children[1].style.transform = "scaleY(100%)";
     }, true);
     
     target.addEventListener("focusout", function(event)
@@ -16,8 +20,10 @@ function addHoverEvent(target)
 {
     target.addEventListener("mouseenter", function(event)
     {
-        target.children[1].style.transform = "scaleY(100%)";
+        // There should be no dropdown
+        if (mediaQuery.matches) { return; }
         
+        target.children[1].style.transform = "scaleY(100%)";
     }, true);
     
     target.addEventListener("mouseleave", function(event)

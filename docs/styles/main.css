@@ -78,50 +78,67 @@ hr.pre-heading
     margin-bottom: 0.4375em;
 }
 
-h1
+h1, h2, h3
 {
     color: var(--colour3);
+    font-weight: 800;
+}
+/* Code for Firefox */
+h1::-moz-selection, h2::-moz-selection, h3::-moz-selection
+{
+    color: var(--colour1);
+    background: var(--colour6);
+}
+h1::selection, h2::selection, h3::selection
+{
+    color: var(--colour1);
+    background: var(--colour6);
+}
+
+h1
+{
     margin: auto;
     text-align: center;
-    font-weight: 800;
     font-size: 3.83rem;
     text-shadow: 2px 2px 2px var(--colour4);
 }
 /* Code for Firefox */
 h1::-moz-selection
 {
-    color: var(--colour1);
-    background: var(--colour6);
     text-shadow: 2px 2px 2px var(--colour2);
 }
 h1::selection
 {
-    color: var(--colour1);
-    background: var(--colour6);
     text-shadow: 2px 2px 2px var(--colour2);
 }
 
 h2
 {
-    color: var(--colour3);
     margin: 0 0 0 1.25rem;
     text-align: left;
-    font-weight: 800;
     font-size: 3.16rem;
     text-shadow: 1.25px 1.25px 2px var(--colour4);
 }
 /* Code for Firefox */
 h2::-moz-selection
 {
-    color: var(--colour1);
-    background: var(--colour6);
     text-shadow: 1.25px 1.25px 2px var(--colour2);
 }
 h2::selection
 {
-    color: var(--colour1);
-    background: var(--colour6);
     text-shadow: 1.25px 1.25px 2px var(--colour2);
+}
+
+@media screen and (max-width: 100ch)
+{
+	h1
+    {
+        font-size: 3.16rem;
+    }
+    h2
+    {
+        font-size: 2.83rem;
+    }
 }
 
 #skip-nav
@@ -183,7 +200,7 @@ li
 /*Scroll bar styling*/
 ::-webkit-scrollbar
 {
-    width: 0.625em;
+    width: 10px;
 }
 ::-webkit-scrollbar-track
 {

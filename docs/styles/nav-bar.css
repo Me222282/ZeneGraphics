@@ -11,3 +11,13 @@ hr.nav-line
     margin-top: 0.16em;
     margin-bottom: 0.416em;
 }
+
+@media screen and (max-width: 80ch)
+{
+    nav
+    {
+        flex-direction: column;
+        align-content: center;
+        text-align: center;
+    }
+}
