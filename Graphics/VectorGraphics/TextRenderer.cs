@@ -73,7 +73,6 @@ namespace Zene.Graphics
         }
 
         private readonly int _uniformTexSlot;
-        private readonly int _uniformColourSource;
 
         void IBindable.Bind()
         {
@@ -130,7 +129,6 @@ namespace Zene.Graphics
             _uniformMatrix = GL.GetUniformLocation(ShaderId, "matrix");
             _uniformColour = GL.GetUniformLocation(ShaderId, "uColour");
             _uniformTexSlot = GL.GetUniformLocation(ShaderId, "uTextureSlot");
-            _uniformColourSource = GL.GetUniformLocation(ShaderId, "uColourSource");
 
             // Set matrices in shader to default
             SetMatrices();

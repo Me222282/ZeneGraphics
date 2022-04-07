@@ -32,6 +32,19 @@ namespace Zene.Graphics
         public Vector2 ExtraOffset { get; }
         public bool Supported { get; }
 
+        public override string ToString()
+        {
+            if (!Supported) { return "Unsupported character"; }
+
+            return $"CharFontData\n{{\n    Size: [{Size}]\n    Offset: [{ExtraOffset}]\n    TexSize: [{TextureRefSize}]\n    TexOffset: [{TextureCoordOffset}]\n}}";
+        }
+        public string ToString(string format)
+        {
+            if (!Supported) { return "Unsupported character"; }
+
+            return $"CharFontData\n{{\n    Size: [{Size.ToString(format)}]\n    Offset: [{ExtraOffset.ToString(format)}]\n    TexSize: [{TextureRefSize.ToString(format)}]\n    TexOffset: [{TextureCoordOffset.ToString(format)}]\n}}";
+        }
+
         public static CharFontData Unsupported { get; } = new CharFontData();
     }
 }

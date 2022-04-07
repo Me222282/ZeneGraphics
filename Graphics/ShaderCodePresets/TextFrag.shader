@@ -20,16 +20,16 @@ void main()
 	// Use texel as opacity
 	switch (uColurSource)
 	{
-	case 1:
-		colour = vec4(uColour.rgb, uColour.a * tex.r);
-		return;
+		case 1:
+			colour = vec4(uColour.rgb, uColour.a * tex.r);
+			return;
 
-	case 2:
-		colour = vec4(charColour.rgb, charColour.a * tex.r);
-		return;
+		case 2:
+			colour = vec4(charColour.rgb, charColour.a * tex.r);
+			return;
 
-	default:
-		colour = vec4(1.0, 1.0, 1.0, tex.r);
-		return;
+		default:
+			colour = vec4(1.0, 1.0, 1.0, tex.r);
+			return;
 	}
 }
