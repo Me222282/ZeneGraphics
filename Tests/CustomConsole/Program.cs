@@ -59,6 +59,7 @@ namespace CustomConsole
                 return caret;
             }
         }
+        private int _textIndex = 0;
 
         public void Run()
         {
@@ -67,8 +68,15 @@ namespace CustomConsole
 
             VirtualConsole.AddFunction("Copy", new StringConverter[] { VirtualConsole.StringParam, VirtualConsole.IntParam }, (objs, info) =>
             {
-                if (info != null && info.Length != 0)
+                bool displayCount = false;
+
+                if (info == "-i")
                 {
+                    displayCount = true;
+                }
+                else if (info != null && info.Length != 0)
+                {
+                    Console.WriteLine(info.Length);
                     VirtualConsole.Log("Invalid extra info");
                     return;
                 }
@@ -78,6 +86,12 @@ namespace CustomConsole
 
                 for (int i = 0; i < count; i++)
                 {
+                    if (displayCount)
+                    {
+                        VirtualConsole.Log($"{text} - {i}");
+                        continue;
+                    }
+
                     VirtualConsole.Log(text);
                 }
             });
@@ -94,7 +108,10 @@ namespace CustomConsole
                     _textRender.DrawLeftBound(new string('\n', i) + VirtualConsole.Output[i], _fontC);
                 }
 
-                _textRender.DrawLeftBound(new string('\n', VirtualConsole.Output.Count) + "Console> " + _enterText.ToString() + Caret, _fontC);
+                string offset = new string('\n', VirtualConsole.Output.Count);
+
+                _textRender.DrawLeftBound(offset + "Console> " + _enterText.ToString(), _fontC);
+                _textRender.DrawLeftBound(offset + new string(' ', 9 + _textIndex) + Caret, _fontC);
 
                 if (Title != VirtualConsole.Directory)
                 {
@@ -125,10 +142,35 @@ namespace CustomConsole
                 _ctrl = true;
                 return;
             }
+
+            if (e[Keys.Left])
+            {
+                _textIndex--;
+
+                if (_textIndex < 0)
+                {
+                    _textIndex = 0;
+                }
+            }
+            if (e[Keys.Right])
+            {
+                _textIndex++;
+
+                if (_textIndex > _enterText.Length)
+                {
+                    _textIndex = _enterText.Length;
+                }
+            }
+
             if (e[Keys.BackSpace] && _enterText.Length > 0)
             {
-                // Remove last character
-                _enterText.Remove(_enterText.Length - 1, 1);
+                _textIndex--;
+                if (_textIndex < 0)
+                {
+                    _textIndex = 0;
+                }
+                // Remove character at text index
+                _enterText.Remove(_textIndex, 1);
                 return;
             }
             if (e[Keys.Enter] || e[Keys.NumPadEnter])
@@ -144,10 +186,7 @@ namespace CustomConsole
                 }
 
                 _enterText.Clear();
-            }
-            if (e[Keys.Apostrophe] && !e[Mods.Shift])
-            {
-                _enterText.Append('\'');
+                _textIndex = 0;
             }
         }
         protected override void OnKeyUp(KeyEventArgs e)
@@ -168,7 +207,9 @@ namespace CustomConsole
             // Invalid character
             if (!e[' '] && !_fontC.GetCharacterData(e.Character).Supported) { return; }
 
-            _enterText.Append(e.Character);
+            //_enterText.Append(e.Character);
+            _enterText.Insert(_textIndex, e.Character);
+            _textIndex++;
         }
 
         protected override void OnScroll(ScrollEventArgs e)
