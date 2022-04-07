@@ -33,6 +33,9 @@ namespace CustomConsole
 
         public override string Name => "FontC";
 
+        public override double CharSpace => 0.2;
+        public override double LineSpace => 0.25;
+
         private readonly Texture2D _texture;
 
         public override void BindTexture(uint slot) => _texture.Bind(slot);
@@ -571,19 +574,22 @@ namespace CustomConsole
             Vector2.Zero);
         private static readonly CharFontData _copywriteChar = new CharFontData(
             new Vector2(_pixelWidth * 200, 0),
-            _texSize,
-            _charSize,
-            Vector2.Zero);
+            new Vector2(_pixelWidth * 48, _pixelHeight * 42),
+            new Vector2((1d / 42) * 48, 1d),
+            new Vector2(0.1, 0),
+            0.1);
         private static readonly CharFontData _registeredChar = new CharFontData(
-            new Vector2(_pixelWidth * 225, 0),
-            _texSize,
-            _charSize,
-            Vector2.Zero);
+            new Vector2(_pixelWidth * 249, 0),
+            new Vector2(_pixelWidth * 48, _pixelHeight * 42),
+            new Vector2((1d / 42) * 48, 1d),
+            new Vector2(0.1, 0),
+            0.1);
         private static readonly CharFontData _trademarkChar = new CharFontData(
-            new Vector2(_pixelWidth * 250, 0),
-            _texSize,
-            _charSize,
-            Vector2.Zero);
+            new Vector2(_pixelWidth * 298, 0),
+            new Vector2(_pixelWidth * 48, _pixelHeight * 42),
+            new Vector2((1d / 42) * 48, 1d),
+            new Vector2(0.1, 0),
+            0.1);
 
         public override CharFontData GetCharacterData(char character)
         {

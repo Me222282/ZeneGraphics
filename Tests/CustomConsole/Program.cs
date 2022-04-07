@@ -91,10 +91,10 @@ namespace CustomConsole
 
                 for (int i = 0; i < VirtualConsole.Output.Count; i++)
                 {
-                    _textRender.DrawLeftBound(new string('\n', i) + VirtualConsole.Output[i], _fontC, 0.2, 0.25);
+                    _textRender.DrawLeftBound(new string('\n', i) + VirtualConsole.Output[i], _fontC);
                 }
 
-                _textRender.DrawLeftBound(new string('\n', VirtualConsole.Output.Count) + "Console> " + _enterText.ToString() + Caret, _fontC, 0.2, 0.25);
+                _textRender.DrawLeftBound(new string('\n', VirtualConsole.Output.Count) + "Console> " + _enterText.ToString() + Caret, _fontC);
 
                 if (Title != VirtualConsole.Directory)
                 {
@@ -164,6 +164,9 @@ namespace CustomConsole
         protected override void OnTextInput(TextInputEventArgs e)
         {
             base.OnTextInput(e);
+
+            // Invalid character
+            if (!e[' '] && !_fontC.GetCharacterData(e.Character).Supported) { return; }
 
             _enterText.Append(e.Character);
         }

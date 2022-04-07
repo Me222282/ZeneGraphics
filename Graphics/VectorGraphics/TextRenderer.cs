@@ -265,7 +265,7 @@ namespace Zene.Graphics
                 data[(count * _blockSize) + 3] = charData.Size;
 
                 // Adjust offset for next character
-                offsetCurrent.X += charData.Size.X + charSpace;
+                offsetCurrent.X += charData.Size.X + charData.Buffer + charSpace;
                 // Continue counters
                 count++;
                 i++;
@@ -288,7 +288,7 @@ namespace Zene.Graphics
 
             _drawable.DrawMultiple(compText.Length);
         }
-        public void DrawLeftBound(ReadOnlySpan<char> text, Font font) => DrawLeftBound(text, font, 0, 0);
+        public void DrawLeftBound(ReadOnlySpan<char> text, Font font) => DrawLeftBound(text, font, font.CharSpace, font.LineSpace);
 
         /*
         public void DrawLeftBound(ReadOnlySpan<char> text, ReadOnlySpan<Colour> colours, Font font, double charSpace, double lineSpace)
@@ -399,7 +399,7 @@ namespace Zene.Graphics
                 data[(count * _blockSize) + 5] = new Vector2(cf.B, cf.A);
 
                 // Adjust offset for next character
-                offsetCurrent.X += charData.Size.X + charSpace;
+                offsetCurrent.X += charData.Size.X + charData.Buffer + charSpace;
                 // Continue counters
                 count++;
                 i++;
@@ -543,7 +543,7 @@ namespace Zene.Graphics
                 data[(count * _blockSize) + 5] = new Vector2(cf.B, cf.A);
 
                 // Adjust offset for next character
-                offsetCurrent.X += charData.Size.X + charSpace;
+                offsetCurrent.X += charData.Size.X + charData.Buffer + charSpace;
                 // Continue counters
                 count++;
                 i++;
@@ -680,7 +680,7 @@ namespace Zene.Graphics
                 data[(count * _blockSize) + 3] = charData.Size;
 
                 // Adjust offset for next character
-                offsetCurrent.X += charData.Size.X + charSpace;
+                offsetCurrent.X += charData.Size.X + charData.Buffer + charSpace;
                 // Continue counters
                 count++;
                 i++;
@@ -703,7 +703,7 @@ namespace Zene.Graphics
 
             _drawable.DrawMultiple(compText.Length);
         }
-        public void DrawCentred(ReadOnlySpan<char> text, Font font) => DrawCentred(text, font, 0, 0);
+        public void DrawCentred(ReadOnlySpan<char> text, Font font) => DrawCentred(text, font, font.CharSpace, font.LineSpace);
 
         private bool _disposed = false;
         public void Dispose()

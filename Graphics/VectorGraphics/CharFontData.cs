@@ -13,6 +13,17 @@ namespace Zene.Graphics
             TextureRefSize = texSize;
             Size = size;
             ExtraOffset = extraOffset;
+            Buffer = 0;
+
+            Supported = true;
+        }
+        public CharFontData(Vector2 texCoordOffset, Vector2 texSize, Vector2 size, Vector2 extraOffset, double buffer)
+        {
+            TextureCoordOffset = texCoordOffset;
+            TextureRefSize = texSize;
+            Size = size;
+            ExtraOffset = extraOffset;
+            Buffer = buffer;
 
             Supported = true;
         }
@@ -22,6 +33,7 @@ namespace Zene.Graphics
             TextureRefSize = texSize;
             Size = Vector2.One;
             ExtraOffset = Vector2.Zero;
+            Buffer = 0;
 
             Supported = true;
         }
@@ -30,19 +42,20 @@ namespace Zene.Graphics
         public Vector2 TextureRefSize { get; }
         public Vector2 Size { get; }
         public Vector2 ExtraOffset { get; }
+        public double Buffer { get; }
         public bool Supported { get; }
 
         public override string ToString()
         {
             if (!Supported) { return "Unsupported character"; }
 
-            return $"CharFontData\n{{\n    Size: [{Size}]\n    Offset: [{ExtraOffset}]\n    TexSize: [{TextureRefSize}]\n    TexOffset: [{TextureCoordOffset}]\n}}";
+            return $"CharFontData\n{{\n    Size: [{Size}]\n    Offset: [{ExtraOffset}]\n    TexSize: [{TextureRefSize}]\n    TexOffset: [{TextureCoordOffset}]\n     Buffer: [{Buffer}]\n}}";
         }
         public string ToString(string format)
         {
             if (!Supported) { return "Unsupported character"; }
 
-            return $"CharFontData\n{{\n    Size: [{Size.ToString(format)}]\n    Offset: [{ExtraOffset.ToString(format)}]\n    TexSize: [{TextureRefSize.ToString(format)}]\n    TexOffset: [{TextureCoordOffset.ToString(format)}]\n}}";
+            return $"CharFontData\n{{\n    Size: [{Size.ToString(format)}]\n    Offset: [{ExtraOffset.ToString(format)}]\n    TexSize: [{TextureRefSize.ToString(format)}]\n    TexOffset: [{TextureCoordOffset.ToString(format)}]\n     Buffer: [{Buffer.ToString(format)}]\n}}";
         }
 
         public static CharFontData Unsupported { get; } = new CharFontData();
