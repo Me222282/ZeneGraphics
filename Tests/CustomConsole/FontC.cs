@@ -10,8 +10,7 @@ namespace CustomConsole
         private const double _pixelWidth = 1.0 / 649;
 
         public FontC()
-            //: base(1.0, 1.75)
-            : base((((1.0 / 7) * 8) / 42) * 24, (1.0 / 7) * 8)
+            : base((1d / 42) * 24, 1d)
         {
             // Load font image
             byte[] byteData = Bitmap.ExtractData("resources/fontC.png", out int w, out int h);
@@ -39,9 +38,8 @@ namespace CustomConsole
         public override void BindTexture(uint slot) => _texture.Bind(slot);
 
         private static readonly Vector2 _texSize = new Vector2(_pixelWidth * 24, _pixelHeight * 42);
-        //private static readonly Vector2 _charSize = new Vector2(1.0, 1.75);
-        private static readonly Vector2 _charSize = new Vector2((((1.0 / 7) * 8) / 42) * 24, (1.0 / 7) * 8);
-        private static readonly Vector2 _offset = new Vector2(0d, ((1.0 / 7) * 8) / 24 * -5);
+        private static readonly Vector2 _charSize = new Vector2((1d / 42) * 24, 1d);
+        private static readonly Vector2 _offset = new Vector2(0d, (1d / 42) * -5);
 
         private static readonly CharFontData[] _characterData = new CharFontData[]
         {
@@ -327,9 +325,9 @@ namespace CustomConsole
                 Vector2.Zero),
             new CharFontData(
                 new Vector2(_pixelWidth * 400, _pixelHeight * 182),
-                _texSize,
-                _charSize,
-                _offset),
+                new Vector2(_pixelWidth * 24, _pixelHeight * 47),
+                new Vector2((1d / 42) * 24, (1d / 42) * 47),
+                Vector2.Zero),
             new CharFontData(
                 new Vector2(_pixelWidth * 425, _pixelHeight * 187),
                 _texSize,

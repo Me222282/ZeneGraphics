@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace CustomConsole
@@ -84,7 +85,7 @@ namespace CustomConsole
                 return;
             }
             // History command
-            if (text == "history")
+            if (text == "hx")
             {
                 if (_history.Count == 0)
                 {
@@ -100,7 +101,7 @@ namespace CustomConsole
                 return;
             }
             // Directory command
-            if (text == "directory")
+            if (text == "dir")
             {
                 Log(Directory);
 
@@ -134,17 +135,30 @@ namespace CustomConsole
                     return;
                 }
 
-                string pathFull = Path.Combine(Directory, path);
+                if ((path.Count(c => c == '\"') % 2) != 0)
+                {
+                    Log("Quotation marks weren't closed");
+                    return;
+                }
+
+                path = path.Replace("\"", "");
+
+                //string pathFull = Path.Combine(Directory, path);
+                string pathFull = Path.GetFullPath(path, Directory);
 
                 if (System.IO.Directory.Exists(pathFull))
                 {
                     Directory = pathFull;
+
+                    _history.Add(text);
                     return;
                 }
 
                 if (System.IO.Directory.Exists(path))
                 {
                     Directory = path;
+
+                    _history.Add(text);
                     return;
                 }
 

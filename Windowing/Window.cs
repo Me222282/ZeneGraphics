@@ -78,6 +78,8 @@ namespace Zene.Windowing
                 GL.Enable(GLEnum.DebugOutput);
                 GL.DebugMessageCallback(OnDebugCallBack, null);
             }
+
+            _title = title;
         }
 
         private readonly GL.DebugProc OnDebugCallBack;
@@ -284,6 +286,18 @@ namespace Zene.Windowing
                 }
 
                 GLFW.SetCursor(_window, value.Handle);
+            }
+        }
+
+        private string _title;
+        public string Title
+        {
+            get => _title;
+            set
+            {
+                _title = value;
+
+                GLFW.SetWindowTitle(Handle, value);
             }
         }
 
