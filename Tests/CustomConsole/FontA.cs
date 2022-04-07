@@ -11,7 +11,7 @@ namespace CustomConsole
             : base(1.0, _widthToHeight)
         {
             // Load font image
-            byte[] byteData = Bitmap.ExtractData("resources/FontA.png", out int w, out int h);
+            byte[] byteData = Bitmap.ExtractData("resources/fontA.png", out int w, out int h);
             // Convert to one channel GLArray
             GLArray<Vector2<byte>> texData = new GLArray<Vector2<byte>>(w, h);
             for (int i = 0; i < texData.Size; i++)

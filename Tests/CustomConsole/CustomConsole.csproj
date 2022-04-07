@@ -16,7 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="resources\FontA.png">
+    <None Update="resources\fontA.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resources\fontB.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="resources\fontC.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
