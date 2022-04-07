@@ -10,5 +10,10 @@ namespace Zene.Windowing
         }
 
         public char Character { get; }
+
+        public bool this[char character]
+        {
+            get => Character == character;
+        }
     }
 }

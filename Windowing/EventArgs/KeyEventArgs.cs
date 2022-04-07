@@ -16,5 +16,14 @@ namespace Zene.Windowing
         public Mods Modifier { get; }
 
         public KeyAction Action { get; }
+
+        public bool this[Keys key]
+        {
+            get => Key == key;
+        }
+        public bool this[Mods mod]
+        {
+            get => (Modifier & mod) == mod;
+        }
     }
 }
