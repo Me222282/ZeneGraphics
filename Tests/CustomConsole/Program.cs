@@ -104,12 +104,21 @@ namespace CustomConsole
                     VirtualConsole.Log(text);
                 }
             });
-            VirtualConsole.AddVariable("margin", VariableType.Int, () =>
+            VirtualConsole.AddVariable("margin", VariableType.Double, () =>
             {
-                return (int)_margin;
+                return _margin;
             }, obj =>
             {
-                _margin = (int)obj;
+                _margin = (double)obj;
+            });
+
+            Vector3 v = Vector3.One;
+            VirtualConsole.AddVariable("v", VariableType.Vector3, () =>
+            {
+                return v;
+            }, obj =>
+            {
+                v = (Vector3)obj;
             });
 
             Matrix4 originOffset = Matrix4.Identity;

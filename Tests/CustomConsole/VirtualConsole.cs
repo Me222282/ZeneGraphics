@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Zene.Structs;
 
 namespace CustomConsole
 {
@@ -15,7 +16,10 @@ namespace CustomConsole
         Double,
         String,
         Char,
-        Bool
+        Bool,
+
+        Vector2,
+        Vector3
     }
 
     public static class VirtualConsole
@@ -342,6 +346,7 @@ namespace CustomConsole
                     VariableType.String => StringParam,
                     VariableType.Char => CharParam,
                     VariableType.Bool => BoolParam,
+                    VariableType.Vector2 => Vector2Param,
                     _ => throw new Exception("Invalid type"),
                 };
             }
@@ -358,10 +363,70 @@ namespace CustomConsole
                 VariableType.String => StringParam,
                 VariableType.Char => CharParam,
                 VariableType.Bool => BoolParam,
+                VariableType.Vector2 => Vector2Param,
+                VariableType.Vector3 => Vector3Param,
                 _ => throw new Exception("Invalid type"),
             };
 
             _variables.Add(new Variable(name, sc, get, set));
+
+            if (type == VariableType.Vector2)
+            {
+                // X sub value
+                _variables.Add(new Variable(name + ".x", DoubleParam, () =>
+                {
+                    return ((Vector2)get()).X;
+                }, v =>
+                {
+                    set(new Vector2((double)v, ((Vector2)get()).Y));
+                }));
+                // Y sub value
+                _variables.Add(new Variable(name + ".y", DoubleParam, () =>
+                {
+                    return ((Vector2)get()).Y;
+                }, v =>
+                {
+                    set(new Vector2(((Vector2)get()).X, (double)v));
+                }));
+
+                return;
+            }
+
+            if (type == VariableType.Vector3)
+            {
+                // X sub value
+                _variables.Add(new Variable(name + ".x", DoubleParam, () =>
+                {
+                    return ((Vector3)get()).X;
+                }, v =>
+                {
+                    Vector3 old = (Vector3)get();
+
+                    set(new Vector3((double)v, old.Y, old.Z));
+                }));
+                // Y sub value
+                _variables.Add(new Variable(name + ".y", DoubleParam, () =>
+                {
+                    return ((Vector3)get()).Y;
+                }, v =>
+                {
+                    Vector3 old = (Vector3)get();
+
+                    set(new Vector3(old.X, (double)v, old.Z));
+                }));
+                // Z sub value
+                _variables.Add(new Variable(name + ".z", DoubleParam, () =>
+                {
+                    return ((Vector3)get()).Z;
+                }, v =>
+                {
+                    Vector3 old = (Vector3)get();
+
+                    set(new Vector3(old.X, old.Y, (double)v));
+                }));
+
+                return;
+            }
         }
         public static void Log(string value)
         {
@@ -572,6 +637,7 @@ namespace CustomConsole
                             endNumber = true;
 
                             SetValue((int)IntParam(input.ToString()), oper, negate, ref result);
+                            input.Clear();
                             oper = Operation.None;
                             negate = false;
                             continue;
@@ -929,6 +995,7 @@ namespace CustomConsole
                             endNumber = true;
 
                             SetValue((double)DoubleParam(input.ToString()), oper, negate, ref result);
+                            input.Clear();
                             oper = Operation.None;
                             negate = false;
                             continue;
@@ -1416,6 +1483,615 @@ namespace CustomConsole
                 }
 
                 throw new ConsoleException("Invalid boolean parameter");
+            }
+        }
+
+        public static object Vector2Param(string value)
+        {
+            bool construct = false;
+            bool part2 = false;
+            bool endNumber = false;
+            bool refName = false;
+            bool negate = false;
+            bool inBrackets = false;
+            int bracketCount = 0;
+
+            Operation oper = Operation.Add;
+            StringBuilder input = new StringBuilder(32);
+
+            Vector2 result = Vector2.Zero;
+
+            void FromVar()
+            {
+                Variable var = FindVariable('$' + input.ToString(), out _);
+                object obj = var.Getter();
+
+                Vector2 val;
+
+                try
+                {
+                    val = (Vector2)obj;
+                }
+                catch (Exception)
+                {
+                    throw new ConsoleException("Variable not convertable to Vector2 type");
+                }
+
+                SetValue(val, oper, negate, ref result);
+                refName = false;
+                input.Clear();
+            }
+            void ChangeNorm()
+            {
+                if (!endNumber)
+                {
+                    if (refName) { FromVar(); }
+
+                    negate = false;
+                }
+
+                endNumber = false;
+                construct = false;
+            }
+            void ChangeDiff()
+            {
+                if (refName) { FromVar(); }
+                endNumber = false;
+            }
+
+            for (int i = 0; i < value.Length; i++)
+            {
+                char c = value[i];
+
+                if (construct)
+                {
+                    if (c == ',' && !part2)
+                    {
+                        SetValue((double)DoubleParam(input.ToString()), true, oper, negate, ref result);
+                        input.Clear();
+                        part2 = true;
+                        continue;
+                    }
+                    else if (c == ',')
+                    {
+                        throw new ConsoleException("Invalid Vector2 paramter");
+                    }
+
+                    if (c == ']')
+                    {
+                        if (!part2)
+                        {
+                            throw new ConsoleException("Invalid Vector2 paramter");
+                        }
+
+                        construct = false;
+                        endNumber = true;
+
+                        SetValue((double)DoubleParam(input.ToString()), false, oper, negate, ref result);
+                        input.Clear();
+                        oper = Operation.None;
+                        negate = false;
+                        continue;
+                    }
+
+                    if (c != ' ')
+                    {
+                        input.Append(c);
+                        continue;
+                    }
+
+                    continue;
+                }
+
+                if (inBrackets)
+                {
+                    if (c == '(')
+                    {
+                        bracketCount++;
+                    }
+                    if (c == ')')
+                    {
+                        bracketCount--;
+
+                        if (bracketCount < 0)
+                        {
+                            inBrackets = false;
+                            endNumber = true;
+
+                            SetValue((Vector2)Vector2Param(input.ToString()), oper, negate, ref result);
+                            input.Clear();
+                            oper = Operation.None;
+                            negate = false;
+                            continue;
+                        }
+                    }
+
+                    input.Append(c);
+                    continue;
+                }
+
+                switch (c)
+                {
+                    case '+':
+                        ChangeDiff();
+
+                        if (oper == Operation.None)
+                        {
+                            oper = Operation.Add;
+                        }
+                        continue;
+
+                    case '-':
+                        ChangeDiff();
+
+                        if (oper == Operation.None)
+                        {
+                            oper = Operation.Subtract;
+                            continue;
+                        }
+                        negate = !negate;
+                        continue;
+
+                    case '*':
+                        ChangeNorm();
+                        oper = Operation.Mutliply;
+                        continue;
+
+                    case '/':
+                        ChangeNorm();
+                        oper = Operation.Divide;
+                        continue;
+
+                    case ' ':
+                        if (refName)
+                        {
+                            endNumber = true;
+
+                            FromVar();
+
+                            oper = Operation.None;
+                            negate = false;
+                            continue;
+                        }
+
+                        continue;
+
+                    default:
+                        if (endNumber)
+                        {
+                            throw new ConsoleException("Invalid Vector2 syntax");
+                        }
+                        break;
+                }
+
+                if (refName)
+                {
+                    input.Append(c);
+                    continue;
+                }
+
+                if (!construct)
+                {
+                    if (c == '[')
+                    {
+                        construct = true;
+                        part2 = false;
+                        continue;
+                    }
+                    if (c == '$')
+                    {
+                        refName = true;
+                        construct = false;
+                        continue;
+                    }
+                    if (c == '(')
+                    {
+                        inBrackets = true;
+                        continue;
+                    }
+                }
+
+                input.Append(c);
+                continue;
+            }
+
+            if ((!endNumber && !refName) || inBrackets || construct)
+            {
+                throw new ConsoleException("Invalid Vector2 syntax");
+            }
+
+            if (refName)
+            {
+                FromVar();
+            }
+
+            return result;
+        }
+
+        private static void SetValue(Vector2 value, Operation o, bool neg, ref Vector2 v)
+        {
+            if (neg) { value = -value; }
+
+            switch (o)
+            {
+                case Operation.Add:
+                    v += value;
+                    return;
+
+                case Operation.Subtract:
+                    v -= value;
+                    return;
+
+                case Operation.Mutliply:
+                    v *= value;
+                    return;
+
+                case Operation.Divide:
+                    v /= value;
+                    return;
+            }
+        }
+        private static void SetValue(double value, bool side, Operation o, bool neg, ref Vector2 v)
+        {
+            if (neg) { value = -value; }
+
+            if (side)
+            {
+                switch (o)
+                {
+                    case Operation.Add:
+                        v.X += value;
+                        return;
+
+                    case Operation.Subtract:
+                        v.X -= value;
+                        return;
+
+                    case Operation.Mutliply:
+                        v.X *= value;
+                        return;
+
+                    case Operation.Divide:
+                        v.X /= value;
+                        return;
+                }
+
+                return;
+            }
+
+            switch (o)
+            {
+                case Operation.Add:
+                    v.Y += value;
+                    return;
+
+                case Operation.Subtract:
+                    v.Y -= value;
+                    return;
+
+                case Operation.Mutliply:
+                    v.Y *= value;
+                    return;
+
+                case Operation.Divide:
+                    v.Y /= value;
+                    return;
+            }
+        }
+
+        public static object Vector3Param(string value)
+        {
+            bool construct = false;
+            int part2 = 0;
+            bool endNumber = false;
+            bool refName = false;
+            bool negate = false;
+            bool inBrackets = false;
+            int bracketCount = 0;
+
+            Operation oper = Operation.Add;
+            StringBuilder input = new StringBuilder(32);
+
+            Vector3 result = Vector3.Zero;
+
+            void FromVar()
+            {
+                Variable var = FindVariable('$' + input.ToString(), out _);
+                object obj = var.Getter();
+
+                Vector3 val;
+
+                try
+                {
+                    val = (Vector3)obj;
+                }
+                catch (Exception)
+                {
+                    throw new ConsoleException("Variable not convertable to Vector3 type");
+                }
+
+                SetValue(val, oper, negate, ref result);
+                refName = false;
+                input.Clear();
+            }
+            void ChangeNorm()
+            {
+                if (!endNumber)
+                {
+                    if (refName) { FromVar(); }
+
+                    negate = false;
+                }
+
+                endNumber = false;
+                construct = false;
+            }
+            void ChangeDiff()
+            {
+                if (refName) { FromVar(); }
+                endNumber = false;
+            }
+
+            for (int i = 0; i < value.Length; i++)
+            {
+                char c = value[i];
+
+                if (construct)
+                {
+                    if (c == ',' && part2 != 2)
+                    {
+                        SetValue((double)DoubleParam(input.ToString()), part2, oper, negate, ref result);
+                        input.Clear();
+                        part2++;
+                        continue;
+                    }
+                    else if (c == ',')
+                    {
+                        throw new ConsoleException("Invalid Vector3 paramter");
+                    }
+
+                    if (c == ']')
+                    {
+                        if (part2 != 2)
+                        {
+                            throw new ConsoleException("Invalid Vector3 paramter");
+                        }
+
+                        construct = false;
+                        endNumber = true;
+
+                        SetValue((double)DoubleParam(input.ToString()), part2, oper, negate, ref result);
+                        input.Clear();
+                        oper = Operation.None;
+                        negate = false;
+                        continue;
+                    }
+
+                    if (c != ' ')
+                    {
+                        input.Append(c);
+                        continue;
+                    }
+
+                    continue;
+                }
+
+                if (inBrackets)
+                {
+                    if (c == '(')
+                    {
+                        bracketCount++;
+                    }
+                    if (c == ')')
+                    {
+                        bracketCount--;
+
+                        if (bracketCount < 0)
+                        {
+                            inBrackets = false;
+                            endNumber = true;
+
+                            SetValue((Vector3)Vector2Param(input.ToString()), oper, negate, ref result);
+                            input.Clear();
+                            oper = Operation.None;
+                            negate = false;
+                            continue;
+                        }
+                    }
+
+                    input.Append(c);
+                    continue;
+                }
+
+                switch (c)
+                {
+                    case '+':
+                        ChangeDiff();
+
+                        if (oper == Operation.None)
+                        {
+                            oper = Operation.Add;
+                        }
+                        continue;
+
+                    case '-':
+                        ChangeDiff();
+
+                        if (oper == Operation.None)
+                        {
+                            oper = Operation.Subtract;
+                            continue;
+                        }
+                        negate = !negate;
+                        continue;
+
+                    case '*':
+                        ChangeNorm();
+                        oper = Operation.Mutliply;
+                        continue;
+
+                    case '/':
+                        ChangeNorm();
+                        oper = Operation.Divide;
+                        continue;
+
+                    case ' ':
+                        if (refName)
+                        {
+                            endNumber = true;
+
+                            FromVar();
+
+                            oper = Operation.None;
+                            negate = false;
+                            continue;
+                        }
+
+                        continue;
+
+                    default:
+                        if (endNumber)
+                        {
+                            throw new ConsoleException("Invalid Vector3 syntax");
+                        }
+                        break;
+                }
+
+                if (refName)
+                {
+                    input.Append(c);
+                    continue;
+                }
+
+                if (!construct)
+                {
+                    if (c == '[')
+                    {
+                        construct = true;
+                        part2 = 0;
+                        continue;
+                    }
+                    if (c == '$')
+                    {
+                        refName = true;
+                        construct = false;
+                        continue;
+                    }
+                    if (c == '(')
+                    {
+                        inBrackets = true;
+                        continue;
+                    }
+                }
+
+                input.Append(c);
+                continue;
+            }
+
+            if ((!endNumber && !refName) || inBrackets || construct)
+            {
+                throw new ConsoleException("Invalid Vector3 syntax");
+            }
+
+            if (refName)
+            {
+                FromVar();
+            }
+
+            return result;
+        }
+
+        private static void SetValue(Vector3 value, Operation o, bool neg, ref Vector3 v)
+        {
+            if (neg) { value = -value; }
+
+            switch (o)
+            {
+                case Operation.Add:
+                    v += value;
+                    return;
+
+                case Operation.Subtract:
+                    v -= value;
+                    return;
+
+                case Operation.Mutliply:
+                    v *= value;
+                    return;
+
+                case Operation.Divide:
+                    v /= value;
+                    return;
+            }
+        }
+        private static void SetValue(double value, int side, Operation o, bool neg, ref Vector3 v)
+        {
+            if (neg) { value = -value; }
+
+            if (side == 0)
+            {
+                switch (o)
+                {
+                    case Operation.Add:
+                        v.X += value;
+                        return;
+
+                    case Operation.Subtract:
+                        v.X -= value;
+                        return;
+
+                    case Operation.Mutliply:
+                        v.X *= value;
+                        return;
+
+                    case Operation.Divide:
+                        v.X /= value;
+                        return;
+                }
+
+                return;
+            }
+            if (side == 1)
+            {
+                switch (o)
+                {
+                    case Operation.Add:
+                        v.Y += value;
+                        return;
+
+                    case Operation.Subtract:
+                        v.Y -= value;
+                        return;
+
+                    case Operation.Mutliply:
+                        v.Y *= value;
+                        return;
+
+                    case Operation.Divide:
+                        v.Y /= value;
+                        return;
+                }
+
+                return;
+            }
+
+            switch (o)
+            {
+                case Operation.Add:
+                    v.Z += value;
+                    return;
+
+                case Operation.Subtract:
+                    v.Z -= value;
+                    return;
+
+                case Operation.Mutliply:
+                    v.Z *= value;
+                    return;
+
+                case Operation.Divide:
+                    v.Z /= value;
+                    return;
             }
         }
     }
