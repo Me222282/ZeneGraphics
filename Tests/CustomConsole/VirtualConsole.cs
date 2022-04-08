@@ -1269,11 +1269,68 @@ namespace CustomConsole
                 {
                     int i = (int)IntParam(number.ToString());
 
+                    if (i < 0 || i > (str.Length - 1))
+                    {
+                        throw new ConsoleException("Index out of range");
+                    }
+
                     return str[i];
                 }
             }
 
             return result;
+        }
+        public static object BoolParam(string value)
+        {
+            bool result = true;
+            bool fromVar = false;
+
+            int i = 0;
+
+            if (value[i] == '!')
+            {
+                result = false;
+                i++;
+            }
+            if (value[i] == '$')
+            {
+                fromVar = true;
+                i++;
+            }
+
+            string info = value[i..].Trim();
+
+            if (fromVar)
+            {
+                Variable var = FindVariable('$' + info, out _);
+                object obj = var.Getter();
+
+                if (obj is bool b)
+                {
+                    return result ? b : !b;
+                }
+                if (obj is int @int)
+                {
+                    return result ? @int > 0 : @int == 0;
+                }
+
+                throw new ConsoleException("Variable not convertable to boolean type");
+            }
+            else
+            {
+                info = info.ToLower();
+
+                if (info == "true")
+                {
+                    return result;
+                }
+                if (info == "false")
+                {
+                    return !result;
+                }
+
+                throw new ConsoleException("Invalid boolean parameter");
+            }
         }
     }
 }
