@@ -77,7 +77,7 @@ namespace CustomConsole
             // Update draw when output to console
             VirtualConsole.OnLog += (_, _) => _update = true;
 
-            VirtualConsole.AddFunction("Copy", new StringConverter[] { VirtualConsole.StringParam, VirtualConsole.IntParam }, (objs, info) =>
+            VirtualConsole.AddFunction("Copy", new VariableType[] { VariableType.String, VariableType.Int }, (objs, info) =>
             {
                 bool displayCount = false;
 
@@ -104,7 +104,7 @@ namespace CustomConsole
                     VirtualConsole.Log(text);
                 }
             });
-            VirtualConsole.AddVariable("margin", VirtualConsole.IntParam, () =>
+            VirtualConsole.AddVariable("margin", VariableType.Int, () =>
             {
                 return (int)_margin;
             }, obj =>

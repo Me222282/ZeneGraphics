@@ -8,6 +8,16 @@ namespace CustomConsole
 {
     public delegate object StringConverter(string str);
 
+    public enum VariableType
+    {
+        Int,
+        Float,
+        Double,
+        String,
+        Char,
+        Bool
+    }
+
     public static class VirtualConsole
     {
         static VirtualConsole()
@@ -44,6 +54,14 @@ namespace CustomConsole
                 {
                     throw new ConsoleException("Variable cannot be set");
                 }),
+
+                new Variable("PATH", StringParam, () =>
+                {
+                    return Environment.GetEnvironmentVariable("PATH");
+                }, obj =>
+                {
+                    Environment.SetEnvironmentVariable("PATH", (string)obj);
+                })
             };
         }
 
@@ -310,13 +328,40 @@ namespace CustomConsole
 
         public static event EventHandler<string> OnLog;
 
-        public static void AddFunction(string name, StringConverter[] paramConverters, FunctionPasser callcack)
+        public static void AddFunction(string name, VariableType[] paramTypes, FunctionPasser callcack)
         {
+            StringConverter[] paramConverters = new StringConverter[paramTypes.Length];
+
+            for (int i = 0; i < paramTypes.Length; i++)
+            {
+                paramConverters[i] = paramTypes[i] switch
+                {
+                    VariableType.Int => IntParam,
+                    VariableType.Float => FloatParam,
+                    VariableType.Double => DoubleParam,
+                    VariableType.String => StringParam,
+                    VariableType.Char => CharParam,
+                    VariableType.Bool => BoolParam,
+                    _ => throw new Exception("Invalid type"),
+                };
+            }
+
             _functions.Add(new Function(name, paramConverters, callcack));
         }
-        public static void AddVariable(string name, StringConverter paramConverter, VariableGetter get, VariableSetter set)
+        public static void AddVariable(string name, VariableType type, VariableGetter get, VariableSetter set)
         {
-            _variables.Add(new Variable(name, paramConverter, get, set));
+            StringConverter sc = type switch
+            {
+                VariableType.Int => IntParam,
+                VariableType.Float => FloatParam,
+                VariableType.Double => DoubleParam,
+                VariableType.String => StringParam,
+                VariableType.Char => CharParam,
+                VariableType.Bool => BoolParam,
+                _ => throw new Exception("Invalid type"),
+            };
+
+            _variables.Add(new Variable(name, sc, get, set));
         }
         public static void Log(string value)
         {
