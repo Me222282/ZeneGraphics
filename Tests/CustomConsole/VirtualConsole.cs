@@ -16,6 +16,8 @@ namespace CustomConsole
 
         public static string Directory { get; private set; } = Environment.CurrentDirectory;
 
+        public static string Name { get; set; } = "Console";
+
         public static void EnterText(string text)
         {
             text = text.Trim();

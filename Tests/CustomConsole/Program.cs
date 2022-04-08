@@ -61,6 +61,8 @@ namespace CustomConsole
         }
         private int _textIndex = 0;
 
+        private double _viewOffset = 0;
+
         public void Run()
         {
             // Vsync
@@ -95,23 +97,54 @@ namespace CustomConsole
                     VirtualConsole.Log(text);
                 }
             });
+            VirtualConsole.AddFunction("margin", new StringConverter[] { VirtualConsole.DoubleParam }, (objs, info) =>
+            {
+                _margin = (double)objs[0];
+            });
+            VirtualConsole.AddFunction("name", new StringConverter[] { VirtualConsole.StringParam }, (objs, info) =>
+            {
+                VirtualConsole.Name = (string)objs[0];
+            });
 
             while (GLFW.WindowShouldClose(Handle) == GLFW.False)
             {
                 Framebuffer.Clear(BufferBit.Colour);
 
-                _textRender.Model = Matrix4.CreateScale(_charSize) *
-                    Matrix4.CreateTranslation((Width * -0.5) + _margin, (Height * 0.5) - _margin, 0d);
+                _textRender.View = Matrix4.CreateTranslation(0d, _viewOffset, 0d);
+
+                Vector2 corner = ((Width * -0.5) + _margin, (Height * 0.5) - _margin);
+                Matrix4 scaleM = Matrix4.CreateScale(_charSize);
+
+                double lineOffset = 0;
 
                 for (int i = 0; i < VirtualConsole.Output.Count; i++)
                 {
-                    _textRender.DrawLeftBound(new string('\n', i) + VirtualConsole.Output[i], _fontC);
+                    ReadOnlySpan<char> text = VirtualConsole.Output[i];
+
+                    double location = corner.Y + (_viewOffset + lineOffset - _fontC.LineHeight);
+                    // Above view
+                    if (location > corner.Y) { goto NextChar; }
+                    // Below view
+                    if (location < -corner.Y) { goto NextChar; }
+
+                    _textRender.Model = scaleM *
+                        Matrix4.CreateTranslation(corner.X, corner.Y + lineOffset, 0d);
+
+                    _textRender.DrawLeftBound(text, _fontC);
+
+                    NextChar:
+                        double lineHeight = (_fontC.GetLineHeight(text) + _fontC.LineSpace) * -_charSize;
+                        lineOffset += lineHeight;
                 }
 
-                string offset = new string('\n', VirtualConsole.Output.Count);
+                _textRender.Model = scaleM *
+                    Matrix4.CreateTranslation(corner.X, corner.Y + lineOffset, 0d);
 
-                _textRender.DrawLeftBound(offset + "Console> " + _enterText.ToString(), _fontC);
-                _textRender.DrawLeftBound(offset + new string(' ', 9 + _textIndex) + Caret, _fontC);
+                ReadOnlySpan<char> enterText = VirtualConsole.Name + "> " + _enterText.ToString();
+                _textRender.DrawLeftBound(enterText, _fontC);
+
+                SetCaretOffset(enterText);
+                _textRender.DrawLeftBound($"{Caret}", _fontC);
 
                 if (Title != VirtualConsole.Directory)
                 {
@@ -123,6 +156,20 @@ namespace CustomConsole
             }
         }
         
+        private unsafe void SetCaretOffset(ReadOnlySpan<char> enterText)
+        {
+            ReadOnlySpan<char> offsetCount;
+
+            fixed (char* c = &enterText[0])
+            {
+                offsetCount = new ReadOnlySpan<char>(c, VirtualConsole.Name.Length + 2 + _textIndex);
+            }
+
+            double charSpace = _fontC.GetCharacterData(offsetCount[^1]).Buffer + _fontC.CharSpace;
+            double caretOffset = (_fontC.GetLineWidth(offsetCount, _fontC.CharSpace, 4) + charSpace) * _charSize;
+            _textRender.Model *= Matrix4.CreateTranslation(caretOffset, 0d, 0d);
+        }
+
         protected override void OnSizePixelChange(SizeChangeEventArgs e)
         {
             base.OnSizePixelChange(e);
@@ -177,7 +224,7 @@ namespace CustomConsole
             {
                 string command = _enterText.ToString();
 
-                VirtualConsole.Log("Console> " + command);
+                VirtualConsole.Log(VirtualConsole.Name + "> " + command);
                 VirtualConsole.EnterText(command);
 
                 if (VirtualConsole.Output.Count > 0)
@@ -216,7 +263,22 @@ namespace CustomConsole
         {
             base.OnScroll(e);
 
-            if (!_ctrl) { return; }
+            if (!_ctrl)
+            {
+                double absDelta = Math.Abs(e.DeltaY);
+                double offset = ((absDelta * _fontC.LineHeight) + (_fontC.LineSpace * absDelta)) * _charSize;
+
+                if (e.DeltaY < 0) { offset = -offset; }
+                _viewOffset -= offset;
+
+                Console.WriteLine(((e.DeltaY * _fontC.LineHeight) - _fontC.LineSpace));
+
+                if (_viewOffset < 0)
+                {
+                    _viewOffset = 0;
+                }
+                return;
+            }
 
             _charSize += e.DeltaY;
 

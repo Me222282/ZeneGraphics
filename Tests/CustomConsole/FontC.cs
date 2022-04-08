@@ -24,7 +24,7 @@ namespace CustomConsole
             _texture = new Texture2D(TextureFormat.R8, TextureData.Byte)
             {
                 WrapStyle = WrapStyle.EdgeClamp,
-                MinFilter = TextureSampling.Nearest,
+                MinFilter = TextureSampling.Blend,
                 MagFilter = TextureSampling.Nearest
             };
             // Asign data

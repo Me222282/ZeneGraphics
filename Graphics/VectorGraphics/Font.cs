@@ -59,7 +59,7 @@ namespace Zene.Graphics
                 CharFontData charData = GetCharacterData(text[i]);
 
                 // Add charater width
-                result += charData.Size.X + charSpace;
+                result += charData.Size.X + charData.Buffer + charSpace;
             }
 
             // If there was no new line character found - newLineIndex doesn't exist
@@ -110,10 +110,31 @@ namespace Zene.Graphics
                 CharFontData charData = GetCharacterData(text[i]);
 
                 // Add charater width
-                result[currentLine] += charData.Size.X + charSpace;
+                result[currentLine] += charData.Size.X + charData.Buffer + charSpace;
             }
 
             return result;
+        }
+
+        public double GetLineHeight(ReadOnlySpan<char> text)
+        {
+            int count = 1;
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (text[i] == '\n')
+                {
+                    count++;
+                    continue;
+                }
+                if (text[i] == '\r' && (text.Length > (i + 1) && text[i + 1] != '\n'))
+                {
+                    count++;
+                    continue;
+                }
+            }
+
+            return (count * LineHeight) + ((count - 1) * LineSpace);
         }
     }
 }
