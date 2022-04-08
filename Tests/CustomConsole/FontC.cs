@@ -44,6 +44,11 @@ namespace CustomConsole
         private static readonly Vector2 _charSize = new Vector2((1d / 42) * 24, 1d);
         private static readonly Vector2 _offset = new Vector2(0d, (1d / 42) * -5);
 
+        private static readonly CharFontData _unknownChar = new CharFontData(
+            new Vector2(_pixelWidth * 347, 0),
+            new Vector2(_pixelWidth * 48, _pixelHeight * 42),
+            new Vector2((1d / 42) * 48, 1d),
+            Vector2.Zero);
         private static readonly CharFontData[] _characterData = new CharFontData[]
         {
             // !
@@ -408,7 +413,7 @@ namespace CustomConsole
                 _charSize,
                 _offset),
 
-            CharFontData.Unsupported,
+            _unknownChar,
 
             // Alphabet lower case
             new CharFontData(
@@ -625,7 +630,12 @@ namespace CustomConsole
                     return c;
                 }
 
-                return CharFontData.Unsupported;
+                CharFontData u = _unknownChar;
+
+                u.Buffer = CharSpace * 0.5;
+                u.ExtraOffset = (u.Buffer, 0d);
+
+                return u;
             }
         }
     }

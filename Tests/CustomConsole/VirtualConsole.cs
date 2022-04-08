@@ -10,14 +10,55 @@ namespace CustomConsole
 
     public static class VirtualConsole
     {
+        static VirtualConsole()
+        {
+            _variables = new List<Variable>(256)
+            {
+                new Variable("name", StringParam, () =>
+                {
+                    return Name;
+                }, obj =>
+                {
+                    Name = (string)obj;
+                }),
+
+                new Variable("dir", StringParam, () =>
+                {
+                    return Directory;
+                }, obj =>
+                {
+                    string path = (string)obj;
+
+                    if (!System.IO.Directory.Exists(path))
+                    {
+                        throw new ConsoleException("Path could not be found");
+                    }
+
+                    Environment.CurrentDirectory = path;
+                }),
+
+                new Variable("user", StringParam, () =>
+                {
+                    return Environment.UserName;
+                }, obj =>
+                {
+                    throw new ConsoleException("Variable cannot be set");
+                }),
+            };
+        }
+
         private static readonly List<string> _history = new List<string>(256);
         private static readonly List<string> _lines = new List<string>(256);
         private static readonly List<Function> _functions = new List<Function>(256);
-        private static readonly List<Variable> _variables = new List<Variable>(256);
+        private static readonly List<Variable> _variables;
 
-        public static string Directory { get; private set; } = Environment.CurrentDirectory;
+        public static string Directory
+        {
+            get => Environment.CurrentDirectory;
+            set => Environment.CurrentDirectory = value;
+        }
 
-        private static string _name = "Console";
+        private static string _name = Environment.UserName;
         public static string Name
         {
             get => _name;

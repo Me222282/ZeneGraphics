@@ -111,20 +111,6 @@ namespace CustomConsole
             {
                 _margin = (int)obj;
             });
-            VirtualConsole.AddVariable("name", VirtualConsole.StringParam, () =>
-            {
-                return VirtualConsole.Name;
-            }, obj =>
-            {
-                VirtualConsole.Name = (string)obj;
-            });
-            VirtualConsole.AddVariable("dir", VirtualConsole.StringParam, () =>
-            {
-                return VirtualConsole.Directory;
-            }, obj =>
-            {
-                VirtualConsole.ExecuteCommand("cd " + (string)obj);
-            });
 
             Matrix4 originOffset = Matrix4.Identity;
 
@@ -314,7 +300,7 @@ namespace CustomConsole
 
             if (!_ctrl)
             {
-                double absDelta = Math.Abs(e.DeltaY);
+                double absDelta = Math.Abs(e.DeltaY * 3);
                 double offset = ((absDelta * _fontC.LineHeight) + (_fontC.LineSpace * absDelta)) * _charSize;
 
                 if (e.DeltaY < 0) { offset = -offset; }
