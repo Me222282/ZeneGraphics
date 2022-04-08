@@ -90,5 +90,10 @@ namespace Zene.Structs
         {
             return new Vector3I((int)(object)obj.X, (int)(object)obj.Y, (int)(object)obj.Z);
         }
+
+        public static implicit operator Vector3<T>((T, T, T) v)
+        {
+            return new Vector3<T>(v.Item1, v.Item2, v.Item3);
+        }
     }
 }

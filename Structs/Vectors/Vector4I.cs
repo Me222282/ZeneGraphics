@@ -405,6 +405,11 @@ namespace Zene.Structs
             return new Vector4(a.X / b.X, a.Y / b.Y, a.Z / b.Z, a.W / b.W);
         }
 
+        public static implicit operator Vector4I((int, int, int, int) v)
+        {
+            return new Vector4I(v.Item1, v.Item2, v.Item3, v.Item4);
+        }
+
         public static Vector4I Random(Random r)
         {
             return new Vector4I(

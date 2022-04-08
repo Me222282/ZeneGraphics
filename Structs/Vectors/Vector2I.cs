@@ -326,6 +326,11 @@ namespace Zene.Structs
             return new Vector2(a.X * b.X, a.Y * b.Y);
         }
 
+        public static implicit operator Vector2I((int, int) v)
+        {
+            return new Vector2I(v.Item1, v.Item2);
+        }
+
         public static Vector2I Random(Random r)
         {
             return new Vector2I(
