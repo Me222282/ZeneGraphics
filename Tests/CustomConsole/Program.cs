@@ -212,6 +212,9 @@ namespace CustomConsole
         {
             base.OnSizePixelChange(e);
 
+            // Minimised
+            if (e.Width < 1 || e.Height < 1) { return; }
+
             _update = true;
 
             Framebuffer.ViewSize = e.Size;

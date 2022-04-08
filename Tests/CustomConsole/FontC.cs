@@ -577,6 +577,11 @@ namespace CustomConsole
             _texSize,
             _charSize,
             Vector2.Zero);
+        private static readonly CharFontData _euroChar = new CharFontData(
+            new Vector2(_pixelWidth * 25, _pixelHeight * 48),
+            _texSize,
+            _charSize,
+            Vector2.Zero);
         private static readonly CharFontData _copywriteChar = new CharFontData(
             new Vector2(_pixelWidth * 200, 0),
             new Vector2(_pixelWidth * 48, _pixelHeight * 42),
@@ -602,6 +607,7 @@ namespace CustomConsole
             catch (IndexOutOfRangeException)
             {
                 if (character == '£') { return _poundChar; }
+                if (character == '€') { return _euroChar; }
                 if (character == '©')
                 {
                     CharFontData c = _copywriteChar;
