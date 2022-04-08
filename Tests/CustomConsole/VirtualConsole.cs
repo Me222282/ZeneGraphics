@@ -13,6 +13,7 @@ namespace CustomConsole
         private static readonly List<string> _history = new List<string>(256);
         private static readonly List<string> _lines = new List<string>(256);
         private static readonly List<Function> _functions = new List<Function>(256);
+        private static readonly List<Variable> _variables = new List<Variable>(256);
 
         public static string Directory { get; private set; } = Environment.CurrentDirectory;
 
@@ -168,6 +169,30 @@ namespace CustomConsole
                 return;
             }
 
+            // Variable
+            if (text[0] == '$')
+            {
+                Variable var = FindVariable(text, out string setting);
+
+                // Error was thrown
+                if (var == null) { return; }
+
+                if (setting == null)
+                {
+                    Log(var.Getter().ToString());
+                    _history.Add(text);
+                    return;
+                }
+
+                object arg = var.ParamConverter(setting);
+
+                if (arg == null) { return; }
+
+                var.Setter(arg);
+                _history.Add(text);
+                return;
+            }
+
             Function f = FindFunction(text, out int paramIndex);
 
             if (f == null)
@@ -188,6 +213,10 @@ namespace CustomConsole
         public static void AddFunction(string name, StringConverter[] paramConverters, FunctionPasser callcack)
         {
             _functions.Add(new Function(name, paramConverters, callcack));
+        }
+        public static void AddVariable(string name, StringConverter paramConverter, VariableGetter get, VariableSetter set)
+        {
+            _variables.Add(new Variable(name, paramConverter, get, set));
         }
         public static void Log(string value)
         {
@@ -224,6 +253,63 @@ namespace CustomConsole
             string nameStr = name.ToString();
 
             return _functions.Find(f => f.Name == nameStr);
+        }
+        private static Variable FindVariable(string text, out string setter)
+        {
+            StringBuilder name = new StringBuilder(32);
+
+            bool foundName = false;
+
+            setter = null;
+
+            for (int i = 1; i < text.Length; i++)
+            {
+                char c = text[i];
+
+                if (c == '\n')
+                {
+                    Log("Invalid syntax");
+                    return null;
+                }
+
+                // End of name
+                if (c == ' ')
+                {
+                    foundName = true;
+                    continue;
+                }
+
+                if (c == '=')
+                {
+                    if (text.Length < (i + 2))
+                    {
+                        Log("Invalid syntax");
+                        return null;
+                    }
+
+                    setter = text[(i + 1)..].Trim();
+                    break;
+                }
+
+                if (foundName)
+                {
+                    Log("Invalid syntax");
+                    return null;
+                }
+
+                name.Append(c);
+            }
+
+            string nameStr = name.ToString();
+            Variable v = _variables.Find(v => v.Name == nameStr);
+
+            if (v == null)
+            {
+                Log("Unknown variable");
+                return null;
+            }
+
+            return v;
         }
 
         public static object IntParam(string value)

@@ -97,13 +97,19 @@ namespace CustomConsole
                     VirtualConsole.Log(text);
                 }
             });
-            VirtualConsole.AddFunction("margin", new StringConverter[] { VirtualConsole.DoubleParam }, (objs, info) =>
+            VirtualConsole.AddVariable("margin", VirtualConsole.DoubleParam, () =>
             {
-                _margin = (double)objs[0];
+                return _margin;
+            }, obj =>
+            {
+                _margin = (double)obj;
             });
-            VirtualConsole.AddFunction("name", new StringConverter[] { VirtualConsole.StringParam }, (objs, info) =>
+            VirtualConsole.AddVariable("name", VirtualConsole.StringParam, () =>
             {
-                VirtualConsole.Name = (string)objs[0];
+                return VirtualConsole.Name;
+            }, obj =>
+            {
+                VirtualConsole.Name = (string)obj;
             });
 
             while (GLFW.WindowShouldClose(Handle) == GLFW.False)
@@ -270,8 +276,6 @@ namespace CustomConsole
 
                 if (e.DeltaY < 0) { offset = -offset; }
                 _viewOffset -= offset;
-
-                Console.WriteLine(((e.DeltaY * _fontC.LineHeight) - _fontC.LineSpace));
 
                 if (_viewOffset < 0)
                 {
