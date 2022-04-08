@@ -33,8 +33,8 @@ namespace CustomConsole
 
         public override string Name => "FontC";
 
-        public override double CharSpace => 0.2;
-        public override double LineSpace => 0.25;
+        public override double CharSpace { get; set; } = 0.2;
+        public override double LineSpace { get; set; } = 0.25;
 
         private readonly Texture2D _texture;
 
@@ -576,20 +576,17 @@ namespace CustomConsole
             new Vector2(_pixelWidth * 200, 0),
             new Vector2(_pixelWidth * 48, _pixelHeight * 42),
             new Vector2((1d / 42) * 48, 1d),
-            new Vector2(0.1, 0),
-            0.1);
+            Vector2.Zero);
         private static readonly CharFontData _registeredChar = new CharFontData(
             new Vector2(_pixelWidth * 249, 0),
             new Vector2(_pixelWidth * 48, _pixelHeight * 42),
             new Vector2((1d / 42) * 48, 1d),
-            new Vector2(0.1, 0),
-            0.1);
+            Vector2.Zero);
         private static readonly CharFontData _trademarkChar = new CharFontData(
             new Vector2(_pixelWidth * 298, 0),
             new Vector2(_pixelWidth * 48, _pixelHeight * 42),
             new Vector2((1d / 42) * 48, 1d),
-            new Vector2(0.1, 0),
-            0.1);
+            Vector2.Zero);
 
         public override CharFontData GetCharacterData(char character)
         {
@@ -600,9 +597,33 @@ namespace CustomConsole
             catch (IndexOutOfRangeException)
             {
                 if (character == '£') { return _poundChar; }
-                if (character == '©') { return _copywriteChar; }
-                if (character == '®') { return _registeredChar; }
-                if (character == '™') { return _trademarkChar; }
+                if (character == '©')
+                {
+                    CharFontData c = _copywriteChar;
+
+                    c.Buffer = CharSpace * 0.5;
+                    c.ExtraOffset = (c.Buffer, 0d);
+
+                    return c;
+                }
+                if (character == '®')
+                {
+                    CharFontData c = _registeredChar;
+
+                    c.Buffer = CharSpace * 0.5;
+                    c.ExtraOffset = (c.Buffer, 0d);
+
+                    return c;
+                }
+                if (character == '™')
+                {
+                    CharFontData c = _trademarkChar;
+
+                    c.Buffer = CharSpace * 0.5;
+                    c.ExtraOffset = (c.Buffer, 0d);
+
+                    return c;
+                }
 
                 return CharFontData.Unsupported;
             }

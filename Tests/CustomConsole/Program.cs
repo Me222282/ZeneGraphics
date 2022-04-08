@@ -23,6 +23,9 @@ namespace CustomConsole
         public Program(int width, int height, string title)
          : base(width, height, title)
         {
+            Framebuffer = new TextureRenderer(width, height);
+            Framebuffer.SetColourAttachment(0, TextureFormat.Rgba8);
+
             _textRender = new TextRenderer(40)
             {
                 AutoIncreaseCapacity = true
@@ -36,6 +39,7 @@ namespace CustomConsole
             OnSizePixelChange(new SizeChangeEventArgs(width, height));
         }
 
+        public override TextureRenderer Framebuffer { get; }
         private readonly TextRenderer _textRender;
         private readonly Font _fontC;
 
@@ -63,10 +67,15 @@ namespace CustomConsole
 
         private double _viewOffset = 0;
 
+        private bool _update = true;
+
         public void Run()
         {
             // Vsync
             GLFW.SwapInterval(1);
+
+            // Update draw when output to console
+            VirtualConsole.OnLog += (_, _) => _update = true;
 
             VirtualConsole.AddFunction("Copy", new StringConverter[] { VirtualConsole.StringParam, VirtualConsole.IntParam }, (objs, info) =>
             {
@@ -78,9 +87,7 @@ namespace CustomConsole
                 }
                 else if (info != null && info.Length != 0)
                 {
-                    Console.WriteLine(info.Length);
-                    VirtualConsole.Log("Invalid extra info");
-                    return;
+                    throw new ConsoleException("Invalid extra info");
                 }
 
                 string text = (string)objs[0];
@@ -97,12 +104,12 @@ namespace CustomConsole
                     VirtualConsole.Log(text);
                 }
             });
-            VirtualConsole.AddVariable("margin", VirtualConsole.DoubleParam, () =>
+            VirtualConsole.AddVariable("margin", VirtualConsole.IntParam, () =>
             {
-                return _margin;
+                return (int)_margin;
             }, obj =>
             {
-                _margin = (double)obj;
+                _margin = (int)obj;
             });
             VirtualConsole.AddVariable("name", VirtualConsole.StringParam, () =>
             {
@@ -111,45 +118,40 @@ namespace CustomConsole
             {
                 VirtualConsole.Name = (string)obj;
             });
+            VirtualConsole.AddVariable("dir", VirtualConsole.StringParam, () =>
+            {
+                return VirtualConsole.Directory;
+            }, obj =>
+            {
+                VirtualConsole.ExecuteCommand("cd " + (string)obj);
+            });
+
+            Matrix4 originOffset = Matrix4.Identity;
 
             while (GLFW.WindowShouldClose(Handle) == GLFW.False)
             {
-                Framebuffer.Clear(BufferBit.Colour);
+                Framebuffer.Bind();
 
-                _textRender.View = Matrix4.CreateTranslation(0d, _viewOffset, 0d);
-
-                Vector2 corner = ((Width * -0.5) + _margin, (Height * 0.5) - _margin);
-                Matrix4 scaleM = Matrix4.CreateScale(_charSize);
-
-                double lineOffset = 0;
-
-                for (int i = 0; i < VirtualConsole.Output.Count; i++)
+                if (_update)
                 {
-                    ReadOnlySpan<char> text = VirtualConsole.Output[i];
-
-                    double location = corner.Y + (_viewOffset + lineOffset - _fontC.LineHeight);
-                    // Above view
-                    if (location > corner.Y) { goto NextChar; }
-                    // Below view
-                    if (location < -corner.Y) { goto NextChar; }
-
-                    _textRender.Model = scaleM *
-                        Matrix4.CreateTranslation(corner.X, corner.Y + lineOffset, 0d);
-
-                    _textRender.DrawLeftBound(text, _fontC);
-
-                    NextChar:
-                        double lineHeight = (_fontC.GetLineHeight(text) + _fontC.LineSpace) * -_charSize;
-                        lineOffset += lineHeight;
+                    Draw();
+                    // Last set to right position for enter text
+                    originOffset = _textRender.Model;
+                    _update = false;
                 }
 
-                _textRender.Model = scaleM *
-                    Matrix4.CreateTranslation(corner.X, corner.Y + lineOffset, 0d);
+                base.Framebuffer.Clear(BufferBit.Colour);
+                Framebuffer.CopyFrameBuffer(base.Framebuffer, BufferBit.Colour, TextureSampling.Nearest);
+
+                base.Framebuffer.Bind();
+
+                _textRender.Model = originOffset;
 
                 ReadOnlySpan<char> enterText = VirtualConsole.Name + "> " + _enterText.ToString();
                 _textRender.DrawLeftBound(enterText, _fontC);
 
                 SetCaretOffset(enterText);
+
                 _textRender.DrawLeftBound($"{Caret}", _fontC);
 
                 if (Title != VirtualConsole.Directory)
@@ -162,6 +164,41 @@ namespace CustomConsole
             }
         }
         
+        private void Draw()
+        {
+            Framebuffer.Clear(BufferBit.Colour);
+
+            _textRender.View = Matrix4.CreateTranslation(0d, _viewOffset, 0d);
+
+            Vector2 corner = ((Width * -0.5) + _margin, (Height * 0.5) - _margin);
+            Matrix4 scaleM = Matrix4.CreateScale(_charSize);
+
+            double lineOffset = 0;
+
+            for (int i = 0; i < VirtualConsole.Output.Count; i++)
+            {
+                ReadOnlySpan<char> text = VirtualConsole.Output[i];
+
+                double location = corner.Y + (_viewOffset + lineOffset - _fontC.LineHeight);
+                // Above view
+                if (location > corner.Y) { goto NextChar; }
+                // Below view
+                if (location < -corner.Y) { goto NextChar; }
+
+                _textRender.Model = scaleM *
+                    Matrix4.CreateTranslation(corner.X, corner.Y + lineOffset, 0d);
+
+                _textRender.DrawLeftBound(text, _fontC);
+
+            NextChar:
+                double lineHeight = (_fontC.GetLineHeight(text) + _fontC.LineSpace) * -_charSize;
+                lineOffset += lineHeight;
+            }
+
+            _textRender.Model = scaleM *
+                Matrix4.CreateTranslation(corner.X, corner.Y + lineOffset, 0d);
+        }
+
         private unsafe void SetCaretOffset(ReadOnlySpan<char> enterText)
         {
             ReadOnlySpan<char> offsetCount;
@@ -179,8 +216,12 @@ namespace CustomConsole
         protected override void OnSizePixelChange(SizeChangeEventArgs e)
         {
             base.OnSizePixelChange(e);
-            
+
+            _update = true;
+
             Framebuffer.ViewSize = e.Size;
+            base.Framebuffer.ViewSize = e.Size;
+            Framebuffer.Size = e.Size;
 
             _textRender.Projection = Matrix4.CreateOrthographic(e.Width, e.Height, 0d, 1d);
         }
@@ -231,7 +272,7 @@ namespace CustomConsole
                 string command = _enterText.ToString();
 
                 VirtualConsole.Log(VirtualConsole.Name + "> " + command);
-                VirtualConsole.EnterText(command);
+                VirtualConsole.ExecuteCommand(command);
 
                 if (VirtualConsole.Output.Count > 0)
                 {
@@ -268,6 +309,8 @@ namespace CustomConsole
         protected override void OnScroll(ScrollEventArgs e)
         {
             base.OnScroll(e);
+
+            _update = true;
 
             if (!_ctrl)
             {

@@ -182,7 +182,11 @@ namespace Zene.Graphics
             compText = compText.Replace("\t", "");
             compText = compText.Replace("\0", "");
             compText = compText.Replace("\a", "");
-            compText = compText.Replace("\u0027", "");
+
+            if (compText.Contains('\''))
+            {
+                Console.WriteLine("this");
+            }
 
             // No visable characters are drawn
             if (compText == "") { return; }
@@ -207,7 +211,7 @@ namespace Zene.Graphics
             while (count < compText.Length)
             {
                 // No character - it is null
-                if (text[i] == '\0' || text[i] == '\a' || text[i] == '\u0027')
+                if (text[i] == '\0' || text[i] == '\a')
                 {
                     i++;
                     // Index in compressed text shouldn't be changed - it has no null characters
@@ -231,6 +235,13 @@ namespace Zene.Graphics
                 // Character should be skipped - offsetCurrent adjusted for new line
                 if (text[i] == '\n')
                 {
+                    // Sometimes there is both
+                    if (text.Length > (i + 1) && text[i + 1] == '\r')
+                    {
+                        i++;
+                        continue;
+                    }
+
                     offsetCurrent.Y -= font.LineHeight + lineSpace;
                     offsetCurrent.X = 0;
                     i++;
@@ -307,7 +318,6 @@ namespace Zene.Graphics
             compText = compText.Replace("\t", "");
             compText = compText.Replace("\0", "");
             compText = compText.Replace("\a", "");
-            compText = compText.Replace("\u0027", "");
             
             if (compText.Length != colours.Length)
             {
@@ -337,7 +347,7 @@ namespace Zene.Graphics
             while (count < compText.Length)
             {
                 // No character - it is null
-                if (text[i] == '\0' || text[i] == '\a' || text[i] == '\u0027')
+                if (text[i] == '\0' || text[i] == '\a')
                 {
                     i++;
                     // Index in compressed text shouldn't be changed - it has no null characters
@@ -361,6 +371,13 @@ namespace Zene.Graphics
                 // Character should be skipped - offsetCurrent adjusted for new line
                 if (text[i] == '\n')
                 {
+                    // Sometimes there is both
+                    if (text.Length > (i + 1) && text[i + 1] == '\r')
+                    {
+                        i++;
+                        continue;
+                    }
+                    
                     offsetCurrent.Y -= font.LineHeight + lineSpace;
                     offsetCurrent.X = 0;
                     i++;
@@ -438,7 +455,6 @@ namespace Zene.Graphics
             compText = compText.Replace("\t", "");
             compText = compText.Replace("\0", "");
             compText = compText.Replace("\a", "");
-            compText = compText.Replace("\u0027", "");
             
             if (compText.Length != colours.Length)
             {
@@ -479,7 +495,7 @@ namespace Zene.Graphics
             while (count < compText.Length)
             {
                 // No character
-                if (text[i] == '\0' || text[i] == '\a' || text[i] == '\u0027')
+                if (text[i] == '\0' || text[i] == '\a')
                 {
                     i++;
                     // Index in compressed text shouldn't be changed - it has no null characters
@@ -503,6 +519,13 @@ namespace Zene.Graphics
                 // Character should be skipped - offsetCurrent adjusted for new line
                 if (text[i] == '\n')
                 {
+                    // Sometimes there is both
+                    if (text.Length > (i + 1) && text[i + 1] == '\r')
+                    {
+                        i++;
+                        continue;
+                    }
+                    
                     offsetCurrent.Y -= font.LineHeight + lineSpace;
                     lineCurrent++;
                     offsetCurrent.X = lineWidths[lineCurrent] * -0.5;
@@ -584,7 +607,6 @@ namespace Zene.Graphics
             compText = compText.Replace("\t", "");
             compText = compText.Replace("\0", "");
             compText = compText.Replace("\a", "");
-            compText = compText.Replace("\u0027", "");
 
             // No visable characters are drawn
             if (compText == "") { return; }
@@ -620,7 +642,7 @@ namespace Zene.Graphics
             while (count < compText.Length)
             {
                 // No character
-                if (text[i] == '\0' || text[i] == '\a' || text[i] == '\u0027')
+                if (text[i] == '\0' || text[i] == '\a')
                 {
                     i++;
                     // Index in compressed text shouldn't be changed - it has no null characters
@@ -644,6 +666,13 @@ namespace Zene.Graphics
                 // Character should be skipped - offsetCurrent adjusted for new line
                 if (text[i] == '\n')
                 {
+                    // Sometimes there is both
+                    if (text.Length > (i + 1) && text[i + 1] == '\r')
+                    {
+                        i++;
+                        continue;
+                    }
+
                     offsetCurrent.Y -= font.LineHeight + lineSpace;
                     lineCurrent++;
                     offsetCurrent.X = lineWidths[lineCurrent] * -0.5;

@@ -38,11 +38,11 @@ namespace Zene.Graphics
             Supported = true;
         }
 
-        public Vector2 TextureCoordOffset { get; }
-        public Vector2 TextureRefSize { get; }
-        public Vector2 Size { get; }
-        public Vector2 ExtraOffset { get; }
-        public double Buffer { get; }
+        public Vector2 TextureCoordOffset { get; set; }
+        public Vector2 TextureRefSize { get; set; }
+        public Vector2 Size { get; set; }
+        public Vector2 ExtraOffset { get; set; }
+        public double Buffer { get; set; }
         public bool Supported { get; }
 
         public override string ToString()

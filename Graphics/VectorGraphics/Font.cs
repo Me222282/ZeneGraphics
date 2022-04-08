@@ -20,8 +20,8 @@ namespace Zene.Graphics
 
         public abstract string Name { get; }
 
-        public virtual double CharSpace => 0d;
-        public virtual double LineSpace => 0d;
+        public virtual double CharSpace { get; set; } = 0d;
+        public virtual double LineSpace { get; set; } = 0d;
 
         public double GetLineWidth(ReadOnlySpan<char> text, double charSpace, int tabSize) => GetLineWidth(text, charSpace, tabSize, 0, out _);
         public double GetLineWidth(ReadOnlySpan<char> text, double charSpace, int tabSize, int startIndex, out int newLineIndex)

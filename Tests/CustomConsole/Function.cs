@@ -41,8 +41,7 @@ namespace CustomConsole
             funcParams = funcParams.Trim();
             if (funcParams[0] != '(')
             {
-                VirtualConsole.Log("Invalid syntax");
-                return null;
+                throw new ConsoleException("Invalid syntax");
             }
 
             int paramCounter = 0;
@@ -53,8 +52,7 @@ namespace CustomConsole
 
                 if (c == '\n' || c == '\r')
                 {
-                    VirtualConsole.Log("Invlaid new line character");
-                    return null;
+                    throw new ConsoleException("Invlaid new line character");
                 }
 
                 if (c == ')' && !inQuotes)
@@ -66,16 +64,12 @@ namespace CustomConsole
                 {
                     if (paramCounter >= ParamCount)
                     {
-                        VirtualConsole.Log($"Function requires {ParamCount} parameters");
-                        return null;
+                        throw new ConsoleException($"Function requires {ParamCount} parameters");
                     }
 
                     object obj = ParamConverters[paramCounter](param.ToString().Trim());
 
-                    // Invalid parameter
-                    if (obj == null) { return null; }
-
-                    objects[paramCounter] = obj;
+                    objects[paramCounter] = obj ?? throw new ConsoleException("Parameter error");
                     paramCounter++;
 
                     param.Clear();
@@ -89,34 +83,33 @@ namespace CustomConsole
                 continue;
             }
 
+            if (endIndex == -1)
+            {
+                throw new Exception("Invalid syntax");
+            }
+
             // last parameter
             if (ParamCount != 0)
             {
                 if (param.Length == 0)
                 {
-                    VirtualConsole.Log($"Invalid syntax");
-                    return null;
+                    throw new ConsoleException("Invalid syntax");
                 }
 
                 if (paramCounter >= ParamCount)
                 {
-                    VirtualConsole.Log($"Function requires {ParamCount} parameters");
-                    return null;
+                    throw new ConsoleException($"Function requires {ParamCount} parameters");
                 }
 
                 object obj = ParamConverters[paramCounter](param.ToString().Trim());
 
-                // Invalid parameter
-                if (obj == null) { return null; }
-
-                objects[paramCounter] = obj;
+                objects[paramCounter] = obj ?? throw new ConsoleException("Parameter error");
                 paramCounter++;
             }
 
             if (ParamCount != paramCounter)
             {
-                VirtualConsole.Log($"Function requires {ParamCount} parameters");
-                return null;
+                throw new ConsoleException($"Function requires {ParamCount} parameters");
             }
 
             return objects;
