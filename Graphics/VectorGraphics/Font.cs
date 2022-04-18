@@ -9,6 +9,8 @@ namespace Zene.Graphics
         {
             SpaceWidth = spaceWidth;
             LineHeight = lineHeight;
+
+            Name = GetType().Name;
         }
 
         public abstract void BindTexture(uint slot);
@@ -18,7 +20,7 @@ namespace Zene.Graphics
 
         public abstract CharFontData GetCharacterData(char character);
 
-        public abstract string Name { get; }
+        public virtual string Name { get; }
 
         public virtual double CharSpace { get; set; } = 0d;
         public virtual double LineSpace { get; set; } = 0d;

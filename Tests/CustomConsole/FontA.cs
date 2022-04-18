@@ -30,7 +30,7 @@ namespace CustomConsole
             _texture.SetData(w, h, BaseFormat.Rg, texData);
         }
 
-        public override string Name => "FontA";
+        //public override string Name => "FontA";
 
         private readonly Texture2D _texture;
 

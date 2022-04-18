@@ -30,7 +30,7 @@ namespace CustomConsole
             {
                 AutoIncreaseCapacity = true
             };
-            _fontC = new FontC();
+            _fontC = new FontC2();
 
             // Opacity
             State.Blending = true;
