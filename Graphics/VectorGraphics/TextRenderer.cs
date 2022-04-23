@@ -183,11 +183,6 @@ namespace Zene.Graphics
             compText = compText.Replace("\0", "");
             compText = compText.Replace("\a", "");
 
-            if (compText.Contains('\''))
-            {
-                Console.WriteLine("this");
-            }
-
             // No visable characters are drawn
             if (compText == "") { return; }
 
