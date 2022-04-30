@@ -10,10 +10,10 @@ namespace GUITest
 {
     public class TestTextRender : IShaderProgram
     {
-        public uint ShaderId { get; }
+        public uint ShaderId { get; private set; }
         uint IIdentifiable.Id => ShaderId;
 
-        private readonly int _uniformMatrix;
+        private int _uniformMatrix;
         private Matrix4 _m1 = Matrix4.Identity;
         public Matrix4 Model
         {
@@ -58,7 +58,7 @@ namespace GUITest
             GL.ProgramUniformMatrix4fv(ShaderId, _uniformMatrix, false, (_m1 * _m2 * _m3).GetGLData());
         }
 
-        private readonly int _uniformColour;
+        private int _uniformColour;
         private Colour _colour;
         public Colour Colour
         {
@@ -74,7 +74,7 @@ namespace GUITest
             }
         }
 
-        private readonly int _uniformTexSlot;
+        private int _uniformTexSlot;
 
         void IBindable.Bind()
         {
@@ -125,17 +125,7 @@ namespace GUITest
             // Shader
             //
 
-            ShaderId = CustomShader.CreateShader(ShaderPresets.TextVert, File.ReadAllText("resources/textfrag.shader"));
-
-            // Fetch uniform locations
-            _uniformMatrix = GL.GetUniformLocation(ShaderId, "matrix");
-            _uniformColour = GL.GetUniformLocation(ShaderId, "uColour");
-            _uniformTexSlot = GL.GetUniformLocation(ShaderId, "uTextureSlot");
-
-            // Set matrices in shader to default
-            SetMatrices();
-            // Set colour to default
-            GL.ProgramUniform4f(ShaderId, _uniformColour, 1f, 1f, 1f, 1f);
+            Reload();
         }
         private readonly DrawObject<Vector2, byte> _drawable;
         private ArrayBuffer<Vector2> _instanceData;
@@ -320,6 +310,21 @@ namespace GUITest
             font.BindTexture(0);
 
             _drawable.DrawMultiple(compText.Length);
+        }
+
+        public void Reload()
+        {
+            ShaderId = CustomShader.CreateShader(ShaderPresets.TextVert, File.ReadAllText("resources/textfrag.shader"));
+
+            // Fetch uniform locations
+            _uniformMatrix = GL.GetUniformLocation(ShaderId, "matrix");
+            _uniformColour = GL.GetUniformLocation(ShaderId, "uColour");
+            _uniformTexSlot = GL.GetUniformLocation(ShaderId, "uTextureSlot");
+
+            // Set matrices in shader to default
+            SetMatrices();
+            // Set colour to default
+            GL.ProgramUniform4f(ShaderId, _uniformColour, 1f, 1f, 1f, 1f);
         }
     }
 }

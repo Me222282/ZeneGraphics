@@ -32,11 +32,10 @@ float median(float r, float g, float b)
     return max(min(r, g), min(max(r, g), b));
 }
 
-const float smoothing = 1.0 / 64.0;
+const float smoothing = 1.0 / 55.0;
 
 void main()
 {
-
     vec3 fontSample = texture(fontSampler, tex_Coords).rgb;
     float sigDist = median(fontSample.r, fontSample.g, fontSample.b);
     float opacity = smoothstep(0.5 - smoothing, 0.5 + smoothing, sigDist);

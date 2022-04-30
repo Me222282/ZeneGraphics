@@ -41,7 +41,7 @@ namespace Zene.Graphics
     public static unsafe class State
     {
         /// <summary>
-        /// Determines whether to blend the computed fragment colour values with the values in the color buffers.
+        /// Determines whether to blend the computed fragment colour values with the values in the colour buffers.
         /// </summary>
         public static bool Blending
         {
@@ -61,7 +61,7 @@ namespace Zene.Graphics
             }
         }
         /// <summary>
-        /// Determines whether to apply the currently selected logical operation to the computed fragment color and color buffer values.
+        /// Determines whether to apply the currently selected logical operation to the computed fragment colour and colour buffer values.
         /// </summary>
         public static bool LogicOPColour
         {
@@ -181,7 +181,7 @@ namespace Zene.Graphics
             }
         }
         /// <summary>
-        /// Determines whether to dither colour components or indices before they are written to the color buffer.
+        /// Determines whether to dither colour components or indices before they are written to the colour buffer.
         /// </summary>
         public static bool Dither
         {
@@ -202,7 +202,7 @@ namespace Zene.Graphics
         }
         /// <summary>
         /// Determines whether the R, G, and B destination colour values (after conversion from fixed-point to floating-point)
-        /// are considered to be encoded for the sRGB color space and hence are linearized prior to their use in blending.
+        /// are considered to be encoded for the sRGB colour space and hence are linearized prior to their use in blending.
         /// </summary>
         public static bool FramebufferSRGB
         {

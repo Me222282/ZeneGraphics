@@ -112,7 +112,7 @@ namespace GUITest
             };
 
             // Enabling transparency
-            Zene.Graphics.Base.GL.Enable(Zene.Graphics.Base.GLEnum.Blend);
+            State.Blending = true;
             Zene.Graphics.Base.GL.BlendFunc(Zene.Graphics.Base.GLEnum.SrcAlpha, Zene.Graphics.Base.GLEnum.OneMinusSrcAlpha);
 
             OnSizePixelChange(new SizeChangeEventArgs(width, height));
@@ -141,7 +141,7 @@ namespace GUITest
             // Text
             _textRender2.Model = Matrix4.CreateScale(_fontSize, _fontSize, 0);
             _textRender2.DrawCentred(_text.ToString(), _font, -0.5, 0);
-            
+
             double dp = 1 / _panels.Count;
 
             for (int i = 0; i < _panels.Count; i++)
@@ -156,6 +156,11 @@ namespace GUITest
         {
             base.OnKeyDown(e);
 
+            if (e[Keys.F1])
+            {
+                _textRender2.Reload();
+                return;
+            }
             if (e.Key == Keys.Enter || e.Key == Keys.NumPadEnter)
             {
                 _text.Append('\n');
