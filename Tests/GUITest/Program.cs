@@ -73,14 +73,21 @@ namespace GUITest
         public Program(int width, int height, string title)
             : base(width, height, title, 4.3)
         {
-            _textRender = new EditTextRenderer(100)
+            _textRender = new TextRenderer(100)
+            {
+                AutoIncreaseCapacity = true,
+                Projection = Matrix4.CreateOrthographic(10, 10, 0, -1)
+            };
+
+            _textRender2 = new TestTextRender(100)
             {
                 AutoIncreaseCapacity = true,
                 Projection = Matrix4.CreateOrthographic(10, 10, 0, -1)
             };
 
             //_font = new FontMeme("Resources/fontB.png");
-            _font = new FontA();
+            //_font = new FontA();
+            _font = new IntelligentFont();
 
             _drawingBox = new DrawObject<double, byte>(new double[]
             {
@@ -111,7 +118,8 @@ namespace GUITest
             OnSizePixelChange(new SizeChangeEventArgs(width, height));
         }
 
-        private readonly EditTextRenderer _textRender;
+        private readonly TextRenderer _textRender;
+        private readonly TestTextRender _textRender2;
         private readonly Font _font;
         private readonly StringBuilder _text = new StringBuilder();
 
@@ -123,6 +131,7 @@ namespace GUITest
         public override TextureRenderer Framebuffer { get; }
         private readonly List<Panel> _panels;
 
+        private double _fontSize = 10d;
         private void Draw()
         {
             Framebuffer.Bind();
@@ -130,9 +139,9 @@ namespace GUITest
             Framebuffer.Clear(BufferBit.Colour | BufferBit.Depth);
 
             // Text
-            _textRender.Model = Matrix4.CreateScale(10, 10, 0);
-            _textRender.DrawCentred(_text.ToString(), 0, 5, _font, -0.15, 0);
-
+            _textRender2.Model = Matrix4.CreateScale(_fontSize, _fontSize, 0);
+            _textRender2.DrawCentred(_text.ToString(), _font, -0.5, 0);
+            
             double dp = 1 / _panels.Count;
 
             for (int i = 0; i < _panels.Count; i++)
@@ -204,6 +213,7 @@ namespace GUITest
             Matrix4 matrix = Matrix4.CreateOrthographic(Width, Height, 0, -2);
 
             _textRender.Projection = matrix;
+            _textRender2.Projection = matrix;
             _shader.Matrix3 = matrix;
         }
 
@@ -259,6 +269,11 @@ namespace GUITest
             {
                 panel.MouseUp(panelEvent);
             }
+        }
+
+        protected override void OnScroll(ScrollEventArgs e)
+        {
+            _fontSize += e.DeltaY;
         }
     }
 }

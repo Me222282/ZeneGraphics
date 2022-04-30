@@ -30,8 +30,6 @@ namespace GUITest
             _texture.SetData(w, h, BaseFormat.Rg, texData);
         }
 
-        public override string Name { get; } = "FontA";
-
         private readonly Texture2D _texture;
 
         public override void BindTexture(uint slot) => _texture.Bind(slot);
