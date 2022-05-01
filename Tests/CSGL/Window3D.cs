@@ -295,6 +295,7 @@ namespace CSGL
             if (_down)      { cameraMove.Y += moveSpeed; }
 
             if (_lShift)    { cameraMove *= 2; }
+            if (_lSlow) { cameraMove *= 0.25; }
 
             if (_lAltGoFast) { cameraMove *= 4; }
 
@@ -409,6 +410,7 @@ namespace CSGL
         private bool _backward;
         private bool _lShift;
         private bool _lAltGoFast;
+        private bool _lSlow;
 
         private bool flashLight = true;
         private bool doLight = true;
@@ -424,6 +426,10 @@ namespace CSGL
             if (e.Key == Keys.LeftShift)
             {
                 _lShift = true;
+            }
+            else if (e.Key == Keys.RightShift)
+            {
+                _lSlow = true;
             }
             else if (e.Key == Keys.LeftAlt)
             {
@@ -545,6 +551,10 @@ namespace CSGL
             if (e.Key == Keys.LeftShift)
             {
                 _lShift = false;
+            }
+            else if (e.Key == Keys.RightShift)
+            {
+                _lSlow = false;
             }
             else if (e.Key == Keys.LeftAlt)
             {
