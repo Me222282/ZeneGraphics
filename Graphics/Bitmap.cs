@@ -10,6 +10,7 @@ namespace Zene.Graphics
 {
     public enum ImageEncoding
     {
+        Unknown,
         Png,
         Jpeg,
         Bmp,
@@ -193,6 +194,11 @@ namespace Zene.Graphics
         public void Export(string path, ImageEncoding format, bool alpha = true) => Export(new FileStream(path, FileMode.Open), format, alpha, true);
         public void Export(Stream stream, ImageEncoding format, bool alpha = true, bool close = false)
         {
+            if (format == ImageEncoding.Unknown)
+            {
+                throw new Exception("Cannot export to unkown encoding.");
+            }
+
             ImageWriter writer = new ImageWriter();
 
             // Does the data contain an alpha channel
@@ -380,6 +386,40 @@ namespace Zene.Graphics
             }
 
             return _loadingTextures.IsEmpty;
+        }
+
+        public static ImageEncoding GetImageEncoding(string path)
+        {
+            Stream s = new FileStream(path, FileMode.Open);
+            ImageEncoding ie = GetImageEncoding(s);
+
+            s.Close();
+            return ie;
+        }
+        public static ImageEncoding GetImageEncoding(Stream file)
+        {
+            if (StbImage.stbi__png_test(new StbImage.stbi__context(file)) != 0)
+            {
+                return ImageEncoding.Png;
+            }
+            if (StbImage.stbi__bmp_test(new StbImage.stbi__context(file)) != 0)
+            {
+                return ImageEncoding.Bmp;
+            }
+            if (StbImage.stbi__jpeg_test(new StbImage.stbi__context(file)) != 0)
+            {
+                return ImageEncoding.Jpeg;
+            }
+            if (StbImage.stbi__hdr_test(new StbImage.stbi__context(file)) != 0)
+            {
+                return ImageEncoding.Hdr;
+            }
+            if (StbImage.stbi__tga_test(new StbImage.stbi__context(file)) != 0)
+            {
+                return ImageEncoding.Tga;
+            }
+
+            return ImageEncoding.Unknown;
         }
 
         /// <summary>

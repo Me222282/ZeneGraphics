@@ -169,6 +169,7 @@ namespace CSGL
         private Material ObjectMaterial = new Material(Material.Source.Default, Material.Source.None, Shine.None);
 
         private Object3D loadObject;
+        private Texture2D _loadObjectImage;
 
         private DrawObject<Vector3, uint> Floor;
 
@@ -254,6 +255,8 @@ namespace CSGL
                 AutoIncreaseCapacity = true
             };
             _font = new FontA();
+
+            _loadObjectImage = Texture2D.Create(new GLArray<Colour>(1, 1, 1, new Colour(134, 94, 250)), WrapStyle.EdgeClamp, TextureSampling.Blend, false);
         }
 
         private readonly Matrix3 lightRotation = Matrix3.CreateRotationY(Radian.Percent(0.001));
@@ -330,9 +333,12 @@ namespace CSGL
 
             Shader.DrawLighting(doLight);
             Shader.SetModelMatrix(Matrix4.CreateRotationZ(Radian.Percent(0.5)) * Matrix4.CreateRotationY(Radian.Percent(0.25)) * Matrix4.CreateTranslation(100, 0, 0));
-            Shader.SetColourSource(ColourSource.UniformColour);
+            //Shader.SetColourSource(ColourSource.UniformColour);
+            Shader.SetColourSource(ColourSource.Texture);
             Shader.SetDrawColour(new Colour(134, 94, 250));
 
+            _loadObjectImage.Bind(0);
+            Shader.SetTextureSlot(0);
             loadObject.Draw();
 
             Shader.SetColourSource(ColourSource.Texture);
@@ -593,7 +599,7 @@ namespace CSGL
 
             if (e.Width > e.Height)
             {
-                double heightPercent = e.Height / e.Width;
+                double heightPercent = (double)e.Height / e.Width;
 
                 mWidth = 400;
 
@@ -601,7 +607,7 @@ namespace CSGL
             }
             else
             {
-                double widthPercent = e.Width / e.Height;
+                double widthPercent = (double)e.Width / e.Height;
 
                 mHeight = 56.25 * 4;
 
@@ -665,9 +671,25 @@ namespace CSGL
         {
             base.OnFileDrop(e);
 
+            if (Bitmap.GetImageEncoding(e.Paths[0]) != ImageEncoding.Unknown)
+            {
+                _loadObjectImage.Dispose();
+
+                _loadObjectImage = Texture2D.Create(e.Paths[0], WrapStyle.EdgeClamp, TextureSampling.Blend, true);
+
+                return;
+            }
+
             loadObject.Dispose();
 
-            loadObject = Object3D.FromObj(e.Paths[0], (uint)LightingShader.Location.Normal);
+            try
+            {
+                loadObject = Object3D.FromObj(e.Paths[0], (uint)LightingShader.Location.TextureCoords, (uint)LightingShader.Location.Normal);
+            }
+            catch (Exception)
+            {
+                loadObject = Object3D.FromObj(e.Paths[0], (uint)LightingShader.Location.Normal);
+            }
         }
     }
 }

@@ -32,16 +32,22 @@ float median(float r, float g, float b)
     return max(min(r, g), min(max(r, g), b));
 }
 
-const float smoothing = 1.0 / 55.0;
+const float smoothing = 1.0 / 128.0;
 
 void main()
 {
     vec3 fontSample = texture(fontSampler, tex_Coords).rgb;
-    float sigDist = median(fontSample.r, fontSample.g, fontSample.b);
-    float opacity = smoothstep(0.5 - smoothing, 0.5 + smoothing, sigDist);
+    //float sigDist = median(fontSample.r, fontSample.g, fontSample.b);
+    float opacity = smoothstep(0.5 - smoothing, 0.5 + smoothing, fontSample.r);
+    //float opacity = fontSample.r;
+
+    //if (opacity < 0.5) { discard; }
 
     // Insignificant
-    if (opacity < 0.05) { discard; }
+    if (opacity < 0.05)
+    {
+        discard;
+    }
 
     //outColour = vec4(charColour.rgb, charColour.a * opacity);
     outColour = vec4(uColour.rgb, uColour.a * opacity);
