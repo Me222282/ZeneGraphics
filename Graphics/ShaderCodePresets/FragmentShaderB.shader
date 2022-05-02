@@ -26,7 +26,7 @@ void main()
 			break;
 
 		default:
-			colour = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+			colour = vec4(1.0, 1.0, 1.0, 1.0);
 			break;
 	}
 }
