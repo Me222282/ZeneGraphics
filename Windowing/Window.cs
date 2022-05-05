@@ -67,7 +67,7 @@ namespace Zene.Windowing
 
             SetCallBacks();
 
-            GL.Init(GLFW.GetProcAddress, version);
+            State.Init(GLFW.GetProcAddress, version);
 
             // Setup debug callback - error output/display
             // If supported in current opengl version
@@ -153,6 +153,12 @@ namespace Zene.Windowing
         public void Close()
         {
             GLFW.SetWindowShouldClose(_window, 1);
+        }
+
+        public bool IsContext
+        {
+            get => GLFW.GetCurrentContext() == Handle;
+            set => GLFW.MakeContextCurrent(Handle);
         }
 
         private readonly BaseFramebuffer _baseFramebuffer;
