@@ -1,5 +1,6 @@
 ﻿using System;
 using Zene.Graphics.Base;
+using Zene.Structs;
 
 namespace Zene.Graphics
 {
@@ -40,6 +41,44 @@ namespace Zene.Graphics
 
     public static unsafe class State
     {
+        public static void Init(Func<string, IntPtr> func, double version)
+        {
+            if (Initialised) { return; }
+
+            GL.Init(func, version);
+
+            SetConstants();
+
+            Initialised = true;
+        }
+
+        public static bool Initialised { get; private set; } = false;
+
+        /// <summary>
+        /// The render area used by any draws to the bound framebuffer.
+        /// </summary>
+        public static RectangleI DrawView
+        {
+            get => GL.view;
+            set => GL.Viewport(value.X, value.Y, value.Width, value.Height);
+        }
+        /// <summary>
+        /// The size of the render area used by any draws to the bound framebuffer.
+        /// </summary>
+        public static Vector2I DrawViewSize
+        {
+            get => GL.view.Size;
+            set => GL.Viewport(GL.view.X, GL.view.Y, value.X, value.Y);
+        }
+        /// <summary>
+        /// The location of the render area used by any draws to the bound framebuffer.
+        /// </summary>
+        public static Vector2I DrawViewLocation
+        {
+            get => GL.view.Location;
+            set => GL.Viewport(value.X, value.Y, GL.view.Width, GL.view.Height);
+        }
+
         /// <summary>
         /// Determines whether to blend the computed fragment colour values with the values in the colour buffers.
         /// </summary>
@@ -958,7 +997,7 @@ namespace Zene.Graphics
             GL.ReleaseShaderCompiler();
         }
 
-        static State()
+        private static void SetConstants()
         {
             if (GL.Version >= 3.0)
             {
@@ -978,12 +1017,12 @@ namespace Zene.Graphics
         /// Gets the maximum colour attachments of framebuffers for the hardware being used.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public static int MaxColourAttach { get; } = 8;
+        public static int MaxColourAttach { get; private set; } = 8;
         /// <summary>
         /// Gets the maximum colour attachments of framebuffers for the hardware being used.
         /// </summary>
         [OpenGLSupport(2.0)]
-        public static int MaxDrawBuffers { get; } = 1;
+        public static int MaxDrawBuffers { get; private set; } = 1;
 
         /// <summary>
         /// Clears all errors in gl error stack.

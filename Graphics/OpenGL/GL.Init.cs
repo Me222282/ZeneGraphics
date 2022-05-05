@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using Zene.Structs;
 
 namespace Zene.Graphics.Base
 {
@@ -4219,9 +4220,12 @@ namespace Zene.Graphics.Base
             }*/
 		}
 
+		internal static RectangleI view;
 		[OpenGLSupport(1.0)]
 		public static void Viewport(int x, int y, int width, int height)
 		{
+			view = new RectangleI(x, y, width, height);
+
 			Functions.Viewport(x, y, width, height);
 		}
 		[OpenGLSupport(4.1)]
