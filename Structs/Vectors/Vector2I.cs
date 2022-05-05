@@ -330,24 +330,5 @@ namespace Zene.Structs
         {
             return new Vector2I(v.Item1, v.Item2);
         }
-
-        public static Vector2I Random(Random r)
-        {
-            return new Vector2I(
-                r.Next(),
-                r.Next());
-        }
-        public static Vector2I Random(Random r, int min, int max)
-        {
-            return new Vector2I(
-                r.Next(min, max),
-                r.Next(min, max));
-        }
-        public static Vector2I Random(Random r, int minX, int maxX, int minY, int maxY)
-        {
-            return new Vector2I(
-                r.Next(minX, maxX),
-                r.Next(minY, maxY));
-        }
     }
 }

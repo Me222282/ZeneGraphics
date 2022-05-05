@@ -138,6 +138,159 @@ namespace Zene.Structs
                 random.Next(0, 256));
         }
 
+        public static Vector2 NextVector2(this Random random)
+        {
+            return new Vector2(
+                random.NextDouble(),
+                random.NextDouble());
+        }
+        public static Vector2 NextVector2(this Random random, double scale)
+        {
+            return new Vector2(
+                random.NextDouble() * scale,
+                random.NextDouble() * scale);
+        }
+        public static Vector2 NextVector2(this Random random, double min, double max)
+        {
+            return new Vector2(
+                (random.NextDouble() * (max - min)) + min,
+                (random.NextDouble() * (max - min)) + min);
+        }
+        public static Vector2 NextVector2(this Random random, double minX, double maxX, double minY, double maxY)
+        {
+            return new Vector2(
+                (random.NextDouble() * (maxX - minX)) + minX,
+                (random.NextDouble() * (maxY - minY)) + minY);
+        }
+
+        public static Vector2I NextVector2I(this Random random)
+        {
+            return new Vector2I(
+                random.Next(),
+                random.Next());
+        }
+        public static Vector2I NextVector2I(this Random random, int min, int max)
+        {
+            return new Vector2I(
+                random.Next(min, max),
+                random.Next(min, max));
+        }
+        public static Vector2I NextVector2I(this Random random, int minX, int maxX, int minY, int maxY)
+        {
+            return new Vector2I(
+                random.Next(minX, maxX),
+                random.Next(minY, maxY));
+        }
+
+        public static Vector3 NextVector3(this Random random)
+        {
+            return new Vector3(
+                random.NextDouble(),
+                random.NextDouble(),
+                random.NextDouble());
+        }
+        public static Vector3 NextVector3(this Random random, double scale)
+        {
+            return new Vector3(
+                random.NextDouble() * scale,
+                random.NextDouble() * scale,
+                random.NextDouble() * scale);
+        }
+        public static Vector3 NextVector3(this Random random, double min, double max)
+        {
+            return new Vector3(
+                (random.NextDouble() * (max - min)) + min,
+                (random.NextDouble() * (max - min)) + min,
+                (random.NextDouble() * (max - min)) + min);
+        }
+        public static Vector3 NextVector3(this Random random, double minX, double maxX, double minY, double maxY, double minZ, double maxZ)
+        {
+            return new Vector3(
+                (random.NextDouble() * (maxX - minX)) + minX,
+                (random.NextDouble() * (maxY - minY)) + minY,
+                (random.NextDouble() * (maxZ - minZ)) + minZ);
+        }
+
+        public static Vector3I NextVector3I(this Random random)
+        {
+            return new Vector3I(
+                random.Next(),
+                random.Next(),
+                random.Next());
+        }
+        public static Vector3I NextVector3I(this Random random, int min, int max)
+        {
+            return new Vector3I(
+                random.Next(min, max),
+                random.Next(min, max),
+                random.Next(min, max));
+        }
+        public static Vector3I NextVector3I(this Random random, int minX, int maxX, int minY, int maxY, int minZ, int maxZ)
+        {
+            return new Vector3I(
+                random.Next(minX, maxX),
+                random.Next(minY, maxY),
+                random.Next(minZ, maxZ));
+        }
+
+        public static Vector4 NextVector4(this Random random)
+        {
+            return new Vector4(
+                random.NextDouble(),
+                random.NextDouble(),
+                random.NextDouble(),
+                random.NextDouble());
+        }
+        public static Vector4 NextVector4(this Random random, double scale)
+        {
+            return new Vector4(
+                random.NextDouble() * scale,
+                random.NextDouble() * scale,
+                random.NextDouble() * scale,
+                random.NextDouble() * scale);
+        }
+        public static Vector4 NextVector4(this Random random, double min, double max)
+        {
+            return new Vector4(
+                (random.NextDouble() * (max - min)) + min,
+                (random.NextDouble() * (max - min)) + min,
+                (random.NextDouble() * (max - min)) + min,
+                (random.NextDouble() * (max - min)) + min);
+        }
+        public static Vector4 NextVector4(this Random random, double minX, double maxX, double minY, double maxY, double minZ, double maxZ, double minW, double maxW)
+        {
+            return new Vector4(
+                (random.NextDouble() * (maxX - minX)) + minX,
+                (random.NextDouble() * (maxY - minY)) + minY,
+                (random.NextDouble() * (maxZ - minZ)) + minZ,
+                (random.NextDouble() * (maxW - minW)) + minW);
+        }
+
+        public static Vector4I NextVector4I(this Random random)
+        {
+            return new Vector4I(
+                random.Next(),
+                random.Next(),
+                random.Next(),
+                random.Next());
+        }
+        public static Vector4I NextVector4I(this Random random, int min, int max)
+        {
+            return new Vector4I(
+                random.Next(min, max),
+                random.Next(min, max),
+                random.Next(min, max),
+                random.Next(min, max));
+        }
+        public static Vector4I NextVector4I(this Random random, int minX, int maxX, int minY, int maxY, int minZ, int maxZ, int minW, int maxW)
+        {
+            return new Vector4I(
+                random.Next(minX, maxX),
+                random.Next(minY, maxY),
+                random.Next(minZ, maxZ),
+                random.Next(minW, maxW));
+        }
+
         public static double Lerp(this double a, double b, double blend) => (blend * (b - a)) + a;
     }
 }

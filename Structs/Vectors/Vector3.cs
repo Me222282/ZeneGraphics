@@ -353,34 +353,5 @@ namespace Zene.Structs
         {
             return new Vector3(v.Item1, v.Item2, v.Item3);
         }
-
-        public static Vector3 Random(Random r)
-        {
-            return new Vector3(
-                r.NextDouble(),
-                r.NextDouble(),
-                r.NextDouble());
-        }
-        public static Vector3 Random(Random r, double scale)
-        {
-            return new Vector3(
-                r.NextDouble() * scale,
-                r.NextDouble() * scale,
-                r.NextDouble() * scale);
-        }
-        public static Vector3 Random(Random r, double min, double max)
-        {
-            return new Vector3(
-                (r.NextDouble() * (max - min)) + min,
-                (r.NextDouble() * (max - min)) + min,
-                (r.NextDouble() * (max - min)) + min);
-        }
-        public static Vector3 Random(Random r, double minX, double maxX, double minY, double maxY, double minZ, double maxZ)
-        {
-            return new Vector3(
-                (r.NextDouble() * (maxX - minX)) + minX,
-                (r.NextDouble() * (maxY - minY)) + minY,
-                (r.NextDouble() * (maxZ - minZ)) + minZ);
-        }
     }
 }

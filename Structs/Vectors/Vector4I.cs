@@ -409,30 +409,5 @@ namespace Zene.Structs
         {
             return new Vector4I(v.Item1, v.Item2, v.Item3, v.Item4);
         }
-
-        public static Vector4I Random(Random r)
-        {
-            return new Vector4I(
-                r.Next(),
-                r.Next(),
-                r.Next(),
-                r.Next());
-        }
-        public static Vector4I Random(Random r, int min, int max)
-        {
-            return new Vector4I(
-                r.Next(min, max),
-                r.Next(min, max),
-                r.Next(min, max),
-                r.Next(min, max));
-        }
-        public static Vector4I Random(Random r, int minX, int maxX, int minY, int maxY, int minZ, int maxZ, int minW, int maxW)
-        {
-            return new Vector4I(
-                r.Next(minX, maxX),
-                r.Next(minY, maxY),
-                r.Next(minZ, maxZ),
-                r.Next(minW, maxW));
-        }
     }
 }
