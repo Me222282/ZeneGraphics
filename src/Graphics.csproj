@@ -51,7 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="ZeneStructs\Structs.csproj" />
+    <ProjectReference Include="..\..\Structs\src\Structs.csproj" />
   </ItemGroup>
 
   <ItemGroup>
