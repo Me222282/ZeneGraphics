@@ -2,6 +2,8 @@
 
 Temp
 
+Use the [clone](https://github.com/Me222282/ZeneGraphics/tree/clone) branch when using git clone.
+
 ## Credits
 
 OpenGL Loader by Zackary Snow(smack0007) - [Source Page](https://github.com/smack0007/GLDotNet)</br>
