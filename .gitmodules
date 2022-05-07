@@ -1,0 +1,6 @@
+[submodule "Graphics"]
+	path = Graphics
+	url = https://github.com/Me222282/ZeneGraphics.git
+[submodule "Structs"]
+	path = Structs
+	url = https://github.com/Me222282/ZeneStructs.git
