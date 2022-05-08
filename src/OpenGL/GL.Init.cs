@@ -7,7 +7,21 @@ namespace Zene.Graphics.Base
 {
 	public unsafe partial class GL
     {
-		public static double Version { get; private set; } = 0.0;
+		[ThreadStatic]
+		internal static GraphicsContext context;
+
+		public static double Version
+        {
+			get
+            {
+				if (context == null)
+                {
+					return 0d;
+                }
+
+				return context.version;
+            }
+        }
 
 		public delegate void DebugProc(uint source, uint type, uint id, uint severity, int length, string message, IntPtr userParam);
 
@@ -2643,10 +2657,10 @@ namespace Zene.Graphics.Base
 			throw new OpenGLSupportException("Method not supported");
         }
 
-		public static void Init(Func<string, IntPtr> getProcAddress, double version)
+		internal static void Init(Func<string, IntPtr> getProcAddress, double version)
 		{
 			// Setup version acessor
-			if (Version < version) { Version = version; }
+			if (Version < version && context != null) { context.version = version; }
 
 
 			if (getProcAddress == null) throw new ArgumentNullException(nameof(getProcAddress));
@@ -4208,23 +4222,12 @@ namespace Zene.Graphics.Base
 				Console.WriteLine("The Zene Graphics Library will have extremely limited functionality below OpenGL version 2.0.");
 				Console.WriteLine("To get the most out of The Zene Graphics Library, use versions 3.2 and above.");
 			}
-
-			// Setup texture binding referance
-			int size = 0;
-			GetIntegerv(GLEnum.MaxTextureImageUnits, &size);
-			BoundTextures = new TextureBinding[size];
-			/*
-			for (int i = 0; i < size; i++)
-            {
-				BoundTextures[i] = new TextureBinding();
-            }*/
 		}
 
-		internal static RectangleI view;
 		[OpenGLSupport(1.0)]
 		public static void Viewport(int x, int y, int width, int height)
 		{
-			view = new RectangleI(x, y, width, height);
+			context.viewport = new RectangleI(x, y, width, height);
 
 			Functions.Viewport(x, y, width, height);
 		}

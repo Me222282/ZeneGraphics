@@ -43,10 +43,6 @@ namespace Zene.Graphics.Base
 			public uint Uniform;
 		}
 
-		public static uint BoundShaderProgram { get; private set; } = 0;
-		private static BufferBinding _boundBuffers = new BufferBinding();
-		public static BufferBinding BoundBuffers => _boundBuffers;
-
 		[OpenGLSupport(4.1)]
 		public static void ActiveShaderProgram(uint pipeline, uint program)
 		{
@@ -97,46 +93,46 @@ namespace Zene.Graphics.Base
 			switch (target)
 			{
 				case GLEnum.ArrayBuffer:
-					_boundBuffers.Array = buffer;
+					context.boundBuffers.Array = buffer;
 					return;
 				case GLEnum.AtomicCounterBuffer:
-					_boundBuffers.AtomicCounter = buffer;
+					context.boundBuffers.AtomicCounter = buffer;
 					return;
 				case GLEnum.CopyReadBuffer:
-					_boundBuffers.CopyRead = buffer;
+					context.boundBuffers.CopyRead = buffer;
 					return;
 				case GLEnum.CopyWriteBuffer:
-					_boundBuffers.CopyWrite = buffer;
+					context.boundBuffers.CopyWrite = buffer;
 					return;
 				case GLEnum.DispatchIndirectBuffer:
-					_boundBuffers.DispatchIndirect = buffer;
+					context.boundBuffers.DispatchIndirect = buffer;
 					return;
 				case GLEnum.DrawIndirectBuffer:
-					_boundBuffers.DrawIndirect = buffer;
+					context.boundBuffers.DrawIndirect = buffer;
 					return;
 				case GLEnum.ElementArrayBuffer:
-					_boundBuffers.ElementArray = buffer;
+					context.boundBuffers.ElementArray = buffer;
 					return;
 				case GLEnum.PixelPackBuffer:
-					_boundBuffers.PixelPack = buffer;
+					context.boundBuffers.PixelPack = buffer;
 					return;
 				case GLEnum.PixelUnpackBuffer:
-					_boundBuffers.PixelUnpack = buffer;
+					context.boundBuffers.PixelUnpack = buffer;
 					return;
 				case GLEnum.QueryBuffer:
-					_boundBuffers.Query = buffer;
+					context.boundBuffers.Query = buffer;
 					return;
 				case GLEnum.ShaderStorageBuffer:
-					_boundBuffers.ShaderStorage = buffer;
+					context.boundBuffers.ShaderStorage = buffer;
 					return;
 				case GLEnum.TextureBuffer:
-					_boundBuffers.Texture = buffer;
+					context.boundBuffers.Texture = buffer;
 					return;
 				case GLEnum.TransformFeedbackBuffer:
-					_boundBuffers.TransformFeedback = buffer;
+					context.boundBuffers.TransformFeedback = buffer;
 					return;
 				case GLEnum.UniformBuffer:
-					_boundBuffers.Uniform = buffer;
+					context.boundBuffers.Uniform = buffer;
 					return;
 			}
 		}
@@ -2507,7 +2503,7 @@ namespace Zene.Graphics.Base
 		[OpenGLSupport(2.0)]
 		public static void UseProgram(uint program)
 		{
-			BoundShaderProgram = program;
+			context.boundShaderProgram = program;
 
 			Functions.UseProgram(program);
 		}

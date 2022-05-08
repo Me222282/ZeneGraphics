@@ -18,6 +18,18 @@ namespace Zene.Graphics.Base
 
             Properties = new FramebufferProperties(this);
         }
+        internal FrameBufferGL(uint id, bool stereo, bool doubleBuffered, int width, int height)
+        {
+            Id = id;
+
+            _view = new RectangleI(0, 0, width, height);
+
+            Properties = new FramebufferProperties(this, width, height)
+            {
+                Stereo = stereo,
+                DoubleBuffered = doubleBuffered
+            };
+        }
         internal FrameBufferGL(uint id)
         {
             Id = id;
@@ -86,7 +98,7 @@ namespace Zene.Graphics.Base
             {
                 _view = value;
 
-                if (this.Bound())
+                if (this.Bound(FrameTarget.Draw))
                 {
                     GL.Viewport(_view.X, _view.Y, _view.Width, _view.Height);
                 }
@@ -99,7 +111,7 @@ namespace Zene.Graphics.Base
             {
                 _view.Size = value;
 
-                if (this.Bound())
+                if (this.Bound(FrameTarget.Draw))
                 {
                     GL.Viewport(_view.X, _view.Y, _view.Width, _view.Height);
                 }
@@ -115,7 +127,7 @@ namespace Zene.Graphics.Base
             {
                 _view.Location = value;
 
-                if (this.Bound())
+                if (this.Bound(FrameTarget.Draw))
                 {
                     GL.Viewport(_view.X, _view.Y, _view.Width, _view.Height);
                 }

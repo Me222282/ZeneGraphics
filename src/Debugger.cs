@@ -30,6 +30,7 @@ namespace Zene.Graphics
             Exception = 4
         }
 
+        [ThreadStatic]
         private static readonly List<string> _errors = new List<string>();
 
         /// <summary>
@@ -37,6 +38,7 @@ namespace Zene.Graphics
         /// </summary>
         public static Type Manager { get; set; } = Type.Console;
 
+        [ThreadStatic]
         private const string _unknownError = "An unknown error has occurred.";
 
         /// <summary>

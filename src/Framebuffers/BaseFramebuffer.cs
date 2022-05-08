@@ -9,15 +9,6 @@ namespace Zene.Graphics
     /// </summary>
     public sealed class BaseFramebuffer : IFramebuffer
     {
-        public BaseFramebuffer(bool stereo, bool doubleBuffered, int width, int height)
-        {
-            _properties = new FramebufferProperties(this, width, height)
-            {
-                Stereo = stereo,
-                DoubleBuffered = doubleBuffered
-            };
-        }
-
         /// <summary>
         /// The name of this object.
         /// </summary>
@@ -27,22 +18,21 @@ namespace Zene.Graphics
         /// </summary>
         FrameTarget IFramebuffer.Binding => Binding;
 
-        private readonly FramebufferProperties _properties;
-        FramebufferProperties IFramebuffer.Properties => _properties;
+        FramebufferProperties IFramebuffer.Properties => GL.context.baseFrameBuffer.Properties;
 
-        public void Size(int width, int height) => _properties.Size(width, height);
+        public void Size(int width, int height) => GL.context.baseFrameBuffer.Properties.Size(width, height);
 
         /// <summary>
         /// Bind the framebuffer.
         /// </summary>
         [OpenGLSupport(3.0)]
-        void IFramebuffer.Bind(FrameTarget target) => _frameBuffer.Bind(target);
+        void IFramebuffer.Bind(FrameTarget target) => GL.context.baseFrameBuffer.Bind(target);
         /// <summary>
         /// Bind the framebuffer for a specific task.
         /// </summary>
         /// <param name="target">The task to bind the framebuffer for.</param>
         [OpenGLSupport(3.0)]
-        void IBindable.Bind() => _frameBuffer.Bind();
+        void IBindable.Bind() => GL.context.baseFrameBuffer.Bind();
         void IBindable.Unbind()
         {
             if (!this.Bound()) { return; }
@@ -56,8 +46,8 @@ namespace Zene.Graphics
         [OpenGLSupport(1.0)]
         RectangleI IFramebuffer.View
         {
-            get => _frameBuffer.View;
-            set => _frameBuffer.View = value;
+            get => GL.context.baseFrameBuffer.View;
+            set => GL.context.baseFrameBuffer.View = value;
         }
         /// <summary>
         /// Sets the render size for the framebuffer.
@@ -65,8 +55,8 @@ namespace Zene.Graphics
         [OpenGLSupport(1.0)]
         Vector2I IFramebuffer.ViewSize
         {
-            get => _frameBuffer.ViewSize;
-            set => _frameBuffer.ViewSize = value;
+            get => GL.context.baseFrameBuffer.ViewSize;
+            set => GL.context.baseFrameBuffer.ViewSize = value;
         }
 
         FrameDrawTarget IFramebuffer.ReadBuffer
@@ -98,11 +88,6 @@ namespace Zene.Graphics
 
         // Static methods - main part of class
 
-        static BaseFramebuffer()
-        {
-            _frameBuffer = new FrameBufferGL(0);
-        }
-
         /// <summary>
         /// The name of this object.
         /// </summary>
@@ -110,21 +95,19 @@ namespace Zene.Graphics
         /// <summary>
         /// The framebuffer target this framebuffer was last bound to.
         /// </summary>
-        public static FrameTarget Binding => _frameBuffer.Binding;
-
-        private static readonly FrameBufferGL _frameBuffer;
+        public static FrameTarget Binding => GL.context.baseFrameBuffer.Binding;
 
         /// <summary>
         /// Bind the framebuffer.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public static void Bind(FrameTarget target) => _frameBuffer.Bind(target);
+        public static void Bind(FrameTarget target) => GL.context.baseFrameBuffer.Bind(target);
         /// <summary>
         /// Bind the framebuffer for a specific task.
         /// </summary>
         /// <param name="target">The task to bind the framebuffer for.</param>
         [OpenGLSupport(3.0)]
-        public static void Bind() => _frameBuffer.Bind();
+        public static void Bind() => GL.context.baseFrameBuffer.Bind();
 
         /// <summary>
         /// Gets or sets the render size and location for the framebuffer.
@@ -132,8 +115,8 @@ namespace Zene.Graphics
         [OpenGLSupport(1.0)]
         public static RectangleI View
         {
-            get => _frameBuffer.View;
-            set => _frameBuffer.View = value;
+            get => GL.context.baseFrameBuffer.View;
+            set => GL.context.baseFrameBuffer.View = value;
         }
         /// <summary>
         /// Sets the render size for the framebuffer.
@@ -141,30 +124,42 @@ namespace Zene.Graphics
         [OpenGLSupport(1.0)]
         public static Vector2I ViewSize
         {
-            get => _frameBuffer.ViewSize;
-            set => _frameBuffer.ViewSize = value;
+            get => GL.context.baseFrameBuffer.ViewSize;
+            set => GL.context.baseFrameBuffer.ViewSize = value;
         }
         /// <summary>
         /// Sets the render location for the framebuffer.
         /// </summary>
         public static Vector2I ViewLocation
         {
-            get => _frameBuffer.ViewLocation;
-            set => _frameBuffer.ViewLocation = value;
+            get => GL.context.baseFrameBuffer.ViewLocation;
+            set => GL.context.baseFrameBuffer.ViewLocation = value;
         }
 
         /// <summary>
         /// The clear colour that is used when <see cref="Clear(BufferBit)"/> is called.
         /// </summary>
-        public static ColourF ClearColour { get; set; } = ColourF.Zero;
+        public static ColourF ClearColour
+        {
+            get => GL.context.frameClearColour;
+            set => GL.context.frameClearColour = value;
+        }
         /// <summary>
         /// The depth value that is used when <see cref="Clear(BufferBit)"/> is called.
         /// </summary>
-        public static double ClearDepth { get; set; } = 1.0;
+        public static double ClearDepth
+        {
+            get => GL.context.frameClearDepth;
+            set => GL.context.frameClearDepth = value;
+        }
         /// <summary>
         /// The stencil value that is used when <see cref="Clear(BufferBit)"/> is called.
         /// </summary>
-        public static int CLearStencil { get; set; } = 0;
+        public static int ClearStencil
+        {
+            get => GL.context.frameClearStencil;
+            set => GL.context.frameClearStencil = value;
+        }
 
         /// <summary>
         /// Clears the specified attachments to a generic value.
@@ -185,7 +180,7 @@ namespace Zene.Graphics
             }
             if ((buffer & BufferBit.Stencil) == BufferBit.Stencil)
             {
-                GL.ClearStencil(CLearStencil);
+                GL.ClearStencil(ClearStencil);
             }
 
             GL.Clear((uint)buffer);

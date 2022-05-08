@@ -35,10 +35,10 @@ namespace Zene.Graphics
         {
             return framebuffer.Binding switch
             {
-                FrameTarget.FrameBuffer => framebuffer.Id == GL.BoundFrameBuffers.Draw &&
-                                       framebuffer.Id == GL.BoundFrameBuffers.Read,
-                FrameTarget.Read => framebuffer.Id == GL.BoundFrameBuffers.Read,
-                FrameTarget.Draw => framebuffer.Id == GL.BoundFrameBuffers.Draw,
+                FrameTarget.FrameBuffer => framebuffer.Id == GL.context.boundFrameBuffers.Draw &&
+                                       framebuffer.Id == GL.context.boundFrameBuffers.Read,
+                FrameTarget.Read => framebuffer.Id == GL.context.boundFrameBuffers.Read,
+                FrameTarget.Draw => framebuffer.Id == GL.context.boundFrameBuffers.Draw,
                 _ => false,
             };
         }
@@ -52,10 +52,10 @@ namespace Zene.Graphics
         {
             return target switch
             {
-                FrameTarget.FrameBuffer => framebuffer.Id == GL.BoundFrameBuffers.Draw &&
-                                       framebuffer.Id == GL.BoundFrameBuffers.Read,
-                FrameTarget.Read => framebuffer.Id == GL.BoundFrameBuffers.Read,
-                FrameTarget.Draw => framebuffer.Id == GL.BoundFrameBuffers.Draw,
+                FrameTarget.FrameBuffer => framebuffer.Id == GL.context.boundFrameBuffers.Draw &&
+                                       framebuffer.Id == GL.context.boundFrameBuffers.Read,
+                FrameTarget.Read => framebuffer.Id == GL.context.boundFrameBuffers.Read,
+                FrameTarget.Draw => framebuffer.Id == GL.context.boundFrameBuffers.Draw,
                 _ => false,
             };
         }

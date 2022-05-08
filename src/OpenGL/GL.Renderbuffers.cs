@@ -18,18 +18,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
+
 namespace Zene.Graphics.Base
 {
     public unsafe partial class GL
     {
-		public static uint BoundRenderbuffer { get; private set; } = 0;
-
 		[OpenGLSupport(3.0)]
 		public static void BindRenderbuffer(uint target, uint renderbuffer)
 		{
 			if (target == GLEnum.Renderbuffer)
 			{
-				BoundRenderbuffer = renderbuffer;
+				context.boundRenderbuffer = renderbuffer;
 			}
 
 			Functions.BindRenderbuffer(target, renderbuffer);

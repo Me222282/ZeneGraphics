@@ -18,6 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
+
 namespace Zene.Graphics.Base
 {
     public unsafe partial class GL
@@ -27,9 +29,6 @@ namespace Zene.Graphics.Base
 			public uint Read;
 			public uint Draw;
 		}
-
-		private static FrameBufferBinding _boundFrameBuffers = new FrameBufferBinding();
-		public static FrameBufferBinding BoundFrameBuffers => _boundFrameBuffers;
 
 		[OpenGLSupport(3.0)]
 		internal static void GenFramebuffers(int n, uint* framebuffers)
@@ -58,16 +57,16 @@ namespace Zene.Graphics.Base
 			switch (target)
 			{
 				case GLEnum.Framebuffer:
-					_boundFrameBuffers.Draw = framebuffer;
-					_boundFrameBuffers.Read = framebuffer;
+					context.boundFrameBuffers.Draw = framebuffer;
+					context.boundFrameBuffers.Read = framebuffer;
 					return;
 
 				case GLEnum.ReadFramebuffer:
-					_boundFrameBuffers.Read = framebuffer;
+					context.boundFrameBuffers.Read = framebuffer;
 					return;
 
 				case GLEnum.DrawFramebuffer:
-					_boundFrameBuffers.Draw = framebuffer;
+					context.boundFrameBuffers.Draw = framebuffer;
 					return;
 			}
 		}
