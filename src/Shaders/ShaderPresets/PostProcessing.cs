@@ -4,7 +4,7 @@ using Zene.Structs;
 
 namespace Zene.Graphics.Shaders
 {
-    public class PostProcessing : PostShader, IDrawable, IFramebuffer
+    public class PostProcessing : PostShader, IFramebuffer
     {
         public PostProcessing(int width, int height)
         {
@@ -141,12 +141,18 @@ namespace Zene.Graphics.Shaders
             _drawingObject.Dispose();
         }
 
-        public void Draw()
+        public void Draw(IFramebuffer destination = null)
         {
             _multiSFramebuffer.CopyFrameBuffer(_framebuffer, BufferBit.Colour, TextureSampling.Nearest);
 
-            //_multiSFramebuffer.UnBind();
-            State.NullBind(Target.Framebuffer);
+            if (destination == null)
+            {
+                BaseFramebuffer.Bind(FrameTarget.FrameBuffer);
+            }
+            else
+            {
+                destination.Bind(FrameTarget.FrameBuffer);
+            }
 
             GL.Disable(GLEnum.DepthTest);
 

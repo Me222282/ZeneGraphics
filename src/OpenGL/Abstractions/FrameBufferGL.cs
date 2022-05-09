@@ -45,10 +45,10 @@ namespace Zene.Graphics.Base
         [OpenGLSupport(3.0)]
         public void Bind()
         {
-            if (this.Bound()) { return; }
-
             // Set viewport
             GL.Viewport(_view.X, _view.Y, _view.Width, _view.Height);
+
+            if (this.Bound()) { return; }
 
             Binding = FrameTarget.FrameBuffer;
             GL.BindFramebuffer(GLEnum.Framebuffer, Id);
@@ -56,10 +56,10 @@ namespace Zene.Graphics.Base
         [OpenGLSupport(3.0)]
         public void Bind(FrameTarget target)
         {
-            if (this.Bound(target)) { return; }
-
             // Set viewport
             GL.Viewport(_view.X, _view.Y, _view.Width, _view.Height);
+
+            if (this.Bound(target)) { return; }
 
             Binding = target;
             GL.BindFramebuffer((uint)target, Id);

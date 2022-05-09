@@ -100,10 +100,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void Bind() => _framebuffer.Bind();
         [OpenGLSupport(3.0)]
-        public void Unbind()
-        {
-            _framebuffer.Unbind();
-        }
+        public void Unbind() => _framebuffer.Unbind();
 
         private bool _disposed = false;
         [OpenGLSupport(3.0)]
