@@ -76,12 +76,20 @@ namespace Zene.Graphics.Shaders
 
         public void SetDrawColour(float r, float g, float b, float a)
         {
-            GL.ProgramUniform4f(Program, _uniformColour, r, g, b, a);
+            GL.ProgramUniform4f(Program, _uniformColour,
+                r * ColourF.ByteToFloat,
+                g * ColourF.ByteToFloat,
+                b * ColourF.ByteToFloat,
+                a * ColourF.ByteToFloat);
         }
 
         public void SetDrawColour(float r, float g, float b)
         {
-            GL.ProgramUniform4f(Program, _uniformColour, r, g, b, 1.0f);
+            GL.ProgramUniform4f(Program, _uniformColour,
+                r * ColourF.ByteToFloat,
+                g * ColourF.ByteToFloat,
+                b * ColourF.ByteToFloat,
+                1.0f);
         }
 
         public void SetDrawColour(Colour colour)
