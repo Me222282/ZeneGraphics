@@ -236,25 +236,25 @@ vec3 SpotLighting(SpotLight light)
 
 	switch (uMaterial.DiffuseLightSource)
 	{
-	case 4:
-		diffusedLight = vec3(0.0, 0.0, 0.0);
-		break;
+		case 4:
+			diffusedLight = vec3(0.0, 0.0, 0.0);
+			break;
 
-	case 1:
-		diffusedLight = uMaterial.DiffuseLight;
-		break;
+		case 1:
+			diffusedLight = uMaterial.DiffuseLight;
+			break;
 
-	case 2:
-		diffusedLight = pos_ambColour;
-		break;
+		case 2:
+			diffusedLight = pos_ambColour;
+			break;
 
-	case 3:
-		diffusedLight = vec3(texture(uMaterial.DiffTextureSlot, tex_ambCoords));
-		break;
+		case 3:
+			diffusedLight = vec3(texture(uMaterial.DiffTextureSlot, tex_ambCoords));
+			break;
 
-	default:
-		diffusedLight = vec3(1.0, 1.0, 1.0);
-		break;
+		default:
+			diffusedLight = vec3(1.0, 1.0, 1.0);
+			break;
 	}
 
 	// Diffuse Light
@@ -289,25 +289,21 @@ vec3 SpotLighting(SpotLight light)
 
 		switch (uMaterial.SpecularLightSource)
 		{
-		case 4:
-			specularedLight = vec3(0.0, 0.0, 0.0);
-			break;
+			case 1:
+				specularedLight = uMaterial.SpecularLight;
+				break;
 
-		case 1:
-			specularedLight = uMaterial.SpecularLight;
-			break;
+			case 2:
+				specularedLight = pos_specColour;
+				break;
 
-		case 2:
-			specularedLight = pos_specColour;
-			break;
+			case 3:
+				specularedLight = vec3(texture(uMaterial.SpecTextureSlot, tex_specCoords));
+				break;
 
-		case 3:
-			specularedLight = vec3(texture(uMaterial.SpecTextureSlot, tex_specCoords));
-			break;
-
-		default:
-			specularedLight = vec3(0.5, 0.5, 0.5);
-			break;
+			default:
+				specularedLight = vec3(0.5, 0.5, 0.5);
+				break;
 		}
 
 		// Specular Light

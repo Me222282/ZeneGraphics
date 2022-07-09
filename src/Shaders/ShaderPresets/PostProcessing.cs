@@ -86,6 +86,7 @@ namespace Zene.Graphics.Shaders
         [OpenGLSupport(2.0)]
         public FrameDrawTarget DrawBuffer
         {
+            get => _multiSFramebuffer.DrawBuffers[0];
             set
             {
                 _multiSFramebuffer.DrawBuffers = new FrameDrawTarget[] { value };
@@ -95,35 +96,29 @@ namespace Zene.Graphics.Shaders
         /// <summary>
         /// The clear colour that is used when <see cref="Clear(BufferBit)"/> is called.
         /// </summary>
-        public ColourF ClearColour { get; set; } = new ColourF(0f, 0f, 0f, 1f);
+        public ColourF ClearColour
+        {
+            get => _multiSFramebuffer.ClearColour;
+            set => _multiSFramebuffer.ClearColour = value;
+        }
         /// <summary>
         /// The depth value that is used when <see cref="Clear(BufferBit)"/> is called.
         /// </summary>
-        public double ClearDepth { get; set; } = 1.0;
+        public double ClearDepth
+        {
+            get => _multiSFramebuffer.ClearDepth;
+            set => _multiSFramebuffer.ClearDepth = value;
+        }
         /// <summary>
         /// The stencil value that is used when <see cref="Clear(BufferBit)"/> is called.
         /// </summary>
-        public int CLearStencil { get; set; } = 0;
-
-        public void Clear(BufferBit buffer)
+        public int CLearStencil
         {
-            _multiSFramebuffer.Bind();
-            
-            if ((buffer & BufferBit.Colour) == BufferBit.Colour)
-            {
-                GL.ClearColour(ClearColour.R, ClearColour.G, ClearColour.B, ClearColour.A);
-            }
-            if ((buffer & BufferBit.Depth) == BufferBit.Depth)
-            {
-                GL.ClearDepth(ClearDepth);
-            }
-            if ((buffer & BufferBit.Stencil) == BufferBit.Stencil)
-            {
-                GL.ClearStencil(CLearStencil);
-            }
-
-            GL.Clear((uint)buffer);
+            get => _multiSFramebuffer.ClearStencil;
+            set => _multiSFramebuffer.ClearStencil = value;
         }
+
+        public void Clear(BufferBit buffer) => _multiSFramebuffer.Clear(buffer);
 
         bool IFramebuffer.Validate() => throw new NotSupportedException();
 

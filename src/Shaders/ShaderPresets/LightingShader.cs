@@ -77,19 +77,19 @@ namespace Zene.Graphics.Shaders
         public void SetDrawColour(float r, float g, float b, float a)
         {
             GL.ProgramUniform4f(Program, _uniformColour,
-                r * ColourF.ByteToFloat,
-                g * ColourF.ByteToFloat,
-                b * ColourF.ByteToFloat,
-                a * ColourF.ByteToFloat);
+                r,
+                g,
+                b,
+                a);
         }
 
         public void SetDrawColour(float r, float g, float b)
         {
             GL.ProgramUniform4f(Program, _uniformColour,
-                r * ColourF.ByteToFloat,
-                g * ColourF.ByteToFloat,
-                b * ColourF.ByteToFloat,
-                1.0f);
+                r,
+                g,
+                b,
+                1f);
         }
 
         public void SetDrawColour(Colour colour)
@@ -211,14 +211,23 @@ namespace Zene.Graphics.Shaders
 
             ColourF c = lightColour;
 
-            GL.ProgramUniform3f(Program, (index * 6) + _uSpotLight, c.R, c.G, c.B);
+            GL.ProgramUniform3f(Program, (index * 7) + _uSpotLight, c.R, c.G, c.B);
+        }
+
+        public unsafe ColourF GetSpotLightColour(int index)
+        {
+            ColourF c;
+
+            GL.GetnUniformfv(Program, (index * 7) + _uSpotLight, 3 * sizeof(float), (float*)&c);
+
+            return c;
         }
 
         public void SetSpotLightPosition(int index, Vector3 position)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            GL.ProgramUniform3f(Program, (index * 6) + _uSpotLight + 1, (float)position.X,
+            GL.ProgramUniform3f(Program, (index * 7) + _uSpotLight + 1, (float)position.X,
                 (float)position.Y, (float)position.Z);
         }
 
@@ -226,7 +235,7 @@ namespace Zene.Graphics.Shaders
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            GL.ProgramUniform3f(Program, (index * 6) + _uSpotLight + 2, (float)direction.X,
+            GL.ProgramUniform3f(Program, (index * 7) + _uSpotLight + 2, (float)direction.X,
                 (float)direction.Y, (float)direction.Z);
         }
 
@@ -234,7 +243,7 @@ namespace Zene.Graphics.Shaders
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            int uIndex = (index * 6) + _uSpotLight;
+            int uIndex = (index * 7) + _uSpotLight;
 
             GL.ProgramUniform1f(Program, uIndex + 3, (float)Math.Cos(innerAngle));
             GL.ProgramUniform1f(Program, uIndex + 4, (float)Math.Cos(outerAngle));
@@ -244,10 +253,10 @@ namespace Zene.Graphics.Shaders
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            int uIndex = (index * 6) + _uSpotLight;
+            int uIndex = (index * 7) + _uSpotLight;
 
-            GL.ProgramUniform1f(Program, uIndex + 4, (float)linear);
-            GL.ProgramUniform1f(Program, uIndex + 5, (float)quadratic);
+            GL.ProgramUniform1f(Program, uIndex + 5, (float)linear);
+            GL.ProgramUniform1f(Program, uIndex + 6, (float)quadratic);
         }
 
         private int _uniformCameraPos;

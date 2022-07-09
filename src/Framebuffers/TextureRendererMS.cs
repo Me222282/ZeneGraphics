@@ -146,7 +146,7 @@ namespace Zene.Graphics
         /// <summary>
         /// The stencil value that is used when <see cref="Clear(BufferBit)"/> is called.
         /// </summary>
-        public int CLearStencil { get; set; } = 0;
+        public int ClearStencil { get; set; } = 0;
 
         public void Clear(BufferBit buffer)
         {
@@ -162,7 +162,7 @@ namespace Zene.Graphics
             }
             if ((buffer & BufferBit.Stencil) == BufferBit.Stencil)
             {
-                GL.ClearStencil(CLearStencil);
+                GL.ClearStencil(ClearStencil);
             }
 
             GL.Clear((uint)buffer);
