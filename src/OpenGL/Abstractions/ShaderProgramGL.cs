@@ -156,18 +156,29 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, double value)
+        public void SetUniformF(int location, double value)
         {
             Bind();
 
             GL.Uniform1f(location, (float)value);
         }
         /// <summary>
+        /// Specify the value of a double uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="value">The value to set the uniform to.</param>
+        public void SetUniformD(int location, double value)
+        {
+            Bind();
+
+            GL.Uniform1d(location, value);
+        }
+        /// <summary>
         /// Specify the value of a float uniform variable.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, float value)
+        public void SetUniformF(int location, float value)
         {
             Bind();
 
@@ -178,7 +189,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, int value)
+        public void SetUniformI(int location, int value)
         {
             Bind();
 
@@ -189,7 +200,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, uint value)
+        public void SetUniformUI(int location, uint value)
         {
             Bind();
 
@@ -201,7 +212,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, double[] values)
+        public void SetUniformF(int location, double[] values)
         {
             Bind();
 
@@ -215,11 +226,25 @@ namespace Zene.Graphics.Base
             GL.Uniform1fv(location, values.Length, data);
         }
         /// <summary>
+        /// Specify the values of a double array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        public void SetUniformD(int location, double[] values)
+        {
+            Bind();
+
+            fixed (double* ptr = &values[0])
+            {
+                GL.Uniform1dv(location, values.Length, ptr);
+            }
+        }
+        /// <summary>
         /// Specify the values of a float array uniform variable.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, float[] values)
+        public void SetUniformF(int location, float[] values)
         {
             Bind();
 
@@ -233,7 +258,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, int[] values)
+        public void SetUniformI(int location, int[] values)
         {
             Bind();
 
@@ -247,7 +272,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, uint[] values)
+        public void SetUniformUI(int location, uint[] values)
         {
             Bind();
 
@@ -262,18 +287,29 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, Vector2 value)
+        public void SetUniformF(int location, Vector2 value)
         {
             Bind();
 
             GL.Uniform2f(location, (float)value.X, (float)value.Y);
         }
         /// <summary>
+        /// Specify the value of a double vector2 uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="value">The value to set the uniform to.</param>
+        public void SetUniformD(int location, Vector2 value)
+        {
+            Bind();
+
+            GL.Uniform2d(location, value.X, value.Y);
+        }
+        /// <summary>
         /// Specify the value of a float vector2 uniform variable.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, Vector2<float> value)
+        public void SetUniformF(int location, Vector2<float> value)
         {
             Bind();
 
@@ -284,7 +320,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, Vector2I value)
+        public void SetUniformI(int location, Vector2I value)
         {
             Bind();
 
@@ -295,7 +331,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, Vector2<uint> value)
+        public void SetUniformUI(int location, Vector2<uint> value)
         {
             Bind();
 
@@ -307,7 +343,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, Vector2[] values)
+        public void SetUniformF(int location, Vector2[] values)
         {
             Bind();
 
@@ -320,20 +356,34 @@ namespace Zene.Graphics.Base
                 data[i + 1] = (float)values[i].Y;
             }
 
-            GL.Uniform1fv(location, values.Length, data);
+            GL.Uniform2fv(location, values.Length, data);
+        }
+        /// <summary>
+        /// Specify the values of a double vector2 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        public void SetUniformD(int location, Vector2[] values)
+        {
+            Bind();
+
+            fixed (Vector2* ptr = &values[0])
+            {
+                GL.Uniform2dv(location, values.Length, (double*)ptr);
+            }
         }
         /// <summary>
         /// Specify the values of a float vector2 array uniform variable.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, Vector2<float>[] values)
+        public void SetUniformF(int location, Vector2<float>[] values)
         {
             Bind();
 
             fixed (Vector2<float>* ptr = &values[0])
             {
-                GL.Uniform1fv(location, values.Length, (float*)ptr);
+                GL.Uniform2fv(location, values.Length, (float*)ptr);
             }
         }
         /// <summary>
@@ -341,13 +391,13 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, Vector2I[] values)
+        public void SetUniformI(int location, Vector2I[] values)
         {
             Bind();
 
             fixed (Vector2I* ptr = &values[0])
             {
-                GL.Uniform1iv(location, values.Length, (int*)ptr);
+                GL.Uniform2iv(location, values.Length, (int*)ptr);
             }
         }
         /// <summary>
@@ -355,13 +405,13 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, Vector2<uint>[] values)
+        public void SetUniformUI(int location, Vector2<uint>[] values)
         {
             Bind();
 
             fixed (Vector2<uint>* ptr = &values[0])
             {
-                GL.Uniform1uiv(location, values.Length, (uint*)ptr);
+                GL.Uniform2uiv(location, values.Length, (uint*)ptr);
             }
         }
 
@@ -370,18 +420,29 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, Vector3 value)
+        public void SetUniformF(int location, Vector3 value)
         {
             Bind();
 
             GL.Uniform3f(location, (float)value.X, (float)value.Y, (float)value.Z);
         }
         /// <summary>
+        /// Specify the value of a double vector3 uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="value">The value to set the uniform to.</param>
+        public void SetUniformD(int location, Vector3 value)
+        {
+            Bind();
+
+            GL.Uniform3d(location, value.X, value.Y, value.Z);
+        }
+        /// <summary>
         /// Specify the value of a float vector3 uniform variable.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, Vector3<float> value)
+        public void SetUniformF(int location, Vector3<float> value)
         {
             Bind();
 
@@ -392,7 +453,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, Vector3I value)
+        public void SetUniformI(int location, Vector3I value)
         {
             Bind();
 
@@ -403,7 +464,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, Vector3<uint> value)
+        public void SetUniformUI(int location, Vector3<uint> value)
         {
             Bind();
 
@@ -415,7 +476,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, Vector3[] values)
+        public void SetUniformF(int location, Vector3[] values)
         {
             Bind();
 
@@ -429,20 +490,34 @@ namespace Zene.Graphics.Base
                 data[i + 2] = (float)values[i].Z;
             }
 
-            GL.Uniform1fv(location, values.Length, data);
+            GL.Uniform3fv(location, values.Length, data);
+        }
+        /// <summary>
+        /// Specify the values of a double vector3 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        public void SetUniformD(int location, Vector3[] values)
+        {
+            Bind();
+
+            fixed (Vector3* ptr = &values[0])
+            {
+                GL.Uniform3dv(location, values.Length, (double*)ptr);
+            }
         }
         /// <summary>
         /// Specify the values of a float vector3 array uniform variable.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, Vector3<float>[] values)
+        public void SetUniformF(int location, Vector3<float>[] values)
         {
             Bind();
 
             fixed (Vector3<float>* ptr = &values[0])
             {
-                GL.Uniform1fv(location, values.Length, (float*)ptr);
+                GL.Uniform3fv(location, values.Length, (float*)ptr);
             }
         }
         /// <summary>
@@ -450,13 +525,13 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, Vector3I[] values)
+        public void SetUniformI(int location, Vector3I[] values)
         {
             Bind();
 
             fixed (Vector3I* ptr = &values[0])
             {
-                GL.Uniform1iv(location, values.Length, (int*)ptr);
+                GL.Uniform3iv(location, values.Length, (int*)ptr);
             }
         }
         /// <summary>
@@ -464,13 +539,13 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, Vector3<uint>[] values)
+        public void SetUniformUI(int location, Vector3<uint>[] values)
         {
             Bind();
 
             fixed (Vector3<uint>* ptr = &values[0])
             {
-                GL.Uniform1uiv(location, values.Length, (uint*)ptr);
+                GL.Uniform3uiv(location, values.Length, (uint*)ptr);
             }
         }
 
@@ -479,18 +554,29 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, Vector4 value)
+        public void SetUniformF(int location, Vector4 value)
         {
             Bind();
 
             GL.Uniform4f(location, (float)value.X, (float)value.Y, (float)value.Z, (float)value.W);
         }
         /// <summary>
+        /// Specify the value of a double vector4 uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="value">The value to set the uniform to.</param>
+        public void SetUniformD(int location, Vector4 value)
+        {
+            Bind();
+
+            GL.Uniform4d(location, value.X, value.Y, value.Z, value.W);
+        }
+        /// <summary>
         /// Specify the value of a float vector4 uniform variable.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, Vector4<float> value)
+        public void SetUniformF(int location, Vector4<float> value)
         {
             Bind();
 
@@ -501,7 +587,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, Vector4I value)
+        public void SetUniformI(int location, Vector4I value)
         {
             Bind();
 
@@ -512,7 +598,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        public void SetUniform(int location, Vector4<uint> value)
+        public void SetUniformUI(int location, Vector4<uint> value)
         {
             Bind();
 
@@ -524,7 +610,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, Vector4[] values)
+        public void SetUniformF(int location, Vector4[] values)
         {
             Bind();
 
@@ -539,20 +625,34 @@ namespace Zene.Graphics.Base
                 data[i + 3] = (float)values[i].W;
             }
 
-            GL.Uniform1fv(location, values.Length, data);
+            GL.Uniform4fv(location, values.Length, data);
+        }
+        /// <summary>
+        /// Specify the values of a double vector4 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        public void SetUniformD(int location, Vector4[] values)
+        {
+            Bind();
+
+            fixed (Vector4* ptr = &values[0])
+            {
+                GL.Uniform4dv(location, values.Length, (double*)ptr);
+            }
         }
         /// <summary>
         /// Specify the values of a float vector4 array uniform variable.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, Vector4<float>[] values)
+        public void SetUniformF(int location, Vector4<float>[] values)
         {
             Bind();
 
             fixed (Vector4<float>* ptr = &values[0])
             {
-                GL.Uniform1fv(location, values.Length, (float*)ptr);
+                GL.Uniform4fv(location, values.Length, (float*)ptr);
             }
         }
         /// <summary>
@@ -560,13 +660,13 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, Vector4I[] values)
+        public void SetUniformI(int location, Vector4I[] values)
         {
             Bind();
 
             fixed (Vector4I* ptr = &values[0])
             {
-                GL.Uniform1iv(location, values.Length, (int*)ptr);
+                GL.Uniform4iv(location, values.Length, (int*)ptr);
             }
         }
         /// <summary>
@@ -574,13 +674,13 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
-        public void SetUniform(int location, Vector4<uint>[] values)
+        public void SetUniformUI(int location, Vector4<uint>[] values)
         {
             Bind();
 
             fixed (Vector4<uint>* ptr = &values[0])
             {
-                GL.Uniform1uiv(location, values.Length, (uint*)ptr);
+                GL.Uniform4uiv(location, values.Length, (uint*)ptr);
             }
         }
 
@@ -593,7 +693,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix2 matrix)
+        public void SetUniformF(int location, ref Matrix2 matrix)
         {
             Bind();
 
@@ -610,7 +710,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix2x3 matrix)
+        public void SetUniformF(int location, ref Matrix2x3 matrix)
         {
             Bind();
 
@@ -628,7 +728,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix2x4 matrix)
+        public void SetUniformF(int location, ref Matrix2x4 matrix)
         {
             Bind();
 
@@ -648,7 +748,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix3 matrix)
+        public void SetUniformF(int location, ref Matrix3 matrix)
         {
             Bind();
 
@@ -666,7 +766,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix3x2 matrix)
+        public void SetUniformF(int location, ref Matrix3x2 matrix)
         {
             Bind();
 
@@ -683,7 +783,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix3x4 matrix)
+        public void SetUniformF(int location, ref Matrix3x4 matrix)
         {
             Bind();
 
@@ -703,7 +803,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix4 matrix)
+        public void SetUniformF(int location, ref Matrix4 matrix)
         {
             Bind();
 
@@ -722,7 +822,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix4x3 matrix)
+        public void SetUniformF(int location, ref Matrix4x3 matrix)
         {
             Bind();
 
@@ -740,7 +840,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix4x2 matrix)
+        public void SetUniformF(int location, ref Matrix4x2 matrix)
         {
             Bind();
 
@@ -758,7 +858,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix2[] matrices)
+        public void SetUniformF(int location, Matrix2[] matrices)
         {
             Bind();
 
@@ -780,7 +880,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix2x3[] matrices)
+        public void SetUniformF(int location, Matrix2x3[] matrices)
         {
             Bind();
 
@@ -805,7 +905,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix2x4[] matrices)
+        public void SetUniformF(int location, Matrix2x4[] matrices)
         {
             Bind();
 
@@ -834,7 +934,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix3[] matrices)
+        public void SetUniformF(int location, Matrix3[] matrices)
         {
             Bind();
 
@@ -862,7 +962,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix3x2[] matrices)
+        public void SetUniformF(int location, Matrix3x2[] matrices)
         {
             Bind();
 
@@ -886,7 +986,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix3x4[] matrices)
+        public void SetUniformF(int location, Matrix3x4[] matrices)
         {
             Bind();
 
@@ -919,7 +1019,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix4[] matrices)
+        public void SetUniformF(int location, Matrix4[] matrices)
         {
             Bind();
 
@@ -955,7 +1055,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix4x3[] matrices)
+        public void SetUniformF(int location, Matrix4x3[] matrices)
         {
             Bind();
 
@@ -986,7 +1086,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix4x2[] matrices)
+        public void SetUniformF(int location, Matrix4x2[] matrices)
         {
             Bind();
 
@@ -1008,6 +1108,264 @@ namespace Zene.Graphics.Base
             GL.UniformMatrix4x2fv(location, matrices.Length, false, data);
         }
 
+        /// <summary>
+        /// Specify the value of a double matrix2 uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrix">The matrix to set the uniform to.</param>
+        public void SetUniformD(int location, ref Matrix2 matrix)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrix.Data[0])
+            {
+                GL.UniformMatrix2dv(location, 1, false, ptr);
+            }
+        }
+        /// <summary>
+        /// Specify the value of a double matrix2x3 uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrix">The matrix to set the uniform to.</param>
+        public void SetUniformD(int location, ref Matrix2x3 matrix)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrix.Data[0])
+            {
+                GL.UniformMatrix2x3dv(location, 1, false, ptr);
+            }
+        }
+        /// <summary>
+        /// Specify the value of a double matrix2x4 uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrix">The matrix to set the uniform to.</param>
+        public void SetUniformD(int location, ref Matrix2x4 matrix)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrix.Data[0])
+            {
+                GL.UniformMatrix2x4dv(location, 1, false, ptr);
+            }
+        }
+
+        /// <summary>
+        /// Specify the value of a double matrix3 uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrix">The matrix to set the uniform to.</param>
+        public void SetUniformD(int location, ref Matrix3 matrix)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrix.Data[0])
+            {
+                GL.UniformMatrix3dv(location, 1, false, ptr);
+            }
+        }
+        /// <summary>
+        /// Specify the value of a double matrix3x2 uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrix">The matrix to set the uniform to.</param>
+        public void SetUniformD(int location, ref Matrix3x2 matrix)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrix.Data[0])
+            {
+                GL.UniformMatrix3x2dv(location, 1, false, ptr);
+            }
+        }
+        /// <summary>
+        /// Specify the value of a double matrix3x4 uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrix">The matrix to set the uniform to.</param>
+        public void SetUniformD(int location, ref Matrix3x4 matrix)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrix.Data[0])
+            {
+                GL.UniformMatrix3x4dv(location, 1, false, ptr);
+            }
+        }
+
+        /// <summary>
+        /// Specify the value of a double matrix4 uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrix">The matrix to set the uniform to.</param>
+        public void SetUniformD(int location, ref Matrix4 matrix)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrix.Data[0])
+            {
+                GL.UniformMatrix4dv(location, 1, false, ptr);
+            }
+        }
+        /// <summary>
+        /// Specify the value of a double matrix4x3 uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrix">The matrix to set the uniform to.</param>
+        public void SetUniformD(int location, ref Matrix4x3 matrix)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrix.Data[0])
+            {
+                GL.UniformMatrix4x3dv(location, 1, false, ptr);
+            }
+        }
+        /// <summary>
+        /// Specify the value of a double matrix4x2 uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrix">The matrix to set the uniform to.</param>
+        public void SetUniformD(int location, ref Matrix4x2 matrix)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrix.Data[0])
+            {
+                GL.UniformMatrix4x2dv(location, 1, false, ptr);
+            }
+        }
+
+        /// <summary>
+        /// Specify the value of a double matrix2 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrices">The array of matrices to set the uniform to.</param>
+        public void SetUniformD(int location, Matrix2[] matrices)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrices[0].Data[0])
+            {
+                GL.UniformMatrix2dv(location, matrices.Length, false, ptr);
+            }
+        }
+        /// <summary>
+        /// Specify the value of a double matrix2x3 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrices">The array of matrices to set the uniform to.</param>
+        public void SetUniformD(int location, Matrix2x3[] matrices)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrices[0].Data[0])
+            {
+                GL.UniformMatrix2x3dv(location, matrices.Length, false, ptr);
+            }
+        }
+        /// <summary>
+        /// Specify the value of a double matrix2x4 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrices">The array of matrices to set the uniform to.</param>
+        public void SetUniformD(int location, Matrix2x4[] matrices)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrices[0].Data[0])
+            {
+                GL.UniformMatrix2x4dv(location, matrices.Length, false, ptr);
+            }
+        }
+
+        /// <summary>
+        /// Specify the value of a double matrix3 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrices">The array of matrices to set the uniform to.</param>
+        public void SetUniformD(int location, Matrix3[] matrices)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrices[0].Data[0])
+            {
+                GL.UniformMatrix3dv(location, matrices.Length, false, ptr);
+            }
+        }
+        /// <summary>
+        /// Specify the value of a double matrix3x2 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrices">The array of matrices to set the uniform to.</param>
+        public void SetUniformD(int location, Matrix3x2[] matrices)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrices[0].Data[0])
+            {
+                GL.UniformMatrix3x2dv(location, matrices.Length, false, ptr);
+            }
+        }
+        /// <summary>
+        /// Specify the value of a double matrix3x4 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrices">The array of matrices to set the uniform to.</param>
+        public void SetUniformD(int location, Matrix3x4[] matrices)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrices[0].Data[0])
+            {
+                GL.UniformMatrix3x4dv(location, matrices.Length, false, ptr);
+            }
+        }
+
+        /// <summary>
+        /// Specify the value of a double matrix4 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrices">The array of matrices to set the uniform to.</param>
+        public void SetUniformD(int location, Matrix4[] matrices)
+        {
+            Bind();
+
+            fixed(double * ptr = &matrices[0].Data[0])
+            {
+                GL.UniformMatrix4dv(location, matrices.Length, false, ptr);
+            }
+        }
+        /// <summary>
+        /// Specify the value of a double matrix4x3 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrices">The array of matrices to set the uniform to.</param>
+        public void SetUniformD(int location, Matrix4x3[] matrices)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrices[0].Data[0])
+            {
+                GL.UniformMatrix4x3dv(location, matrices.Length, false, ptr);
+            }
+        }
+        /// <summary>
+        /// Specify the value of a double matrix4x2 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="matrices">The array of matrices to set the uniform to.</param>
+        public void SetUniformD(int location, Matrix4x2[] matrices)
+        {
+            Bind();
+
+            fixed (double* ptr = &matrices[0].Data[0])
+            {
+                GL.UniformMatrix4x2dv(location, matrices.Length, false, ptr);
+            }
+        }
+
         // Float input
 
         /// <summary>
@@ -1015,7 +1373,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix2<float> matrix)
+        public void SetUniformF(int location, Matrix2<float> matrix)
         {
             Bind();
 
@@ -1029,7 +1387,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix2x3<float> matrix)
+        public void SetUniformF(int location, Matrix2x3<float> matrix)
         {
             Bind();
 
@@ -1043,7 +1401,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix2x4<float> matrix)
+        public void SetUniformF(int location, Matrix2x4<float> matrix)
         {
             Bind();
 
@@ -1058,7 +1416,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix3<float> matrix)
+        public void SetUniformF(int location, Matrix3<float> matrix)
         {
             Bind();
 
@@ -1072,7 +1430,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix3x2<float> matrix)
+        public void SetUniformF(int location, Matrix3x2<float> matrix)
         {
             Bind();
 
@@ -1086,7 +1444,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix3x4<float> matrix)
+        public void SetUniformF(int location, Matrix3x4<float> matrix)
         {
             Bind();
 
@@ -1101,7 +1459,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix4<float> matrix)
+        public void SetUniformF(int location, Matrix4<float> matrix)
         {
             Bind();
 
@@ -1115,7 +1473,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix4x3<float> matrix)
+        public void SetUniformF(int location, Matrix4x3<float> matrix)
         {
             Bind();
 
@@ -1129,7 +1487,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrix">The matrix to set the uniform to.</param>
-        public void SetUniform(int location, Matrix4x2<float> matrix)
+        public void SetUniformF(int location, Matrix4x2<float> matrix)
         {
             Bind();
 
@@ -1144,7 +1502,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix2<float>[] matrices)
+        public void SetUniformF(int location, Matrix2<float>[] matrices)
         {
             Bind();
 
@@ -1158,7 +1516,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix2x3<float>[] matrices)
+        public void SetUniformF(int location, Matrix2x3<float>[] matrices)
         {
             Bind();
 
@@ -1172,7 +1530,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix2x4<float>[] matrices)
+        public void SetUniformF(int location, Matrix2x4<float>[] matrices)
         {
             Bind();
 
@@ -1187,7 +1545,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix3<float>[] matrices)
+        public void SetUniformF(int location, Matrix3<float>[] matrices)
         {
             Bind();
 
@@ -1201,7 +1559,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix3x2<float>[] matrices)
+        public void SetUniformF(int location, Matrix3x2<float>[] matrices)
         {
             Bind();
 
@@ -1215,7 +1573,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix3x4<float>[] matrices)
+        public void SetUniformF(int location, Matrix3x4<float>[] matrices)
         {
             Bind();
 
@@ -1230,7 +1588,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix4<float>[] matrices)
+        public void SetUniformF(int location, Matrix4<float>[] matrices)
         {
             Bind();
 
@@ -1244,7 +1602,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix4x3<float>[] matrices)
+        public void SetUniformF(int location, Matrix4x3<float>[] matrices)
         {
             Bind();
 
@@ -1258,7 +1616,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        public void SetUniform(int location, Matrix4x2<float>[] matrices)
+        public void SetUniformF(int location, Matrix4x2<float>[] matrices)
         {
             Bind();
 
