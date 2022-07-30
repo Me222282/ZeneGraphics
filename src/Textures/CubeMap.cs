@@ -38,11 +38,6 @@ namespace Zene.Graphics
         public TextureData DataType { get; set; }
 
         /// <summary>
-        /// The formating of data stored in this texture.
-        /// </summary>
-        public new TextureFormat InternalFormat { get; }
-
-        /// <summary>
         /// Creats and filles the data of <paramref name="face"/> inside the texture with <paramref name="data"/>.
         /// </summary>
         /// <typeparam name="T"></typeparam>

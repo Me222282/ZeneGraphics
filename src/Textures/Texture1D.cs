@@ -28,11 +28,6 @@ namespace Zene.Graphics
         }
 
         /// <summary>
-        /// The formating of data stored in this texture.
-        /// </summary>
-        public new TextureFormat InternalFormat { get; }
-
-        /// <summary>
         /// The internal storage resolution of the alpha component at base level.
         /// </summary>
         public int AlphaSize => Properties.AlphaSize;

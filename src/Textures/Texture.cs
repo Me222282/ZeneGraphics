@@ -59,11 +59,6 @@ namespace Zene.Graphics
         }
 
         /// <summary>
-        /// The formating of data stored in this texture.
-        /// </summary>
-        public new TextureFormat InternalFormat { get; }
-
-        /// <summary>
         /// Gets or sets a signal pixel of the texture.
         /// </summary>
         /// <param name="x">The 0-based x location of the pixel.</param>

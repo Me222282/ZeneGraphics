@@ -133,13 +133,15 @@ namespace Zene.Graphics
         public static bool ResolveGLError { get; set; } = true;
 
         /// <summary>
-        /// Manages the last unmanged OpenGL error base on <see cref="Manager"/>.
+        /// Manages the last unmanged OpenGL error based on <see cref="Manager"/>.
         /// </summary>
         public static void PushGLError()
         {
             if (Manager == Type.None) { return; }
 
             uint error = GL.GetError();
+
+            if (error == GLEnum.NoError) { return; }
 
             if (Manager == Type.Exception)
             {

@@ -28,11 +28,6 @@ namespace Zene.Graphics
         }
 
         /// <summary>
-        /// The formating of data stored in this texture.
-        /// </summary>
-        public new TextureFormat InternalFormat { get; }
-
-        /// <summary>
         /// The type of data being inputed into the texture.
         /// </summary>
         public TextureData DataType { get; set; }
