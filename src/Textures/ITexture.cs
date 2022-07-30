@@ -274,6 +274,13 @@ namespace Zene.Graphics
         Back = GLEnum.TextureCubeMapNegativeZ
     }
 
+    public enum AccessType : uint
+    {
+        Read = GLEnum.ReadOnly,
+        Write = GLEnum.WriteOnly,
+        ReadWrte = GLEnum.ReadWrite
+    }
+
     /// <summary>
     /// Object that encapsulate an OpenGL texture object.
     /// </summary>

@@ -5,13 +5,6 @@ using Zene.Graphics.Base;
 
 namespace Zene.Graphics
 {
-    public enum AccessType : uint
-    {
-        Read = GLEnum.ReadOnly,
-        Write = GLEnum.WriteOnly,
-        ReadWrte = GLEnum.ReadWrite
-    }
-
     public unsafe class Buffer<T> : IBuffer where T : unmanaged
     {
         public Buffer(IEnumerable<T> data, BufferTarget bufferType, BufferUsage usage)

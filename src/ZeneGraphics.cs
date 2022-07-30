@@ -147,18 +147,37 @@ namespace Zene.Graphics
         }
 
         /// <summary>
-        /// Determines whether <paramref name="usage"/> is an old buffer usage type or a new one.
+        /// Determines whether <paramref name="usage"/> is a usage type used for immutable buffers.
         /// </summary>
         /// <param name="usage">The <see cref="BufferUsage"/> to query.</param>
-        /// <returns>True if <paramref name="usage"/> is an old usage, otherwise False.</returns>
-        public static bool IsOld(this BufferUsage usage)
+        /// <returns>True if <paramref name="usage"/> is a usage used for immutable buffers.</returns>
+        public static bool IsStorageUsage(this BufferUsage usage)
         {
-            return !(usage switch
+            return usage switch
             {
                 BufferUsage.DynamicStorage or BufferUsage.ClientStorage or BufferUsage.Coherent or
                     BufferUsage.Persistant or BufferUsage.Read or BufferUsage.Write => true,
                 _ => false
-            });
+            };
+        }
+
+        /// <summary>
+        /// Determines whether <paramref name="access"/> is readable or not.
+        /// </summary>
+        /// <param name="access">The <see cref="AccessType"/> to query.</param>
+        /// <returns></returns>
+        public static bool CanRead(this AccessType access)
+        {
+            return access == AccessType.Read || access == AccessType.ReadWrte;
+        }
+        /// <summary>
+        /// Determines whether <paramref name="access"/> is writable or not.
+        /// </summary>
+        /// <param name="access">The <see cref="AccessType"/> to query.</param>
+        /// <returns></returns>
+        public static bool CanWrite(this AccessType access)
+        {
+            return access == AccessType.Write || access == AccessType.ReadWrte;
         }
 
         /// <summary>
@@ -200,6 +219,14 @@ namespace Zene.Graphics
         public static bool IsShaderProgram(this IIdentifiable obj)
         {
             return GL.IsProgram(obj.Id);
+        }
+        /// <summary>
+        /// Determine if a name corresponds to a buffer object.
+        /// </summary>
+        /// <param name="obj">Specifies a value that may be the name of a buffer object.</param>
+        public static bool IsBuffer(this IIdentifiable obj)
+        {
+            return GL.IsBuffer(obj.Id);
         }
 
         /// <summary>

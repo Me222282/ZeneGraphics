@@ -1464,27 +1464,99 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(1.5)]
-		public static IntPtr MapBuffer(uint target, uint access)
+		public static IntPtr MapBuffer(IBuffer target, uint access)
 		{
-			return Functions.MapBuffer(target, access);
+			target.Properties._mapped = true;
+			target.Properties._mapLength = target.Properties.Size;
+			target.Properties._mapOffset = 0;
+			target.Properties._access = (AccessType)access;
+			target.Properties._accessFlags = (AccessType)access switch
+			{
+				AccessType.Read => MappedAccessFlags.Read,
+				AccessType.Write => MappedAccessFlags.Write,
+				AccessType.ReadWrte => MappedAccessFlags.Read | MappedAccessFlags.Write,
+				_ => 0
+			};
+
+			return Functions.MapBuffer((uint)target.Target, access);
 		}
 
 		[OpenGLSupport(3.0)]
-		public static IntPtr MapBufferRange(uint target, int offset, int length, uint access)
+		public static IntPtr MapBufferRange(IBuffer target, int offset, int length, uint access)
 		{
-			return Functions.MapBufferRange(target, offset, length, access);
+			target.Properties._mapped = true;
+			target.Properties._mapLength = length;
+			target.Properties._mapOffset = offset;
+
+			MappedAccessFlags flags = (MappedAccessFlags)access;
+			target.Properties._accessFlags = flags;
+			
+			if (flags.HasFlag(MappedAccessFlags.Read) && flags.HasFlag(MappedAccessFlags.Write))
+            {
+				target.Properties._access = AccessType.ReadWrte;
+            }
+			else if (flags.HasFlag(MappedAccessFlags.Read))
+            {
+				target.Properties._access = AccessType.Read;
+			}
+			else if (flags.HasFlag(MappedAccessFlags.Write))
+            {
+				target.Properties._access = AccessType.Write;
+			}
+			else
+            {
+				target.Properties._access = 0;
+			}
+
+			return Functions.MapBufferRange((uint)target.Target, offset, length, access);
 		}
 
 		[OpenGLSupport(4.5)]
-		public static IntPtr MapNamedBuffer(uint buffer, uint access)
+		public static IntPtr MapNamedBuffer(IBuffer buffer, uint access)
 		{
-			return Functions.MapNamedBuffer(buffer, access);
+			buffer.Properties._mapped = true;
+			buffer.Properties._mapLength = buffer.Properties.Size;
+			buffer.Properties._mapOffset = 0;
+			buffer.Properties._access = (AccessType)access;
+			buffer.Properties._accessFlags = (AccessType)access switch
+			{
+				AccessType.Read => MappedAccessFlags.Read,
+				AccessType.Write => MappedAccessFlags.Write,
+				AccessType.ReadWrte => MappedAccessFlags.Read | MappedAccessFlags.Write,
+				_ => 0
+			};
+
+			return Functions.MapNamedBuffer(buffer.Id, access);
 		}
 
 		[OpenGLSupport(4.5)]
-		public static IntPtr MapNamedBufferRange(uint buffer, int offset, int length, uint access)
+		public static IntPtr MapNamedBufferRange(IBuffer buffer, int offset, int length, uint access)
 		{
-			return Functions.MapNamedBufferRange(buffer, offset, length, access);
+			buffer.Properties._mapped = true;
+			buffer.Properties._mapLength = length;
+			buffer.Properties._mapOffset = offset;
+
+			MappedAccessFlags flags = (MappedAccessFlags)access;
+			buffer.Properties._accessFlags = flags;
+
+			if (flags.HasFlag(MappedAccessFlags.Read) && flags.HasFlag(MappedAccessFlags.Write))
+			{
+				buffer.Properties._access = AccessType.ReadWrte;
+			}
+			else if (flags.HasFlag(MappedAccessFlags.Read))
+			{
+				buffer.Properties._access = AccessType.Read;
+			}
+			else if (flags.HasFlag(MappedAccessFlags.Write))
+			{
+				buffer.Properties._access = AccessType.Write;
+			}
+			else
+			{
+				buffer.Properties._access = 0;
+			}
+
+			return Functions.MapNamedBufferRange(buffer.Id, offset, length, access);
 		}
 
 		[OpenGLSupport(4.2)]
@@ -2489,15 +2561,25 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(1.5)]
-		public static bool UnmapBuffer(uint target)
+		public static bool UnmapBuffer(IBuffer target)
 		{
-			return Functions.UnmapBuffer(target);
+			target.Properties._mapped = false;
+			target.Properties._accessFlags = 0;
+			target.Properties._mapLength = 0;
+			target.Properties._mapOffset = 0;
+
+			return Functions.UnmapBuffer((uint)target.Target);
 		}
 
 		[OpenGLSupport(4.5)]
-		public static bool UnmapNamedBuffer(uint buffer)
+		public static bool UnmapNamedBuffer(IBuffer buffer)
 		{
-			return Functions.UnmapNamedBuffer(buffer);
+			buffer.Properties._mapped = false;
+			buffer.Properties._accessFlags = 0;
+			buffer.Properties._mapLength = 0;
+			buffer.Properties._mapOffset = 0;
+
+			return Functions.UnmapNamedBuffer(buffer.Id);
 		}
 
 		[OpenGLSupport(2.0)]

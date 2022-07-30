@@ -3,6 +3,20 @@ using Zene.Graphics.Base;
 
 namespace Zene.Graphics
 {
+    [Flags]
+    public enum MappedAccessFlags : uint
+    {
+        Read = GLEnum.MapReadBit,
+        Write = GLEnum.MapWriteBit,
+        Persistent = GLEnum.MapPersistentBit,
+        Coherent = GLEnum.MapCoherentBit,
+
+        InvalidateRange = GLEnum.MapInvalidateRangeBit,
+        InvalidateBuffer = GLEnum.MapInvalidateBufferBit,
+        FlushExplicit = GLEnum.MapFlushExplicitBit,
+        Unsynchronized = GLEnum.MapUnsynchronizedBit,
+    }
+
     /// <summary>
     /// The frequency of buffer data being get and set.
     /// </summary>
@@ -134,6 +148,11 @@ namespace Zene.Graphics
         /// The type of this buffer.
         /// </summary>
         public BufferTarget Target { get; }
+
+        /// <summary>
+        /// The properties of this Buffer.
+        /// </summary>
+        public BufferProperties Properties { get; }
 
         /// <summary>
         /// Binds this <see cref="IBuffer"/> to read. Used for copying.

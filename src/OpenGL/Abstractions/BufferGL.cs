@@ -7,12 +7,16 @@ namespace Zene.Graphics.Base
         public BufferGL()
         {
             Id = GL.GenBuffer();
+
+            Properties = new BufferProperties(this);
         }
 
         public uint Id { get; }
 
         public BufferUsage UsageType { get; private set; }
         public BufferTarget Target { get; }
+
+        public BufferProperties Properties { get; }
 
         public void Bind()
         {
@@ -109,7 +113,7 @@ namespace Zene.Graphics.Base
         /// <param name="usage">Specifies the expected usage pattern of the data store.</param>
         public void BufferData<T>(T[] data, BufferUsage usage) where T : unmanaged
         {
-            if (usage.IsOld())
+            if (usage.IsStorageUsage())
             {
                 throw new BufferException(this, $"BufferUsage {nameof(usage)} is not a valid usage for BufferData<T>(int, T*, BufferUsage).");
             }
@@ -126,12 +130,31 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Creates and initializes a buffer object's data store.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data">Specifies the array of data that will be copied into the data store for initialization.</param>
+        /// <param name="usage">Specifies the expected usage pattern of the data store.</param>
+        public void BufferData<T>(GLArray<T> data, BufferUsage usage) where T : unmanaged
+        {
+            if (usage.IsStorageUsage())
+            {
+                throw new BufferException(this, $"BufferUsage {nameof(usage)} is not a valid usage for BufferData<T>(int, T*, BufferUsage).");
+            }
+
+            Bind();
+
+            GL.BufferData((uint)Target, data.Size * sizeof(T), (T*)data, (uint)usage);
+
+            UsageType = usage;
+        }
+        /// <summary>
+        /// Creates and initializes a buffer object's data store.
+        /// </summary>
         /// <param name="size">Specifies the size in bytes of the buffer object's new data store.</param>
         /// <param name="data">Specifies a pointer to data that will be copied into the data store for initialization.</param>
         /// <param name="usage">Specifies the expected usage pattern of the data store.</param>
         public void BufferData(int size, IntPtr data, BufferUsage usage)
         {
-            if (usage.IsOld())
+            if (usage.IsStorageUsage())
             {
                 throw new BufferException(this, $"BufferUsage {nameof(usage)} is not a valid usage for BufferData<T>(int, T*, BufferUsage).");
             }
@@ -151,7 +174,7 @@ namespace Zene.Graphics.Base
         /// <param name="usage">Specifies the expected usage pattern of the data store.</param>
         public void BufferData<T>(int length, T* data, BufferUsage usage) where T : unmanaged
         {
-            if (usage.IsOld())
+            if (usage.IsStorageUsage())
             {
                 throw new BufferException(this, $"BufferUsage {nameof(usage)} is not a valid usage for BufferData<T>(int, T*, BufferUsage).");
             }
@@ -172,7 +195,7 @@ namespace Zene.Graphics.Base
         [OpenGLSupport(4.4)]
         public void BufferStorage<T>(T[] data, BufferUsage usage) where T : unmanaged
         {
-            if (!usage.IsOld())
+            if (!usage.IsStorageUsage())
             {
                 throw new BufferException(this, $"BufferUsage {nameof(usage)} is not a valid usage for BufferStorage<T>(int, T*, BufferUsage).");
             }
@@ -189,13 +212,33 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Creates and initializes a buffer object's immutable data store.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data">Specifies the array of data that will be copied into the data store for initialization.</param>
+        /// <param name="usage">Specifies the expected usage pattern of the data store.</param>
+        [OpenGLSupport(4.4)]
+        public void BufferStorage<T>(GLArray<T> data, BufferUsage usage) where T : unmanaged
+        {
+            if (!usage.IsStorageUsage())
+            {
+                throw new BufferException(this, $"BufferUsage {nameof(usage)} is not a valid usage for BufferStorage<T>(int, T*, BufferUsage).");
+            }
+
+            Bind();
+
+            GL.BufferStorage((uint)Target, data.Size * sizeof(T), data, (uint)usage);
+
+            UsageType = usage;
+        }
+        /// <summary>
+        /// Creates and initializes a buffer object's immutable data store.
+        /// </summary>
         /// <param name="size">Specifies the size in bytes of the buffer object's new data store.</param>
         /// <param name="data">Specifies a pointer to data that will be copied into the data store for initialization.</param>
         /// <param name="usage">Specifies the expected usage pattern of the data store.</param>
         [OpenGLSupport(4.4)]
         public void BufferStorage(int size, IntPtr data, BufferUsage usage)
         {
-            if (!usage.IsOld())
+            if (!usage.IsStorageUsage())
             {
                 throw new BufferException(this, $"BufferUsage {nameof(usage)} is not a valid usage for BufferStorage<T>(int, T*, BufferUsage).");
             }
@@ -216,7 +259,7 @@ namespace Zene.Graphics.Base
         [OpenGLSupport(4.4)]
         public void BufferStorage<T>(int length, T* data, BufferUsage usage) where T : unmanaged
         {
-            if (!usage.IsOld())
+            if (!usage.IsStorageUsage())
             {
                 throw new BufferException(this, $"BufferUsage {nameof(usage)} is not a valid usage for BufferStorage<T>(int, T*, BufferUsage).");
             }
@@ -242,6 +285,18 @@ namespace Zene.Graphics.Base
             {
                 GL.BufferSubData((uint)Target, offset * sizeof(T), data.Length * sizeof(T), ptr);
             }
+        }
+        /// <summary>
+        /// Updates a subset of a buffer object's data store.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="offset">Specifies the offset into the buffer object's data store where data replacement will begin, measured in <typeparamref name="T"/>.</param>
+        /// <param name="data">Specifies the array of data that will be copied into the data store.</param>
+        public void BufferSubData<T>(int offset, GLArray<T> data) where T : unmanaged
+        {
+            Bind();
+
+            GL.BufferSubData((uint)Target, offset * sizeof(T), data.Size * sizeof(T), data);
         }
         /// <summary>
         /// Updates a subset of a buffer object's data store.
@@ -651,14 +706,189 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Indicate modifications to a range of a mapped buffer.
         /// </summary>
-        /// <param name="offset"></param>
-        /// <param name="length"></param>
+        /// <param name="offset">Specifies the start of the buffer subrange, in basic machine units.</param>
+        /// <param name="length">Specifies the length of the buffer subrange, in basic machine units.</param>
         [OpenGLSupport(3.0)]
         public void FlushMappedBufferRange(int offset, int length)
         {
+            if (!Properties.Mapped)
+            {
+                throw new BufferException(this, $"Cannot use {nameof(FlushMappedBufferRange)} when the buffer is not mapped.");
+            }
+
+            if (!Properties.MappedAccessFlags.HasFlag(MappedAccessFlags.FlushExplicit))
+            {
+                throw new BufferException(this, $"{nameof(Properties.MappedAccessFlags)} must contain {MappedAccessFlags.FlushExplicit} to use {nameof(FlushMappedBufferRange)}.");
+            }
+
             Bind();
 
             GL.FlushMappedBufferRange((uint)Target, offset, length);
+        }
+
+        /// <summary>
+        /// Returns a subset of a buffer object's data store.
+        /// </summary>
+        /// <remarks>
+        /// Reference is aligned to sizeof(<typeparamref name="T"/>).
+        /// </remarks>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="offset">Specifies the offset into the buffer object's data store from which data will be returned, measured in sizeof(<typeparamref name="T"/>).</param>
+        /// <param name="size">Specifies the size in sizeof(<typeparamref name="T"/>) of the data store region being returned.</param>
+        /// <returns></returns>
+        public T[] GetBufferSubData<T>(int offset, int size) where T : unmanaged
+        {
+            Bind();
+
+            T[] data = new T[size];
+
+            fixed (T* ptr = &data[0])
+            {
+                GL.GetBufferSubData((uint)Target, offset * sizeof(T), size * sizeof(T), ptr);
+            }
+
+            return data;
+        }
+        /// <summary>
+        /// Returns a subset of a buffer object's data store.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="offset">Specifies the offset into the buffer object's data store from which data will be returned, measured in bytes.</param>
+        /// <param name="size">Specifies the size in sizeof(<typeparamref name="T"/>) of the data store region being returned.</param>
+        /// <returns></returns>
+        public T[] GetBufferSubDataF<T>(int offset, int size) where T : unmanaged
+        {
+            Bind();
+
+            T[] data = new T[size];
+
+            fixed (T* ptr = &data[0])
+            {
+                GL.GetBufferSubData((uint)Target, offset, size * sizeof(T), ptr);
+            }
+
+            return data;
+        }
+        /// <summary>
+        /// Returns a subset of a buffer object's data store.
+        /// </summary>
+        /// <remarks>
+        /// Reference is aligned to sizeof(<typeparamref name="T"/>).
+        /// </remarks>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="offset">Specifies the offset into the buffer object's data store from which data will be returned, measured in sizeof(<typeparamref name="T"/>).</param>
+        /// <param name="size">Specifies the size in sizeof(<typeparamref name="T"/>) of the data store region being returned.</param>
+        /// <returns></returns>
+        public GLArray<T> GetBufferSubDataA<T>(int offset, int size) where T : unmanaged
+        {
+            Bind();
+
+            GLArray<T> data = new GLArray<T>(size);
+
+            GL.GetBufferSubData((uint)Target, offset * sizeof(T), size * sizeof(T), data);
+
+            return data;
+        }
+        /// <summary>
+        /// Returns a subset of a buffer object's data store.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="offset">Specifies the offset into the buffer object's data store from which data will be returned, measured in bytes.</param>
+        /// <param name="size">Specifies the size in sizeof(<typeparamref name="T"/>) of the data store region being returned.</param>
+        /// <returns></returns>
+        public GLArray<T> GetBufferSubDataAF<T>(int offset, int size) where T : unmanaged
+        {
+            Bind();
+
+            GLArray<T> data = new GLArray<T>(size);
+
+            GL.GetBufferSubData((uint)Target, offset, size * sizeof(T), data);
+
+            return data;
+        }
+
+        /// <summary>
+        /// Invalidate the content of a buffer object's data store.
+        /// </summary>
+        [OpenGLSupport(4.3)]
+        public void InvalidateBufferData() => GL.InvalidateBufferData(Id);
+
+        /// <summary>
+        /// Invalidate a region of a buffer object's data store.
+        /// </summary>
+        /// <param name="offset">The offset, in bytes, within the buffer's data store of the start of the range to be invalidated.</param>
+        /// <param name="length">The length, in bytes, of the range within the buffer's data store to be invalidated.</param>
+        [OpenGLSupport(4.3)]
+        public void InvalidateBufferSubData(int offset, int length)
+        {
+            GL.InvalidateBufferSubData(Id, offset, length);
+        }
+
+        /// <summary>
+        /// Map all of a buffer object's data store into the client's address space.
+        /// </summary>
+        /// <param name="access">Specifies the access policy for the mapped data.</param>
+        /// <returns></returns>
+        public MappedBuffer MapBuffer(AccessType access)
+        {
+            Bind();
+
+            IntPtr ptr = GL.MapBuffer(this, (uint)access);
+
+            return new MappedBuffer(this, ptr);
+        }
+        /// <summary>
+        /// Map all or part of a buffer object's data store into the client's address space.
+        /// </summary>
+        /// <param name="offset">Specifies the starting offset within the buffer of the range to be mapped.</param>
+        /// <param name="length">Specifies the length of the range to be mapped.</param>
+        /// <param name="access">Specifies a combination of access flags indicating the desired access to the mapped range.</param>
+        /// <returns></returns>
+        [OpenGLSupport(3.0)]
+        public MappedBuffer MapBufferRange(int offset, int length, MappedAccessFlags access)
+        {
+            if (!access.HasFlag(MappedAccessFlags.Read) &&
+                !access.HasFlag(MappedAccessFlags.Write))
+            {
+                throw new ArgumentException($"{nameof(access)} must contain {MappedAccessFlags.Read} or {MappedAccessFlags.Write}.", $"{nameof(access)}");
+            }
+
+            if (access.HasFlag(MappedAccessFlags.Read) &&
+                (access.HasFlag(MappedAccessFlags.InvalidateRange) ||
+                access.HasFlag(MappedAccessFlags.InvalidateBuffer) ||
+                access.HasFlag(MappedAccessFlags.Unsynchronized)))
+            {
+                throw new ArgumentException($@"{nameof(access)} cannot contain {MappedAccessFlags.Read} and {MappedAccessFlags.InvalidateRange},
+{MappedAccessFlags.InvalidateBuffer} or {MappedAccessFlags.Unsynchronized}.", $"{nameof(access)}");
+            }
+
+            if (access.HasFlag(MappedAccessFlags.FlushExplicit) &&
+                !access.HasFlag(MappedAccessFlags.Write))
+            {
+                throw new ArgumentException($"{nameof(access)} must contain {MappedAccessFlags.Write} when including {MappedAccessFlags.FlushExplicit} flag.", $"{nameof(access)}");
+            }
+
+            Bind();
+
+            IntPtr ptr = GL.MapBufferRange(this, offset, length, (uint)access);
+
+            return new MappedBuffer(this, ptr);
+        }
+
+        /// <summary>
+        /// Release the mapping of a buffer object's data store into the client's address space.
+        /// </summary>
+        [OpenGLSupport(1.5)]
+        public void UnmapBuffer()
+        {
+            if (!Properties.Mapped)
+            {
+                throw new BufferException(this, "The buffer is already unmapped.");
+            }
+
+            Bind();
+
+            GL.UnmapBuffer(this);
         }
     }
 }
