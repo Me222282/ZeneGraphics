@@ -29,7 +29,7 @@ namespace Zene.Graphics.Base
 
         public uint Id { get; }
 
-        public TextureFormat InternalFormat { get; private set; }
+        public TextureFormat InternalFormat { get; protected set; }
 
         public TexRenProperties Properties { get; }
 

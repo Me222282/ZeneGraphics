@@ -9,10 +9,10 @@
         /// <param name="width">Specifies the width of the renderbuffer, in pixels.</param>
         /// <param name="height">Specifies the height of the renderbuffer, in pixels.</param>
         [OpenGLSupport(3.0)]
-        public static void RenderbufferStorage(this IRenderbuffer renderbuffer, TextureFormat intFormat, int width, int height)
+        public static void RenderbufferStorage(this IRenderbuffer renderbuffer, int width, int height)
         {
             renderbuffer.Bind();
-            GL.RenderbufferStorage(renderbuffer, (uint)intFormat, width, height);
+            GL.RenderbufferStorage(renderbuffer, (uint)renderbuffer.InternalFormat, width, height);
         }
         /// <summary>
         /// Establish data storage, format, dimensions and sample count of a renderbuffer object's image.
@@ -21,10 +21,10 @@
         /// <param name="width">Specifies the width of the renderbuffer, in pixels.</param>
         /// <param name="height">Specifies the height of the renderbuffer, in pixels.</param>
         [OpenGLSupport(3.0)]
-        public static void RenderbufferStorageMultisample(this IRenderbuffer renderbuffer, TextureFormat intFormat, int samples, int width, int height)
+        public static void RenderbufferStorageMultisample(this IRenderbuffer renderbuffer, int samples, int width, int height)
         {
             renderbuffer.Bind();
-            GL.RenderbufferStorageMultisample(renderbuffer, samples, (uint)intFormat, width, height);
+            GL.RenderbufferStorageMultisample(renderbuffer, samples, (uint)renderbuffer.InternalFormat, width, height);
         }
 
         //

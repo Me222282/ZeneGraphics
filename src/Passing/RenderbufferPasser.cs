@@ -45,18 +45,12 @@ namespace Zene.Graphics.Passing
         /// Returns a new <see cref="RenderbufferGL"/> equivalent for the data this renderbuffer contains.
         /// </summary>
         /// <returns></returns>
-        public RenderbufferGL Pass()
-        {
-            return new RenderbufferGL(Id, InternalFormat);
-        }
+        public Renderbuffer Pass() => new Renderbuffer(Id, InternalFormat);
 
         /// <summary>
         /// Returns a new <see cref="RenderbufferGL"/> equivalent for the data provided.
         /// </summary>
         /// <returns></returns>
-        public static RenderbufferGL Pass(uint id, TextureFormat format)
-        {
-            return new RenderbufferGL(id, format);
-        }
+        public static Renderbuffer Pass(uint id, TextureFormat format) => new Renderbuffer(Id, InternalFormat);
     }
 }

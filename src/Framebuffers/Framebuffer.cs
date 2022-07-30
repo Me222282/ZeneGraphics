@@ -390,7 +390,7 @@ namespace Zene.Graphics
             // Renderbuffer
             IRenderbuffer renderbuffer = (IRenderbuffer)_depth;
 
-            renderbuffer.RenderbufferStorage(renderbuffer.InternalFormat, width, height);
+            renderbuffer.RenderbufferStorage(width, height);
             renderbuffer.Unbind();
             return;
         }

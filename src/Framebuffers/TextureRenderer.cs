@@ -1,6 +1,5 @@
 ﻿using System;
 using Zene.Graphics.Base;
-using Zene.Graphics.Base.Extensions;
 using Zene.Structs;
 
 namespace Zene.Graphics
@@ -84,7 +83,7 @@ namespace Zene.Graphics
 
         private readonly Texture2D[] _colourAttachs;
         private Texture2D _depthTex;
-        private RenderbufferGL _depthRen;
+        private Renderbuffer _depthRen;
 
         /// <summary>
         /// The clear colour that is used when <see cref="Clear(BufferBit)"/> is called.
@@ -180,8 +179,8 @@ namespace Zene.Graphics
                 return;
             }
 
-            RenderbufferGL renderbuffer = new RenderbufferGL();
-            renderbuffer.RenderbufferStorage(intFormat, _targetWidth, _targetHeight);
+            Renderbuffer renderbuffer = new Renderbuffer(intFormat);
+            renderbuffer.CreateStorage(_targetWidth, _targetHeight);
 
             FramebufferRenderbuffer(renderbuffer,
                 // The internal format contains a stencil attachment
@@ -212,7 +211,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public IRenderbuffer DepthRenderbuffer => _depthRen;
+        public Renderbuffer DepthRenderbuffer => _depthRen;
 
         /// <summary>
         /// Removes a specific attachment.
@@ -279,7 +278,7 @@ namespace Zene.Graphics
                     // Make sure texture exists
                     if (texture != null)
                     {
-                        texture.TexImage2D(0, _targetWidth, _targetHeight, BaseFormat.Rgb, texture.DataType, IntPtr.Zero);
+                        texture.SetData(0, _targetWidth, _targetHeight, BaseFormat.Rgb, GLArray<byte>.Empty);
                     }
                 }
                 // Unbind texture
@@ -288,14 +287,14 @@ namespace Zene.Graphics
                 // Depth attachment
                 if (_depthTex != null)
                 {
-                    _depthTex.TexImage2D(0, _targetWidth, _targetHeight, BaseFormat.DepthComponent, _depthTex.DataType, IntPtr.Zero);
+                    _depthTex.SetData(0, _targetWidth, _targetHeight, BaseFormat.Rgb, GLArray<byte>.Empty);
                     _depthTex.Unbind();
                     return;
                 }
 
                 if (_depthRen != null)
                 {
-                    _depthRen.RenderbufferStorage(_depthRen.InternalFormat, _targetWidth, _targetHeight);
+                    _depthRen.CreateStorage(_targetWidth, _targetHeight);
                     _depthRen.Unbind();
                     return;
                 }

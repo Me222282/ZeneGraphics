@@ -1,6 +1,5 @@
 ﻿using System;
 using Zene.Graphics.Base;
-using Zene.Graphics.Base.Extensions;
 using Zene.Structs;
 
 namespace Zene.Graphics
@@ -79,7 +78,7 @@ namespace Zene.Graphics
 
         private readonly Texture2DMultisample[] _colourAttachs;
         private Texture2DMultisample _depthTex;
-        private RenderbufferGL _depthRen;
+        private Renderbuffer _depthRen;
 
         /// <summary>
         /// The clear colour that is used when <see cref="Clear(BufferBit)"/> is called.
@@ -172,8 +171,8 @@ namespace Zene.Graphics
                 return;
             }
 
-            RenderbufferGL renderbuffer = new RenderbufferGL();
-            renderbuffer.RenderbufferStorageMultisample(intFormat, Samples, _targetWidth, _targetHeight);
+            Renderbuffer renderbuffer = new Renderbuffer(intFormat);
+            renderbuffer.CreateStorage(Samples, _targetWidth, _targetHeight);
 
             FramebufferRenderbuffer(renderbuffer,
                 // The internal format contains a stencil attachment
@@ -204,7 +203,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <returns></returns>
         [OpenGLSupport(3.2)]
-        public IRenderbuffer DepthRenderbuffer => _depthRen;
+        public Renderbuffer DepthRenderbuffer => _depthRen;
 
         /// <summary>
         /// Removes a specific attachment.
@@ -287,7 +286,7 @@ namespace Zene.Graphics
 
                 if (_depthRen != null)
                 {
-                    _depthRen.RenderbufferStorageMultisample(_depthRen.InternalFormat, Samples, _targetWidth, _targetHeight);
+                    _depthRen.CreateStorage(Samples, _targetWidth, _targetHeight);
                     _depthRen.Unbind();
                     return;
                 }
