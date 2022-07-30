@@ -58,21 +58,21 @@ namespace Zene.Graphics.Passing
         }
 
         /// <summary>
-        /// Returns a new <see cref="FrameBufferGL"/> equivalent for the data this framebuffer contains.
+        /// Returns a new <see cref="FramebufferGL"/> equivalent for the data this framebuffer contains.
         /// </summary>
         /// <returns></returns>
-        public FrameBufferGL Pass()
+        public FramebufferGL Pass()
         {
-            return new FrameBufferGL(Id);
+            return new FramebufferGL(Id);
         }
 
         /// <summary>
-        /// Returns a new <see cref="FrameBufferGL"/> equivalent for the data provided.
+        /// Returns a new <see cref="FramebufferGL"/> equivalent for the data provided.
         /// </summary>
         /// <returns></returns>
-        public static FrameBufferGL Pass(uint id)
+        public static FramebufferGL Pass(uint id)
         {
-            return new FrameBufferGL(id);
+            return new FramebufferGL(id);
         }
 
         public void Clear(BufferBit buffer)

@@ -2,7 +2,7 @@
 
 namespace Zene.Graphics.Base
 {
-    public unsafe sealed class BufferGL : IBuffer
+    public unsafe class BufferGL : IBuffer
     {
         public BufferGL()
         {
@@ -29,10 +29,17 @@ namespace Zene.Graphics.Base
         {
             if (_disposed) { return; }
 
-            GL.DeleteBuffer(Id);
+            Dispose(true);
 
             _disposed = true;
             GC.SuppressFinalize(this);
+        }
+        protected virtual void Dispose(bool dispose)
+        {
+            if (dispose)
+            {
+                GL.DeleteBuffer(Id);
+            }
         }
 
         public void Unbind()
@@ -61,7 +68,7 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Bind a buffer to be referenced as parameters for draw calls
         /// </summary>
-        public void BindIndirectDraw()
+        protected void BindIndirectDraw()
         {
             if (this.Bound(BufferTarget.DrawIndirect)) { return; }
 
@@ -73,7 +80,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="index">Specify the index of the binding point within the array.</param>
         [OpenGLSupport(3.0)]
-        public void BindBase(uint index)
+        protected void BindBase(uint index)
         {
             if (Target != BufferTarget.AtomicCounter ||
                 Target != BufferTarget.TransformFeedback ||
@@ -92,7 +99,7 @@ namespace Zene.Graphics.Base
         /// <param name="offset">The starting offset in basic machine units into the buffer object.</param>
         /// <param name="size">The amount of data in machine units that can be read from the buffer object while used as an indexed target.</param>
         [OpenGLSupport(3.0)]
-        public void BindBase(uint index, int offset, int size)
+        protected void BindBase(uint index, int offset, int size)
         {
             if (Target != BufferTarget.AtomicCounter ||
                 Target != BufferTarget.TransformFeedback ||
@@ -111,7 +118,7 @@ namespace Zene.Graphics.Base
         /// <typeparam name="T"></typeparam>
         /// <param name="data">Specifies the array of data that will be copied into the data store for initialization.</param>
         /// <param name="usage">Specifies the expected usage pattern of the data store.</param>
-        public void BufferData<T>(T[] data, BufferUsage usage) where T : unmanaged
+        protected void BufferData<T>(T[] data, BufferUsage usage) where T : unmanaged
         {
             if (usage.IsStorageUsage())
             {
@@ -133,7 +140,7 @@ namespace Zene.Graphics.Base
         /// <typeparam name="T"></typeparam>
         /// <param name="data">Specifies the array of data that will be copied into the data store for initialization.</param>
         /// <param name="usage">Specifies the expected usage pattern of the data store.</param>
-        public void BufferData<T>(GLArray<T> data, BufferUsage usage) where T : unmanaged
+        protected void BufferData<T>(GLArray<T> data, BufferUsage usage) where T : unmanaged
         {
             if (usage.IsStorageUsage())
             {
@@ -152,7 +159,7 @@ namespace Zene.Graphics.Base
         /// <param name="size">Specifies the size in bytes of the buffer object's new data store.</param>
         /// <param name="data">Specifies a pointer to data that will be copied into the data store for initialization.</param>
         /// <param name="usage">Specifies the expected usage pattern of the data store.</param>
-        public void BufferData(int size, IntPtr data, BufferUsage usage)
+        protected void BufferData(int size, IntPtr data, BufferUsage usage)
         {
             if (usage.IsStorageUsage())
             {
@@ -172,7 +179,7 @@ namespace Zene.Graphics.Base
         /// <param name="length">Specifies the size of the array to be the buffer object's new data store.</param>
         /// <param name="data">Specifies a pointer to data that will be copied into the data store for initialization.</param>
         /// <param name="usage">Specifies the expected usage pattern of the data store.</param>
-        public void BufferData<T>(int length, T* data, BufferUsage usage) where T : unmanaged
+        protected void BufferData<T>(int length, T* data, BufferUsage usage) where T : unmanaged
         {
             if (usage.IsStorageUsage())
             {
@@ -193,7 +200,7 @@ namespace Zene.Graphics.Base
         /// <param name="data">Specifies the array of data that will be copied into the data store for initialization.</param>
         /// <param name="usage">Specifies the expected usage pattern of the data store.</param>
         [OpenGLSupport(4.4)]
-        public void BufferStorage<T>(T[] data, BufferUsage usage) where T : unmanaged
+        protected void BufferStorage<T>(T[] data, BufferUsage usage) where T : unmanaged
         {
             if (!usage.IsStorageUsage())
             {
@@ -216,7 +223,7 @@ namespace Zene.Graphics.Base
         /// <param name="data">Specifies the array of data that will be copied into the data store for initialization.</param>
         /// <param name="usage">Specifies the expected usage pattern of the data store.</param>
         [OpenGLSupport(4.4)]
-        public void BufferStorage<T>(GLArray<T> data, BufferUsage usage) where T : unmanaged
+        protected void BufferStorage<T>(GLArray<T> data, BufferUsage usage) where T : unmanaged
         {
             if (!usage.IsStorageUsage())
             {
@@ -236,7 +243,7 @@ namespace Zene.Graphics.Base
         /// <param name="data">Specifies a pointer to data that will be copied into the data store for initialization.</param>
         /// <param name="usage">Specifies the expected usage pattern of the data store.</param>
         [OpenGLSupport(4.4)]
-        public void BufferStorage(int size, IntPtr data, BufferUsage usage)
+        protected void BufferStorage(int size, IntPtr data, BufferUsage usage)
         {
             if (!usage.IsStorageUsage())
             {
@@ -257,7 +264,7 @@ namespace Zene.Graphics.Base
         /// <param name="data">Specifies a pointer to data that will be copied into the data store for initialization.</param>
         /// <param name="usage">Specifies the expected usage pattern of the data store.</param>
         [OpenGLSupport(4.4)]
-        public void BufferStorage<T>(int length, T* data, BufferUsage usage) where T : unmanaged
+        protected void BufferStorage<T>(int length, T* data, BufferUsage usage) where T : unmanaged
         {
             if (!usage.IsStorageUsage())
             {
@@ -277,7 +284,7 @@ namespace Zene.Graphics.Base
         /// <typeparam name="T"></typeparam>
         /// <param name="offset">Specifies the offset into the buffer object's data store where data replacement will begin, measured in <typeparamref name="T"/>.</param>
         /// <param name="data">Specifies the array of data that will be copied into the data store.</param>
-        public void BufferSubData<T>(int offset, T[] data) where T : unmanaged
+        protected void BufferSubData<T>(int offset, T[] data) where T : unmanaged
         {
             Bind();
 
@@ -292,7 +299,7 @@ namespace Zene.Graphics.Base
         /// <typeparam name="T"></typeparam>
         /// <param name="offset">Specifies the offset into the buffer object's data store where data replacement will begin, measured in <typeparamref name="T"/>.</param>
         /// <param name="data">Specifies the array of data that will be copied into the data store.</param>
-        public void BufferSubData<T>(int offset, GLArray<T> data) where T : unmanaged
+        protected void BufferSubData<T>(int offset, GLArray<T> data) where T : unmanaged
         {
             Bind();
 
@@ -304,7 +311,7 @@ namespace Zene.Graphics.Base
         /// <param name="offset">Specifies the offset into the buffer object's data store where data replacement will begin, measured in bytes.</param>
         /// <param name="size">Specifies the size in bytes of the data store region being replaced.</param>
         /// <param name="data">Specifies a pointer to the new data that will be copied into the data store.</param>
-        public void BufferSubData(int offset, int size, IntPtr data)
+        protected void BufferSubData(int offset, int size, IntPtr data)
         {
             Bind();
 
@@ -317,7 +324,7 @@ namespace Zene.Graphics.Base
         /// <param name="offset">Specifies the offset into the buffer object's data store where data replacement will begin, measured in <typeparamref name="T"/>.</param>
         /// <param name="length">Specifies the size of the array the data store region being replaced.</param>
         /// <param name="data">Specifies a pointer to the new data that will be copied into the data store.</param>
-        public void BufferSubData<T>(int offset, int length, T* data) where T : unmanaged
+        protected void BufferSubData<T>(int offset, int length, T* data) where T : unmanaged
         {
             Bind();
 
@@ -333,7 +340,7 @@ namespace Zene.Graphics.Base
         /// <param name="type">The type of data in <paramref name="value"/>.</param>
         /// <param name="value">The data to be replicated into the buffer's data store.</param>
         [OpenGLSupport(4.3)]
-        public void ClearBufferData<T>(TextureFormat internalFormat, BaseFormat format, TextureData type, T value) where T : unmanaged 
+        protected void ClearBufferData<T>(TextureFormat internalFormat, BaseFormat format, TextureData type, T value) where T : unmanaged 
         {
             Bind();
 
@@ -350,7 +357,7 @@ namespace Zene.Graphics.Base
         /// <param name="type">The type of data in <paramref name="value"/>.</param>
         /// <param name="value">The data to be replicated into the buffer's data store.</param>
         [OpenGLSupport(4.3)]
-        public void ClearBufferSubData<T>(TextureFormat internalFormat, int offset, int size, BaseFormat format, TextureData type, T value) where T : unmanaged
+        protected void ClearBufferSubData<T>(TextureFormat internalFormat, int offset, int size, BaseFormat format, TextureData type, T value) where T : unmanaged
         {
             Bind();
 
@@ -364,7 +371,7 @@ namespace Zene.Graphics.Base
         /// <param name="srcOffset">Specifies the offset, in basic machine units, within the data store of the source buffer object at which data will be read.</param>
         /// <param name="destOffset">Specifies the offset, in basic machine units, within the data store of the destination buffer object at which data will be written.</param>
         /// <param name="size">Specifies the size, in basic machine units, of the data to be copied from the source buffer object to the destination buffer object.</param>
-        public void CopyBufferSubData(IBuffer dest, int srcOffset, int destOffset, int size)
+        protected void CopyBufferSubData(IBuffer dest, int srcOffset, int destOffset, int size)
         {
             BufferTarget srcTarget = BindRead();
             BufferTarget destTarget = dest.BindWrite();
@@ -378,7 +385,7 @@ namespace Zene.Graphics.Base
         /// <param name="mode">Specifies what kind of primitives to render.</param>
         /// <param name="first">Specifies the starting index in the enabled arrays.</param>
         /// <param name="size">Specifies the number of vertices to be rendered.</param>
-        public void DrawArrays(DrawMode mode, int first, int size)
+        protected void DrawArrays(DrawMode mode, int first, int size)
         {
             if (Target != BufferTarget.Array)
             {
@@ -398,7 +405,7 @@ namespace Zene.Graphics.Base
         /// <param name="first"></param>
         /// <param name="baseInstance"></param>
         [OpenGLSupport(4.0)]
-        public void DrawArraysIndirect(DrawMode mode, uint count, uint primCount, uint first, uint baseInstance)
+        protected void DrawArraysIndirect(DrawMode mode, uint count, uint primCount, uint first, uint baseInstance)
         {
             if (Target != BufferTarget.Array)
             {
@@ -425,7 +432,7 @@ namespace Zene.Graphics.Base
         /// <param name="paramSource">The <see cref="IBuffer"/> that contains the parameter data.</param>
         /// <param name="offset">The offset into <paramref name="paramSource"/> where the parameters should be sourced from.</param>
         [OpenGLSupport(4.0)]
-        public void DrawArraysIndirect(DrawMode mode, IBuffer paramSource, int offset)
+        protected void DrawArraysIndirect(DrawMode mode, IBuffer paramSource, int offset)
         {
             if (Target != BufferTarget.Array)
             {
@@ -450,7 +457,7 @@ namespace Zene.Graphics.Base
         /// <param name="size">Specifies the number of vertices to be rendered.</param>
         /// <param name="instances">Specifies the number of instances of the specified range of vertices to be rendered.</param>
         [OpenGLSupport(3.1)]
-        public void DrawArraysInstanced(DrawMode mode, int first, int size, int instances)
+        protected void DrawArraysInstanced(DrawMode mode, int first, int size, int instances)
         {
             if (Target != BufferTarget.Array)
             {
@@ -470,7 +477,7 @@ namespace Zene.Graphics.Base
         /// <param name="instances">Specifies the number of instances of the specified range of vertices to be rendered.</param>
         /// <param name="baseInstance">Specifies the base instance for use in fetching instanced vertex attributes.</param>
         [OpenGLSupport(4.2)]
-        public void DrawArraysInstancedBaseInstance(DrawMode mode, int first, int size, int instances, uint baseInstance)
+        protected void DrawArraysInstancedBaseInstance(DrawMode mode, int first, int size, int instances, uint baseInstance)
         {
             if (Target != BufferTarget.Array)
             {
@@ -489,7 +496,7 @@ namespace Zene.Graphics.Base
         /// <param name="count">Specifies the number of elements to be rendered.</param>
         /// <param name="type">Specifies the type of the values in this element buffer.</param>
         /// <param name="offset">Specifies an offset of the first index in the array of this element buffer.</param>
-        public void DrawElements(DrawMode mode, int count, IndexType type, int offset)
+        protected void DrawElements(DrawMode mode, int count, IndexType type, int offset)
         {
             if (Target != BufferTarget.ElementArray)
             {
@@ -509,7 +516,7 @@ namespace Zene.Graphics.Base
         /// <param name="offset">Specifies an offset of the first index in the array of this element buffer.</param>
         /// <param name="baseVertex">Specifies a constant that should be added to each element of the array when being referenced.</param>
         [OpenGLSupport(3.2)]
-        public void DrawElementsBaseVertex(DrawMode mode, int count, IndexType type, int offset, int baseVertex)
+        protected void DrawElementsBaseVertex(DrawMode mode, int count, IndexType type, int offset, int baseVertex)
         {
             if (Target != BufferTarget.ElementArray)
             {
@@ -530,7 +537,7 @@ namespace Zene.Graphics.Base
         /// <param name="first"></param>
         /// <param name="baseInstance"></param>
         [OpenGLSupport(4.0)]
-        public void DrawElementsIndirect(DrawMode mode, IndexType type, uint count, uint primCount, uint first, uint baseInstance)
+        protected void DrawElementsIndirect(DrawMode mode, IndexType type, uint count, uint primCount, uint first, uint baseInstance)
         {
             if (Target != BufferTarget.ElementArray)
             {
@@ -558,7 +565,7 @@ namespace Zene.Graphics.Base
         /// <param name="paramSource">The <see cref="IBuffer"/> that contains the parameter data.</param>
         /// <param name="offset">The offset into <paramref name="paramSource"/> where the parameters should be sourced from.</param>
         [OpenGLSupport(4.0)]
-        public void DrawElementsIndirect(DrawMode mode, IndexType type, IBuffer paramSource, int offset)
+        protected void DrawElementsIndirect(DrawMode mode, IndexType type, IBuffer paramSource, int offset)
         {
             if (Target != BufferTarget.Array)
             {
@@ -584,7 +591,7 @@ namespace Zene.Graphics.Base
         /// <param name="offset">Specifies an offset of the first index in the array of this element buffer.</param>
         /// <param name="instances">Specifies the number of instances to render.</param>
         [OpenGLSupport(3.1)]
-        public void DrawElementsInstanced(DrawMode mode, int count, IndexType type, int offset, int instances)
+        protected void DrawElementsInstanced(DrawMode mode, int count, IndexType type, int offset, int instances)
         {
             if (Target != BufferTarget.ElementArray)
             {
@@ -605,7 +612,7 @@ namespace Zene.Graphics.Base
         /// <param name="instances">Specifies the number of instances to render.</param>
         /// <param name="baseInstance">Specifies the base instance for use in fetching instanced vertex attributes.</param>
         [OpenGLSupport(4.2)]
-        public void DrawElementsInstancedBaseInstance(DrawMode mode, int count, IndexType type, int offset, int instances, uint baseInstance)
+        protected void DrawElementsInstancedBaseInstance(DrawMode mode, int count, IndexType type, int offset, int instances, uint baseInstance)
         {
             if (Target != BufferTarget.ElementArray)
             {
@@ -626,7 +633,7 @@ namespace Zene.Graphics.Base
         /// <param name="instances">Specifies the number of instances to render.</param>
         /// <param name="baseVertex">Specifies a constant that should be added to each element of the array when being referenced.</param>
         [OpenGLSupport(3.2)]
-        public void DrawElementsInstancedBaseVertex(DrawMode mode, int count, IndexType type, int offset, int instances, int baseVertex)
+        protected void DrawElementsInstancedBaseVertex(DrawMode mode, int count, IndexType type, int offset, int instances, int baseVertex)
         {
             if (Target != BufferTarget.ElementArray)
             {
@@ -648,7 +655,7 @@ namespace Zene.Graphics.Base
         /// <param name="baseVertex">Specifies a constant that should be added to each element of the array when being referenced.</param>
         /// <param name="baseInstance">Specifies the base instance for use in fetching instanced vertex attributes.</param>
         [OpenGLSupport(3.2)]
-        public void DrawElementsInstancedBaseVertexBaseInstance(DrawMode mode, int count, IndexType type, int offset, int instances, int baseVertex, uint baseInstance)
+        protected void DrawElementsInstancedBaseVertexBaseInstance(DrawMode mode, int count, IndexType type, int offset, int instances, int baseVertex, uint baseInstance)
         {
             if (Target != BufferTarget.ElementArray)
             {
@@ -669,7 +676,7 @@ namespace Zene.Graphics.Base
         /// <param name="count">Specifies the number of elements to be rendered.</param>
         /// <param name="type">Specifies the type of the values in this element buffer.</param>
         /// <param name="offset">Specifies an offset of the first index in the array of this element buffer.</param>
-        public void DrawRangeElements(DrawMode mode, uint start, uint end, int count, IndexType type, int offset)
+        protected void DrawRangeElements(DrawMode mode, uint start, uint end, int count, IndexType type, int offset)
         {
             if (Target != BufferTarget.ElementArray)
             {
@@ -691,7 +698,7 @@ namespace Zene.Graphics.Base
         /// <param name="offset">Specifies an offset of the first index in the array of this element buffer.</param>
         /// <param name="baseVertex">Specifies a constant that should be added to each element of the array when being referenced.</param>
         [OpenGLSupport(3.2)]
-        public void DrawRangeElementsBaseVertex(DrawMode mode, uint start, uint end, int count, IndexType type, int offset, int baseVertex)
+        protected void DrawRangeElementsBaseVertex(DrawMode mode, uint start, uint end, int count, IndexType type, int offset, int baseVertex)
         {
             if (Target != BufferTarget.ElementArray)
             {
@@ -709,7 +716,7 @@ namespace Zene.Graphics.Base
         /// <param name="offset">Specifies the start of the buffer subrange, in basic machine units.</param>
         /// <param name="length">Specifies the length of the buffer subrange, in basic machine units.</param>
         [OpenGLSupport(3.0)]
-        public void FlushMappedBufferRange(int offset, int length)
+        protected void FlushMappedBufferRange(int offset, int length)
         {
             if (!Properties.Mapped)
             {
@@ -736,7 +743,7 @@ namespace Zene.Graphics.Base
         /// <param name="offset">Specifies the offset into the buffer object's data store from which data will be returned, measured in sizeof(<typeparamref name="T"/>).</param>
         /// <param name="size">Specifies the size in sizeof(<typeparamref name="T"/>) of the data store region being returned.</param>
         /// <returns></returns>
-        public T[] GetBufferSubData<T>(int offset, int size) where T : unmanaged
+        protected T[] GetBufferSubData<T>(int offset, int size) where T : unmanaged
         {
             Bind();
 
@@ -756,7 +763,7 @@ namespace Zene.Graphics.Base
         /// <param name="offset">Specifies the offset into the buffer object's data store from which data will be returned, measured in bytes.</param>
         /// <param name="size">Specifies the size in sizeof(<typeparamref name="T"/>) of the data store region being returned.</param>
         /// <returns></returns>
-        public T[] GetBufferSubDataF<T>(int offset, int size) where T : unmanaged
+        protected T[] GetBufferSubDataF<T>(int offset, int size) where T : unmanaged
         {
             Bind();
 
@@ -779,7 +786,7 @@ namespace Zene.Graphics.Base
         /// <param name="offset">Specifies the offset into the buffer object's data store from which data will be returned, measured in sizeof(<typeparamref name="T"/>).</param>
         /// <param name="size">Specifies the size in sizeof(<typeparamref name="T"/>) of the data store region being returned.</param>
         /// <returns></returns>
-        public GLArray<T> GetBufferSubDataA<T>(int offset, int size) where T : unmanaged
+        protected GLArray<T> GetBufferSubDataA<T>(int offset, int size) where T : unmanaged
         {
             Bind();
 
@@ -796,7 +803,7 @@ namespace Zene.Graphics.Base
         /// <param name="offset">Specifies the offset into the buffer object's data store from which data will be returned, measured in bytes.</param>
         /// <param name="size">Specifies the size in sizeof(<typeparamref name="T"/>) of the data store region being returned.</param>
         /// <returns></returns>
-        public GLArray<T> GetBufferSubDataAF<T>(int offset, int size) where T : unmanaged
+        protected GLArray<T> GetBufferSubDataAF<T>(int offset, int size) where T : unmanaged
         {
             Bind();
 
@@ -811,7 +818,7 @@ namespace Zene.Graphics.Base
         /// Invalidate the content of a buffer object's data store.
         /// </summary>
         [OpenGLSupport(4.3)]
-        public void InvalidateBufferData() => GL.InvalidateBufferData(Id);
+        protected void InvalidateBufferData() => GL.InvalidateBufferData(Id);
 
         /// <summary>
         /// Invalidate a region of a buffer object's data store.
@@ -819,7 +826,7 @@ namespace Zene.Graphics.Base
         /// <param name="offset">The offset, in bytes, within the buffer's data store of the start of the range to be invalidated.</param>
         /// <param name="length">The length, in bytes, of the range within the buffer's data store to be invalidated.</param>
         [OpenGLSupport(4.3)]
-        public void InvalidateBufferSubData(int offset, int length)
+        protected void InvalidateBufferSubData(int offset, int length)
         {
             GL.InvalidateBufferSubData(Id, offset, length);
         }
@@ -829,7 +836,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="access">Specifies the access policy for the mapped data.</param>
         /// <returns></returns>
-        public MappedBuffer MapBuffer(AccessType access)
+        protected MappedBuffer MapBuffer(AccessType access)
         {
             Bind();
 
@@ -845,7 +852,7 @@ namespace Zene.Graphics.Base
         /// <param name="access">Specifies a combination of access flags indicating the desired access to the mapped range.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public MappedBuffer MapBufferRange(int offset, int length, MappedAccessFlags access)
+        protected MappedBuffer MapBufferRange(int offset, int length, MappedAccessFlags access)
         {
             if (!access.HasFlag(MappedAccessFlags.Read) &&
                 !access.HasFlag(MappedAccessFlags.Write))
@@ -879,7 +886,7 @@ namespace Zene.Graphics.Base
         /// Release the mapping of a buffer object's data store into the client's address space.
         /// </summary>
         [OpenGLSupport(1.5)]
-        public void UnmapBuffer()
+        protected void UnmapBuffer()
         {
             if (!Properties.Mapped)
             {

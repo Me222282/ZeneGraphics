@@ -3,7 +3,7 @@
 namespace Zene.Graphics.Base.Extensions
 {
     [OpenGLSupport(3.0)]
-    public static unsafe class FrameBufferOpenGL
+    public static unsafe class FramebufferOpenGL
     {
         /*
         /// <summary>

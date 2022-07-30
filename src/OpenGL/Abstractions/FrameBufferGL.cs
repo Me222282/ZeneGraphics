@@ -7,18 +7,18 @@ namespace Zene.Graphics.Base
     /// The most basic implimentation of an OpenGL framebuffer.
     /// </summary>
     [OpenGLSupport(3.0)]
-    public unsafe sealed class FrameBufferGL : IFramebuffer
+    public unsafe class FramebufferGL : IFramebuffer
     {
         /// <summary>
         /// Creats an OpenGL framebuffer object.
         /// </summary>
-        public FrameBufferGL()
+        public FramebufferGL()
         {
             Id = GL.GenFramebuffer();
 
             Properties = new FramebufferProperties(this);
         }
-        internal FrameBufferGL(uint id, bool stereo, bool doubleBuffered, int width, int height)
+        internal FramebufferGL(uint id, bool stereo, bool doubleBuffered, int width, int height)
         {
             Id = id;
 
@@ -30,7 +30,7 @@ namespace Zene.Graphics.Base
                 DoubleBuffered = doubleBuffered
             };
         }
-        internal FrameBufferGL(uint id)
+        internal FramebufferGL(uint id)
         {
             Id = id;
 
@@ -71,10 +71,18 @@ namespace Zene.Graphics.Base
         {
             if (_disposed) { return; }
 
-            GL.DeleteFramebuffer(Id);
+            Dispose(true);
 
             _disposed = true;
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool dispose)
+        {
+            if (dispose)
+            {
+                GL.DeleteFramebuffer(Id);
+            }
         }
 
         [OpenGLSupport(3.0)]
@@ -166,7 +174,7 @@ namespace Zene.Graphics.Base
             }
         }
 
-        public void Clear(BufferBit buffer)
+        public virtual void Clear(BufferBit buffer)
         {
             Bind();
 
@@ -200,7 +208,7 @@ namespace Zene.Graphics.Base
         /// <param name="mask">The bitwise or of the flags indicating which buffers are to be copied.</param>
         /// <param name="filter">Specifies the interpolation to be applied if the image is stretched.</param>
         [OpenGLSupport(3.0)]
-        public void BlitBuffer(IFramebuffer destination, IBox srcBox, IBox dstBox, BufferBit mask, TextureSampling filter)
+        protected void BlitBuffer(IFramebuffer destination, IBox srcBox, IBox dstBox, BufferBit mask, TextureSampling filter)
         {
             if (destination == null)
             {
@@ -232,7 +240,7 @@ namespace Zene.Graphics.Base
         /// <param name="mask">The bitwise or of the flags indicating which buffers are to be copied.</param>
         /// <param name="filter">Specifies the interpolation to be applied if the image is stretched.</param>
         [OpenGLSupport(3.0)]
-        public void BlitBuffer(IFramebuffer destination, int x, int y, int width, int height, int dstX, int dstY, int dstWidth, int dstHeight, BufferBit mask, TextureSampling filter)
+        protected void BlitBuffer(IFramebuffer destination, int x, int y, int width, int height, int dstX, int dstY, int dstWidth, int dstHeight, BufferBit mask, TextureSampling filter)
         {
             if (destination == null)
             {
@@ -251,7 +259,7 @@ namespace Zene.Graphics.Base
         /// Check the completeness status of a framebuffer.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public FrameBufferStatus CheckStatus()
+        protected FrameBufferStatus CheckStatus()
         {
             Bind();
             return (FrameBufferStatus)GL.CheckFramebufferStatus((uint)Binding);
@@ -263,7 +271,7 @@ namespace Zene.Graphics.Base
         /// <param name="renderbuffer">Specifies the renderbuffer object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public void FramebufferRenderbuffer(IRenderbuffer renderbuffer, FrameAttachment attachment)
+        protected void FramebufferRenderbuffer(IRenderbuffer renderbuffer, FrameAttachment attachment)
         {
             Bind();
             GL.FramebufferRenderbuffer(this, (uint)attachment, GLEnum.Renderbuffer, renderbuffer);
@@ -276,7 +284,7 @@ namespace Zene.Graphics.Base
         /// <param name="level">Specifies the mipmap level of the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.2)]
-        public void FramebufferTexture(ITexture texture, int level, FrameAttachment attachment)
+        protected void FramebufferTexture(ITexture texture, int level, FrameAttachment attachment)
         {
             Bind();
             GL.FramebufferTexture(this, (uint)attachment, texture, level);
@@ -288,7 +296,7 @@ namespace Zene.Graphics.Base
         /// <param name="level">Specifies the mipmap level of the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public void FramebufferTexture1D(ITexture texture, int level, FrameAttachment attachment)
+        protected void FramebufferTexture1D(ITexture texture, int level, FrameAttachment attachment)
         {
             Bind();
             GL.FramebufferTexture1D(this, (uint)attachment, GLEnum.Texture1d, texture, level);
@@ -300,7 +308,7 @@ namespace Zene.Graphics.Base
         /// <param name="level">Specifies the mipmap level of the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public void FramebufferTexture2D(CubeMapFace textureTarget, ITexture texture, int level, FrameAttachment attachment)
+        protected void FramebufferTexture2D(CubeMapFace textureTarget, ITexture texture, int level, FrameAttachment attachment)
         {
             Bind();
             GL.FramebufferTexture2D(this, (uint)attachment, (uint)textureTarget, texture, level);
@@ -312,7 +320,7 @@ namespace Zene.Graphics.Base
         /// <param name="level">Specifies the mipmap level of the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public void FramebufferTexture2D(ITexture texture, int level, FrameAttachment attachment)
+        protected void FramebufferTexture2D(ITexture texture, int level, FrameAttachment attachment)
         {
             Bind();
             GL.FramebufferTexture2D(this, (uint)attachment, (uint)texture.Target, texture, level);
@@ -325,7 +333,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         /// <param name="offset">The offset into the 3d texture to be the 2d section to be attached.</param>
         [OpenGLSupport(3.0)]
-        public void FramebufferTexture3D(ITexture texture, int level, FrameAttachment attachment, int offset)
+        protected void FramebufferTexture3D(ITexture texture, int level, FrameAttachment attachment, int offset)
         {
             Bind();
             GL.FramebufferTexture3D(this, (uint)attachment, (uint)texture.Target, texture, level, offset);
@@ -337,7 +345,7 @@ namespace Zene.Graphics.Base
         /// <param name="texture">Specifies the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.2)]
-        public void FramebufferTexture(ITexture texture, FrameAttachment attachment)
+        protected void FramebufferTexture(ITexture texture, FrameAttachment attachment)
         {
             Bind();
             GL.FramebufferTexture(this, (uint)attachment, texture, 0);
@@ -348,7 +356,7 @@ namespace Zene.Graphics.Base
         /// <param name="texture">Specifies the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public void FramebufferTexture1D(ITexture texture, FrameAttachment attachment)
+        protected void FramebufferTexture1D(ITexture texture, FrameAttachment attachment)
         {
             Bind();
             GL.FramebufferTexture1D(this, (uint)attachment, GLEnum.Texture1d, texture, 0);
@@ -359,7 +367,7 @@ namespace Zene.Graphics.Base
         /// <param name="texture">Specifies the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public void FramebufferTexture2D(CubeMapFace textureTarget, ITexture texture, FrameAttachment attachment)
+        protected void FramebufferTexture2D(CubeMapFace textureTarget, ITexture texture, FrameAttachment attachment)
         {
             Bind();
             GL.FramebufferTexture2D(this, (uint)attachment, (uint)textureTarget, texture, 0);
@@ -370,7 +378,7 @@ namespace Zene.Graphics.Base
         /// <param name="texture">Specifies the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public void FramebufferTexture2D(ITexture texture, FrameAttachment attachment)
+        protected void FramebufferTexture2D(ITexture texture, FrameAttachment attachment)
         {
             Bind();
 
@@ -383,7 +391,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         /// <param name="offset">The offset into the 3d texture to be the 2d section to be attached.</param>
         [OpenGLSupport(3.0)]
-        public void FramebufferTexture3D(ITexture texture, FrameAttachment attachment, int offset)
+        protected void FramebufferTexture3D(ITexture texture, FrameAttachment attachment, int offset)
         {
             Bind();
             GL.FramebufferTexture3D(this, (uint)attachment, (uint)texture.Target, texture, 0, offset);
@@ -397,7 +405,7 @@ namespace Zene.Graphics.Base
         /// <param name="layer">Specifies the layer of the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public void FramebufferTextureLayer(ITexture texture, int level, int layer, FrameAttachment attachment)
+        protected void FramebufferTextureLayer(ITexture texture, int level, int layer, FrameAttachment attachment)
         {
             Bind();
             GL.FramebufferTextureLayer(this, (uint)attachment, texture, level, layer);
@@ -409,7 +417,7 @@ namespace Zene.Graphics.Base
         /// <param name="layer">Specifies the layer of the texture object to attach.</param>
         /// <param name="attachment">Specifies the attachment point of the framebuffer.</param>
         [OpenGLSupport(3.0)]
-        public void FramebufferTextureLayer(ITexture texture, int layer, FrameAttachment attachment)
+        protected void FramebufferTextureLayer(ITexture texture, int layer, FrameAttachment attachment)
         {
             Bind();
             GL.FramebufferTextureLayer(this, (uint)attachment, texture, 0, layer);
@@ -420,7 +428,7 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="attachments">Specifies the attachments to be invalidated.</param>
         [OpenGLSupport(4.3)]
-        public void Invalidate(FrameAttachment[] attachments)
+        protected void Invalidate(FrameAttachment[] attachments)
         {
             Bind();
             fixed (void* pointer = &attachments[0])
@@ -437,7 +445,7 @@ namespace Zene.Graphics.Base
         /// <param name="width">Specifies the width of the region to be invalidated.</param>
         /// <param name="height">Specifies the height of the region to be invalidated.</param>
         [OpenGLSupport(4.3)]
-        public void InvalidateSub(FrameAttachment[] attachments, int x, int y, int width, int height)
+        protected void InvalidateSub(FrameAttachment[] attachments, int x, int y, int width, int height)
         {
             Bind();
             fixed (void* pointer = &attachments[0])
@@ -459,7 +467,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public int GetRedSize(FrameAttachment attachment)
+        protected int GetRedSize(FrameAttachment attachment)
         {
             Bind();
             int value = 0;
@@ -478,7 +486,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public int GetGreenSize(FrameAttachment attachment)
+        protected int GetGreenSize(FrameAttachment attachment)
         {
             Bind();
             int value = 0;
@@ -497,7 +505,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public int GetBlueSize(FrameAttachment attachment)
+        protected int GetBlueSize(FrameAttachment attachment)
         {
             Bind();
             int value = 0;
@@ -516,7 +524,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public int GetAlphaSize(FrameAttachment attachment)
+        protected int GetAlphaSize(FrameAttachment attachment)
         {
             Bind();
             int value = 0;
@@ -535,7 +543,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public int GetDepthSize(FrameAttachment attachment)
+        protected int GetDepthSize(FrameAttachment attachment)
         {
             Bind();
             int value = 0;
@@ -554,7 +562,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public int GetStencilSize(FrameAttachment attachment)
+        protected int GetStencilSize(FrameAttachment attachment)
         {
             Bind();
             int value = 0;
@@ -570,7 +578,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public ChannelType GetComponentType(FrameAttachment attachment)
+        protected ChannelType GetComponentType(FrameAttachment attachment)
         {
             Bind();
             int value = 0;
@@ -586,7 +594,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public ColourEncode GetColourEncoding(FrameAttachment attachment)
+        protected ColourEncode GetColourEncoding(FrameAttachment attachment)
         {
             Bind();
             int value = 0;
@@ -605,7 +613,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public AttachType GetObjectType(FrameAttachment attachment)
+        protected AttachType GetObjectType(FrameAttachment attachment)
         {
             Bind();
             int value = 0;
@@ -624,7 +632,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public uint GetObjectId(FrameAttachment attachment)
+        protected uint GetObjectId(FrameAttachment attachment)
         {
             Bind();
             int value = 0;
@@ -643,7 +651,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public int GetTextureLevel(FrameAttachment attachment)
+        protected int GetTextureLevel(FrameAttachment attachment)
         {
             Bind();
             int value = 0;
@@ -662,7 +670,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public CubeMapFace GetTextureCubeMapFace(FrameAttachment attachment)
+        protected CubeMapFace GetTextureCubeMapFace(FrameAttachment attachment)
         {
             Bind();
             int value = 0;
@@ -681,7 +689,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.2)]
-        public bool GetLayered(FrameAttachment attachment)
+        protected bool GetLayered(FrameAttachment attachment)
         {
             Bind();
             int value = 0;
@@ -700,7 +708,7 @@ namespace Zene.Graphics.Base
         /// <param name="attachment">Specifies the attachment of the framebuffer object to query.</param>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public int GetTextureLayer(FrameAttachment attachment)
+        protected int GetTextureLayer(FrameAttachment attachment)
         {
             Bind();
             int value = 0;
@@ -722,7 +730,7 @@ namespace Zene.Graphics.Base
         /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public int GetDefaultWidth()
+        protected int GetDefaultWidth()
         {
             Bind();
             int value = 0;
@@ -740,7 +748,7 @@ namespace Zene.Graphics.Base
         /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public int GetDefaultHeight()
+        protected int GetDefaultHeight()
         {
             Bind();
             int value = 0;
@@ -758,7 +766,7 @@ namespace Zene.Graphics.Base
         /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public int GetDefaultLayers()
+        protected int GetDefaultLayers()
         {
             Bind();
             int value = 0;
@@ -776,7 +784,7 @@ namespace Zene.Graphics.Base
         /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public int GetDefaultSamples()
+        protected int GetDefaultSamples()
         {
             Bind();
             int value = 0;
@@ -794,7 +802,7 @@ namespace Zene.Graphics.Base
         /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public bool GetDefaultFixedSampleLocations()
+        protected bool GetDefaultFixedSampleLocations()
         {
             Bind();
             int value = 0;
@@ -812,7 +820,7 @@ namespace Zene.Graphics.Base
         /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
-        public bool GetDoubleBuffer()
+        protected bool GetDoubleBuffer()
         {
             Bind();
             int value = 0;
@@ -830,7 +838,7 @@ namespace Zene.Graphics.Base
         /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
-        public int GetSamples()
+        protected int GetSamples()
         {
             Bind();
             int value = 0;
@@ -848,7 +856,7 @@ namespace Zene.Graphics.Base
         /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
-        public int GetSampleBuffers()
+        protected int GetSampleBuffers()
         {
             Bind();
             int value = 0;
@@ -866,7 +874,7 @@ namespace Zene.Graphics.Base
         /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
-        public bool GetStereo()
+        protected bool GetStereo()
         {
             Bind();
             int value = 0;
@@ -884,7 +892,7 @@ namespace Zene.Graphics.Base
         /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
-        public BaseFormat GetColourReadFormat()
+        protected BaseFormat GetColourReadFormat()
         {
             Bind();
             int value = 0;
@@ -902,7 +910,7 @@ namespace Zene.Graphics.Base
         /// </remarks>
         /// <returns></returns>
         [OpenGLSupport(4.5)]
-        public TextureData GetColourReadType()
+        protected TextureData GetColourReadType()
         {
             Bind();
             int value = 0;
@@ -922,7 +930,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set to the parameter.</param>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public void SetDefaultWidth(int value)
+        protected void SetDefaultWidth(int value)
         {
             Bind();
             GL.FramebufferParameteri((uint)Binding, GLEnum.FramebufferDefaultWidth, value);
@@ -934,7 +942,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set to the parameter.</param>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public void SetDefaultHeight(int value)
+        protected void SetDefaultHeight(int value)
         {
             Bind();
             GL.FramebufferParameteri((uint)Binding, GLEnum.FramebufferDefaultHeight, value);
@@ -946,7 +954,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set to the parameter.</param>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public void SetDefaultLayers(int value)
+        protected void SetDefaultLayers(int value)
         {
             Bind();
             GL.FramebufferParameteri((uint)Binding, GLEnum.FramebufferDefaultLayers, value);
@@ -958,7 +966,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set to the parameter.</param>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public void SetDefaultSamples(int value)
+        protected void SetDefaultSamples(int value)
         {
             Bind();
             GL.FramebufferParameteri((uint)Binding, GLEnum.FramebufferDefaultSamples, value);
@@ -970,7 +978,7 @@ namespace Zene.Graphics.Base
         /// <param name="value">The value to set to the parameter.</param>
         /// <returns></returns>
         [OpenGLSupport(4.3)]
-        public void SetDefaultFixedSampleLocations(bool value)
+        protected void SetDefaultFixedSampleLocations(bool value)
         {
             Bind();
             GL.FramebufferParameteri((uint)Binding, GLEnum.FramebufferDefaultFixedSampleLocations, value ? 1 : 0);

@@ -9,7 +9,7 @@ namespace Zene.Graphics
     /// <summary>
     /// An object that manges a 2 dimensional texture.
     /// </summary>
-    public class Texture2D : ITexture
+    public class Texture2D : TextureGL
     {
         /// <summary>
         /// Creates a 2 dimensional texture with a set internal format.
@@ -17,28 +17,22 @@ namespace Zene.Graphics
         /// <param name="format">The internal format of the texture.</param>
         /// <param name="dataType">The type of data that is going to be passed to OpenGL.</param>
         public Texture2D(TextureFormat format, TextureData dataType)
+            : base(TextureTarget.Texture2D)
         {
-            _texture = new TextureGL(TextureTarget.Texture2D);
             InternalFormat = format;
             DataType = dataType;
         }
         internal Texture2D(uint id, TextureFormat format, TextureData dataType)
+            : base(id, TextureTarget.Texture2D, format)
         {
-            _texture = new TextureGL(id, TextureTarget.Texture2D, format);
             InternalFormat = format;
             DataType = dataType;
         }
 
-        private readonly TextureGL _texture;
-
-        public TextureTarget Target => TextureTarget.Texture2D;
-
-        public TextureFormat InternalFormat { get; }
-        protected TextureProperties Properties => _texture.Properties;
-        TextureProperties ITexture.Properties => _texture.Properties;
-
-        public uint Id => _texture.Id;
-        public uint ReferanceSlot => _texture.ReferanceSlot;
+        /// <summary>
+        /// The formating of data stored in this texture.
+        /// </summary>
+        public new TextureFormat InternalFormat { get; }
 
         /// <summary>
         /// The type of data being inputed into the texture.
@@ -245,36 +239,13 @@ namespace Zene.Graphics
             }
         }
 
-        public void Bind(uint slot) => _texture.Bind(slot);
-        public void Bind() => _texture.Bind();
         /// <summary>
         /// Binds a specified level of the texture to a texture slot.
         /// </summary>
         /// <param name="slot">The slot to bind to.</param>
         /// <param name="level">The level of the texture.</param>
         /// <param name="access">The access type for the texture.</param>
-        public void Bind(uint slot, int level, AccessType access) => _texture.BindLevel(slot, level, false, 0, access);
-        public void Unbind() => _texture.Unbind();
-
-        private bool _disposed = false;
-        public void Dispose()
-        {
-            if (!_disposed)
-            {
-                Dispose(true);
-
-                _disposed = true;
-
-                GC.SuppressFinalize(this);
-            }
-        }
-        protected virtual void Dispose(bool dispose)
-        {
-            if (dispose)
-            {
-                _texture.Dispose();
-            }
-        }
+        public void Bind(uint slot, int level, AccessType access) => BindLevel(slot, level, false, 0, access);
 
         /// <summary>
         /// Create a texture from <paramref name="data"/>.
@@ -287,7 +258,7 @@ namespace Zene.Graphics
         /// <param name="data">The data to set the texture to.</param>
         public void SetData<T>(int level, int width, int height, BaseFormat inputFormat, GLArray<T> data) where T : unmanaged
         {
-            _texture.TexImage2D(level, InternalFormat, width, height, inputFormat, DataType, data);
+            TexImage2D(level, InternalFormat, width, height, inputFormat, DataType, data);
         }
         /// <summary>
         /// Create a texture from <paramref name="data"/>.
@@ -312,7 +283,7 @@ namespace Zene.Graphics
         /// <param name="data">The data to change the scetion to.</param>
         public void EditData<T>(int level, int x, int y, int width, int height, BaseFormat inputFormat, GLArray<T> data) where T : unmanaged
         {
-            _texture.TexSubImage2D(level, x, y, width, height, inputFormat, DataType, data);
+            TexSubImage2D(level, x, y, width, height, inputFormat, DataType, data);
         }
         /// <summary>
         /// Change the data of a section of the first level of the texture.
@@ -334,7 +305,7 @@ namespace Zene.Graphics
         /// <param name="height">The height of the texture.</param>
         public void CreateStorage(int levels, int width, int height)
         {
-            _texture.TexStorage2D(levels, InternalFormat, width, height);
+            TexStorage2D(levels, InternalFormat, width, height);
         }
         /// <summary>
         /// Create an empy texture.
@@ -351,7 +322,7 @@ namespace Zene.Graphics
         /// <param name="outputFormat">The format of the output data.</param>
         public GLArray<T> GetData<T>(int level, BaseFormat outputFormat) where T : unmanaged
         {
-            return _texture.GetTexImage<T>(level, outputFormat, DataType);
+            return GetTexImage<T>(level, outputFormat, DataType);
         }
         /// <summary>
         /// Returns the data stored in the first level of this texture.
@@ -372,7 +343,7 @@ namespace Zene.Graphics
         /// <param name="outputFormat">The format of the output data. Can be ignored if getting compressed data.</param>
         public GLArray<T> GetDataSection<T>(int level, int x, int y, int width, int height, BaseFormat outputFormat) where T : unmanaged
         {
-            return _texture.GetTextureSubImage<T>(level, x, y, 0, width, height, 1, outputFormat, DataType);
+            return GetTextureSubImage<T>(level, x, y, 0, width, height, 1, outputFormat, DataType);
         }
         /// <summary>
         /// Returns a section of the data stored in this texture.
@@ -401,7 +372,7 @@ namespace Zene.Graphics
         /// <param name="y">The y offset to write to.</param>
         public void CopyTexture(ITexture source, int srcLevel, int srcX, int srcY, int srcZ, int width, int height, int level, int x, int y)
         {
-            _texture.CopyImageSubData(source, srcLevel, srcX, srcY, srcZ, width, height, 1, level, x, y, 0);
+            CopyImageSubData(source, srcLevel, srcX, srcY, srcZ, width, height, 1, level, x, y, 0);
         }
         /// <summary>
         /// Copy data from <paramref name="source"/>.
@@ -430,7 +401,7 @@ namespace Zene.Graphics
         /// <param name="y">The y offset to write to.</param>
         public void CopyTexture(Texture2D source, int srcLevel, int srcX, int srcY, int width, int height, int level, int x, int y)
         {
-            _texture.CopyImageSubData(source, srcLevel, srcX, srcY, 0, width, height, 1, level, x, y, 0);
+            CopyImageSubData(source, srcLevel, srcX, srcY, 0, width, height, 1, level, x, y, 0);
         }
         /// <summary>
         /// Copy data from <paramref name="source"/>.
@@ -450,7 +421,7 @@ namespace Zene.Graphics
         /// </summary>
         public void CreateMipMap()
         {
-            _texture.GenerateMipmap();
+            GenerateMipmap();
         }
 
         public static Texture2D Create(GLArray<Colour> data, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap)

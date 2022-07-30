@@ -6,7 +6,7 @@ namespace Zene.Graphics.Base
     /// The most basic implimentation of an OpenGL renderbuffer.
     /// </summary>
     [OpenGLSupport(3.0)]
-    public unsafe sealed class RenderbufferGL : IRenderbuffer
+    public unsafe class RenderbufferGL : IRenderbuffer
     {
         /// <summary>
         /// Creates an OpenGL renderbuffer object.
@@ -39,7 +39,7 @@ namespace Zene.Graphics.Base
         {
             if (_disposed) { return; }
 
-            GL.DeleteRenderbuffer(Id);
+            Dispose(true);
 
             _disposed = true;
             GC.SuppressFinalize(this);
@@ -59,6 +59,14 @@ namespace Zene.Graphics.Base
             GL.BindRenderbuffer(GLEnum.Renderbuffer, 0);
         }
 
+        protected virtual void Dispose(bool dispose)
+        {
+            if (dispose)
+            {
+                GL.DeleteRenderbuffer(Id);
+            }
+        }
+
         /// <summary>
         /// Establish data storage, format and dimensions of a renderbuffer object's image.
         /// </summary>
@@ -66,7 +74,7 @@ namespace Zene.Graphics.Base
         /// <param name="width">Specifies the width of the renderbuffer, in pixels.</param>
         /// <param name="height">Specifies the height of the renderbuffer, in pixels.</param>
         [OpenGLSupport(3.0)]
-        public void RenderbufferStorage(TextureFormat intFormat, int width, int height)
+        protected void RenderbufferStorage(TextureFormat intFormat, int width, int height)
         {
             Bind();
             GL.RenderbufferStorage(this, (uint)intFormat, width, height);
@@ -82,7 +90,7 @@ namespace Zene.Graphics.Base
         /// <param name="width">Specifies the width of the renderbuffer, in pixels.</param>
         /// <param name="height">Specifies the height of the renderbuffer, in pixels.</param>
         [OpenGLSupport(3.0)]
-        public void RenderbufferStorageMultisample(TextureFormat intFormat, int samples, int width, int height)
+        protected void RenderbufferStorageMultisample(TextureFormat intFormat, int samples, int width, int height)
         {
             Bind();
             GL.RenderbufferStorageMultisample(this, samples, (uint)intFormat, width, height);
@@ -98,7 +106,7 @@ namespace Zene.Graphics.Base
         /// Returns the width in pixels of the image of this specified renderbuffer object.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int GetWidth()
+        protected int GetWidth()
         {
             Bind();
             int output;
@@ -112,7 +120,7 @@ namespace Zene.Graphics.Base
         /// Returns the height in pixels of the image of this specified renderbuffer object.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int GetHeight()
+        protected int GetHeight()
         {
             Bind();
             int output;
@@ -126,7 +134,7 @@ namespace Zene.Graphics.Base
         /// Returns the number of samples of the image of this specified renderbuffer object.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int GetSamples()
+        protected int GetSamples()
         {
             Bind();
             int output;
@@ -140,7 +148,7 @@ namespace Zene.Graphics.Base
         /// Returns the actual resolution in bits for the red component of the image of the renderbuffer object.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int GetRedSize()
+        protected int GetRedSize()
         {
             Bind();
             int output;
@@ -154,7 +162,7 @@ namespace Zene.Graphics.Base
         /// Returns the actual resolution in bits for the green component of the image of the renderbuffer object.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int GetGreenSize()
+        protected int GetGreenSize()
         {
             Bind();
             int output;
@@ -168,7 +176,7 @@ namespace Zene.Graphics.Base
         /// Returns the actual resolution in bits for the blue component of the image of the renderbuffer object.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int GetBlueSize()
+        protected int GetBlueSize()
         {
             Bind();
             int output;
@@ -182,7 +190,7 @@ namespace Zene.Graphics.Base
         /// Returns the actual resolution in bits for the alpha component of the image of the renderbuffer object.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int GetAlphaSize()
+        protected int GetAlphaSize()
         {
             Bind();
             int output;
@@ -196,7 +204,7 @@ namespace Zene.Graphics.Base
         /// Returns the actual resolution in bits for the depth component of the image of the renderbuffer object.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int GetDepthSize()
+        protected int GetDepthSize()
         {
             Bind();
             int output;
@@ -210,7 +218,7 @@ namespace Zene.Graphics.Base
         /// Returns the actual resolution in bits for the stencil component of the image of the renderbuffer object.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int GetStencilSize()
+        protected int GetStencilSize()
         {
             Bind();
             int output;

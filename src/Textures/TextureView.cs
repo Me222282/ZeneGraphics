@@ -7,7 +7,7 @@ namespace Zene.Graphics
     /// <summary>
     /// An object that manages a pointer to another texture.
     /// </summary>
-    public class TextureView : ITexture
+    public class TextureView : TextureGL
     {
         /// <summary>
         /// Creates a pointer to the data in <paramref name="source"/>.
@@ -20,10 +20,9 @@ namespace Zene.Graphics
         /// <param name="layer">The layer to source data from.</param>
         /// <param name="layerCount">The number of layers to point to.</param>
         public TextureView(ITexture source, TextureTarget target, TextureFormat format, int level, int levelCount, int layer, int layerCount)
+            : base(target)
         {
-            Target = target;
-            _texture = new TextureGL(target);
-            _texture.TextureView(source, format, (uint)level, (uint)levelCount, (uint)layer, (uint)layerCount);
+            TextureView(source, format, (uint)level, (uint)levelCount, (uint)layer, (uint)layerCount);
         }
         /// <summary>
         /// Creates a pointer with the same internal format to the data in <paramref name="source"/>.
@@ -35,21 +34,10 @@ namespace Zene.Graphics
         /// <param name="layer">The layer to source data from.</param>
         /// <param name="layerCount">The number of layers to point to.</param>
         public TextureView(ITexture source, TextureTarget target, int level, int levelCount, int layer, int layerCount)
+            : base(target)
         {
-            Target = target;
-            _texture = new TextureGL(target);
-            _texture.TextureView(source, source.InternalFormat, (uint)level, (uint)levelCount, (uint)layer, (uint)layerCount);
+            TextureView(source, source.InternalFormat, (uint)level, (uint)levelCount, (uint)layer, (uint)layerCount);
         }
-
-        private readonly TextureGL _texture;
-
-        public TextureTarget Target { get; }
-        public TextureFormat InternalFormat => _texture.InternalFormat;
-        protected TextureProperties Properties => _texture.Properties;
-        TextureProperties ITexture.Properties => _texture.Properties;
-
-        public uint Id => _texture.Id;
-        public uint ReferanceSlot => _texture.ReferanceSlot;
 
         /// <summary>
         /// The internal storage resolution of the alpha component at base level.
@@ -309,8 +297,6 @@ namespace Zene.Graphics
             set => Properties.NumLevels = value;
         }
 
-        public void Bind(uint slot) => _texture.Bind(slot);
-        public void Bind() => _texture.Bind();
         /// <summary>
         /// Binds a specified level and layer of the texture to a texture slot.
         /// </summary>
@@ -318,28 +304,7 @@ namespace Zene.Graphics
         /// <param name="level">The level of the texture.</param>
         /// <param name="layer">The index of a texture array.</param>
         /// <param name="access">The access type for the texture.</param>
-        public void Bind(uint slot, int level, int layer, AccessType access) => _texture.BindLevel(slot, level, false, layer, access);
-        public void Unbind() => _texture.Unbind();
-
-        private bool _disposed = false;
-        public void Dispose()
-        {
-            if (!_disposed)
-            {
-                Dispose(true);
-
-                _disposed = true;
-
-                GC.SuppressFinalize(this);
-            }
-        }
-        protected virtual void Dispose(bool dispose)
-        {
-            if (dispose)
-            {
-                _texture.Dispose();
-            }
-        }
+        public void Bind(uint slot, int level, int layer, AccessType access) => BindLevel(slot, level, false, layer, access);
 
         /// <summary>
         /// Reasgines the pointer to <paramref name="source"/>.
@@ -351,7 +316,7 @@ namespace Zene.Graphics
         /// <param name="layerCount">The number of layers to point to.</param>
         public void View(ITexture source, int level, int levelCount, int layer, int layerCount)
         {
-            _texture.TextureView(source, InternalFormat, (uint)level, (uint)levelCount, (uint)layer, (uint)layerCount);
+            TextureView(source, InternalFormat, (uint)level, (uint)levelCount, (uint)layer, (uint)layerCount);
         }
 
         /// <summary>
@@ -363,7 +328,7 @@ namespace Zene.Graphics
         /// <param name="outputType">The type fo data to output.</param>
         public GLArray<T> GetData<T>(int level, BaseFormat outputFormat, TextureData outputType) where T : unmanaged
         {
-            return _texture.GetTexImage<T>(level, outputFormat, outputType);
+            return GetTexImage<T>(level, outputFormat, outputType);
         }
         /// <summary>
         /// Returns a section of the data stored in this texture.
@@ -385,7 +350,7 @@ namespace Zene.Graphics
         /// <param name="outputType">The type fo data to output.</param>
         public GLArray<T> GetDataSection<T>(int level, int x, int width, BaseFormat outputFormat, TextureData outputType) where T : unmanaged
         {
-            return _texture.GetTextureSubImage<T>(level, x, 0, 0, width, 1, 1, outputFormat, outputType);
+            return GetTextureSubImage<T>(level, x, 0, 0, width, 1, 1, outputFormat, outputType);
         }
         /// <summary>
         /// Returns a section of the data stored in this texture.

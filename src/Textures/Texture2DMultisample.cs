@@ -7,33 +7,27 @@ namespace Zene.Graphics
     /// <summary>
     /// An object that manages a 2 dimensional multisample texture.
     /// </summary>
-    public class Texture2DMultisample : ITexture
+    public class Texture2DMultisample : TextureGL
     {
         /// <summary>
         /// Creates a 2 dimensional multisample texture with a set internal format.
         /// </summary>
         /// <param name="format">The internal format of the texture.</param>
         public Texture2DMultisample(TextureFormat format)
+            : base(TextureTarget.Multisample2D)
         {
-            _texture = new TextureGL(TextureTarget.Multisample2D);
             InternalFormat = format;
         }
         internal Texture2DMultisample(uint id, TextureFormat format)
+            : base(id, TextureTarget.Multisample2D, format)
         {
-            _texture = new TextureGL(id, TextureTarget.Multisample2D, format);
             InternalFormat = format;
         }
 
-        private readonly TextureGL _texture;
-
-        public TextureTarget Target => TextureTarget.Multisample2D;
-
-        public TextureFormat InternalFormat { get; }
-        protected TextureProperties Properties => _texture.Properties;
-        TextureProperties ITexture.Properties => _texture.Properties;
-
-        public uint Id => _texture.Id;
-        public uint ReferanceSlot => _texture.ReferanceSlot;
+        /// <summary>
+        /// The formating of data stored in this texture.
+        /// </summary>
+        public new TextureFormat InternalFormat { get; }
 
         /// <summary>
         /// The internal storage resolution of the alpha component at base level.
@@ -183,36 +177,13 @@ namespace Zene.Graphics
         /// </summary>
         public int Samples => Properties._samples;
 
-        public void Bind(uint slot) => _texture.Bind(slot);
-        public void Bind() => _texture.Bind();
         /// <summary>
         /// Binds a specified level of the texture to a texture slot.
         /// </summary>
         /// <param name="slot">The slot to bind to.</param>
         /// <param name="level">The level of the texture.</param>
         /// <param name="access">The access type for the texture.</param>
-        public void Bind(uint slot, int level, AccessType access) => _texture.BindLevel(slot, level, false, 0, access);
-        public void Unbind() => _texture.Unbind();
-
-        private bool _disposed = false;
-        public void Dispose()
-        {
-            if (!_disposed)
-            {
-                Dispose(true);
-
-                _disposed = true;
-
-                GC.SuppressFinalize(this);
-            }
-        }
-        protected virtual void Dispose(bool dispose)
-        {
-            if (dispose)
-            {
-                _texture.Dispose();
-            }
-        }
+        public void Bind(uint slot, int level, AccessType access) => BindLevel(slot, level, false, 0, access);
 
         /// <summary>
         /// Creates the space for the texture data.
@@ -224,7 +195,7 @@ namespace Zene.Graphics
         public void CreateData(int width, int height, int samples, bool fixedSampleLocation)
         {
             
-            _texture.TexImage2DMultisample(samples, InternalFormat, width, height, fixedSampleLocation);
+            TexImage2DMultisample(samples, InternalFormat, width, height, fixedSampleLocation);
         }
         /// <summary>
         /// Creates the storage for the texture data.
@@ -236,7 +207,7 @@ namespace Zene.Graphics
         public void CreateStorage(int width, int height, int samples, bool fixedSampleLocation)
         {
             
-            _texture.TexStorage2DMultisample(samples, InternalFormat, width, height, fixedSampleLocation);
+            TexStorage2DMultisample(samples, InternalFormat, width, height, fixedSampleLocation);
         }
 
         /// <summary>
@@ -248,7 +219,7 @@ namespace Zene.Graphics
         public GLArray<T> GetData<T>(BaseFormat outputFormat, TextureData dataType) where T : unmanaged
         {
             
-            return _texture.GetTexImage<T>(0, outputFormat, dataType);
+            return GetTexImage<T>(0, outputFormat, dataType);
         }
 
         public static Texture2DMultisample Create(TextureFormat format, int samples, int width, int height, WrapStyle wrapStyle)

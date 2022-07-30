@@ -7,7 +7,7 @@ namespace Zene.Graphics
     {
         public unsafe GraphicsContext(bool stereo, bool doubleBuffered, int width, int height, double version)
         {
-            baseFrameBuffer = new FrameBufferGL(0, stereo, doubleBuffered, width, height);
+            baseFrameBuffer = new FramebufferGL(0, stereo, doubleBuffered, width, height);
 
             this.version = version;
             viewport = new RectangleI(0, 0, width, height);
@@ -32,7 +32,7 @@ namespace Zene.Graphics
 
         internal double version;
 
-        internal FrameBufferGL baseFrameBuffer;
+        internal FramebufferGL baseFrameBuffer;
         internal ColourF frameClearColour = ColourF.Zero;
         internal double frameClearDepth = 1d;
         internal int frameClearStencil = 0;

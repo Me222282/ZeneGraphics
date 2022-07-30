@@ -9,7 +9,7 @@ namespace Zene.Graphics
     /// An object that manages all components of a multisample framebuffer.
     /// </summary>
     [OpenGLSupport(3.2)]
-    public class TextureRendererMS : IFramebuffer
+    public class TextureRendererMS : FramebufferGL
     {
         /// <summary>
         /// Creats a multismaple framebuffer from set parameters.
@@ -24,23 +24,14 @@ namespace Zene.Graphics
                 throw new FrameBufferException(this, "Framebuffers must have a width and heihgt greater that 0.");
             }
 
-            _framebuffer = new FrameBufferGL();
-
             _targetWidth = width;
             _targetHeight = height;
             Samples = samples;
 
-            _framebuffer.View = new RectangleI(0, 0, width, height);
+            View = new RectangleI(0, 0, width, height);
 
             _colourAttachs = new Texture2DMultisample[State.MaxColourAttach];
         }
-
-        public uint Id => _framebuffer.Id;
-        public FrameTarget Binding => _framebuffer.Binding;
-        private readonly FrameBufferGL _framebuffer;
-
-        protected FramebufferProperties Properties => _framebuffer.Properties;
-        FramebufferProperties IFramebuffer.Properties => _framebuffer.Properties;
 
         /// <summary>
         /// The width of the framebuffer attachments.
@@ -60,50 +51,13 @@ namespace Zene.Graphics
         private int _targetWidth;
         private int _targetHeight;
 
-        public RectangleI View
-        {
-            get => _framebuffer.View;
-            set => _framebuffer.View = value;
-        }
-        public Vector2I ViewSize
-        {
-            get => _framebuffer.ViewSize;
-            set => _framebuffer.ViewSize = value;
-        }
-        /// <summary>
-        /// Sets the render location for the framebuffer.
-        /// </summary>
-        public Vector2I ViewLocation
-        {
-            get => _framebuffer.ViewLocation;
-            set => _framebuffer.ViewLocation = value;
-        }
-
-        public FrameDrawTarget ReadBuffer
-        {
-            get => _framebuffer.ReadBuffer;
-            set => _framebuffer.ReadBuffer = value;
-        }
-        public FrameDrawTarget[] DrawBuffers
-        {
-            get => _framebuffer.DrawBuffers;
-            set => _framebuffer.DrawBuffers = value;
-        }
-
         [OpenGLSupport(3.0)]
-        public void Bind(FrameTarget target) => _framebuffer.Bind(target);
-        [OpenGLSupport(3.0)]
-        public void Bind() => _framebuffer.Bind();
-        [OpenGLSupport(3.0)]
-        public void Unbind() => _framebuffer.Unbind();
-
-        private bool _disposed = false;
-        [OpenGLSupport(3.0)]
-        public void Dispose()
+        protected override void Dispose(bool dispose)
         {
-            if (_disposed) { return; }
+            base.Dispose(dispose);
 
-            _framebuffer.Dispose();
+            if (!dispose) { return; }
+
             // Dispose of colour attachments
             foreach (Texture2DMultisample texture in _colourAttachs)
             {
@@ -115,21 +69,13 @@ namespace Zene.Graphics
             // Dispose of depth attachment
             if (_depthTex != null) { _depthTex.Dispose(); }
             if (_depthRen != null) { _depthRen.Dispose(); }
-
-            _disposed = true;
-            GC.SuppressFinalize(this);
-        }
-        [OpenGLSupport(3.0)]
-        public bool Validate()
-        {
-            return _framebuffer.Validate();
         }
         /// <summary>
         /// Gets the completion status of this framebuffer.
         /// </summary>
         /// <returns></returns>
         [OpenGLSupport(3.0)]
-        public FrameBufferStatus Status => _framebuffer.CheckStatus();
+        public FrameBufferStatus Status => CheckStatus();
 
         private readonly Texture2DMultisample[] _colourAttachs;
         private Texture2DMultisample _depthTex;
@@ -148,10 +94,8 @@ namespace Zene.Graphics
         /// </summary>
         public int ClearStencil { get; set; } = 0;
 
-        public void Clear(BufferBit buffer)
+        public override void Clear(BufferBit buffer)
         {
-            Bind();
-
             if ((buffer & BufferBit.Colour) == BufferBit.Colour)
             {
                 GL.ClearColour(ClearColour.R, ClearColour.G, ClearColour.B, ClearColour.A);
@@ -165,7 +109,7 @@ namespace Zene.Graphics
                 GL.ClearStencil(ClearStencil);
             }
 
-            GL.Clear((uint)buffer);
+            base.Clear(buffer);
         }
 
         /// <summary>
@@ -190,7 +134,7 @@ namespace Zene.Graphics
             Texture2DMultisample texture = new Texture2DMultisample(intFormat);
             texture.CreateData(_targetWidth, _targetHeight, Samples, FixedSampleLocations);
             
-            _framebuffer.FramebufferTexture2D(texture, (FrameAttachment)((int)FrameAttachment.Colour0 + attachment));
+            FramebufferTexture2D(texture, (FrameAttachment)((int)FrameAttachment.Colour0 + attachment));
             
             _colourAttachs[attachment] = texture;
 
@@ -219,7 +163,7 @@ namespace Zene.Graphics
                 Texture2DMultisample texture = new Texture2DMultisample(intFormat);
                 texture.CreateData(_targetWidth, _targetHeight, Samples, FixedSampleLocations);
 
-                _framebuffer.FramebufferTexture2D(texture,
+                FramebufferTexture2D(texture,
                     // The internal format contains a stencil attachment
                     intFormat.HasStencil() ? FrameAttachment.DepthStencil : FrameAttachment.Depth);
                 
@@ -231,7 +175,7 @@ namespace Zene.Graphics
             RenderbufferGL renderbuffer = new RenderbufferGL();
             renderbuffer.RenderbufferStorageMultisample(intFormat, Samples, _targetWidth, _targetHeight);
 
-            _framebuffer.FramebufferRenderbuffer(renderbuffer,
+            FramebufferRenderbuffer(renderbuffer,
                 // The internal format contains a stencil attachment
                 intFormat.HasStencil() ? FrameAttachment.DepthStencil : FrameAttachment.Depth);
             
@@ -277,7 +221,7 @@ namespace Zene.Graphics
                 {
                     _depthTex.Dispose();
                     _depthTex = null;
-                    _framebuffer.FramebufferTexture2D(default, attachment);
+                    FramebufferTexture2D(default, attachment);
                     return;
                 }
                 // Renderbuffer attachment
@@ -285,7 +229,7 @@ namespace Zene.Graphics
                 {
                     _depthRen.Dispose();
                     _depthRen = null;
-                    _framebuffer.FramebufferRenderbuffer(default, attachment);
+                    FramebufferRenderbuffer(default, attachment);
                     return;
                 }
 
@@ -300,7 +244,7 @@ namespace Zene.Graphics
             {
                 _colourAttachs[colourIndex].Dispose();
                 _colourAttachs[colourIndex] = null;
-                _framebuffer.FramebufferTexture2D(default, attachment);
+                FramebufferTexture2D(default, attachment);
             }
         }
 
@@ -343,7 +287,7 @@ namespace Zene.Graphics
 
                 if (_depthRen != null)
                 {
-                    _depthRen.RenderbufferStorageMultisample(Samples, _targetWidth, _targetHeight);
+                    _depthRen.RenderbufferStorageMultisample(_depthRen.InternalFormat, Samples, _targetWidth, _targetHeight);
                     _depthRen.Unbind();
                     return;
                 }
@@ -362,7 +306,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void CopyFrameBuffer(IFramebuffer destination, IBox dstBox, BufferBit mask, TextureSampling filter)
         {
-            _framebuffer.BlitBuffer(destination, new Rectangle(0, 0, _targetWidth, _targetHeight), dstBox, mask, filter);
+            BlitBuffer(destination, new Rectangle(0, 0, _targetWidth, _targetHeight), dstBox, mask, filter);
         }
         /// <summary>
         /// Copies the data from this framebuffer to <paramref name="destination"/>.
@@ -375,7 +319,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void CopyFrameBuffer(IFramebuffer destination, IBox box, IBox dstBox, BufferBit mask, TextureSampling filter)
         {
-            _framebuffer.BlitBuffer(destination, box, dstBox, mask, filter);
+            BlitBuffer(destination, box, dstBox, mask, filter);
         }
         /// <summary>
         /// Copies all data from this framebuffer to <paramref name="destination"/>.
@@ -386,7 +330,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void CopyFrameBuffer(IFramebuffer destination, BufferBit mask, TextureSampling filter)
         {
-            _framebuffer.BlitBuffer(destination, 
+            BlitBuffer(destination, 
                 new Rectangle(0, 0, _targetWidth, _targetHeight), 
                 new Rectangle(0, 0, destination.Properties.Width, destination.Properties.Height), mask, filter);
         }
@@ -400,7 +344,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void CopyFrameBuffer(IBox dstBox, BufferBit mask, TextureSampling filter)
         {
-            _framebuffer.BlitBuffer(null, new Rectangle(0, 0, _targetWidth, _targetHeight), dstBox, mask, filter);
+            BlitBuffer(null, new Rectangle(0, 0, _targetWidth, _targetHeight), dstBox, mask, filter);
         }
         /// <summary>
         /// Copies the data from this framebuffer to OpenGL Context's framebuffer.
@@ -412,7 +356,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void CopyFrameBuffer(IBox dstBox, IBox box, BufferBit mask, TextureSampling filter)
         {
-            _framebuffer.BlitBuffer(null, box, dstBox, mask, filter);
+            BlitBuffer(null, box, dstBox, mask, filter);
         }
     }
 }

@@ -9,15 +9,15 @@ namespace Zene.Graphics
     /// A basic 2d texture object that passes data to and from the GPU by the <see cref="Colour"/> struct.
     /// </summary>
     [OpenGLSupport(3.0)]
-    public unsafe class Texture : ITexture
+    public unsafe class Texture : TextureGL
     {
         /// <summary>
         /// Creates an empty texture.
         /// </summary>
         /// <param name="format">The internal format of the texture.</param>
         public Texture(TextureFormat format)
+            : base(TextureTarget.Texture2D)
         {
-            _texture = new TextureGL(TextureTarget.Texture2D);
             InternalFormat = format;
         }
         /// <summary>
@@ -26,8 +26,8 @@ namespace Zene.Graphics
         /// <param name="format">The internal format of the texture.</param>
         /// <param name="data">The data to asign the texture.</param>
         public Texture(TextureFormat format, GLArray<Colour> data)
+            : base(TextureTarget.Texture2D)
         {
-            _texture = new TextureGL(TextureTarget.Texture2D);
             InternalFormat = format;
             Data = data;
         }
@@ -37,14 +37,14 @@ namespace Zene.Graphics
         /// <param name="format">The internal format of the texture.</param>
         /// <param name="stream"></param>
         public Texture(TextureFormat format, Stream stream, bool close = false)
+            : base(TextureTarget.Texture2D)
         {
-            _texture = new TextureGL(TextureTarget.Texture2D);
             InternalFormat = format;
 
             byte[] data = Bitmap.ExtractData(stream, out int width, out int height, close);
             fixed (byte* ptr = &data[0])
             {
-                _texture.TexImage2D(0, InternalFormat, width, height, BaseFormat.Rgba, TextureData.Byte, ptr);
+                TexImage2D(0, InternalFormat, width, height, BaseFormat.Rgba, TextureData.Byte, ptr);
             }
         }
         /// <summary>
@@ -58,30 +58,10 @@ namespace Zene.Graphics
             
         }
 
-        public uint Id => _texture.Id;
-        public uint ReferanceSlot => _texture.ReferanceSlot;
-
-        private readonly TextureGL _texture;
-
-        public TextureTarget Target => _texture.Target;
-        public TextureFormat InternalFormat { get; }
-        protected TextureProperties Properties => _texture.Properties;
-        TextureProperties ITexture.Properties => _texture.Properties;
-
-        public void Bind(uint slot) => _texture.Bind(slot);
-        public void Bind() => _texture.Bind();
-
-        private bool _disposed = false;
-        public void Dispose()
-        {
-            if (_disposed) { return; }
-
-            _texture.Dispose();
-
-            _disposed = true;
-            GC.SuppressFinalize(this);
-        }
-        public void Unbind() => _texture.Unbind();
+        /// <summary>
+        /// The formating of data stored in this texture.
+        /// </summary>
+        public new TextureFormat InternalFormat { get; }
 
         /// <summary>
         /// Gets or sets a signal pixel of the texture.
@@ -96,15 +76,15 @@ namespace Zene.Graphics
             {
                 if (GL.Version >= 4.5)
                 {
-                    return _texture.GetTextureSubImage<Colour>(0, x, y, 0, 1, 1, 1, BaseFormat.Rgba, TextureData.Byte)[0];
+                    return GetTextureSubImage<Colour>(0, x, y, 0, 1, 1, 1, BaseFormat.Rgba, TextureData.Byte)[0];
                 }
 
-                return _texture.GetTexImage<Colour>(0, BaseFormat.Rgba, TextureData.Byte)[x, y];
+                return GetTexImage<Colour>(0, BaseFormat.Rgba, TextureData.Byte)[x, y];
             }
             set
             {
                 
-                _texture.TexSubImage2D(0, x, y, 1, 1, BaseFormat.Rgba, TextureData.Byte, &value);
+                TexSubImage2D(0, x, y, 1, 1, BaseFormat.Rgba, TextureData.Byte, &value);
             }
         }
         /// <summary>
@@ -122,15 +102,15 @@ namespace Zene.Graphics
             {
                 if (GL.Version >= 4.5)
                 {
-                    return _texture.GetTextureSubImage<Colour>(0, x, y, 0, width, height, 1, BaseFormat.Rgba, TextureData.Byte);
+                    return GetTextureSubImage<Colour>(0, x, y, 0, width, height, 1, BaseFormat.Rgba, TextureData.Byte);
                 }
 
-                return _texture.GetTexImage<Colour>(0, BaseFormat.Rgba, TextureData.Byte).SubSection(x, y, width, height);
+                return GetTexImage<Colour>(0, BaseFormat.Rgba, TextureData.Byte).SubSection(x, y, width, height);
             }
             set
             {
                 
-                _texture.TexSubImage2D(0, x, y, width, height, BaseFormat.Rgba, TextureData.Byte, value);
+                TexSubImage2D(0, x, y, width, height, BaseFormat.Rgba, TextureData.Byte, value);
             }
         }
         /// <summary>
@@ -141,11 +121,11 @@ namespace Zene.Graphics
         {
             get
             {   
-                return _texture.GetTexImage<Colour>(0, BaseFormat.Rgba, TextureData.Byte);
+                return GetTexImage<Colour>(0, BaseFormat.Rgba, TextureData.Byte);
             }
             set
             {
-                _texture.TexImage2D(0, InternalFormat, value.Width, value.Height, BaseFormat.Rgba, TextureData.Byte, value);
+                TexImage2D(0, InternalFormat, value.Width, value.Height, BaseFormat.Rgba, TextureData.Byte, value);
                 MipMaped = false;
             }
         }
@@ -157,7 +137,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void GenerateMipMap()
         {
-            _texture.GenerateMipmap();
+            GenerateMipmap();
             MipMaped = true;
         }
 

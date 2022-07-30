@@ -32,11 +32,19 @@ namespace Zene.Graphics.Base
         {
             if (_disposed) { return; }
 
-            GL.DeleteShader(Id);
+            Dispose(true);
 
             _disposed = true;
             GC.SuppressFinalize(this);
         }
+        protected virtual void Dispose(bool dispose)
+        {
+            if (dispose)
+            {
+                GL.DeleteShader(Id);
+            }
+        }
+
         public void Compile()
         {
             GL.CompileShader(Id);
@@ -55,7 +63,7 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Compiles the shader object.
         /// </summary>
-        public void CompileShader()
+        protected void CompileShader()
         {
             GL.CompileShader(Id);
         }
@@ -64,7 +72,7 @@ namespace Zene.Graphics.Base
         /// Determines whether the last compile operation on this shader object was successful.
         /// </summary>
         /// <returns></returns>
-        public bool GetCompileStatus()
+        protected bool GetCompileStatus()
         {
             int output = 0;
 
@@ -76,7 +84,7 @@ namespace Zene.Graphics.Base
         /// Returns the number of characters in the information log for this shader object, including the null termination character.
         /// </summary>
         /// <returns></returns>
-        public int GetInfoLogLength()
+        protected int GetInfoLogLength()
         {
             int output = 0;
 
@@ -88,7 +96,7 @@ namespace Zene.Graphics.Base
         /// Teturns the length of the concatenation of the source strings that make up the shader source for this shaderobject, including the null termination character.
         /// </summary>
         /// <returns></returns>
-        public int GetShaderSourceLength()
+        protected int GetShaderSourceLength()
         {
             int output = 0;
 
@@ -101,7 +109,7 @@ namespace Zene.Graphics.Base
         /// Returns the information log for this shader object.
         /// </summary>
         /// <param name="output">The <see cref="StringBuilder"/> to write the log into.</param>
-        public void GetShaderInfoLog(StringBuilder output)
+        protected void GetShaderInfoLog(StringBuilder output)
         {
             GL.GetShaderInfoLog(Id, output.Capacity, null, output);
         }
@@ -109,7 +117,7 @@ namespace Zene.Graphics.Base
         /// Returns the source code string from this shader object.
         /// </summary>
         /// <param name="output">The <see cref="StringBuilder"/> to write the source code into.</param>
-        public void GetShaderSource(StringBuilder output)
+        protected void GetShaderSource(StringBuilder output)
         {
             GL.GetShaderSource(Id, output.Capacity, null, output);
         }
@@ -118,7 +126,7 @@ namespace Zene.Graphics.Base
         /// Replaces the source code in a shader object.
         /// </summary>
         /// <param name="source">The source code to be loaded into the shader.</param>
-        public void ShaderSource(string source)
+        protected void ShaderSource(string source)
         {
             GL.ShaderSource(Id, source);
         }
@@ -126,7 +134,7 @@ namespace Zene.Graphics.Base
         /// Replaces the source code in a shader object.
         /// </summary>
         /// <param name="source">The source code to be loaded into the shader.</param>
-        public void ShaderSource(string[] source)
+        protected void ShaderSource(string[] source)
         {
             int[] lengths = new int[source.Length];
 

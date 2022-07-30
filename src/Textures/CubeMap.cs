@@ -12,7 +12,7 @@ namespace Zene.Graphics
     /// <summary>
     /// An object that manages a cube map texture object.
     /// </summary>
-    public class CubeMap : ITexture
+    public class CubeMap : TextureGL
     {
         /// <summary>
         /// Creates the cube map texture with a set internal format.
@@ -20,47 +20,27 @@ namespace Zene.Graphics
         /// <param name="format">The internal format of the texture.</param>
         /// <param name="dataType">The type of data that is going to be passed to OpenGL.</param>
         public CubeMap(TextureFormat format, TextureData dataType)
+            : base(TextureTarget.CubeMap)
         {
-            _texture = new TextureGL(TextureTarget.CubeMap);
-
             InternalFormat = format;
             DataType = dataType;
         }
         internal CubeMap(uint id, TextureFormat format, TextureData dataType)
+            : base(id, TextureTarget.CubeMap, format)
         {
-            _texture = new TextureGL(id, TextureTarget.CubeMap, format);
             InternalFormat = format;
             DataType = dataType;
         }
-
-        public uint Id => _texture.Id;
-        public uint ReferanceSlot => _texture.ReferanceSlot;
-
-        private readonly TextureGL _texture;
-
-        public TextureTarget Target => TextureTarget.CubeMap;
-        public TextureFormat InternalFormat { get; }
-        protected TextureProperties Properties => _texture.Properties;
-        TextureProperties ITexture.Properties => _texture.Properties;
 
         /// <summary>
         /// The type of data being inputed into the texture.
         /// </summary>
         public TextureData DataType { get; set; }
 
-        public void Bind(uint slot) => _texture.Bind(slot);
-        public void Bind() => _texture.Bind();
-        private bool _disposed = false;
-        public void Dispose()
-        {
-            if (_disposed) { return; }
-
-            _texture.Dispose();
-
-            _disposed = true;
-            GC.SuppressFinalize(this);
-        }
-        public void Unbind() => _texture.Unbind();
+        /// <summary>
+        /// The formating of data stored in this texture.
+        /// </summary>
+        public new TextureFormat InternalFormat { get; }
 
         /// <summary>
         /// Creats and filles the data of <paramref name="face"/> inside the texture with <paramref name="data"/>.
@@ -74,7 +54,7 @@ namespace Zene.Graphics
         /// <param name="data">The data to set the texture with.</param>
         public void SetData<T>(CubeMapFace face, int level, int width, int height, BaseFormat inputFormat, GLArray<T> data) where T : unmanaged
         {
-            _texture.TexImage2D(face, level, InternalFormat, width, height, inputFormat, DataType, data);
+            TexImage2D(face, level, InternalFormat, width, height, inputFormat, DataType, data);
         }
         /// <summary>
         /// Creats and filles the data of <paramref name="face"/> inside the texture with <paramref name="data"/>.
@@ -102,7 +82,7 @@ namespace Zene.Graphics
         /// <param name="data">The data to set the region with.</param>
         public void EditData<T>(CubeMapFace face, int level, int x, int y, int width, int height, BaseFormat inputFormat, GLArray<T> data) where T : unmanaged
         {
-            _texture.TexSubImage2D(face, level, x, y, width, height, inputFormat, DataType, data);
+            TexSubImage2D(face, level, x, y, width, height, inputFormat, DataType, data);
         }
         /// <summary>
         /// Changes the data in a section of the texture.
@@ -127,7 +107,7 @@ namespace Zene.Graphics
         /// <param name="height">The height of the space.</param>
         public void CreateStorage(CubeMapFace face, int levels, int width, int height)
         {
-            _texture.TexStorage2D(face, levels, InternalFormat, width, height);
+            TexStorage2D(face, levels, InternalFormat, width, height);
         }
         /// <summary>
         /// Creates the storage space for the texture.
@@ -147,7 +127,7 @@ namespace Zene.Graphics
         /// <returns></returns>
         public GLArray<T> GetData<T>(CubeMapFace face, int level, BaseFormat outputFormat) where T : unmanaged
         {
-            return _texture.GetTexImage<T>(face, level, outputFormat, DataType);
+            return GetTexImage<T>(face, level, outputFormat, DataType);
         }
         /// <summary>
         /// Gets the data stored in the texture for a single face.
@@ -168,7 +148,7 @@ namespace Zene.Graphics
         /// <returns></returns>
         public GLArray<T> GetData<T>(int level, BaseFormat outputFormat) where T : unmanaged
         {
-            return _texture.GetTextureSubImage<T>(level, 0, 0, 0, Width, Height, 6, outputFormat, DataType);
+            return GetTextureSubImage<T>(level, 0, 0, 0, Width, Height, 6, outputFormat, DataType);
         }
         /// <summary>
         /// Gets the data stored in all faces of the texture.
@@ -204,7 +184,7 @@ namespace Zene.Graphics
                 _ => 0
             };
 
-            return _texture.GetTextureSubImage<T>(level, x, y, zFace, width, height, 1, outputFormat, DataType);
+            return GetTextureSubImage<T>(level, x, y, zFace, width, height, 1, outputFormat, DataType);
         }
         /// <summary>
         /// Get a section of the data of <paramref name="face"/> stored in the texture.
@@ -248,7 +228,7 @@ namespace Zene.Graphics
                 _ => 0
             };
 
-            _texture.CopyImageSubData(source, srcLevel, srcX, srcY, srcZ, width, height, numFaces, level, x, y, zFace);
+            CopyImageSubData(source, srcLevel, srcX, srcY, srcZ, width, height, numFaces, level, x, y, zFace);
         }
         /// <summary>
         /// Copy data from <paramref name="source"/>.
@@ -310,7 +290,7 @@ namespace Zene.Graphics
         /// <param name="y">The y offset to write to.</param>
         public void CopyTexture(CubeMap source, int srcLevel, int srcX, int srcY, int width, int height, int level, int x, int y)
         {
-            _texture.CopyImageSubData(source, srcLevel, srcX, srcY, 0, width, height, 6, level, x, y, 0);
+            CopyImageSubData(source, srcLevel, srcX, srcY, 0, width, height, 6, level, x, y, 0);
         }
         /// <summary>
         /// Copy all faces from <paramref name="source"/>.
@@ -331,7 +311,7 @@ namespace Zene.Graphics
         /// </summary>
         public void CreateMipMap()
         {
-            _texture.GenerateMipmap();
+            GenerateMipmap();
         }
 
         /// <summary>
