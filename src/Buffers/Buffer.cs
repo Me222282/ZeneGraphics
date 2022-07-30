@@ -99,6 +99,8 @@ namespace Zene.Graphics
             }
         }
 
+        public BufferProperties Properties => throw new NotImplementedException();
+
         protected T[] _data;
 
         public Type GetTypeT()
