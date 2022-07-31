@@ -28,7 +28,7 @@ namespace Zene.Graphics.Base
 		public struct BufferBinding
 		{
 			public uint Array;
-			public uint AtomicCounter;
+			public uint[] AtomicCounter;
 			public uint CopyRead;
 			public uint CopyWrite;
 			public uint DispatchIndirect;
@@ -37,10 +37,10 @@ namespace Zene.Graphics.Base
 			public uint PixelPack;
 			public uint PixelUnpack;
 			public uint Query;
-			public uint ShaderStorage;
+			public uint[] ShaderStorage;
 			public uint Texture;
-			public uint TransformFeedback;
-			public uint Uniform;
+			public uint[] TransformFeedback;
+			public uint[] Uniform;
 		}
 
 		[OpenGLSupport(4.1)]
@@ -96,7 +96,7 @@ namespace Zene.Graphics.Base
 					context.boundBuffers.Array = buffer;
 					return;
 				case GLEnum.AtomicCounterBuffer:
-					context.boundBuffers.AtomicCounter = buffer;
+					context.boundBuffers.AtomicCounter[0] = buffer;
 					return;
 				case GLEnum.CopyReadBuffer:
 					context.boundBuffers.CopyRead = buffer;
@@ -123,16 +123,16 @@ namespace Zene.Graphics.Base
 					context.boundBuffers.Query = buffer;
 					return;
 				case GLEnum.ShaderStorageBuffer:
-					context.boundBuffers.ShaderStorage = buffer;
+					context.boundBuffers.ShaderStorage[0] = buffer;
 					return;
 				case GLEnum.TextureBuffer:
 					context.boundBuffers.Texture = buffer;
 					return;
 				case GLEnum.TransformFeedbackBuffer:
-					context.boundBuffers.TransformFeedback = buffer;
+					context.boundBuffers.TransformFeedback[0] = buffer;
 					return;
 				case GLEnum.UniformBuffer:
-					context.boundBuffers.Uniform = buffer;
+					context.boundBuffers.Uniform[0] = buffer;
 					return;
 			}
 		}
@@ -141,12 +141,82 @@ namespace Zene.Graphics.Base
 		public static void BindBufferBase(uint target, uint index, uint buffer)
 		{
 			Functions.BindBufferBase(target, index, buffer);
+
+			switch (target)
+            {
+				case GLEnum.AtomicCounterBuffer:
+					if (context.boundBuffers.AtomicCounter.Length <= index)
+                    {
+						return;
+                    }
+					context.boundBuffers.AtomicCounter[index] = buffer;
+					return;
+
+				case GLEnum.ShaderStorageBuffer:
+					if (context.boundBuffers.ShaderStorage.Length <= index)
+					{
+						return;
+					}
+					context.boundBuffers.ShaderStorage[index] = buffer;
+					return;
+
+				case GLEnum.TransformFeedbackBuffer:
+					if (context.boundBuffers.TransformFeedback.Length <= index)
+					{
+						return;
+					}
+					context.boundBuffers.TransformFeedback[index] = buffer;
+					return;
+
+				case GLEnum.UniformBuffer:
+					if (context.boundBuffers.Uniform.Length <= index)
+					{
+						return;
+					}
+					context.boundBuffers.Uniform[index] = buffer;
+					return;
+			}
 		}
 
 		[OpenGLSupport(3.0)]
 		public static void BindBufferRange(uint target, uint index, uint buffer, int offset, int size)
 		{
 			Functions.BindBufferRange(target, index, buffer, offset, size);
+
+			switch (target)
+			{
+				case GLEnum.AtomicCounterBuffer:
+					if (context.boundBuffers.AtomicCounter.Length <= index)
+					{
+						return;
+					}
+					context.boundBuffers.AtomicCounter[index] = buffer;
+					return;
+
+				case GLEnum.ShaderStorageBuffer:
+					if (context.boundBuffers.ShaderStorage.Length <= index)
+					{
+						return;
+					}
+					context.boundBuffers.ShaderStorage[index] = buffer;
+					return;
+
+				case GLEnum.TransformFeedbackBuffer:
+					if (context.boundBuffers.TransformFeedback.Length <= index)
+					{
+						return;
+					}
+					context.boundBuffers.TransformFeedback[index] = buffer;
+					return;
+
+				case GLEnum.UniformBuffer:
+					if (context.boundBuffers.Uniform.Length <= index)
+					{
+						return;
+					}
+					context.boundBuffers.Uniform[index] = buffer;
+					return;
+			}
 		}
 
 		[OpenGLSupport(4.4)]

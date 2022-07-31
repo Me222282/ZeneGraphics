@@ -99,7 +99,7 @@ namespace Zene.Graphics.Base
         /// <param name="offset">The starting offset in basic machine units into the buffer object.</param>
         /// <param name="size">The amount of data in machine units that can be read from the buffer object while used as an indexed target.</param>
         [OpenGLSupport(3.0)]
-        protected void BindBase(uint index, int offset, int size)
+        protected void BindRange(uint index, int offset, int size)
         {
             if (Target != BufferTarget.AtomicCounter ||
                 Target != BufferTarget.TransformFeedback ||

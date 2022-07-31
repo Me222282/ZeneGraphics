@@ -16,10 +16,54 @@ namespace Zene.Graphics
             int size = 0;
             GL.GetIntegerv(GLEnum.MaxTextureImageUnits, &size);
             boundTextures = new GL.TextureBinding[size];
+
+            // Setup indexed buffer
+            boundBuffers = new GL.BufferBinding();
+
+            if (version >= 3.0)
+            {
+                int tfSize = 0;
+                GL.GetIntegerv(GLEnum.MaxTransformFeedbackBuffers, &tfSize);
+                boundBuffers.TransformFeedback = new uint[tfSize];
+            }
+            else
+            {
+                boundBuffers.TransformFeedback = new uint[1];
+            }
+            if (version >= 3.1)
+            {
+                int uSize = 0;
+                GL.GetIntegerv(GLEnum.MaxUniformBufferBindings, &uSize);
+                boundBuffers.Uniform = new uint[uSize];
+            }
+            else
+            {
+                boundBuffers.Uniform = new uint[1];
+            }
+            if (version >= 4.2)
+            {
+                int acSize = 0;
+                GL.GetIntegerv(GLEnum.MaxAtomicCounterBufferBindings, &acSize);
+                boundBuffers.AtomicCounter = new uint[acSize];
+            }
+            else
+            {
+                boundBuffers.AtomicCounter = new uint[1];
+            }
+            if (version >= 4.3)
+            {
+                int ssSize = 0;
+                GL.GetIntegerv(GLEnum.MaxShaderStorageBufferBindings, &ssSize);
+                boundBuffers.ShaderStorage = new uint[ssSize];
+            }
+            else
+            {
+                boundBuffers.ShaderStorage = new uint[1];
+            }
         }
 
         internal uint boundShaderProgram = 0;
-        internal GL.BufferBinding boundBuffers = new GL.BufferBinding();
+        internal GL.BufferBinding boundBuffers;
 
         internal GL.FrameBufferBinding boundFrameBuffers = new GL.FrameBufferBinding();
 

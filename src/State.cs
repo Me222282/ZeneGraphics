@@ -689,7 +689,7 @@ namespace Zene.Graphics
             return target switch
             {
                 BufferTarget.Array => GL.context.boundBuffers.Array,
-                BufferTarget.AtomicCounter => GL.context.boundBuffers.AtomicCounter,
+                BufferTarget.AtomicCounter => GL.context.boundBuffers.AtomicCounter[0],
                 BufferTarget.CopyRead => GL.context.boundBuffers.CopyRead,
                 BufferTarget.CopyWrite => GL.context.boundBuffers.CopyWrite,
                 BufferTarget.DispatchIndirect => GL.context.boundBuffers.DispatchIndirect,
@@ -698,10 +698,25 @@ namespace Zene.Graphics
                 BufferTarget.PixelPack => GL.context.boundBuffers.PixelPack,
                 BufferTarget.PixelUnPack => GL.context.boundBuffers.PixelUnpack,
                 BufferTarget.Query => GL.context.boundBuffers.Query,
-                BufferTarget.ShaderStorage => GL.context.boundBuffers.ShaderStorage,
+                BufferTarget.ShaderStorage => GL.context.boundBuffers.ShaderStorage[0],
                 BufferTarget.Texture => GL.context.boundBuffers.Texture,
-                BufferTarget.TransformFeedback => GL.context.boundBuffers.TransformFeedback,
-                BufferTarget.Uniform => GL.context.boundBuffers.Uniform,
+                BufferTarget.TransformFeedback => GL.context.boundBuffers.TransformFeedback[0],
+                BufferTarget.Uniform => GL.context.boundBuffers.Uniform[0],
+                _ => 0
+            };
+        }
+        /// <summary>
+        /// Gets the Id of the currently bound buffer object.
+        /// </summary>
+        /// <returns></returns>
+        public static uint GetBoundIndexedBuffer(BufferTarget target, int index)
+        {
+            return target switch
+            {
+                BufferTarget.AtomicCounter => GL.context.boundBuffers.AtomicCounter[index],
+                BufferTarget.ShaderStorage => GL.context.boundBuffers.ShaderStorage[index],
+                BufferTarget.TransformFeedback => GL.context.boundBuffers.TransformFeedback[index],
+                BufferTarget.Uniform => GL.context.boundBuffers.Uniform[index],
                 _ => 0
             };
         }
@@ -801,7 +816,7 @@ namespace Zene.Graphics
                     return;
 
                 case Target.BufferAtomicCounter:
-                    if (GL.context.boundBuffers.AtomicCounter == 0) { return; }
+                    if (GL.context.boundBuffers.AtomicCounter[0] == 0) { return; }
                     GL.BindBuffer(GLEnum.AtomicCounterBuffer, 0);
                     return;
 
@@ -846,18 +861,48 @@ namespace Zene.Graphics
                     return;
 
                 case Target.BufferShaderStorage:
-                    if (GL.context.boundBuffers.ShaderStorage == 0) { return; }
+                    if (GL.context.boundBuffers.ShaderStorage[0] == 0) { return; }
                     GL.BindBuffer(GLEnum.ShaderStorageBuffer, 0);
                     return;
 
                 case Target.BufferTransformFeedback:
-                    if (GL.context.boundBuffers.TransformFeedback == 0) { return; }
+                    if (GL.context.boundBuffers.TransformFeedback[0] == 0) { return; }
                     GL.BindBuffer(GLEnum.TransformFeedbackBuffer, 0);
                     return;
 
                 case Target.BufferUniform:
-                    if (GL.context.boundBuffers.Uniform == 0) { return; }
+                    if (GL.context.boundBuffers.Uniform[0] == 0) { return; }
                     GL.BindBuffer(GLEnum.UniformBuffer, 0);
+                    return;
+            }
+        }
+        /// <summary>
+        /// Sets the binding for <paramref name="target"/> at <paramref name="index"/> to 0.
+        /// </summary>
+        /// <param name="target">The target to nullify.</param>
+        /// <param name="index">The index of target to nullify.</param>
+        public static void NullBind(BufferTarget target, uint index)
+        {
+            switch (target)
+            {
+                case BufferTarget.AtomicCounter:
+                    if (GL.context.boundBuffers.AtomicCounter[index] == 0) { return; }
+                    GL.BindBufferBase(GLEnum.AtomicCounterBuffer, index, 0);
+                    return;
+
+                case BufferTarget.ShaderStorage:
+                    if (GL.context.boundBuffers.ShaderStorage[index] == 0) { return; }
+                    GL.BindBufferBase(GLEnum.ShaderStorageBuffer, index, 0);
+                    return;
+
+                case BufferTarget.TransformFeedback:
+                    if (GL.context.boundBuffers.TransformFeedback[index] == 0) { return; }
+                    GL.BindBufferBase(GLEnum.TransformFeedbackBuffer, index, 0);
+                    return;
+
+                case BufferTarget.Uniform:
+                    if (GL.context.boundBuffers.Uniform[index] == 0) { return; }
+                    GL.BindBufferBase(GLEnum.UniformBuffer, index, 0);
                     return;
             }
         }
