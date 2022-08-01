@@ -13,20 +13,17 @@ namespace Zene.Graphics
         /// <param name="internalFormat">The internal format of the renderbuffer.</param>
         public Renderbuffer(TextureFormat internalFormat)
         {
-            InternalFormat = internalFormat;
+            _targetFormat = internalFormat;
         }
-        internal Renderbuffer(uint id, TextureFormat format)
-            : base(id, format)
-        {
 
-        }
+        private readonly TextureFormat _targetFormat;
 
         /// <summary>
         /// Creates storage for the renderbuffer.
         /// </summary>
         /// <param name="width">The width of the renderbuffer.</param>
         /// <param name="height">The height of the renderbuffer.</param>
-        public void CreateStorage(int width, int height) => RenderbufferStorage(InternalFormat, width, height);
+        public void CreateStorage(int width, int height) => RenderbufferStorage(_targetFormat, width, height);
 
         /// <summary>
         /// Creates storage for a multisample renderbuffer.
@@ -34,7 +31,7 @@ namespace Zene.Graphics
         /// <param name="samples">The number of samples in the renderbuffer.</param>
         /// <param name="width">The width of the renderbuffer.</param>
         /// <param name="height">The height of the renderbuffer.</param>
-        public void CreateStorage(int samples, int width, int height) => RenderbufferStorageMultisample(InternalFormat, samples, width, height);
+        public void CreateStorage(int samples, int width, int height) => RenderbufferStorageMultisample(_targetFormat, samples, width, height);
 
         /// <summary>
         /// The width of the renderbuffer.

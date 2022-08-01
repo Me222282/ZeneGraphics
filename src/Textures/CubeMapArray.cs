@@ -17,16 +17,11 @@ namespace Zene.Graphics
         public CubeMapArray(TextureFormat format, TextureData dataType)
             : base(TextureTarget.CubeMapArray)
         {
-            InternalFormat = format;
-            DataType = dataType;
-        }
-        internal CubeMapArray(uint id, TextureFormat format, TextureData dataType)
-            : base(id, TextureTarget.CubeMapArray, format)
-        {
-            InternalFormat = format;
+            _targetFormat = format;
             DataType = dataType;
         }
 
+        private readonly TextureFormat _targetFormat;
         /// <summary>
         /// The type of data being inputed into the texture.
         /// </summary>
@@ -44,7 +39,7 @@ namespace Zene.Graphics
         /// <param name="data">The data to set the texture with.</param>
         public void SetData<T>(int level, int width, int height, int arrayLength, BaseFormat inputFormat, GLArray<T> data) where T :unmanaged
         {
-            TexImage3D(level, InternalFormat, width, height, arrayLength * 6, inputFormat, DataType, data);
+            TexImage3D(level, _targetFormat, width, height, arrayLength * 6, inputFormat, DataType, data);
         }
         /// <summary>
         /// Creats and filles the data inside the texture with <paramref name="data"/>.
@@ -143,7 +138,7 @@ namespace Zene.Graphics
         /// <param name="arrayLength">The size of the cube map array.</param>
         public void CreateStorage(int levels, int width, int height, int arrayLength)
         {
-            TexStorage3D(levels, InternalFormat, width, height, arrayLength * 6);
+            TexStorage3D(levels, _targetFormat, width, height, arrayLength * 6);
         }
         /// <summary>
         /// Create an empy cube map.

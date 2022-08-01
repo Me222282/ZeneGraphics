@@ -15,6 +15,17 @@
             GL.RenderbufferStorage(renderbuffer, (uint)renderbuffer.InternalFormat, width, height);
         }
         /// <summary>
+        /// Establish data storage, format and dimensions of a renderbuffer object's image.
+        /// </summary>
+        /// <param name="width">Specifies the width of the renderbuffer, in pixels.</param>
+        /// <param name="height">Specifies the height of the renderbuffer, in pixels.</param>
+        [OpenGLSupport(3.0)]
+        public static void RenderbufferStorage(this IRenderbuffer renderbuffer, TextureFormat internalFormat, int width, int height)
+        {
+            renderbuffer.Bind();
+            GL.RenderbufferStorage(renderbuffer, (uint)internalFormat, width, height);
+        }
+        /// <summary>
         /// Establish data storage, format, dimensions and sample count of a renderbuffer object's image.
         /// </summary>
         /// <param name="samples">Specifies the number of samples to be used for the renderbuffer object's storage.</param>
@@ -25,6 +36,18 @@
         {
             renderbuffer.Bind();
             GL.RenderbufferStorageMultisample(renderbuffer, samples, (uint)renderbuffer.InternalFormat, width, height);
+        }
+        /// <summary>
+        /// Establish data storage, format, dimensions and sample count of a renderbuffer object's image.
+        /// </summary>
+        /// <param name="samples">Specifies the number of samples to be used for the renderbuffer object's storage.</param>
+        /// <param name="width">Specifies the width of the renderbuffer, in pixels.</param>
+        /// <param name="height">Specifies the height of the renderbuffer, in pixels.</param>
+        [OpenGLSupport(3.0)]
+        public static void RenderbufferStorageMultisample(this IRenderbuffer renderbuffer, TextureFormat internalFormat, int samples, int width, int height)
+        {
+            renderbuffer.Bind();
+            GL.RenderbufferStorageMultisample(renderbuffer, samples, (uint)internalFormat, width, height);
         }
 
         //

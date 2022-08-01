@@ -17,15 +17,11 @@ namespace Zene.Graphics
         public Texture1D(TextureFormat format, TextureData dataType)
             : base(TextureTarget.Texture1D)
         {
-            InternalFormat = format;
+            _targetFormat = format;
             DataType = dataType;
         }
-        internal Texture1D(uint id, TextureFormat format, TextureData dataType)
-            : base(id, TextureTarget.Texture1D, format)
-        {
-            InternalFormat = format;
-            DataType = dataType;
-        }
+
+        private readonly TextureFormat _targetFormat;
 
         /// <summary>
         /// The internal storage resolution of the alpha component at base level.
@@ -228,7 +224,7 @@ namespace Zene.Graphics
         public void SetData<T>(int level, int size, BaseFormat inputFormat, GLArray<T> data) where T : unmanaged
         {
             
-            TexImage1D(level, InternalFormat, size, inputFormat, DataType, data);
+            TexImage1D(level, _targetFormat, size, inputFormat, DataType, data);
         }
         /// <summary>
         /// Create a texture from <paramref name="data"/>.
@@ -271,7 +267,7 @@ namespace Zene.Graphics
         public void CreateStorage(int levels, int size)
         {
             
-            TexStorage1D(levels, InternalFormat, size);
+            TexStorage1D(levels, _targetFormat, size);
         }
         /// <summary>
         /// Create an empy texture.

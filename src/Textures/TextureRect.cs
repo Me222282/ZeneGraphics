@@ -19,15 +19,11 @@ namespace Zene.Graphics
         public TextureRect(TextureFormat format, TextureData dataType)
             : base(TextureTarget.Rectangle)
         {
-            InternalFormat = format;
+            _targetFormat = format;
             DataType = dataType;
         }
-        internal TextureRect(uint id, TextureFormat format, TextureData dataType)
-            : base(id, TextureTarget.Rectangle, format)
-        {
-            InternalFormat = format;
-            DataType = dataType;
-        }
+
+        private readonly TextureFormat _targetFormat;
 
         /// <summary>
         /// The type of data being inputed into the texture.
@@ -45,7 +41,7 @@ namespace Zene.Graphics
         public void SetData<T>(int width, int height, BaseFormat inputFormat, GLArray<T> data) where T : unmanaged
         {
             
-            TexImage2D(0, InternalFormat, width, height, inputFormat, DataType, data);
+            TexImage2D(0, _targetFormat, width, height, inputFormat, DataType, data);
         }
 
         /// <summary>
@@ -72,7 +68,7 @@ namespace Zene.Graphics
         public void CreateStorage(int width, int height)
         {
             
-            TexStorage2D(1, InternalFormat, width, height);
+            TexStorage2D(1, _targetFormat, width, height);
         }
 
         /// <summary>

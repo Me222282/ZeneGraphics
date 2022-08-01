@@ -17,15 +17,11 @@ namespace Zene.Graphics
         public Texture3D(TextureFormat format, TextureData dataType)
             : base(TextureTarget.Texture3D)
         {
-            InternalFormat = format;
+            _targetFormat = format;
             DataType = dataType;
         }
-        internal Texture3D(uint id, TextureFormat format, TextureData dataType)
-            : base(id, TextureTarget.Texture3D, format)
-        {
-            InternalFormat = format;
-            DataType = dataType;
-        }
+
+        private readonly TextureFormat _targetFormat;
 
         /// <summary>
         /// The type of data being inputed into the texture.
@@ -45,7 +41,7 @@ namespace Zene.Graphics
         public void SetData<T>(int level, int width, int height, int depth, BaseFormat inputFormat, GLArray<T> data) where T : unmanaged
         {
             
-            TexImage3D(level, InternalFormat, width, height, depth, inputFormat, DataType, data);
+            TexImage3D(level, _targetFormat, width, height, depth, inputFormat, DataType, data);
         }
         /// <summary>
         /// Creats and filles the data inside the texture with <paramref name="data"/>.
@@ -102,7 +98,7 @@ namespace Zene.Graphics
         public void CreateStorage(int levels, int width, int height, int depth)
         {
             
-            TexStorage3D(levels, InternalFormat, width, height, depth);
+            TexStorage3D(levels, _targetFormat, width, height, depth);
         }
         /// <summary>
         /// Creates the storage space for a texture.

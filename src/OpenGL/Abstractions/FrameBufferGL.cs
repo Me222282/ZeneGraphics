@@ -30,12 +30,6 @@ namespace Zene.Graphics.Base
                 DoubleBuffered = doubleBuffered
             };
         }
-        internal FramebufferGL(uint id)
-        {
-            Id = id;
-
-            Properties = new FramebufferProperties(this);
-        }
 
         public uint Id { get; }
         public FrameTarget Binding { get; private set; } = FrameTarget.FrameBuffer;

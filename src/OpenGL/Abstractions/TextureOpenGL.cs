@@ -59,6 +59,20 @@ namespace Zene.Graphics.Base.Extensions
         /// <param name="target">Specifies the target texture.</param>
         /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         /// <param name="size">Specifies the width of the texture image. All implementations support texture images that are at least 64 texels wide. The height of the 1D texture image is 1.</param>
+        /// <param name="data">Specifies the compressed image data.</param>
+        [OpenGLSupport(1.3)]
+        public static void CompressedTexImage1D<T>(this ITexture texture, int level, TextureFormat internalFormat, int size, GLArray<T> data) where T : unmanaged
+        {
+            texture.Bind();
+            GL.CompressedTexImage1D(texture, level, (uint)internalFormat, size, 0, data.Size * sizeof(T), data);
+        }
+        /// <summary>
+        /// Specify a one-dimensional texture image in a compressed format.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="size">Specifies the width of the texture image. All implementations support texture images that are at least 64 texels wide. The height of the 1D texture image is 1.</param>
         /// <param name="imageSize">Specifies the number of unsigned bytes of image data starting at the address specified by <paramref name="data"/>.</param>
         /// <param name="data">Specifies the compressed image data.</param>
         [OpenGLSupport(1.3)]
@@ -77,10 +91,40 @@ namespace Zene.Graphics.Base.Extensions
         /// <param name="imageSize">Specifies the number of unsigned bytes of image data starting at the address specified by <paramref name="data"/>.</param>
         /// <param name="data">Specifies the compressed image data.</param>
         [OpenGLSupport(1.3)]
+        public static void CompressedTexImage1D<T>(this ITexture texture, int level, TextureFormat internalFormat, int size, int imageSize, T* data) where T : unmanaged
+        {
+            texture.Bind();
+            GL.CompressedTexImage1D(texture, level, (uint)internalFormat, size, 0, imageSize, data);
+        }
+        /// <summary>
+        /// Specify a one-dimensional texture image in a compressed format.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="size">Specifies the width of the texture image. All implementations support texture images that are at least 64 texels wide. The height of the 1D texture image is 1.</param>
+        /// <param name="imageSize">Specifies the number of unsigned bytes of image data starting at the address specified by <paramref name="data"/>.</param>
+        /// <param name="data">Specifies the compressed image data.</param>
+        [OpenGLSupport(1.3)]
         public static void CompressedTexImage1D(this ITexture texture, int level, int size, int imageSize, IntPtr data)
         {
             texture.Bind();
             GL.CompressedTexImage1D(texture, level, (uint)texture.InternalFormat, size, 0, imageSize, data.ToPointer());
+        }
+        /// <summary>
+        /// Specify a one-dimensional texture image in a compressed format.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="size">Specifies the width of the texture image. All implementations support texture images that are at least 64 texels wide. The height of the 1D texture image is 1.</param>
+        /// <param name="imageSize">Specifies the number of unsigned bytes of image data starting at the address specified by <paramref name="data"/>.</param>
+        /// <param name="data">Specifies the compressed image data.</param>
+        [OpenGLSupport(1.3)]
+        public static void CompressedTexImage1D(this ITexture texture, int level, TextureFormat internalFormat, int size, int imageSize, IntPtr data)
+        {
+            texture.Bind();
+            GL.CompressedTexImage1D(texture, level, (uint)internalFormat, size, 0, imageSize, data.ToPointer());
         }
 
         /// <summary>
@@ -101,6 +145,20 @@ namespace Zene.Graphics.Base.Extensions
         /// Specify a two-dimensional texture image in a compressed format.
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels high.</param>
+        /// <param name="data">Specifies the compressed image data.</param>
+        [OpenGLSupport(1.3)]
+        public static void CompressedTexImage2D<T>(this ITexture texture, int level, TextureFormat internalFormat, int width, int height, GLArray<T> data) where T : unmanaged
+        {
+            texture.Bind();
+            GL.CompressedTexImage2D(texture, level, (uint)internalFormat, width, height, 0, data.Size * sizeof(T), data);
+        }
+        /// <summary>
+        /// Specify a two-dimensional texture image in a compressed format.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="target">Specifies the target texture.</param>
         /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         /// <param name="width">Specifies the width of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels wide.</param>
@@ -116,6 +174,21 @@ namespace Zene.Graphics.Base.Extensions
         /// Specify a two-dimensional texture image in a compressed format.
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels high.</param>
+        /// <param name="data">Specifies the compressed image data.</param>
+        [OpenGLSupport(1.3)]
+        public static void CompressedTexImage2D<T>(this ITexture texture, CubeMapFace target, int level, TextureFormat internalFormat, int width, int height, GLArray<T> data) where T : unmanaged
+        {
+            texture.Bind();
+            GL.CompressedTexImage2D(texture, target, level, (uint)internalFormat, width, height, 0, data.Size * sizeof(T), data);
+        }
+        /// <summary>
+        /// Specify a two-dimensional texture image in a compressed format.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         /// <param name="width">Specifies the width of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels wide.</param>
         /// <param name="height">Specifies the height of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels high.</param>
@@ -126,6 +199,21 @@ namespace Zene.Graphics.Base.Extensions
         {
             texture.Bind();
             GL.CompressedTexImage2D(texture, level, (uint)texture.InternalFormat, width, height, 0, imageSize, data);
+        }
+        /// <summary>
+        /// Specify a two-dimensional texture image in a compressed format.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels high.</param>
+        /// <param name="imageSize">Specifies the number of unsigned bytes of image data starting at the address specified by <paramref name="data"/>.</param>
+        /// <param name="data">Specifies the compressed image data.</param>
+        [OpenGLSupport(1.3)]
+        public static void CompressedTexImage2D<T>(this ITexture texture, int level, TextureFormat internalFormat, int width, int height, int imageSize, T* data) where T : unmanaged
+        {
+            texture.Bind();
+            GL.CompressedTexImage2D(texture, level, (uint)internalFormat, width, height, 0, imageSize, data);
         }
         /// <summary>
         /// Specify a two-dimensional texture image in a compressed format.
@@ -147,6 +235,22 @@ namespace Zene.Graphics.Base.Extensions
         /// Specify a two-dimensional texture image in a compressed format.
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels high.</param>
+        /// <param name="imageSize">Specifies the number of unsigned bytes of image data starting at the address specified by <paramref name="data"/>.</param>
+        /// <param name="data">Specifies the compressed image data.</param>
+        [OpenGLSupport(1.3)]
+        public static void CompressedTexImage2D<T>(this ITexture texture, CubeMapFace target, int level, TextureFormat internalFormat, int width, int height, int imageSize, T* data) where T : unmanaged
+        {
+            texture.Bind();
+            GL.CompressedTexImage2D(texture, target, level, (uint)internalFormat, width, height, 0, imageSize, data);
+        }
+        /// <summary>
+        /// Specify a two-dimensional texture image in a compressed format.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         /// <param name="width">Specifies the width of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels wide.</param>
         /// <param name="height">Specifies the height of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels high.</param>
@@ -157,6 +261,21 @@ namespace Zene.Graphics.Base.Extensions
         {
             texture.Bind();
             GL.CompressedTexImage2D(texture, level, (uint)texture.InternalFormat, width, height, 0, imageSize, data.ToPointer());
+        }
+        /// <summary>
+        /// Specify a two-dimensional texture image in a compressed format.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels high.</param>
+        /// <param name="imageSize">Specifies the number of unsigned bytes of image data starting at the address specified by <paramref name="data"/>.</param>
+        /// <param name="data">Specifies the compressed image data.</param>
+        [OpenGLSupport(1.3)]
+        public static void CompressedTexImage2D(this ITexture texture, int level, TextureFormat internalFormat, int width, int height, int imageSize, IntPtr data)
+        {
+            texture.Bind();
+            GL.CompressedTexImage2D(texture, level, (uint)internalFormat, width, height, 0, imageSize, data.ToPointer());
         }
         /// <summary>
         /// Specify a two-dimensional texture image in a compressed format.
@@ -174,6 +293,22 @@ namespace Zene.Graphics.Base.Extensions
             texture.Bind();
             GL.CompressedTexImage2D(texture, target, level, (uint)texture.InternalFormat, width, height, 0, imageSize, data.ToPointer());
         }
+        /// <summary>
+        /// Specify a two-dimensional texture image in a compressed format.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image. All implementations support 2D texture and cube map texture images that are at least 16384 texels high.</param>
+        /// <param name="imageSize">Specifies the number of unsigned bytes of image data starting at the address specified by <paramref name="data"/>.</param>
+        /// <param name="data">Specifies the compressed image data.</param>
+        [OpenGLSupport(1.3)]
+        public static void CompressedTexImage2D(this ITexture texture, CubeMapFace target, int level, TextureFormat internalFormat, int width, int height, int imageSize, IntPtr data)
+        {
+            texture.Bind();
+            GL.CompressedTexImage2D(texture, target, level, (uint)internalFormat, width, height, 0, imageSize, data.ToPointer());
+        }
 
         /// <summary>
         /// Specify a three-dimensional texture image in a compressed format.
@@ -190,6 +325,22 @@ namespace Zene.Graphics.Base.Extensions
         {
             texture.Bind();
             GL.CompressedTexImage3D(texture, level, (uint)texture.InternalFormat, width, height, depth, 0, data.Size * sizeof(T), data);
+        }
+        /// <summary>
+        /// Specify a three-dimensional texture image in a compressed format.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image. All implementations support 3D texture images that are at least 16 texels high.</param>
+        /// <param name="depth">Specifies the depth of the texture image. All implementations support 3D texture images that are at least 16 texels deep.</param>
+        /// <param name="data">Specifies the compressed image data.</param>
+        [OpenGLSupport(1.3)]
+        public static void CompressedTexImage3D<T>(this ITexture texture, int level, TextureFormat internalFormat, int width, int height, int depth, GLArray<T> data) where T : unmanaged
+        {
+            texture.Bind();
+            GL.CompressedTexImage3D(texture, level, (uint)internalFormat, width, height, depth, 0, data.Size * sizeof(T), data);
         }
         /// <summary>
         /// Specify a three-dimensional texture image in a compressed format.
@@ -220,10 +371,44 @@ namespace Zene.Graphics.Base.Extensions
         /// <param name="imageSize">Specifies the number of unsigned bytes of image data starting at the address specified by <paramref name="data"/>.</param>
         /// <param name="data">Specifies the compressed image data.</param>
         [OpenGLSupport(1.3)]
+        public static void CompressedTexImage3D<T>(this ITexture texture, int level, TextureFormat internalFormat, int width, int height, int depth, int imageSize, T* data) where T : unmanaged
+        {
+            texture.Bind();
+            GL.CompressedTexImage3D(texture, level, (uint)internalFormat, width, height, depth, 0, imageSize, data);
+        }
+        /// <summary>
+        /// Specify a three-dimensional texture image in a compressed format.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image. All implementations support 3D texture images that are at least 16 texels high.</param>
+        /// <param name="depth">Specifies the depth of the texture image. All implementations support 3D texture images that are at least 16 texels deep.</param>
+        /// <param name="imageSize">Specifies the number of unsigned bytes of image data starting at the address specified by <paramref name="data"/>.</param>
+        /// <param name="data">Specifies the compressed image data.</param>
+        [OpenGLSupport(1.3)]
         public static void CompressedTexImage3D(this ITexture texture, int level, int width, int height, int depth, int imageSize, IntPtr data)
         {
             texture.Bind();
             GL.CompressedTexImage3D(texture, level, (uint)texture.InternalFormat, width, height, depth, 0, imageSize, data.ToPointer());
+        }
+        /// <summary>
+        /// Specify a three-dimensional texture image in a compressed format.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image. All implementations support 3D texture images that are at least 16 texels high.</param>
+        /// <param name="depth">Specifies the depth of the texture image. All implementations support 3D texture images that are at least 16 texels deep.</param>
+        /// <param name="imageSize">Specifies the number of unsigned bytes of image data starting at the address specified by <paramref name="data"/>.</param>
+        /// <param name="data">Specifies the compressed image data.</param>
+        [OpenGLSupport(1.3)]
+        public static void CompressedTexImage3D(this ITexture texture, int level, TextureFormat internalFormat, int width, int height, int depth, int imageSize, IntPtr data)
+        {
+            texture.Bind();
+            GL.CompressedTexImage3D(texture, level, (uint)internalFormat, width, height, depth, 0, imageSize, data.ToPointer());
         }
 
         /// <summary>
@@ -508,6 +693,20 @@ namespace Zene.Graphics.Base.Extensions
             GL.CopyTexImage1D(texture, level, (uint)texture.InternalFormat, x, y, size, 0);
         }
         /// <summary>
+        /// Copy pixels into a 1D texture image.
+        /// </summary>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="">Specifies the internal format of the texture.</param>
+        /// <param name="x">Specify the x-axis window coordinate of the lower left corner of the rectangular region of pixels to be copied.</param>
+        /// <param name="y">Specify the y-axis window coordinate of the lower left corner of the rectangular region of pixels to be copied.</param>
+        /// <param name="size">Specifies the width of the texture image. The height of the texture image is 1.</param>
+        [OpenGLSupport(1.1)]
+        public static void CopyTexImage1D(this ITexture texture, int level, TextureFormat internalFormat, int x, int y, int size)
+        {
+            texture.Bind();
+            GL.CopyTexImage1D(texture, level, (uint)internalFormat, x, y, size, 0);
+        }
+        /// <summary>
         /// Copy pixels into a 2D texture image.
         /// </summary>
         /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
@@ -525,6 +724,21 @@ namespace Zene.Graphics.Base.Extensions
         /// <summary>
         /// Copy pixels into a 2D texture image.
         /// </summary>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="">Specifies the internal format of the texture.</param>
+        /// <param name="x">Specify the x-axis window coordinate of the lower left corner of the rectangular region of pixels to be copied.</param>
+        /// <param name="y">Specify the y-axis window coordinate of the lower left corner of the rectangular region of pixels to be copied.</param>
+        /// <param name="width">Specifies the width of the texture image.</param>
+        /// <param name="height">Specifies the height of the texture image.</param>
+        [OpenGLSupport(1.1)]
+        public static void CopyTexImage2D(this ITexture texture, int level, TextureFormat internalFormat, int x, int y, int width, int height)
+        {
+            texture.Bind();
+            GL.CopyTexImage2D(texture, level, (uint)internalFormat, x, y, width, height, 0);
+        }
+        /// <summary>
+        /// Copy pixels into a 2D texture image.
+        /// </summary>
         /// <param name="target">Specifies the target texture.</param>
         /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         /// <param name="">Specifies the internal format of the texture.</param>
@@ -537,6 +751,22 @@ namespace Zene.Graphics.Base.Extensions
         {
             texture.Bind();
             GL.CopyTexImage2D(texture, target, level, (uint)texture.InternalFormat, x, y, width, height, 0);
+        }
+        /// <summary>
+        /// Copy pixels into a 2D texture image.
+        /// </summary>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="">Specifies the internal format of the texture.</param>
+        /// <param name="x">Specify the x-axis window coordinate of the lower left corner of the rectangular region of pixels to be copied.</param>
+        /// <param name="y">Specify the y-axis window coordinate of the lower left corner of the rectangular region of pixels to be copied.</param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        [OpenGLSupport(1.1)]
+        public static void CopyTexImage2D(this ITexture texture, CubeMapFace target, int level, TextureFormat internalFormat, int x, int y, int width, int height)
+        {
+            texture.Bind();
+            GL.CopyTexImage2D(texture, target, level, (uint)internalFormat, x, y, width, height, 0);
         }
 
         /// <summary>
@@ -817,7 +1047,18 @@ namespace Zene.Graphics.Base.Extensions
         public static void TexBuffer(this ITexture texture, IBuffer buffer)
         {
             texture.Bind();
-            GL.TexBuffer((uint)texture.Target, (uint)texture.InternalFormat, buffer.Id);
+            GL.TexBuffer(texture, (uint)texture.InternalFormat, buffer);
+        }
+        /// <summary>
+        /// Attach a buffer object's data store to a buffer texture object.
+        /// </summary>
+        /// <param name="buffer">Specifies the name of the buffer object whose storage to attach to the active buffer texture.</param>
+        /// <param name="">Specifies the internal format of the data in the store belonging to <paramref name="buffer"/>.</param>
+        [OpenGLSupport(3.1)]
+        public static void TexBuffer(this ITexture texture, TextureFormat internalFormat, IBuffer buffer)
+        {
+            texture.Bind();
+            GL.TexBuffer(texture, (uint)internalFormat, buffer);
         }
         /// <summary>
         /// Attach a range of a buffer object's data store to a buffer texture object.
@@ -830,7 +1071,20 @@ namespace Zene.Graphics.Base.Extensions
         public static void TexBufferRange(this ITexture texture, IBuffer buffer, int offset, int size)
         {
             texture.Bind();
-            GL.TexBufferRange((uint)texture.Target, (uint)texture.InternalFormat, buffer.Id, offset, size);
+            GL.TexBufferRange(texture, (uint)texture.InternalFormat, buffer.Id, offset, size);
+        }
+        /// <summary>
+        /// Attach a range of a buffer object's data store to a buffer texture object.
+        /// </summary>
+        /// <param name="buffer">Specifies the name of the buffer object whose storage to attach to the active buffer texture.</param>
+        /// <param name="">Specifies the internal format of the data in the store belonging to <paramref name="buffer"/>.</param>
+        /// <param name="offset">Specifies the offset of the start of the range of the buffer's data store to attach.</param>
+        /// <param name="size">Specifies the size of the range of the buffer's data store to attach.</param>
+        [OpenGLSupport(4.3)]
+        public static void TexBufferRange(this ITexture texture, TextureFormat internalFormat, IBuffer buffer, int offset, int size)
+        {
+            texture.Bind();
+            GL.TexBufferRange(texture, (uint)internalFormat, buffer.Id, offset, size);
         }
 
         /// <summary>
@@ -854,6 +1108,22 @@ namespace Zene.Graphics.Base.Extensions
         /// </summary>
         /// <param name="target">Specifies the target texture.</param>
         /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="">Specifies the number of colour components in the texture.</param>
+        /// <param name="size">Specifies the width of the texture image. All implementations support texture images that are at least 1024 texels wide.</param>
+        /// <param name="format">Specifies the format of the pixel data.</param>
+        /// <param name="type">Specifies the data type of the pixel data.</param>
+        /// <param name="dataPtr">Specifies a pointer to the image data in memory.</param>
+        [OpenGLSupport(1.0)]
+        public static void TexImage1D<T>(this ITexture texture, int level, TextureFormat internalFormat, int size, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
+        {
+            texture.Bind();
+            GL.TexImage1D(texture, level, (int)internalFormat, size, 0, (uint)format, (uint)type, dataPtr);
+        }
+        /// <summary>
+        /// Specify a one-dimensional texture image.
+        /// </summary>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         /// <param name="size">Specifies the width of the texture image. All implementations support texture images that are at least 1024 texels wide.</param>
         /// <param name="format">Specifies the format of the pixel data.</param>
         /// <param name="type">Specifies the data type of the pixel data.</param>
@@ -863,6 +1133,21 @@ namespace Zene.Graphics.Base.Extensions
         {
             texture.Bind();
             GL.TexImage1D(texture, level, (int)texture.InternalFormat, size, 0, (uint)format, (uint)type, dataPtr.ToPointer());
+        }
+        /// <summary>
+        /// Specify a one-dimensional texture image.
+        /// </summary>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="size">Specifies the width of the texture image. All implementations support texture images that are at least 1024 texels wide.</param>
+        /// <param name="format">Specifies the format of the pixel data.</param>
+        /// <param name="type">Specifies the data type of the pixel data.</param>
+        /// <param name="dataPtr">Specifies a pointer to the image data in memory.</param>
+        [OpenGLSupport(1.0)]
+        public static void TexImage1D(this ITexture texture, int level, TextureFormat internalFormat, int size, BaseFormat format, TextureData type, IntPtr dataPtr)
+        {
+            texture.Bind();
+            GL.TexImage1D(texture, level, (int)internalFormat, size, 0, (uint)format, (uint)type, dataPtr.ToPointer());
         }
         /// <summary>
         /// Specify a one-dimensional texture image.
@@ -879,6 +1164,22 @@ namespace Zene.Graphics.Base.Extensions
         {
             texture.Bind();
             GL.TexImage1D(texture, level, (int)texture.InternalFormat, size, 0, (uint)format, (uint)type, data);
+        }
+        /// <summary>
+        /// Specify a one-dimensional texture image.
+        /// </summary>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="">Specifies the number of colour components in the texture.</param>
+        /// <param name="size">Specifies the width of the texture image. All implementations support texture images that are at least 1024 texels wide.</param>
+        /// <param name="format">Specifies the format of the pixel data.</param>
+        /// <param name="type">Specifies the data type of the pixel data.</param>
+        /// <param name="data">Specifies a pointer to the image data in memory.</param>
+        [OpenGLSupport(1.0)]
+        public static void TexImage1D<T>(this ITexture texture, int level, TextureFormat internalFormat, int size, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
+        {
+            texture.Bind();
+            GL.TexImage1D(texture, level, (int)internalFormat, size, 0, (uint)format, (uint)type, data);
         }
 
         /// <summary>
@@ -903,6 +1204,25 @@ namespace Zene.Graphics.Base.Extensions
         /// <summary>
         /// Specify a two-dimensional texture image.
         /// </summary>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image. 
+        /// If target is <see cref="TextureTarget.Rectangle"/>, level must be 0.</param>
+        /// <param name="">Specifies the number of colour components in the texture.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support texture images that are at least 1024 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image, or the number of layers in a texture array, 
+        /// in the case of the <see cref="TextureTarget.Array1D"/> targets. 
+        /// All implementations support 2D texture images that are at least 1024 texels high, and texture arrays that are at least 256 layers deep.</param>
+        /// <param name="format">Specifies the format of the pixel data.</param>
+        /// <param name="type">Specifies the data type of the pixel data.</param>
+        /// <param name="dataPtr">Specifies a pointer to the image data in memory.</param>
+        [OpenGLSupport(1.0)]
+        public static void TexImage2D<T>(this ITexture texture, int level, TextureFormat internalFormat, int width, int height, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
+        {
+            texture.Bind();
+            GL.TexImage2D(texture, level, (int)internalFormat, width, height, 0, (uint)format, (uint)type, dataPtr);
+        }
+        /// <summary>
+        /// Specify a two-dimensional texture image.
+        /// </summary>
         /// <param name="target">Specifies the target texture.</param>
         /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image. 
         /// If target is <see cref="TextureTarget.Rectangle"/>, level must be 0.</param>
@@ -923,6 +1243,26 @@ namespace Zene.Graphics.Base.Extensions
         /// <summary>
         /// Specify a two-dimensional texture image.
         /// </summary>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image. 
+        /// If target is <see cref="TextureTarget.Rectangle"/>, level must be 0.</param>
+        /// <param name="">Specifies the number of colour components in the texture.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support texture images that are at least 1024 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image, or the number of layers in a texture array, 
+        /// in the case of the <see cref="TextureTarget.Array1D"/> target. 
+        /// All implementations support 2D texture images that are at least 1024 texels high, and texture arrays that are at least 256 layers deep.</param>
+        /// <param name="format">Specifies the format of the pixel data.</param>
+        /// <param name="type">Specifies the data type of the pixel data.</param>
+        /// <param name="dataPtr">Specifies a pointer to the image data in memory.</param>
+        [OpenGLSupport(1.0)]
+        public static void TexImage2D<T>(this ITexture texture, CubeMapFace target, int level, TextureFormat internalFormat, int width, int height, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
+        {
+            texture.Bind();
+            GL.TexImage2D(texture, target, level, (int)internalFormat, width, height, 0, (uint)format, (uint)type, dataPtr);
+        }
+        /// <summary>
+        /// Specify a two-dimensional texture image.
+        /// </summary>
         /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image. 
         /// If target is <see cref="TextureTarget.Rectangle"/>, level must be 0.</param>
         /// <param name="width">Specifies the width of the texture image. All implementations support texture images that are at least 1024 texels wide.</param>
@@ -937,6 +1277,24 @@ namespace Zene.Graphics.Base.Extensions
         {
             texture.Bind();
             GL.TexImage2D(texture, level, (int)texture.InternalFormat, width, height, 0, (uint)format, (uint)type, dataPtr.ToPointer());
+        }
+        /// <summary>
+        /// Specify a two-dimensional texture image.
+        /// </summary>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image. 
+        /// If target is <see cref="TextureTarget.Rectangle"/>, level must be 0.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support texture images that are at least 1024 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image, or the number of layers in a texture array, 
+        /// in the case of the <see cref="TextureTarget.Array1D"/> targets. 
+        /// All implementations support 2D texture images that are at least 1024 texels high, and texture arrays that are at least 256 layers deep.</param>
+        /// <param name="format">Specifies the format of the pixel data.</param>
+        /// <param name="type">Specifies the data type of the pixel data.</param>
+        /// <param name="dataPtr">Specifies a pointer to the image data in memory.</param>
+        [OpenGLSupport(1.0)]
+        public static void TexImage2D(this ITexture texture, int level, TextureFormat internalFormat, int width, int height, BaseFormat format, TextureData type, IntPtr dataPtr)
+        {
+            texture.Bind();
+            GL.TexImage2D(texture, level, (int)internalFormat, width, height, 0, (uint)format, (uint)type, dataPtr.ToPointer());
         }
         /// <summary>
         /// Specify a two-dimensional texture image.
@@ -960,6 +1318,25 @@ namespace Zene.Graphics.Base.Extensions
         /// <summary>
         /// Specify a two-dimensional texture image.
         /// </summary>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image. 
+        /// If target is <see cref="TextureTarget.Rectangle"/>, level must be 0.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support texture images that are at least 1024 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image, or the number of layers in a texture array, 
+        /// in the case of the <see cref="TextureTarget.Array1D"/> target. 
+        /// All implementations support 2D texture images that are at least 1024 texels high, and texture arrays that are at least 256 layers deep.</param>
+        /// <param name="format">Specifies the format of the pixel data.</param>
+        /// <param name="type">Specifies the data type of the pixel data.</param>
+        /// <param name="dataPtr">Specifies a pointer to the image data in memory.</param>
+        [OpenGLSupport(1.0)]
+        public static void TexImage2D(this ITexture texture, CubeMapFace target, int level, TextureFormat internalFormat, int width, int height, BaseFormat format, TextureData type, IntPtr dataPtr)
+        {
+            texture.Bind();
+            GL.TexImage2D(texture, target, level, (int)internalFormat, width, height, 0, (uint)format, (uint)type, dataPtr.ToPointer());
+        }
+        /// <summary>
+        /// Specify a two-dimensional texture image.
+        /// </summary>
         /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image. 
         /// If target is <see cref="TextureTarget.Rectangle"/>, level must be 0.</param>
         /// <param name="">Specifies the number of colour components in the texture.</param>
@@ -975,6 +1352,25 @@ namespace Zene.Graphics.Base.Extensions
         {
             texture.Bind();
             GL.TexImage2D(texture, level, (int)texture.InternalFormat, width, height, 0, (uint)format, (uint)type, (T*)data);
+        }
+        /// <summary>
+        /// Specify a two-dimensional texture image.
+        /// </summary>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image. 
+        /// If target is <see cref="TextureTarget.Rectangle"/>, level must be 0.</param>
+        /// <param name="">Specifies the number of colour components in the texture.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support texture images that are at least 1024 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image, or the number of layers in a texture array, 
+        /// in the case of the <see cref="TextureTarget.Array1D"/> targets. 
+        /// All implementations support 2D texture images that are at least 1024 texels high, and texture arrays that are at least 256 layers deep.</param>
+        /// <param name="format">Specifies the format of the pixel data.</param>
+        /// <param name="type">Specifies the data type of the pixel data.</param>
+        /// <param name="data">Specifies a pointer to the image data in memory.</param>
+        [OpenGLSupport(1.0)]
+        public static void TexImage2D<T>(this ITexture texture, int level, TextureFormat internalFormat, int width, int height, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
+        {
+            texture.Bind();
+            GL.TexImage2D(texture, level, (int)internalFormat, width, height, 0, (uint)format, (uint)type, (T*)data);
         }
         /// <summary>
         /// Specify a two-dimensional texture image.
@@ -996,6 +1392,26 @@ namespace Zene.Graphics.Base.Extensions
             texture.Bind();
             GL.TexImage2D(texture, target, level, (int)texture.InternalFormat, width, height, 0, (uint)format, (uint)type, (T*)data);
         }
+        /// <summary>
+        /// Specify a two-dimensional texture image.
+        /// </summary>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image. 
+        /// If target is <see cref="TextureTarget.Rectangle"/>, level must be 0.</param>
+        /// <param name="">Specifies the number of colour components in the texture.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support texture images that are at least 1024 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image, or the number of layers in a texture array, 
+        /// in the case of the <see cref="TextureTarget.Array1D"/> target. 
+        /// All implementations support 2D texture images that are at least 1024 texels high, and texture arrays that are at least 256 layers deep.</param>
+        /// <param name="format">Specifies the format of the pixel data.</param>
+        /// <param name="type">Specifies the data type of the pixel data.</param>
+        /// <param name="data">Specifies a pointer to the image data in memory.</param>
+        [OpenGLSupport(1.0)]
+        public static void TexImage2D<T>(this ITexture texture, CubeMapFace target, int level, TextureFormat internalFormat, int width, int height, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
+        {
+            texture.Bind();
+            GL.TexImage2D(texture, target, level, (int)internalFormat, width, height, 0, (uint)format, (uint)type, (T*)data);
+        }
 
         /// <summary>
         /// Establish the data storage, format, dimensions, and number of samples of a multisample texture's image.
@@ -1013,6 +1429,23 @@ namespace Zene.Graphics.Base.Extensions
         {
             texture.Bind();
             GL.TexImage2DMultisample(texture, samples, (uint)texture.InternalFormat, width, height, fixedsampleLocations);
+        }
+        /// <summary>
+        /// Establish the data storage, format, dimensions, and number of samples of a multisample texture's image.
+        /// </summary>
+        /// <param name="target">Specifies the target of the operation.</param>
+        /// <param name="samples">The number of samples in the multisample texture's image.</param>
+        /// <param name="">The internal format to be used to store the multisample texture's image. 
+        /// It must specify a colour-renderable, depth-renderable, or stencil-renderable format.</param>
+        /// <param name="width">The width of the multisample texture's image, in texels.</param>
+        /// <param name="height">The height of the multisample texture's image, in texels.</param>
+        /// <param name="fixedsampleLocations">Specifies whether the image will use identical sample locations and the same number of 
+        /// samples for all texels in the image, and the sample locations will not depend on the internal format or size of the image.</param>
+        [OpenGLSupport(3.2)]
+        public static void TexImage2DMultisample(this ITexture texture, int samples, TextureFormat internalFormat, int width, int height, bool fixedsampleLocations)
+        {
+            texture.Bind();
+            GL.TexImage2DMultisample(texture, samples, (uint)internalFormat, width, height, fixedsampleLocations);
         }
 
         /// <summary>
@@ -1039,6 +1472,25 @@ namespace Zene.Graphics.Base.Extensions
         /// </summary>
         /// <param name="target">Specifies the target texture.</param>
         /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="">Specifies the number of colour components in the texture.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image. All implementations support 3D texture images that are at least 256 texels high.</param>
+        /// <param name="depth">Specifies the depth of the texture image, or the number of layers in a texture array. 
+        /// All implementations support 3D texture images that are at least 256 texels deep, and texture arrays that are at least 256 layers deep.</param>
+        /// <param name="format">Specifies the format of the pixel data.</param>
+        /// <param name="type">Specifies the data type of the pixel data.</param>
+        /// <param name="dataPtr">Specifies a pointer to the image data in memory.</param>
+        [OpenGLSupport(1.2)]
+        public static void TexImage3D<T>(this ITexture texture, int level, TextureFormat internalFormat, int width, int height, int depth, BaseFormat format, TextureData type, T* dataPtr) where T : unmanaged
+        {
+            texture.Bind();
+            GL.TexImage3D(texture, level, (int)internalFormat, width, height, depth, 0, (uint)format, (uint)type, dataPtr);
+        }
+        /// <summary>
+        /// Specify a three-dimensional texture image.
+        /// </summary>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
         /// <param name="width">Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.</param>
         /// <param name="height">Specifies the height of the texture image. All implementations support 3D texture images that are at least 256 texels high.</param>
         /// <param name="depth">Specifies the depth of the texture image, or the number of layers in a texture array. 
@@ -1051,6 +1503,24 @@ namespace Zene.Graphics.Base.Extensions
         {
             texture.Bind();
             GL.TexImage3D(texture, level, (int)texture.InternalFormat, width, height, depth, 0, (uint)format, (uint)type, dataPtr.ToPointer());
+        }
+        /// <summary>
+        /// Specify a three-dimensional texture image.
+        /// </summary>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image. All implementations support 3D texture images that are at least 256 texels high.</param>
+        /// <param name="depth">Specifies the depth of the texture image, or the number of layers in a texture array. 
+        /// All implementations support 3D texture images that are at least 256 texels deep, and texture arrays that are at least 256 layers deep.</param>
+        /// <param name="format">Specifies the format of the pixel data.</param>
+        /// <param name="type">Specifies the data type of the pixel data.</param>
+        /// <param name="dataPtr">Specifies a pointer to the image data in memory.</param>
+        [OpenGLSupport(1.2)]
+        public static void TexImage3D(this ITexture texture, int level, TextureFormat internalFormat, int width, int height, int depth, BaseFormat format, TextureData type, IntPtr dataPtr)
+        {
+            texture.Bind();
+            GL.TexImage3D(texture, level, (int)internalFormat, width, height, depth, 0, (uint)format, (uint)type, dataPtr.ToPointer());
         }
         /// <summary>
         /// Specify a three-dimensional texture image.
@@ -1071,6 +1541,25 @@ namespace Zene.Graphics.Base.Extensions
             texture.Bind();
             GL.TexImage3D(texture, level, (int)texture.InternalFormat, width, height, depth, 0, (uint)format, (uint)type, data);
         }
+        /// <summary>
+        /// Specify a three-dimensional texture image.
+        /// </summary>
+        /// <param name="target">Specifies the target texture.</param>
+        /// <param name="level">Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap reduction image.</param>
+        /// <param name="">Specifies the number of colour components in the texture.</param>
+        /// <param name="width">Specifies the width of the texture image. All implementations support 3D texture images that are at least 16 texels wide.</param>
+        /// <param name="height">Specifies the height of the texture image. All implementations support 3D texture images that are at least 256 texels high.</param>
+        /// <param name="depth">Specifies the depth of the texture image, or the number of layers in a texture array. 
+        /// All implementations support 3D texture images that are at least 256 texels deep, and texture arrays that are at least 256 layers deep.</param>
+        /// <param name="format">Specifies the format of the pixel data.</param>
+        /// <param name="type">Specifies the data type of the pixel data.</param>
+        /// <param name="data">Specifies a pointer to the image data in memory.</param>
+        [OpenGLSupport(1.2)]
+        public static void TexImage3D<T>(this ITexture texture, int level, TextureFormat internalFormat, int width, int height, int depth, BaseFormat format, TextureData type, GLArray<T> data) where T : unmanaged
+        {
+            texture.Bind();
+            GL.TexImage3D(texture, level, (int)internalFormat, width, height, depth, 0, (uint)format, (uint)type, data);
+        }
 
         /// <summary>
         /// Establish the data storage, format, dimensions, and number of samples of a multisample texture's image.
@@ -1090,6 +1579,24 @@ namespace Zene.Graphics.Base.Extensions
             texture.Bind();
             GL.TexImage3DMultisample(texture, samples, (uint)texture.InternalFormat, width, height, depth, fixedsampleLocations);
         }
+        /// <summary>
+        /// Establish the data storage, format, dimensions, and number of samples of a multisample texture's image.
+        /// </summary>
+        /// <param name="target">Specifies the target of the operation.</param>
+        /// <param name="samples">The number of samples in the multisample texture's image.</param>
+        /// <param name="">The internal format to be used to store the multisample texture's image. 
+        /// It must specify a colour-renderable, depth-renderable, or stencil-renderable format.</param>
+        /// <param name="width">The width of the multisample texture's image, in texels.</param>
+        /// <param name="height">The height of the multisample texture's image, in texels.</param>
+        /// <param name="depth">The depth of the multisample texture's image, in layers.</param>
+        /// <param name="fixedsampleLocations">Specifies whether the image will use identical sample locations and the same number of 
+        /// samples for all texels in the image, and the sample locations will not depend on the internal format or size of the image.</param>
+        [OpenGLSupport(3.2)]
+        public static void TexImage3DMultisample(this ITexture texture, int samples, TextureFormat internalFormat, int width, int height, int depth, bool fixedsampleLocations)
+        {
+            texture.Bind();
+            GL.TexImage3DMultisample(texture, samples, (uint)internalFormat, width, height, depth, fixedsampleLocations);
+        }
 
         /// <summary>
         /// Simultaneously specify storage for all levels of a one-dimensional texture.
@@ -1102,6 +1609,18 @@ namespace Zene.Graphics.Base.Extensions
         {
             texture.Bind();
             GL.TexStorage1D(texture, levels, (uint)texture.InternalFormat, size);
+        }
+        /// <summary>
+        /// Simultaneously specify storage for all levels of a one-dimensional texture.
+        /// </summary>
+        /// <param name="target">Specifies the target to which the texture object is bound for <see cref="TexStorage1D(ITexture, TextureGL.Target1D, int, int)"/>.</param>
+        /// <param name="levels">Specify the number of texture levels.</param>
+        /// <param name="">Specifies the sized internal format to be used to store texture image data.</param>
+        /// <param name="size">Specifies the width of the texture, in texels.</param>
+        public static void TexStorage1D(this ITexture texture, int levels, TextureFormat internalFormat, int size)
+        {
+            texture.Bind();
+            GL.TexStorage1D(texture, levels, (uint)internalFormat, size);
         }
         /// <summary>
         /// Simultaneously specify storage for all levels of a two-dimensional or one-dimensional array texture.
@@ -1118,6 +1637,18 @@ namespace Zene.Graphics.Base.Extensions
         /// <summary>
         /// Simultaneously specify storage for all levels of a two-dimensional or one-dimensional array texture.
         /// </summary>
+        /// <param name="levels">Specify the number of texture levels.</param>
+        /// <param name="">Specifies the sized internal format to be used to store texture image data.</param>
+        /// <param name="width">Specifies the width of the texture, in texels.</param>
+        /// <param name="height">Specifies the height of the texture, in texels.</param>
+        public static void TexStorage2D(this ITexture texture, int levels, TextureFormat internalFormat, int width, int height)
+        {
+            texture.Bind();
+            GL.TexStorage2D(texture, levels, (uint)internalFormat, width, height);
+        }
+        /// <summary>
+        /// Simultaneously specify storage for all levels of a two-dimensional or one-dimensional array texture.
+        /// </summary>
         /// <param name="target">Specifies the target to which the texture object is bound for <see cref="TexStorage2D(ITexture, CubeMapFace, int, int, int)"/>.</param>
         /// <param name="levels">Specify the number of texture levels.</param>
         /// <param name="">Specifies the sized internal format to be used to store texture image data.</param>
@@ -1127,6 +1658,19 @@ namespace Zene.Graphics.Base.Extensions
         {
             texture.Bind();
             GL.TexStorage2D(texture, target, levels, (uint)texture.InternalFormat, width, height);
+        }
+        /// <summary>
+        /// Simultaneously specify storage for all levels of a two-dimensional or one-dimensional array texture.
+        /// </summary>
+        /// <param name="target">Specifies the target to which the texture object is bound for <see cref="TexStorage2D(ITexture, CubeMapFace, int, int, int)"/>.</param>
+        /// <param name="levels">Specify the number of texture levels.</param>
+        /// <param name="">Specifies the sized internal format to be used to store texture image data.</param>
+        /// <param name="width">Specifies the width of the texture, in texels.</param>
+        /// <param name="height">Specifies the height of the texture, in texels.</param>
+        public static void TexStorage2D(this ITexture texture, CubeMapFace target, int levels, TextureFormat internalFormat, int width, int height)
+        {
+            texture.Bind();
+            GL.TexStorage2D(texture, target, levels, (uint)internalFormat, width, height);
         }
         /// <summary>
         /// Specify storage for a two-dimensional multisample texture.
@@ -1143,6 +1687,20 @@ namespace Zene.Graphics.Base.Extensions
             GL.TexStorage2DMultisample(texture, samples, (uint)texture.InternalFormat, width, height, fixedsampleLocations);
         }
         /// <summary>
+        /// Specify storage for a two-dimensional multisample texture.
+        /// </summary>
+        /// <param name="samples">Specify the number of samples in the texture.</param>
+        /// <param name="">Specifies the sized internal format to be used to store texture image data.</param>
+        /// <param name="width">Specifies the width of the texture, in texels.</param>
+        /// <param name="height">Specifies the height of the texture, in texels.</param>
+        /// <param name="fixedsampleLocations">Specifies whether the image will use identical sample locations and the same number of samples for all 
+        /// texels in the image, and the sample locations will not depend on the internal format or size of the image.</param>
+        public static void TexStorage2DMultisample(this ITexture texture, int samples, TextureFormat internalFormat, int width, int height, bool fixedsampleLocations)
+        {
+            texture.Bind();
+            GL.TexStorage2DMultisample(texture, samples, (uint)internalFormat, width, height, fixedsampleLocations);
+        }
+        /// <summary>
         /// Simultaneously specify storage for all levels of a three-dimensional, two-dimensional array or cube-map array texture.
         /// </summary>
         /// <param name="target">Specifies the target to which the texture object is bound for <see cref="TexStorage3D(ITexture, TextureGL.Target3D, int, int, int, int)"/>.</param>
@@ -1155,6 +1713,20 @@ namespace Zene.Graphics.Base.Extensions
         {
             texture.Bind();
             GL.TexStorage3D(texture, levels, (uint)texture.InternalFormat, width, height, depth);
+        }
+        /// <summary>
+        /// Simultaneously specify storage for all levels of a three-dimensional, two-dimensional array or cube-map array texture.
+        /// </summary>
+        /// <param name="target">Specifies the target to which the texture object is bound for <see cref="TexStorage3D(ITexture, TextureGL.Target3D, int, int, int, int)"/>.</param>
+        /// <param name="levels">Specify the number of texture levels.</param>
+        /// <param name="">Specifies the sized internal format to be used to store texture image data.</param>
+        /// <param name="width">Specifies the width of the texture, in texels.</param>
+        /// <param name="height">Specifies the height of the texture, in texels.</param>
+        /// <param name="depth">Specifies the depth of the texture, in texels.</param>
+        public static void TexStorage3D(this ITexture texture, int levels, TextureFormat internalFormat, int width, int height, int depth)
+        {
+            texture.Bind();
+            GL.TexStorage3D(texture, levels, (uint)internalFormat, width, height, depth);
         }
         /// <summary>
         /// Specify storage for a two-dimensional multisample array texture.
@@ -1172,6 +1744,23 @@ namespace Zene.Graphics.Base.Extensions
         {
             texture.Bind();
             GL.TexStorage3DMultisample(texture, samples, (uint)texture.InternalFormat, width, height, depth, fixedsampleLocations);
+        }
+        /// <summary>
+        /// Specify storage for a two-dimensional multisample array texture.
+        /// </summary>
+        /// <param name="target">Specifies the target to which the texture object is bound for 
+        /// <see cref="TexStorage3DMultisample(ITexture, TextureGL.Target3DMultisample, int, int, int, int, bool)"/>.</param>
+        /// <param name="samples">Specify the number of samples in the texture.</param>
+        /// <param name="">Specifies the sized internal format to be used to store texture image data.</param>
+        /// <param name="width">Specifies the width of the texture, in texels.</param>
+        /// <param name="height">Specifies the height of the texture, in texels.</param>
+        /// <param name="depth">Specifies the depth of the texture, in layers.</param>
+        /// <param name="fixedsampleLocations">Specifies whether the image will use identical sample locations and the same number of samples for all 
+        /// texels in the image, and the sample locations will not depend on the internal format or size of the image.</param>
+        public static void TexStorage3DMultisample(this ITexture texture, int samples, TextureFormat internalFormat, int width, int height, int depth, bool fixedsampleLocations)
+        {
+            texture.Bind();
+            GL.TexStorage3DMultisample(texture, samples, (uint)internalFormat, width, height, depth, fixedsampleLocations);
         }
 
         /// <summary>
@@ -1382,6 +1971,20 @@ namespace Zene.Graphics.Base.Extensions
         {
             texture.Bind();
             GL.TextureView(texture, (uint)texture.Target, original, (uint)texture.InternalFormat, minLevel, numLevels, minLayer, numbLayers);
+        }
+        /// <summary>
+        /// Initialize a texture as a data alias of another texture's data store.
+        /// </summary>
+        /// <param name="original">Specifies the texture object of which to make a view.</param>
+        /// <param name="">Specifies the internal format for the newly created view.</param>
+        /// <param name="minLevel">Specifies lowest level of detail of the view.</param>
+        /// <param name="numLevels">Specifies the number of levels of detail to include in the view.</param>
+        /// <param name="minLayer">Specifies the index of the first layer to include in the view.</param>
+        /// <param name="numbLayers">Specifies the number of layers to include in the view.</param>
+        public static void TextureView(this ITexture texture, ITexture original, TextureFormat internalFormat, uint minLevel, uint numLevels, uint minLayer, uint numbLayers)
+        {
+            texture.Bind();
+            GL.TextureView(texture, (uint)texture.Target, original, (uint)internalFormat, minLevel, numLevels, minLayer, numbLayers);
         }
 
         //

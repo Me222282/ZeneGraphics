@@ -17,15 +17,11 @@ namespace Zene.Graphics
         public Texture1DArray(TextureFormat format, TextureData dataType)
             : base(TextureTarget.Texture1DArray)
         {
-            InternalFormat = format;
+            _targetFormat = format;
             DataType = dataType;
         }
-        internal Texture1DArray(uint id, TextureFormat format, TextureData dataType)
-            : base(id, TextureTarget.Texture1DArray, format)
-        {
-            InternalFormat = format;
-            DataType = dataType;
-        }
+
+        private readonly TextureFormat _targetFormat;
 
         /// <summary>
         /// The type of data being inputed into the texture.
@@ -252,7 +248,7 @@ namespace Zene.Graphics
         /// <param name="data">The data to set the texture to.</param>
         public void SetData<T>(int level, int size, int arrayLength, BaseFormat inputFormat, GLArray<T> data) where T : unmanaged
         {
-            TexImage2D(level, InternalFormat, size, arrayLength, inputFormat, DataType, data);
+            TexImage2D(level, _targetFormat, size, arrayLength, inputFormat, DataType, data);
         }
         /// <summary>
         /// Create a texture from <paramref name="data"/>.
@@ -298,7 +294,7 @@ namespace Zene.Graphics
         public void CreateStorage(int levels, int size, int arrayLength)
         {
             
-            TexStorage2D(levels, InternalFormat, size, arrayLength);
+            TexStorage2D(levels, _targetFormat, size, arrayLength);
         }
         /// <summary>
         /// Create an empy texture.

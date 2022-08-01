@@ -18,7 +18,7 @@ namespace Zene.Graphics
         public Texture(TextureFormat format)
             : base(TextureTarget.Texture2D)
         {
-            InternalFormat = format;
+            _targetFormat = format;
         }
         /// <summary>
         /// Create a texture from <paramref name="data"/>.
@@ -28,7 +28,7 @@ namespace Zene.Graphics
         public Texture(TextureFormat format, GLArray<Colour> data)
             : base(TextureTarget.Texture2D)
         {
-            InternalFormat = format;
+            _targetFormat = format;
             Data = data;
         }
         /// <summary>
@@ -39,12 +39,12 @@ namespace Zene.Graphics
         public Texture(TextureFormat format, Stream stream, bool close = false)
             : base(TextureTarget.Texture2D)
         {
-            InternalFormat = format;
+            _targetFormat = format;
 
             byte[] data = Bitmap.ExtractData(stream, out int width, out int height, close);
             fixed (byte* ptr = &data[0])
             {
-                TexImage2D(0, InternalFormat, width, height, BaseFormat.Rgba, TextureData.Byte, ptr);
+                TexImage2D(0, _targetFormat, width, height, BaseFormat.Rgba, TextureData.Byte, ptr);
             }
         }
         /// <summary>
@@ -57,6 +57,8 @@ namespace Zene.Graphics
         {
             
         }
+
+        private readonly TextureFormat _targetFormat;
 
         /// <summary>
         /// Gets or sets a signal pixel of the texture.
@@ -120,7 +122,7 @@ namespace Zene.Graphics
             }
             set
             {
-                TexImage2D(0, InternalFormat, value.Width, value.Height, BaseFormat.Rgba, TextureData.Byte, value);
+                TexImage2D(0, _targetFormat, value.Width, value.Height, BaseFormat.Rgba, TextureData.Byte, value);
                 MipMaped = false;
             }
         }

@@ -273,12 +273,14 @@ namespace Zene.Graphics.Base
 
 			Functions.CompressedTexImage1D((uint)target.Target, level, internalformat, width, border, imageSize, data);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
             {
 				target.Properties._width = width;
 				target.Properties._height = 1;
 				target.Properties._depth = 1;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(1.3)]
@@ -291,12 +293,14 @@ namespace Zene.Graphics.Base
 
 			Functions.CompressedTexImage2D((uint)target.Target, level, internalformat, width, height, border, imageSize, data);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = height;
 				target.Properties._depth = 1;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(1.3)]
@@ -309,12 +313,14 @@ namespace Zene.Graphics.Base
 
 			Functions.CompressedTexImage2D((uint)face, level, internalformat, width, height, border, imageSize, data);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = height;
 				target.Properties._depth = 1;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(1.3)]
@@ -327,12 +333,14 @@ namespace Zene.Graphics.Base
 
 			Functions.CompressedTexImage3D((uint)target.Target, level, internalformat, width, height, depth, border, imageSize, data);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = height;
 				target.Properties._depth = depth;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(1.3)]
@@ -382,12 +390,14 @@ namespace Zene.Graphics.Base
 
 			Functions.CopyTexImage1D((uint)target.Target, level, internalformat, x, y, width, border);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = 1;
 				target.Properties._depth = 1;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(1.1)]
@@ -400,12 +410,14 @@ namespace Zene.Graphics.Base
 
 			Functions.CopyTexImage2D((uint)target.Target, level, internalformat, x, y, width, height, border);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = height;
 				target.Properties._depth = 1;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(1.1)]
@@ -418,12 +430,14 @@ namespace Zene.Graphics.Base
 
 			Functions.CopyTexImage2D((uint)face, level, internalformat, x, y, width, height, border);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = height;
 				target.Properties._depth = 1;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(1.1)]
@@ -544,24 +558,60 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(3.1)]
-		public static void TexBuffer(uint target, uint internalformat, uint buffer)
+		public static void TexBuffer(ITexture target, uint internalformat, IBuffer buffer)
 		{
-			Functions.TexBuffer(target, internalformat, buffer);
+			Functions.TexBuffer((uint)target.Target, internalformat, buffer.Id);
+
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
+			target.Properties._bufferSize = buffer.Properties.Size;
+			target.Properties._bufferOffset = 0;
+			target.Properties._width = buffer.Properties.Size;
+			target.Properties._height = 1;
+			target.Properties._depth = 1;
+			target.Properties.InternalFormatUpdated();
 		}
 		[OpenGLSupport(4.3)]
-		public static void TexBufferRange(uint target, uint internalformat, uint buffer, int offset, int size)
+		public static void TexBufferRange(ITexture target, uint internalformat, uint buffer, int offset, int size)
 		{
-			Functions.TexBufferRange(target, internalformat, buffer, offset, size);
+			Functions.TexBufferRange((uint)target.Target, internalformat, buffer, offset, size);
+
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
+			target.Properties._bufferSize = size;
+			target.Properties._bufferOffset = offset;
+			target.Properties._width = size;
+			target.Properties._height = 1;
+			target.Properties._depth = 1;
+			target.Properties.InternalFormatUpdated();
 		}
 		[OpenGLSupport(4.5)]
-		public static void TextureBuffer(uint texture, uint internalformat, uint buffer)
+		public static void TextureBuffer(ITexture texture, uint internalformat, IBuffer buffer)
 		{
-			Functions.TextureBuffer(texture, internalformat, buffer);
+			Functions.TextureBuffer(texture.Id, internalformat, buffer.Id);
+
+			texture.Properties._internalFormat = (TextureFormat)internalformat;
+
+			texture.Properties._bufferSize = buffer.Properties.Size;
+			texture.Properties._bufferOffset = 0;
+			texture.Properties._width = buffer.Properties.Size;
+			texture.Properties._height = 1;
+			texture.Properties._depth = 1;
+			texture.Properties.InternalFormatUpdated();
 		}
 		[OpenGLSupport(4.5)]
-		public static void TextureBufferRange(uint texture, uint internalformat, uint buffer, int offset, int size)
+		public static void TextureBufferRange(ITexture texture, uint internalformat, uint buffer, int offset, int size)
 		{
-			Functions.TextureBufferRange(texture, internalformat, buffer, offset, size);
+			Functions.TextureBufferRange(texture.Id, internalformat, buffer, offset, size);
+
+			texture.Properties._internalFormat = (TextureFormat)internalformat;
+
+			texture.Properties._bufferSize = size;
+			texture.Properties._bufferOffset = offset;
+			texture.Properties._width = size;
+			texture.Properties._height = 1;
+			texture.Properties._depth = 1;
+			texture.Properties.InternalFormatUpdated();
 		}
 
 		[OpenGLSupport(1.0)]
@@ -574,13 +624,15 @@ namespace Zene.Graphics.Base
 
 			Functions.TexImage1D((uint)target.Target, level, internalformat, width, border, format, type, pixels);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = 1;
 				target.Properties._depth = 1;
 				target.Properties._samples = 0;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(1.0)]
@@ -593,13 +645,15 @@ namespace Zene.Graphics.Base
 
 			Functions.TexImage2D((uint)target.Target, level, internalformat, width, height, border, format, type, pixels);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = height;
 				target.Properties._depth = 1;
 				target.Properties._samples = 0;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(1.0)]
@@ -612,13 +666,15 @@ namespace Zene.Graphics.Base
 
 			Functions.TexImage2D((uint)target.Target, level, internalformat, width, height, border, format, type, pixels.ToPointer());
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = height;
 				target.Properties._depth = 1;
 				target.Properties._samples = 0;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(1.0)]
@@ -631,13 +687,15 @@ namespace Zene.Graphics.Base
 
 			Functions.TexImage2D((uint)face, level, internalformat, width, height, border, format, type, pixels);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = height;
 				target.Properties._depth = 1;
 				target.Properties._samples = 0;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(1.0)]
@@ -650,13 +708,15 @@ namespace Zene.Graphics.Base
 
 			Functions.TexImage2D((uint)face, level, internalformat, width, height, border, format, type, pixels.ToPointer());
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = height;
 				target.Properties._depth = 1;
 				target.Properties._samples = 0;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(3.2)]
@@ -669,11 +729,13 @@ namespace Zene.Graphics.Base
 
 			Functions.TexImage2DMultisample((uint)target.Target, samples, internalformat, width, height, fixedsamplelocations);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			target.Properties._width = width;
 			target.Properties._height = height;
 			target.Properties._depth = 1;
 			target.Properties._samples = samples;
-			target.Properties.InternalFormatChanged();
+			target.Properties.InternalFormatUpdated();
 		}
 		[OpenGLSupport(1.2)]
 		public static void TexImage3D(ITexture target, int level, int internalformat, int width, int height, int depth, int border, uint format, uint type, void* pixels)
@@ -685,13 +747,15 @@ namespace Zene.Graphics.Base
 
 			Functions.TexImage3D((uint)target.Target, level, internalformat, width, height, depth, border, format, type, pixels);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = height;
 				target.Properties._depth = depth;
 				target.Properties._samples = 0;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(3.2)]
@@ -704,11 +768,13 @@ namespace Zene.Graphics.Base
 
 			Functions.TexImage3DMultisample((uint)target.Target, samples, internalformat, width, height, depth, fixedsamplelocations);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			target.Properties._width = width;
 			target.Properties._height = height;
 			target.Properties._depth = depth;
 			target.Properties._samples = samples;
-			target.Properties.InternalFormatChanged();
+			target.Properties.InternalFormatUpdated();
 		}
 
 		[OpenGLSupport(1.0)]
@@ -725,13 +791,15 @@ namespace Zene.Graphics.Base
 				Functions.TexImage1D((uint)target.Target, level, internalformat, width, border, format, type, dataPtr);
 			}
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = 1;
 				target.Properties._depth = 1;
 				target.Properties._samples = 0;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(1.0)]
@@ -748,13 +816,15 @@ namespace Zene.Graphics.Base
 				Functions.TexImage2D((uint)target.Target, level, internalformat, width, height, border, format, type, dataPtr);
 			}
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = height;
 				target.Properties._depth = 1;
 				target.Properties._samples = 0;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(1.0)]
@@ -771,13 +841,15 @@ namespace Zene.Graphics.Base
 				Functions.TexImage2D((uint)face, level, internalformat, width, height, border, format, type, dataPtr);
 			}
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = height;
 				target.Properties._depth = 1;
 				target.Properties._samples = 0;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 		[OpenGLSupport(1.2)]
@@ -794,13 +866,15 @@ namespace Zene.Graphics.Base
 				Functions.TexImage3D((uint)target.Target, level, internalformat, width, height, depth, border, format, type, dataPtr);
 			}
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			if (level == target.Properties._baseLevel)
 			{
 				target.Properties._width = width;
 				target.Properties._height = height;
 				target.Properties._depth = depth;
 				target.Properties._samples = 0;
-				target.Properties.InternalFormatChanged();
+				target.Properties.InternalFormatUpdated();
 			}
 		}
 
@@ -814,12 +888,14 @@ namespace Zene.Graphics.Base
 
 			Functions.TexStorage1D((uint)target.Target, levels, internalformat, width);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			target.Properties._width = width;
 			target.Properties._height = 1;
 			target.Properties._depth = 1;
 			target.Properties._samples = 0;
 			target.Properties._immutableFormat = true;
-			target.Properties.InternalFormatChanged();
+			target.Properties.InternalFormatUpdated();
 		}
 		[OpenGLSupport(4.2)]
 		public static void TexStorage2D(ITexture target, int levels, uint internalformat, int width, int height)
@@ -831,12 +907,14 @@ namespace Zene.Graphics.Base
 
 			Functions.TexStorage2D((uint)target.Target, levels, internalformat, width, height);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			target.Properties._width = width;
 			target.Properties._height = height;
 			target.Properties._depth = 1;
 			target.Properties._samples = 0;
 			target.Properties._immutableFormat = true;
-			target.Properties.InternalFormatChanged();
+			target.Properties.InternalFormatUpdated();
 		}
 		[OpenGLSupport(4.2)]
 		public static void TexStorage2D(ITexture target, CubeMapFace face, int levels, uint internalformat, int width, int height)
@@ -848,12 +926,14 @@ namespace Zene.Graphics.Base
 
 			Functions.TexStorage2D((uint)face, levels, internalformat, width, height);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			target.Properties._width = width;
 			target.Properties._height = height;
 			target.Properties._depth = 1;
 			target.Properties._samples = 0;
 			target.Properties._immutableFormat = true;
-			target.Properties.InternalFormatChanged();
+			target.Properties.InternalFormatUpdated();
 		}
 		[OpenGLSupport(4.3)]
 		public static void TexStorage2DMultisample(ITexture target, int samples, uint internalformat, int width, int height, bool fixedsamplelocations)
@@ -865,12 +945,14 @@ namespace Zene.Graphics.Base
 
 			Functions.TexStorage2DMultisample((uint)target.Target, samples, internalformat, width, height, fixedsamplelocations);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			target.Properties._width = width;
 			target.Properties._height = height;
 			target.Properties._depth = 1;
 			target.Properties._samples = samples;
 			target.Properties._immutableFormat = true;
-			target.Properties.InternalFormatChanged();
+			target.Properties.InternalFormatUpdated();
 		}
 		[OpenGLSupport(4.2)]
 		public static void TexStorage3D(ITexture target, int levels, uint internalformat, int width, int height, int depth)
@@ -882,12 +964,14 @@ namespace Zene.Graphics.Base
 
 			Functions.TexStorage3D((uint)target.Target, levels, internalformat, width, height, depth);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			target.Properties._width = width;
 			target.Properties._height = height;
 			target.Properties._depth = depth;
 			target.Properties._samples = 0;
 			target.Properties._immutableFormat = true;
-			target.Properties.InternalFormatChanged();
+			target.Properties.InternalFormatUpdated();
 		}
 		[OpenGLSupport(4.3)]
 		public static void TexStorage3DMultisample(ITexture target, int samples, uint internalformat, int width, int height, int depth, bool fixedsamplelocations)
@@ -899,12 +983,14 @@ namespace Zene.Graphics.Base
 
 			Functions.TexStorage3DMultisample((uint)target.Target, samples, internalformat, width, height, depth, fixedsamplelocations);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			target.Properties._width = width;
 			target.Properties._height = height;
 			target.Properties._depth = depth;
 			target.Properties._samples = samples;
 			target.Properties._immutableFormat = true;
-			target.Properties.InternalFormatChanged();
+			target.Properties.InternalFormatUpdated();
 		}
 
 		[OpenGLSupport(4.5)]
@@ -917,12 +1003,14 @@ namespace Zene.Graphics.Base
 
 			Functions.TextureStorage1D(texture.Id, levels, internalformat, width);
 
+			texture.Properties._internalFormat = (TextureFormat)internalformat;
+
 			texture.Properties._width = width;
 			texture.Properties._height = 1;
 			texture.Properties._depth = 1;
 			texture.Properties._samples = 0;
 			texture.Properties._immutableFormat = true;
-			texture.Properties.InternalFormatChanged();
+			texture.Properties.InternalFormatUpdated();
 		}
 		[OpenGLSupport(4.5)]
 		public static void TextureStorage2D(ITexture texture, int levels, uint internalformat, int width, int height)
@@ -934,12 +1022,14 @@ namespace Zene.Graphics.Base
 
 			Functions.TextureStorage2D(texture.Id, levels, internalformat, width, height);
 
+			texture.Properties._internalFormat = (TextureFormat)internalformat;
+
 			texture.Properties._width = width;
 			texture.Properties._height = height;
 			texture.Properties._depth = 1;
 			texture.Properties._samples = 0;
 			texture.Properties._immutableFormat = true;
-			texture.Properties.InternalFormatChanged();
+			texture.Properties.InternalFormatUpdated();
 		}
 		[OpenGLSupport(4.5)]
 		public static void TextureStorage2DMultisample(ITexture texture, int samples, uint internalformat, int width, int height, bool fixedsamplelocations)
@@ -951,12 +1041,14 @@ namespace Zene.Graphics.Base
 
 			Functions.TextureStorage2DMultisample(texture.Id, samples, internalformat, width, height, fixedsamplelocations);
 
+			texture.Properties._internalFormat = (TextureFormat)internalformat;
+
 			texture.Properties._width = width;
 			texture.Properties._height = height;
 			texture.Properties._depth = 1;
 			texture.Properties._samples = samples;
 			texture.Properties._immutableFormat = true;
-			texture.Properties.InternalFormatChanged();
+			texture.Properties.InternalFormatUpdated();
 		}
 		[OpenGLSupport(4.5)]
 		public static void TextureStorage3D(ITexture texture, int levels, uint internalformat, int width, int height, int depth)
@@ -968,12 +1060,14 @@ namespace Zene.Graphics.Base
 
 			Functions.TextureStorage3D(texture.Id, levels, internalformat, width, height, depth);
 
+			texture.Properties._internalFormat = (TextureFormat)internalformat;
+
 			texture.Properties._width = width;
 			texture.Properties._height = height;
 			texture.Properties._depth = depth;
 			texture.Properties._samples = 0;
 			texture.Properties._immutableFormat = true;
-			texture.Properties.InternalFormatChanged();
+			texture.Properties.InternalFormatUpdated();
 		}
 		[OpenGLSupport(4.5)]
 		public static void TextureStorage3DMultisample(ITexture texture, int samples, uint internalformat, int width, int height, int depth, bool fixedsamplelocations)
@@ -985,12 +1079,14 @@ namespace Zene.Graphics.Base
 
 			Functions.TextureStorage3DMultisample(texture.Id, samples, internalformat, width, height, depth, fixedsamplelocations);
 
+			texture.Properties._internalFormat = (TextureFormat)internalformat;
+
 			texture.Properties._width = width;
 			texture.Properties._height = height;
 			texture.Properties._depth = depth;
 			texture.Properties._samples = samples;
 			texture.Properties._immutableFormat = true;
-			texture.Properties.InternalFormatChanged();
+			texture.Properties.InternalFormatUpdated();
 		}
 
 		[OpenGLSupport(1.1)]
@@ -1039,6 +1135,8 @@ namespace Zene.Graphics.Base
 
 			Functions.TextureView(texture.Id, target, origtexture.Id, internalformat, minlevel, numlevels, minlayer, numlayers);
 
+			texture.Properties._internalFormat = (TextureFormat)internalformat;
+
 			texture.Properties._width = origtexture.Properties._width;
 			texture.Properties._height = origtexture.Properties._height;
 			texture.Properties._depth = origtexture.Properties._depth;
@@ -1046,7 +1144,7 @@ namespace Zene.Graphics.Base
 
 			texture.Properties._immutableFormat = true;
 
-			texture.Properties.InternalFormatChanged();
+			texture.Properties.InternalFormatUpdated();
 		}
 
 		[OpenGLSupport(4.5)]

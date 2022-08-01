@@ -81,20 +81,24 @@ namespace Zene.Graphics.Base
 		{
 			Functions.RenderbufferStorage(GLEnum.Renderbuffer, internalformat, width, height);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			target.Properties._width = width;
 			target.Properties._height = height;
 			target.Properties._samples = 0;
-			target.Properties.InternalFormatChanged();
+			target.Properties.InternalFormatUpdated();
 		}
 		[OpenGLSupport(3.0)]
 		public static void RenderbufferStorageMultisample(IRenderbuffer target, int samples, uint internalformat, int width, int height)
 		{
 			Functions.RenderbufferStorageMultisample(GLEnum.Renderbuffer, samples, internalformat, width, height);
 
+			target.Properties._internalFormat = (TextureFormat)internalformat;
+
 			target.Properties._width = width;
 			target.Properties._height = height;
 			target.Properties._samples = samples;
-			target.Properties.InternalFormatChanged();
+			target.Properties.InternalFormatUpdated();
 		}
 
 		[OpenGLSupport(4.5)]
@@ -102,20 +106,24 @@ namespace Zene.Graphics.Base
 		{
 			Functions.NamedRenderbufferStorage(renderbuffer.Id, internalformat, width, height);
 
+			renderbuffer.Properties._internalFormat = (TextureFormat)internalformat;
+
 			renderbuffer.Properties._width = width;
 			renderbuffer.Properties._height = height;
 			renderbuffer.Properties._samples = 0;
-			renderbuffer.Properties.InternalFormatChanged();
+			renderbuffer.Properties.InternalFormatUpdated();
 		}
 		[OpenGLSupport(4.5)]
 		public static void NamedRenderbufferStorageMultisample(IRenderbuffer renderbuffer, int samples, uint internalformat, int width, int height)
 		{
 			Functions.NamedRenderbufferStorageMultisample(renderbuffer.Id, samples, internalformat, width, height);
 
+			renderbuffer.Properties._internalFormat = (TextureFormat)internalformat;
+
 			renderbuffer.Properties._width = width;
 			renderbuffer.Properties._height = height;
 			renderbuffer.Properties._samples = samples;
-			renderbuffer.Properties.InternalFormatChanged();
+			renderbuffer.Properties.InternalFormatUpdated();
 		}
 	}
 }

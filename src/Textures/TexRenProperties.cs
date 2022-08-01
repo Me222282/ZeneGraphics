@@ -5,9 +5,15 @@
         public TexRenProperties(IRenderTexture source)
         {
             Handle = source;
-            _oldFormat = source.InternalFormat;
+            _oldFormat = 0;
         }
         public virtual IRenderTexture Handle { get; }
+
+        internal TextureFormat _internalFormat;
+        /// <summary>
+        /// The internal format of the texture image.
+        /// </summary>
+        public TextureFormat InternalFormat => _internalFormat;
 
         internal int _width = 0;
         /// <summary>
@@ -26,12 +32,13 @@
         public int Samples => _samples;
 
         protected TextureFormat _oldFormat;
-        internal virtual void InternalFormatChanged()
+        internal virtual void InternalFormatUpdated()
         {
             // Texture format hasn't changed
-            if (Handle.InternalFormat == _oldFormat) { return; }
+            if (InternalFormat == _oldFormat) { return; }
+            _oldFormat = InternalFormat;
 
-            switch (Handle.InternalFormat)
+            switch (InternalFormat)
             {
                 case TextureFormat.CompressedRed:
                 case TextureFormat.CompressedRedRgtc1:

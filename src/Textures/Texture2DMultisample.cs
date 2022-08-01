@@ -16,13 +16,10 @@ namespace Zene.Graphics
         public Texture2DMultisample(TextureFormat format)
             : base(TextureTarget.Multisample2D)
         {
-            InternalFormat = format;
+            _targetFormat = format;
         }
-        internal Texture2DMultisample(uint id, TextureFormat format)
-            : base(id, TextureTarget.Multisample2D, format)
-        {
-            InternalFormat = format;
-        }
+
+        private readonly TextureFormat _targetFormat;
 
         /// <summary>
         /// The internal storage resolution of the alpha component at base level.
@@ -190,7 +187,7 @@ namespace Zene.Graphics
         public void CreateData(int width, int height, int samples, bool fixedSampleLocation)
         {
             
-            TexImage2DMultisample(samples, InternalFormat, width, height, fixedSampleLocation);
+            TexImage2DMultisample(samples, _targetFormat, width, height, fixedSampleLocation);
         }
         /// <summary>
         /// Creates the storage for the texture data.
@@ -202,7 +199,7 @@ namespace Zene.Graphics
         public void CreateStorage(int width, int height, int samples, bool fixedSampleLocation)
         {
             
-            TexStorage2DMultisample(samples, InternalFormat, width, height, fixedSampleLocation);
+            TexStorage2DMultisample(samples, _targetFormat, width, height, fixedSampleLocation);
         }
 
         /// <summary>

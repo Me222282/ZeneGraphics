@@ -405,14 +405,14 @@ namespace Zene.Graphics
             }
         }
 
-        internal override void InternalFormatChanged()
+        internal override void InternalFormatUpdated()
         {
             // Texture format hasn't changed
-            if (Handle.InternalFormat == _oldFormat) { return; }
+            if (InternalFormat == _oldFormat) { return; }
 
-            base.InternalFormatChanged();
+            base.InternalFormatUpdated();
 
-            switch (Handle.InternalFormat)
+            switch (InternalFormat)
             {
                 case TextureFormat.CompressedRed:
                 case TextureFormat.CompressedRedRgtc1:
@@ -662,36 +662,16 @@ namespace Zene.Graphics
         /// </summary>
         public ChannelType DepthChannel => _depthChannel;
 
+        internal int _bufferOffset = 0;
         /// <summary>
         /// The offset into the data store of the buffer bound to a buffer texture
         /// </summary>
-        public int BufferOffset
-        {
-            get
-            {
-                Handle.Bind();
-                int output;
-
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureBufferOffset, &output);
-
-                return output;
-            }
-        }
+        public int BufferOffset => _bufferOffset;
+        internal int _bufferSize = 0;
         /// <summary>
         /// The size of the range of a data store of the buffer bound to a buffer texture.
         /// </summary>
-        public int BufferSize
-        {
-            get
-            {
-                Handle.Bind();
-                int output;
-
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureBufferSize, &output);
-
-                return output;
-            }
-        }
+        public int BufferSize => _bufferSize;
 
         internal int _immutableLevels = 0;
         /// <summary>

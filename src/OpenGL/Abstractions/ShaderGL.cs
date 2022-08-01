@@ -18,11 +18,6 @@ namespace Zene.Graphics.Base
 
             Type = shaderType;
         }
-        internal ShaderGL(uint id, ShaderType shaderType)
-        {
-            Id = id;
-            Type = shaderType;
-        }
 
         public uint Id { get; }
         public ShaderType Type { get; }

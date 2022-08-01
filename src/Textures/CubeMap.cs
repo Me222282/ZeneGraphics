@@ -22,16 +22,11 @@ namespace Zene.Graphics
         public CubeMap(TextureFormat format, TextureData dataType)
             : base(TextureTarget.CubeMap)
         {
-            InternalFormat = format;
-            DataType = dataType;
-        }
-        internal CubeMap(uint id, TextureFormat format, TextureData dataType)
-            : base(id, TextureTarget.CubeMap, format)
-        {
-            InternalFormat = format;
+            _targetFormat = format;
             DataType = dataType;
         }
 
+        private readonly TextureFormat _targetFormat;
         /// <summary>
         /// The type of data being inputed into the texture.
         /// </summary>
@@ -49,7 +44,7 @@ namespace Zene.Graphics
         /// <param name="data">The data to set the texture with.</param>
         public void SetData<T>(CubeMapFace face, int level, int width, int height, BaseFormat inputFormat, GLArray<T> data) where T : unmanaged
         {
-            TexImage2D(face, level, InternalFormat, width, height, inputFormat, DataType, data);
+            TexImage2D(face, level, _targetFormat, width, height, inputFormat, DataType, data);
         }
         /// <summary>
         /// Creats and filles the data of <paramref name="face"/> inside the texture with <paramref name="data"/>.
@@ -102,7 +97,7 @@ namespace Zene.Graphics
         /// <param name="height">The height of the space.</param>
         public void CreateStorage(CubeMapFace face, int levels, int width, int height)
         {
-            TexStorage2D(face, levels, InternalFormat, width, height);
+            TexStorage2D(face, levels, _targetFormat, width, height);
         }
         /// <summary>
         /// Creates the storage space for the texture.

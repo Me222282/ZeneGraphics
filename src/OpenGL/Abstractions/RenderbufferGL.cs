@@ -13,23 +13,14 @@ namespace Zene.Graphics.Base
         /// </summary>
         public RenderbufferGL()
         {
-            InternalFormat = 0;
-
             Id = GL.GenRenderbuffer();
-
-            Properties = new TexRenProperties(this);
-        }
-        internal RenderbufferGL(uint id, TextureFormat format = 0)
-        {
-            Id = id;
-            InternalFormat = format;
 
             Properties = new TexRenProperties(this);
         }
 
         public uint Id { get; }
 
-        public TextureFormat InternalFormat { get; protected set; }
+        public TextureFormat InternalFormat => Properties.InternalFormat;
 
         public TexRenProperties Properties { get; }
 
@@ -78,8 +69,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.RenderbufferStorage(this, (uint)intFormat, width, height);
-
-            InternalFormat = intFormat;
         }
 
         /// <summary>
@@ -94,8 +83,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.RenderbufferStorageMultisample(this, samples, (uint)intFormat, width, height);
-
-            InternalFormat = intFormat;
         }
 
         //

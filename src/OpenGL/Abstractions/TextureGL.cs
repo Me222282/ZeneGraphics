@@ -17,15 +17,6 @@ namespace Zene.Graphics.Base
         {
             Id = GL.GenTexture();
             Target = target;
-            InternalFormat = 0;
-
-            Properties = new TextureProperties(this);
-        }
-        internal TextureGL(uint id, TextureTarget target, TextureFormat format = 0)
-        {
-            Id = id;
-            Target = target;
-            InternalFormat = format;
 
             Properties = new TextureProperties(this);
         }
@@ -33,7 +24,7 @@ namespace Zene.Graphics.Base
         public uint Id { get; }
 
         public TextureTarget Target { get; }
-        public TextureFormat InternalFormat { get; protected set; }
+        public TextureFormat InternalFormat => Properties.InternalFormat;
 
         public TextureProperties Properties { get; }
 
@@ -212,8 +203,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.CompressedTexImage1D(this, level, (uint)intFormat, size, 0, data.Size * sizeof(T), data);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a one-dimensional texture image in a compressed format.
@@ -239,8 +228,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.CompressedTexImage1D(this, level, (uint)intFormat, size, 0, imageSize, data);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a one-dimensional texture image in a compressed format.
@@ -256,8 +243,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.CompressedTexImage1D(this, level, (uint)intFormat, size, 0, imageSize, data.ToPointer());
-
-            InternalFormat = intFormat;
         }
 
         /// <summary>
@@ -274,8 +259,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.CompressedTexImage2D(this, level, (uint)intFormat, width, height, 0, data.Size * sizeof(T), data);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a two-dimensional texture image in a compressed format.
@@ -292,8 +275,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.CompressedTexImage2D(this, level, (uint)intFormat, width, height, 0, data.Size * sizeof(T), data);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a two-dimensional texture image in a compressed format.
@@ -310,8 +291,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.CompressedTexImage2D(this, level, (uint)intFormat, width, height, 0, imageSize, data);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a two-dimensional texture image in a compressed format.
@@ -329,8 +308,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.CompressedTexImage2D(this, target, level, (uint)intFormat, width, height, 0, imageSize, data);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a two-dimensional texture image in a compressed format.
@@ -347,8 +324,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.CompressedTexImage2D(this, level, (uint)intFormat, width, height, 0, imageSize, data.ToPointer());
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a two-dimensional texture image in a compressed format.
@@ -366,8 +341,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.CompressedTexImage2D(this, target, level, (uint)intFormat, width, height, 0, imageSize, data.ToPointer());
-
-            InternalFormat = intFormat;
         }
 
         /// <summary>
@@ -386,8 +359,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.CompressedTexImage3D(this, level, (uint)intFormat, width, height, depth, 0, data.Size * sizeof(T), data);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a three-dimensional texture image in a compressed format.
@@ -417,8 +388,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.CompressedTexImage3D(this, level, (uint)intFormat, width, height, depth, 0, imageSize, data);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a three-dimensional texture image in a compressed format.
@@ -448,8 +417,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.CompressedTexImage3D(this, level, (uint)intFormat, width, height, depth, 0, imageSize, data.ToPointer());
-
-            InternalFormat = intFormat;
         }
 
         /// <summary>
@@ -729,8 +696,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.CopyTexImage1D(this, level, (uint)intFormat, x, y, size, 0);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Copy pixels into a 2D texture image.
@@ -746,8 +711,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.CopyTexImage2D(this, level, (uint)intFormat, x, y, width, height, 0);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Copy pixels into a 2D texture image.
@@ -763,9 +726,7 @@ namespace Zene.Graphics.Base
         protected void CopyTexImage2D(CubeMapFace target, int level, TextureFormat intFormat, int x, int y, int width, int height)
         {
             Bind();
-            GL.CopyTexImage2D(this, level, (uint)intFormat, x, y, width, height, 0);
-
-            InternalFormat = intFormat;
+            GL.CopyTexImage2D(this, target, level, (uint)intFormat, x, y, width, height, 0);
         }
 
         /// <summary>
@@ -1046,9 +1007,7 @@ namespace Zene.Graphics.Base
         protected void TexBuffer(IBuffer buffer, TextureFormat intFormat)
         {
             Bind();
-            GL.TexBuffer((uint)Target, (uint)intFormat, buffer.Id);
-
-            InternalFormat = intFormat;
+            GL.TexBuffer(this, (uint)intFormat, buffer);
         }
         /// <summary>
         /// Attach a range of a buffer object's data store to a buffer texture object.
@@ -1061,9 +1020,7 @@ namespace Zene.Graphics.Base
         protected void TexBufferRange(IBuffer buffer, TextureFormat intFormat, int offset, int size)
         {
             Bind();
-            GL.TexBufferRange((uint)Target, (uint)intFormat, buffer.Id, offset, size);
-
-            InternalFormat = intFormat;
+            GL.TexBufferRange(this, (uint)intFormat, buffer.Id, offset, size);
         }
 
         /// <summary>
@@ -1081,8 +1038,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexImage1D(this, level, (int)intFormat, size, 0, (uint)format, (uint)type, dataPtr);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a one-dimensional texture image.
@@ -1099,8 +1054,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexImage1D(this, level, (int)intFormat, size, 0, (uint)format, (uint)type, dataPtr.ToPointer());
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a one-dimensional texture image.
@@ -1117,8 +1070,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexImage1D(this, level, (int)intFormat, size, 0, (uint)format, (uint)type, data);
-
-            InternalFormat = intFormat;
         }
 
         /// <summary>
@@ -1139,8 +1090,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexImage2D(this, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a two-dimensional texture image.
@@ -1161,8 +1110,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexImage2D(this, target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a two-dimensional texture image.
@@ -1182,8 +1129,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexImage2D(this, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr.ToPointer());
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a two-dimensional texture image.
@@ -1204,8 +1149,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexImage2D(this, target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, dataPtr.ToPointer());
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a two-dimensional texture image.
@@ -1225,8 +1168,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexImage2D(this, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, (T*)data);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a two-dimensional texture image.
@@ -1247,8 +1188,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexImage2D(this, target, level, (int)intFormat, width, height, 0, (uint)format, (uint)type, (T*)data);
-
-            InternalFormat = intFormat;
         }
 
         /// <summary>
@@ -1267,8 +1206,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexImage2DMultisample(this, samples, (uint)intFormat, width, height, fixedsampleLocations);
-
-            InternalFormat = intFormat;
         }
 
         /// <summary>
@@ -1289,8 +1226,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexImage3D(this, level, (int)intFormat, width, height, depth, 0, (uint)format, (uint)type, dataPtr);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a three-dimensional texture image.
@@ -1310,8 +1245,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexImage3D(this, level, (int)intFormat, width, height, depth, 0, (uint)format, (uint)type, dataPtr.ToPointer());
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify a three-dimensional texture image.
@@ -1331,8 +1264,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexImage3D(this, level, (int)intFormat, width, height, depth, 0, (uint)format, (uint)type, data);
-
-            InternalFormat = intFormat;
         }
 
         /// <summary>
@@ -1352,8 +1283,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexImage3DMultisample(this, samples, (uint)intFormat, width, height, depth, fixedsampleLocations);
-
-            InternalFormat = intFormat;
         }
 
         /// <summary>
@@ -1367,8 +1296,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexStorage1D(this, levels, (uint)intFormat, size);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Simultaneously specify storage for all levels of a two-dimensional or one-dimensional array texture.
@@ -1382,8 +1309,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexStorage2D(this, levels, (uint)intFormat, width, height);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Simultaneously specify storage for all levels of a two-dimensional or one-dimensional array texture.
@@ -1398,8 +1323,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexStorage2D(this, target, levels, (uint)intFormat, width, height);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify storage for a two-dimensional multisample texture.
@@ -1415,8 +1338,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexStorage2DMultisample(this, samples, (uint)intFormat, width, height, fixedsampleLocations);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Simultaneously specify storage for all levels of a three-dimensional, two-dimensional array or cube-map array texture.
@@ -1432,8 +1353,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexStorage3D(this, levels, (uint)intFormat, width, height, depth);
-
-            InternalFormat = intFormat;
         }
         /// <summary>
         /// Specify storage for a two-dimensional multisample array texture.
@@ -1452,8 +1371,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TexStorage3DMultisample(this, samples, (uint)intFormat, width, height, depth, fixedsampleLocations);
-
-            InternalFormat = intFormat;
         }
 
         /// <summary>
@@ -1677,8 +1594,6 @@ namespace Zene.Graphics.Base
         {
             Bind();
             GL.TextureView(this, (uint)Target, original, (uint)intFormat, minLevel, numLevels, minLayer, numbLayers);
-
-            InternalFormat = intFormat;
         }
 
         //
