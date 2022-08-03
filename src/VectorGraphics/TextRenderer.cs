@@ -97,12 +97,12 @@ namespace Zene.Graphics
                 new Vector2(1, -1), new Vector2(1, 0),
                 new Vector2(1, 0), new Vector2(1, 1)
             }, new byte[] { 0, 1, 2, 2, 3, 0 }, 2, 0, AttributeSize.D2, BufferUsage.DrawFrequent);
-            _drawable.AddAttribute(1, 1, AttributeSize.D2); // Texture Coordinates
+            _drawable.AddAttribute(1, 1, AttributeSize.D2); // Texture Coordinates*
 
             // Setup instance offsets ready for drawing
-            _instanceData = new ArrayBuffer<Vector2>(new Vector2[capacity * _blockSize], _blockSize, BufferUsage.DrawRepeated);
+            _instanceData = new ArrayBuffer<Vector2>(_blockSize, BufferUsage.DrawRepeated);
+            _instanceData.InitData(capacity * _blockSize);
 
-            _drawable.Vao.Bind();
             // Add instance reference
             _drawable.Vao.AddBuffer(_instanceData, 2, 0, DataType.Double, AttributeSize.D2);
             _drawable.Vao.AddBuffer(_instanceData, 3, 1, DataType.Double, AttributeSize.D2);
@@ -111,12 +111,12 @@ namespace Zene.Graphics
             // Colour
             //_drawable.Vao.AddBuffer(_instanceData, 6, 4, DataType.Double, AttributeSize.D4);
             // Set indexes as instance referances
+            _drawable.Vao.Bind();
             GL.VertexAttribDivisor(2, 1);
             GL.VertexAttribDivisor(3, 1);
             GL.VertexAttribDivisor(4, 1);
             GL.VertexAttribDivisor(5, 1);
             //GL.VertexAttribDivisor(6, 1);
-
             _drawable.Vao.Unbind();
 
             //
@@ -136,21 +136,19 @@ namespace Zene.Graphics
             GL.ProgramUniform4f(ShaderId, _uniformColour, 1f, 1f, 1f, 1f);
         }
         private readonly DrawObject<Vector2, byte> _drawable;
-        private ArrayBuffer<Vector2> _instanceData;
+        private readonly ArrayBuffer<Vector2> _instanceData;
 
         private int _capacity;
         public int Capacity
         {
-            get
-            {
-                return _capacity;
-            }
+            get => _capacity;
             set
             {
                 _capacity = value;
 
-                _instanceData = new ArrayBuffer<Vector2>(new Vector2[_capacity * _blockSize], _blockSize, BufferUsage.DrawRepeated);
-
+                _instanceData.InitData(_capacity * _blockSize);
+                //_instanceData.SetData(new Vector2[_capacity * _blockSize]);
+                /*
                 _drawable.Vao.Bind();
                 // Add instance reference
                 _drawable.Vao.AddBuffer(_instanceData, 2, 0, DataType.Double, AttributeSize.D2);
@@ -158,7 +156,7 @@ namespace Zene.Graphics
                 _drawable.Vao.AddBuffer(_instanceData, 4, 2, DataType.Double, AttributeSize.D2);
                 _drawable.Vao.AddBuffer(_instanceData, 5, 3, DataType.Double, AttributeSize.D2);
 
-                _drawable.Vao.Unbind();
+                _drawable.Vao.Unbind();*/
             }
         }
 
@@ -277,7 +275,7 @@ namespace Zene.Graphics
                 i++;
             }
             // Pass instance data to gpu
-            _instanceData.SetData(data);
+            _instanceData.EditData(0, data);
 
             //
             // Draw object
@@ -710,7 +708,7 @@ namespace Zene.Graphics
                 i++;
             }
             // Pass instance data to gpu
-            _instanceData.SetData(data);
+            _instanceData.EditData(0, data);
 
             //
             // Draw object

@@ -22,22 +22,6 @@ namespace Zene.Graphics.Base
         }
 
         [OpenGLSupport(1.5)]
-        public static void BufferData(uint target, int size, IntPtr data, uint usage)
-        {
-            BufferData(target, size, data.ToPointer(), usage);
-        }
-
-        [OpenGLSupport(1.5)]
-        public static void BufferData<T>(uint target, int size, T[] data, uint usage)
-            where T: unmanaged
-        {
-            fixed (void* dataPtr = data)
-            {
-                BufferData(target, size, dataPtr, usage);
-            }
-        }
-
-        [OpenGLSupport(1.5)]
         public static void BufferSubData<T>(uint target, int offset, int size, T[] data)
             where T : unmanaged
         {
@@ -180,15 +164,6 @@ namespace Zene.Graphics.Base
         }
 
 #if !GLDOTNET_EXCLUDE_SYSTEM_MEMORY
-        [OpenGLSupport(1.5)]
-        public static void BufferData<T>(uint target, ReadOnlySpan<T> data, uint usage)
-            where T: unmanaged
-        {
-            fixed (void* dataPtr = &MemoryMarshal.GetReference(data))
-            {
-                BufferData(target, Marshal.SizeOf<T>() * data.Length, dataPtr, usage);
-            }
-        }
 
         [OpenGLSupport(1.5)]
         public static unsafe void BufferSubData<T>(uint target, int offset, ReadOnlySpan<T> data)

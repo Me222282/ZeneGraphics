@@ -271,6 +271,9 @@ namespace Zene.Graphics.Base
 		public static void BindVertexArray(uint array)
 		{
 			Functions.BindVertexArray(array);
+
+			// For some reason, binding vertex array objects unbinds any element array buffer
+			GL.context.boundBuffers.ElementArray = 0;
 		}
 
 		[OpenGLSupport(4.3)]
@@ -340,15 +343,19 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(1.5)]
-		public static void BufferData(uint target, int size, void* data, uint usage)
+		public static void BufferData(IBuffer target, int size, void* data, uint usage)
 		{
-			Functions.BufferData(target, size, data, usage);
+			target.Properties._size = size;
+
+			Functions.BufferData((uint)target.Target, size, data, usage);
 		}
 
 		[OpenGLSupport(4.4)]
-		public static void BufferStorage(uint target, int size, void* data, uint flags)
+		public static void BufferStorage(IBuffer target, int size, void* data, uint flags)
 		{
-			Functions.BufferStorage(target, size, data, flags);
+			target.Properties._size = size;
+
+			Functions.BufferStorage((uint)target.Target, size, data, flags);
 		}
 
 		[OpenGLSupport(1.5)]
@@ -1690,15 +1697,19 @@ namespace Zene.Graphics.Base
 		//}
 
 		[OpenGLSupport(4.5)]
-		public static void NamedBufferData(uint buffer, int size, void* data, uint usage)
+		public static void NamedBufferData(IBuffer buffer, int size, void* data, uint usage)
 		{
-			Functions.NamedBufferData(buffer, size, data, usage);
+			buffer.Properties._size = size;
+
+			Functions.NamedBufferData(buffer.Id, size, data, usage);
 		}
 
 		[OpenGLSupport(4.5)]
-		public static void NamedBufferStorage(uint buffer, int size, void* data, uint flags)
+		public static void NamedBufferStorage(IBuffer buffer, int size, void* data, uint flags)
 		{
-			Functions.NamedBufferStorage(buffer, size, data, flags);
+			buffer.Properties._size = size;
+
+			Functions.NamedBufferStorage(buffer.Id, size, data, flags);
 		}
 
 		[OpenGLSupport(4.5)]

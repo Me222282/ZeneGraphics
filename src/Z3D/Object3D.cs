@@ -48,7 +48,7 @@ namespace Zene.Graphics.Z3D
 
             Object3D o = new Object3D
             {
-                _object = new DrawObject<Vector3, uint>(data, indexData, 3, 0, AttributeSize.D3, BufferUsage.DrawFrequent)
+                _object = new DrawObject<Vector3, uint>(data.ToArray(), indexData.ToArray(), 3, 0, AttributeSize.D3, BufferUsage.DrawFrequent)
             };
             o._object.AddAttribute(texCoordI, 1, AttributeSize.D2); // Texture coords
             o._object.AddAttribute(normalI, 2, AttributeSize.D3); // Normals
@@ -68,7 +68,7 @@ namespace Zene.Graphics.Z3D
 
             Object3D o = new Object3D
             {
-                _object = new DrawObject<Vector3, uint>(data, indexData, 2, 0, AttributeSize.D3, BufferUsage.DrawFrequent)
+                _object = new DrawObject<Vector3, uint>(data.ToArray(), indexData.ToArray(), 2, 0, AttributeSize.D3, BufferUsage.DrawFrequent)
             };
             o._object.AddAttribute(normalI, 1, AttributeSize.D3); // Normals
 
@@ -89,7 +89,7 @@ namespace Zene.Graphics.Z3D
 
             Object3D o = new Object3D
             {
-                _object = new DrawObject<Vector3, uint>(data, indexData, 4, 0, AttributeSize.D3, BufferUsage.DrawFrequent)
+                _object = new DrawObject<Vector3, uint>(data.ToArray(), indexData.ToArray(), 4, 0, AttributeSize.D3, BufferUsage.DrawFrequent)
             };
             o._object.AddAttribute(texCoordI, 1, AttributeSize.D2); // Texture coords
             o._object.AddAttribute(normTexCoordI, 1, AttributeSize.D2); // Normal map texture coords

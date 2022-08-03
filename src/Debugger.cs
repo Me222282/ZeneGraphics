@@ -17,11 +17,11 @@ namespace Zene.Graphics
             /// </summary>
             None = 0,
             /// <summary>
-            /// Errors are added to alist which can be emptied to the console with <see cref="FlushErrors"/>.
+            /// Errors are added to a list which can be emptied to the console with <see cref="FlushErrors"/>.
             /// </summary>
             Stack = 1,
             /// <summary>
-            /// Errors are outputed to the console strait away.
+            /// Errors are outputed to the console straight away.
             /// </summary>
             Console = 3,
             /// <summary>
@@ -30,7 +30,7 @@ namespace Zene.Graphics
             Exception = 4
         }
 
-        [ThreadStatic]
+        //[ThreadStatic]
         private static readonly List<string> _errors = new List<string>();
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Zene.Graphics
         /// </summary>
         public static Type Manager { get; set; } = Type.Console;
 
-        [ThreadStatic]
+        //[ThreadStatic]
         private const string _unknownError = "An unknown error has occurred.";
 
         /// <summary>
@@ -49,10 +49,7 @@ namespace Zene.Graphics
         {
             if (Manager == Type.None) { return Task.CompletedTask; }
 
-            if (Manager == Type.Exception)
-            {
-                throw e;
-            }
+            if (Manager == Type.Exception) { throw e; }
 
             return Task.Run(() =>
             {
@@ -63,7 +60,10 @@ namespace Zene.Graphics
                         return;
 
                     case Type.Stack:
-                        _errors.Add(e.Message);
+                        lock (_errors)
+                        {
+                            _errors.Add(e.Message);
+                        }
                         return;
                 }
             });
@@ -90,7 +90,10 @@ namespace Zene.Graphics
                         return;
 
                     case Type.Stack:
-                        _errors.Add(message);
+                        lock (_errors)
+                        {
+                            _errors.Add(message);
+                        }
                         return;
                 }
             });
@@ -116,7 +119,10 @@ namespace Zene.Graphics
                         return;
 
                     case Type.Stack:
-                        _errors.Add(_unknownError);
+                        lock (_errors)
+                        {
+                            _errors.Add(_unknownError);
+                        }
                         return;
                 }
             });
@@ -148,7 +154,7 @@ namespace Zene.Graphics
                 throw new Exception($"{GetGLError(error)}");
             }
 
-            string message = $"{GetGLError(error)} thrown at {Environment.StackTrace}.";
+            string message = $"{GetGLError(error)} thrown at \n{Environment.StackTrace}.";
 
             if ((GL.Version >= 4.3) && State.OutputDebug && !ResolveGLError)
             {
@@ -163,7 +169,10 @@ namespace Zene.Graphics
                     return;
 
                 case Type.Stack:
-                    _errors.Add(message);
+                    lock (_errors)
+                    {
+                        _errors.Add(message);
+                    }
                     return;
             }
         }
@@ -178,12 +187,15 @@ namespace Zene.Graphics
         {
             return Task.Run(() =>
             {
-                for (int i = 0; i < _errors.Count; i++)
+                lock (_errors)
                 {
-                    Console.WriteLine(_errors[i]);
-                }
+                    for (int i = 0; i < _errors.Count; i++)
+                    {
+                        Console.WriteLine(_errors[i]);
+                    }
 
-                _errors.Clear();
+                    _errors.Clear();
+                }
             });
         }
 

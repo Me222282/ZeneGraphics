@@ -1,24 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Zene.Graphics.Base;
 using Zene.Structs;
 
 namespace Zene.Graphics
 {
-    public class DrawObject<T, IndexT> : GLObject, IDrawable where T : unmanaged where IndexT : unmanaged
+    public class DrawObject<T, IndexT> : IBindable, IDisposable, IDrawable where T : unmanaged where IndexT : unmanaged
     {
-        public DrawObject(IEnumerable<T> vertices, IEnumerable<IndexT> indices, uint dataSplit, int vertexIndex, AttributeSize vertexSize, BufferUsage usage)
+        public DrawObject(ReadOnlySpan<T> vertices, ReadOnlySpan<IndexT> indices, uint dataSplit, int vertexIndex, AttributeSize vertexSize, BufferUsage usage)
         {
             if ((int)vertexSize == 1) { throw new Exception("Cannot have a 1 dimensional vertex position."); }
 
             Vao = new VertexArray();
 
-            Buffer = new ArrayBuffer<T>(vertices, dataSplit, usage);
+            Buffer = new ArrayBuffer<T>(dataSplit, usage);
+            Buffer.SetData(vertices);
 
-            _vertexNumber = (uint)vertices.Count() / dataSplit;
+            _vertexNumber = (uint)vertices.Length / dataSplit;
 
-            Ibo = new IndexBuffer<IndexT>(indices, usage);
+            Ibo = new IndexBuffer<IndexT>(usage);
+            Ibo.SetData(indices);
 
             T t = default;
             _dataType = t switch
@@ -39,8 +39,8 @@ namespace Zene.Graphics
             IndexT indexType = default;
             _drawType = indexType switch
             {
-                ushort => GLEnum.UShort,
                 byte => GLEnum.UByte,
+                ushort => GLEnum.UShort,
                 _ => GLEnum.UInt,
             };
         }
@@ -59,87 +59,47 @@ namespace Zene.Graphics
 
         private readonly DataType _dataType;
 
-        public virtual void SetData(IEnumerable<T> vertices)
+        public virtual void SetData(ReadOnlySpan<T> vertices)
         {
-            Buffer.SetData(vertices);
+            Buffer.SetData(vertices.ToArray());
 
-            if (vertices.Count() / Buffer.DataSplit != _vertexNumber)
+            if (vertices.Length / Buffer.DataSplit != _vertexNumber)
             {
                 throw new Exception("Cannot change number of vertices without specifying an index array.");
             }
         }
 
-        public virtual void SetData(IEnumerable<T> vertices, IEnumerable<IndexT> indices)
+        public virtual void SetData(ReadOnlySpan<T> vertices, ReadOnlySpan<IndexT> indices)
         {
-            _vertexNumber = (uint)vertices.Count() / Buffer.DataSplit;
+            _vertexNumber = (uint)vertices.Length / Buffer.DataSplit;
 
-            Buffer.SetData(vertices);
+            Buffer.SetData(vertices.ToArray());
 
-            Ibo.SetData(indices);
+            Ibo.SetData(indices.ToArray());
         }
 
         public void AddAttribute(uint index, int dataStart, AttributeSize attributeSize)
         {
-            if (!_dataCreated)
-            {
-                CreateData();
-            }
-
             Vao.AddBuffer(Buffer, index, dataStart, _dataType, attributeSize);
         }
 
-        public override void CreateData()
-        {
-            Buffer.CreateData();
-            Vao.CreateData();
-            Ibo.CreateData();
-
-            _dataCreated = true;
-        }
-
-        public override void DeleteData()
-        {
-            if (!DataCreated) { return; }
-
-            Buffer.DeleteData();
-            Vao.DeleteData();
-            Ibo.DeleteData();
-
-            _dataCreated = false;
-
-            _bound = false;
-        }
-
-        public override void Bind()
+        public void Bind()
         {
             Vao.Bind();
             Ibo.Bind();
-
-            _bound = true;
         }
-
-        public override void Unbind()
+        public void Unbind()
         {
             Vao.Unbind();
+            Buffer.Unbind();
             Ibo.Unbind();
-
-            _bound = false;
         }
 
         public virtual void Draw()
         {
-            if (!_dataCreated)
-            {
-                CreateData();
-            }
-
-            bool bound = _bound;
-
-            if (!bound) { Bind(); }
+            Bind();
 
             GL.DrawElements(GLEnum.Triangles, Ibo.Size, _drawType, IntPtr.Zero);
-
-            if (!bound) { Unbind(); }
         }
 
         /// <summary>
@@ -148,18 +108,22 @@ namespace Zene.Graphics
         /// <param name="n">The amount of copies to draw.</param>
         public unsafe void DrawMultiple(int n)
         {
-            if (!_dataCreated)
-            {
-                CreateData();
-            }
-
-            bool bound = _bound;
-
-            if (!bound) { Bind(); }
+            Bind();
 
             GL.DrawElementsInstanced(GLEnum.Triangles, Ibo.Size, _drawType, IntPtr.Zero.ToPointer(), n);
+        }
 
-            if (!bound) { Unbind(); }
+        private bool _disposed = false;
+        public void Dispose()
+        {
+            if (_disposed) { return; }
+
+            Buffer.Dispose();
+            Ibo.Dispose();
+            Vao.Dispose();
+
+            _disposed = true;
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Zene.Graphics
 {
     public class DrawingTexture<T> : GLObject, IDrawable where T : unmanaged
     {
-        public DrawingTexture(IEnumerable<T> points, uint texCoordIndex, Bitmap bitmap, WrapStyle wrapStyle, TextureSampling resizeQuality, BufferUsage usage, bool useMipMap)
+        public DrawingTexture(ReadOnlySpan<T> points, uint texCoordIndex, Bitmap bitmap, WrapStyle wrapStyle, TextureSampling resizeQuality, BufferUsage usage, bool useMipMap)
         {
             T[] aPoints = points.ToArray();
 
@@ -35,7 +35,7 @@ namespace Zene.Graphics
                 throw new Exception("Textures can only have 4 vertices.");
             }
 
-            _DrawObject = new DrawObject<T, byte>(AddTexCoords(aPoints, size), IndexArray, (uint)dataSize + 2, 0, (AttributeSize)size, usage);
+            _DrawObject = new DrawObject<T, byte>(AddTexCoords(aPoints, size).ToArray(), IndexArray, (uint)dataSize + 2, 0, (AttributeSize)size, usage);
 
             _Texture = Texture2D.Create(bitmap, wrapStyle, resizeQuality, useMipMap);
             _texData = bitmap;
@@ -93,7 +93,7 @@ namespace Zene.Graphics
                 throw new Exception("Textures can only have 4 vertices.");
             }
 
-            _DrawObject.SetData(AddTexCoords(aData, _AttributeSize));
+            _DrawObject.SetData(AddTexCoords(aData, _AttributeSize).ToArray());
         }
 
         public void SetData(Bitmap bitmap, IEnumerable<T> points)
@@ -120,7 +120,6 @@ namespace Zene.Graphics
 
         public override void CreateData()
         {
-            _DrawObject.CreateData();
             _Texture = Texture2D.Create(_texData, _wrapStyle, _quality, _mipmap);
 
             AddTexCoordsAttribute(_TexCoordI, _AttributeSize);
@@ -132,7 +131,6 @@ namespace Zene.Graphics
         {
             if (!DataCreated) { return; }
 
-            _DrawObject.DeleteData();
             _Texture.Dispose();
 
             _dataCreated = false;

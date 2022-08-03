@@ -4,9 +4,10 @@ namespace Zene.Graphics.Base
 {
     public unsafe class BufferGL : IBuffer
     {
-        public BufferGL()
+        public BufferGL(BufferTarget target)
         {
             Id = GL.GenBuffer();
+            Target = target;
 
             Properties = new BufferProperties(this);
         }
@@ -129,7 +130,7 @@ namespace Zene.Graphics.Base
 
             fixed (T* ptr = &data[0])
             {
-                GL.BufferData((uint)Target, data.Length * sizeof(T), ptr, (uint)usage);
+                GL.BufferData(this, data.Length * sizeof(T), ptr, (uint)usage);
             }
 
             UsageType = usage;
@@ -149,7 +150,7 @@ namespace Zene.Graphics.Base
 
             Bind();
 
-            GL.BufferData((uint)Target, data.Size * sizeof(T), (T*)data, (uint)usage);
+            GL.BufferData(this, data.Size * sizeof(T), (T*)data, (uint)usage);
 
             UsageType = usage;
         }
@@ -168,7 +169,7 @@ namespace Zene.Graphics.Base
 
             Bind();
 
-            GL.BufferData((uint)Target, size, data.ToPointer(), (uint)usage);
+            GL.BufferData(this, size, data.ToPointer(), (uint)usage);
 
             UsageType = usage;
         }
@@ -188,7 +189,7 @@ namespace Zene.Graphics.Base
 
             Bind();
 
-            GL.BufferData((uint)Target, length * sizeof(T), data, (uint)usage);
+            GL.BufferData(this, length * sizeof(T), data, (uint)usage);
 
             UsageType = usage;
         }
@@ -211,7 +212,7 @@ namespace Zene.Graphics.Base
 
             fixed (T* ptr = &data[0])
             {
-                GL.BufferStorage((uint)Target, data.Length * sizeof(T), ptr, (uint)usage);
+                GL.BufferStorage(this, data.Length * sizeof(T), ptr, (uint)usage);
             }
 
             UsageType = usage;
@@ -232,7 +233,7 @@ namespace Zene.Graphics.Base
 
             Bind();
 
-            GL.BufferStorage((uint)Target, data.Size * sizeof(T), data, (uint)usage);
+            GL.BufferStorage(this, data.Size * sizeof(T), data, (uint)usage);
 
             UsageType = usage;
         }
@@ -252,7 +253,7 @@ namespace Zene.Graphics.Base
 
             Bind();
 
-            GL.BufferStorage((uint)Target, size, data.ToPointer(), (uint)usage);
+            GL.BufferStorage(this, size, data.ToPointer(), (uint)usage);
 
             UsageType = usage;
         }
@@ -273,7 +274,7 @@ namespace Zene.Graphics.Base
 
             Bind();
 
-            GL.BufferStorage((uint)Target, length * sizeof(T), data, (uint)usage);
+            GL.BufferStorage(this, length * sizeof(T), data, (uint)usage);
 
             UsageType = usage;
         }
@@ -299,11 +300,38 @@ namespace Zene.Graphics.Base
         /// <typeparam name="T"></typeparam>
         /// <param name="offset">Specifies the offset into the buffer object's data store where data replacement will begin, measured in <typeparamref name="T"/>.</param>
         /// <param name="data">Specifies the array of data that will be copied into the data store.</param>
+        protected void BufferSubDataF<T>(int offset, T[] data) where T : unmanaged
+        {
+            Bind();
+
+            fixed (T* ptr = &data[0])
+            {
+                GL.BufferSubData((uint)Target, offset, data.Length * sizeof(T), ptr);
+            }
+        }
+        /// <summary>
+        /// Updates a subset of a buffer object's data store.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="offset">Specifies the offset into the buffer object's data store where data replacement will begin, measured in <typeparamref name="T"/>.</param>
+        /// <param name="data">Specifies the array of data that will be copied into the data store.</param>
         protected void BufferSubData<T>(int offset, GLArray<T> data) where T : unmanaged
         {
             Bind();
 
             GL.BufferSubData((uint)Target, offset * sizeof(T), data.Size * sizeof(T), data);
+        }
+        /// <summary>
+        /// Updates a subset of a buffer object's data store.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="offset">Specifies the offset into the buffer object's data store where data replacement will begin, measured in <typeparamref name="T"/>.</param>
+        /// <param name="data">Specifies the array of data that will be copied into the data store.</param>
+        protected void BufferSubDataF<T>(int offset, GLArray<T> data) where T : unmanaged
+        {
+            Bind();
+
+            GL.BufferSubData((uint)Target, offset, data.Size * sizeof(T), data);
         }
         /// <summary>
         /// Updates a subset of a buffer object's data store.
@@ -329,6 +357,19 @@ namespace Zene.Graphics.Base
             Bind();
 
             GL.BufferSubData((uint)Target, offset * sizeof(T), length * sizeof(T), data);
+        }
+        /// <summary>
+        /// Updates a subset of a buffer object's data store.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="offset">Specifies the offset into the buffer object's data store where data replacement will begin, measured in <typeparamref name="T"/>.</param>
+        /// <param name="length">Specifies the size of the array the data store region being replaced.</param>
+        /// <param name="data">Specifies a pointer to the new data that will be copied into the data store.</param>
+        protected void BufferSubDataF<T>(int offset, int length, T* data) where T : unmanaged
+        {
+            Bind();
+
+            GL.BufferSubData((uint)Target, offset, length * sizeof(T), data);
         }
 
         /// <summary>
