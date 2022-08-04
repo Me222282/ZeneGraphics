@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Zene.Graphics
+﻿namespace Zene.Graphics
 {
-    public interface IRenderTexture : IDisposable, IIdentifiable, IBindable
+    public interface IRenderTexture : IGLObject
     {
         /// <summary>
         /// Determines wether this is a textrue or renderbuffer.
@@ -12,7 +10,8 @@ namespace Zene.Graphics
         /// <summary>
         /// The properties for this texture.
         /// </summary>
-        public TexRenProperties Properties { get; }
+        public new TexRenProperties Properties { get; }
+        IProperties IGLObject.Properties => Properties;
 
         /// <summary>
         /// The formating of data stored in this texture.

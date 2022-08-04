@@ -96,6 +96,15 @@ namespace Zene.Graphics
         {
             return buffer.Id == State.GetBoundBuffer(target);
         }
+        /// <summary>
+        /// Determines whether <paramref name="vertexArray"/> is bound to the current context.
+        /// </summary>
+        /// <param name="vertexArray">The vertex array to query.</param>
+        /// <returns></returns>
+        public static bool Bound(this IVertexArray vertexArray)
+        {
+            return vertexArray.Id == State.GetBoundVertexArray();
+        }
 
         /// <summary>
         /// Dtermines whether the internal format <paramref name="format"/> represents a compressed format.

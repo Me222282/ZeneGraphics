@@ -9,12 +9,12 @@ namespace Zene.Graphics
         public TextureProperties(ITexture source)
             : base(source)
         {
-            Handle = source;
+            Source = source;
         }
-        public override ITexture Handle { get; }
+        public override ITexture Source { get; }
 
         /// <summary>
-        /// Returns the size of <see cref="Handle"/> at a given mipmap based on the baselevel mipmap.
+        /// Returns the size of <see cref="Source"/> at a given mipmap based on the baselevel mipmap.
         /// </summary>
         /// <param name="level">The mipmap level used to determin the size reduction from baselevel.</param>
         public Vector3I GetMipMapSize(int level)
@@ -23,7 +23,7 @@ namespace Zene.Graphics
 
             Vector3I size;
 
-            switch (Handle.Target)
+            switch (Source.Target)
             {
                 case TextureTarget.Texture1D:
                 case TextureTarget.Buffer:
@@ -89,13 +89,13 @@ namespace Zene.Graphics
             {
                 _baseLevel = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureBaseLevel, value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureBaseLevel, value);
             }
         }
         private ColourF _border = ColourF.Zero;
         /// <summary>
-        /// The border colour of <see cref="Handle"/>.
+        /// The border colour of <see cref="Source"/>.
         /// </summary>
         /// <remarks>
         /// This stores the value as a float.
@@ -107,14 +107,14 @@ namespace Zene.Graphics
             {
                 _border = value;
 
-                Handle.Bind();
+                Source.Bind();
                 float* colour = stackalloc float[] { value.R, value.G, value.B, value.A };
 
-                GL.TexParameterfv((uint)Handle.Target, GLEnum.TextureBorderColour, colour);
+                GL.TexParameterfv((uint)Source.Target, GLEnum.TextureBorderColour, colour);
             }
         }
         /// <summary>
-        /// The border colour of <see cref="Handle"/>.
+        /// The border colour of <see cref="Source"/>.
         /// </summary>
         /// <remarks>
         /// This stores the value as a integer.
@@ -126,10 +126,10 @@ namespace Zene.Graphics
             {
                 _border = value;
 
-                Handle.Bind();
+                Source.Bind();
                 int* colour = stackalloc int[] { value.R, value.G, value.B, value.A };
 
-                GL.TexParameteriv((uint)Handle.Target, GLEnum.TextureBorderColour, colour);
+                GL.TexParameteriv((uint)Source.Target, GLEnum.TextureBorderColour, colour);
             }
         }
         private ComparisonFunction _compareFunc = ComparisonFunction.LessEqual;
@@ -143,8 +143,8 @@ namespace Zene.Graphics
             {
                 _compareFunc = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureCompareFunc, (int)value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureCompareFunc, (int)value);
             }
         }
         private ComparisonMode _compareMode = ComparisonMode.None;
@@ -158,13 +158,13 @@ namespace Zene.Graphics
             {
                 _compareMode = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureCompareMode, (int)value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureCompareMode, (int)value);
             }
         }
         internal int _depth = 0;
         /// <summary>
-        /// The depth of <see cref="Handle"/> at base level.
+        /// The depth of <see cref="Source"/> at base level.
         /// </summary>
         public int Depth => _depth;
         private DepthStencilMode _dsMode = DepthStencilMode.Depth;
@@ -178,8 +178,8 @@ namespace Zene.Graphics
             {
                 _dsMode = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.DepthStencilTextureMode, (int)value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.DepthStencilTextureMode, (int)value);
             }
         }
         /// <summary>
@@ -189,10 +189,10 @@ namespace Zene.Graphics
         {
             get
             {
-                Handle.Bind();
+                Source.Bind();
                 int output;
 
-                GL.GetTexParameteriv((uint)Handle.Target, GLEnum.ImageFormatCompatibilityType, &output);
+                GL.GetTexParameteriv((uint)Source.Target, GLEnum.ImageFormatCompatibilityType, &output);
 
                 return (FormatCompatibilityType)output;
             }
@@ -208,13 +208,13 @@ namespace Zene.Graphics
             {
                 _lodBias = value;
 
-                Handle.Bind();
-                GL.TexParameterf((uint)Handle.Target, GLEnum.TextureLodBias, (float)value);
+                Source.Bind();
+                GL.TexParameterf((uint)Source.Target, GLEnum.TextureLodBias, (float)value);
             }
         }
         private TextureSampling _magFilter = TextureSampling.Blend;
         /// <summary>
-        /// The texture magnification function used when the level-of-detail function determines that <see cref="Handle"/> should be magified.
+        /// The texture magnification function used when the level-of-detail function determines that <see cref="Source"/> should be magified.
         /// </summary>
         public TextureSampling MagFilter
         {
@@ -223,8 +223,8 @@ namespace Zene.Graphics
             {
                 _magFilter = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureMagFilter, (int)value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureMagFilter, (int)value);
             }
         }
         internal int _maxLevel = 0;
@@ -238,8 +238,8 @@ namespace Zene.Graphics
             {
                 _maxLevel = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureMaxLevel, value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureMaxLevel, value);
             }
         }
         private double _maxLod = 1000;
@@ -253,13 +253,13 @@ namespace Zene.Graphics
             {
                 _maxLod = value;
 
-                Handle.Bind();
-                GL.TexParameterf((uint)Handle.Target, GLEnum.TextureMaxLod, (float)value);
+                Source.Bind();
+                GL.TexParameterf((uint)Source.Target, GLEnum.TextureMaxLod, (float)value);
             }
         }
         private TextureSampling _minFilter = TextureSampling.Blend;
         /// <summary>
-        /// The texture minification function used when the level-of-detail function determines that <see cref="Handle"/> should be minified.
+        /// The texture minification function used when the level-of-detail function determines that <see cref="Source"/> should be minified.
         /// </summary>
         public TextureSampling MinFilter
         {
@@ -268,8 +268,8 @@ namespace Zene.Graphics
             {
                 _minFilter = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureMinFilter, (int)value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureMinFilter, (int)value);
             }
         }
         private double _minLod = -1000;
@@ -283,8 +283,8 @@ namespace Zene.Graphics
             {
                 _minLod = value;
 
-                Handle.Bind();
-                GL.TexParameterf((uint)Handle.Target, GLEnum.TextureMinLod, (float)value);
+                Source.Bind();
+                GL.TexParameterf((uint)Source.Target, GLEnum.TextureMinLod, (float)value);
             }
         }
         private Swizzle _redSwiz = Swizzle.Red;
@@ -298,8 +298,8 @@ namespace Zene.Graphics
             {
                 _redSwiz = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureSwizzleR, (int)value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureSwizzleR, (int)value);
             }
         }
         private Swizzle _greenSwiz = Swizzle.Green;
@@ -313,8 +313,8 @@ namespace Zene.Graphics
             {
                 _greenSwiz = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureSwizzleG, (int)value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureSwizzleG, (int)value);
             }
         }
         private Swizzle _blueSwiz = Swizzle.Blue;
@@ -328,8 +328,8 @@ namespace Zene.Graphics
             {
                 _blueSwiz = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureSwizzleB, (int)value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureSwizzleB, (int)value);
             }
         }
         private Swizzle _alphaSwiz = Swizzle.Alpha;
@@ -343,8 +343,8 @@ namespace Zene.Graphics
             {
                 _alphaSwiz = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureSwizzleA, (int)value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureSwizzleA, (int)value);
             }
         }
         private WrapStyle _wrapX = WrapStyle.Repeated;
@@ -358,8 +358,8 @@ namespace Zene.Graphics
             {
                 _wrapX = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureWrapS, (int)value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureWrapS, (int)value);
             }
         }
         private WrapStyle _wrapY = WrapStyle.Repeated;
@@ -373,8 +373,8 @@ namespace Zene.Graphics
             {
                 _wrapY = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureWrapT, (int)value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureWrapT, (int)value);
             }
         }
         private WrapStyle _wrapZ = WrapStyle.Repeated;
@@ -388,8 +388,8 @@ namespace Zene.Graphics
             {
                 _wrapZ = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureWrapR, (int)value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureWrapR, (int)value);
             }
         }
         /// <summary>
@@ -684,8 +684,8 @@ namespace Zene.Graphics
             {
                 _immutableLevels = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureImmutableLevels, value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureImmutableLevels, value);
             }
         }
         internal int _minLayer = 0;
@@ -699,8 +699,8 @@ namespace Zene.Graphics
             {
                 _minLayer = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureViewMinLayer, value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureViewMinLayer, value);
             }
         }
         internal int _minLevel = 0;
@@ -714,8 +714,8 @@ namespace Zene.Graphics
             {
                 _minLevel = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureViewMinLevel, value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureViewMinLevel, value);
             }
         }
         internal int _numLayers = 0;
@@ -729,8 +729,8 @@ namespace Zene.Graphics
             {
                 _numLayers = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureViewNumLayers, value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureViewNumLayers, value);
             }
         }
         internal int _numLevels = 0;
@@ -744,40 +744,40 @@ namespace Zene.Graphics
             {
                 _numLevels = value;
 
-                Handle.Bind();
-                GL.TexParameteri((uint)Handle.Target, GLEnum.TextureViewNumLevels, value);
+                Source.Bind();
+                GL.TexParameteri((uint)Source.Target, GLEnum.TextureViewNumLevels, value);
             }
         }
 
         /// <summary>
-        /// The number of bytes that make up <see cref="Handle"/>'s data.
+        /// The number of bytes that make up <see cref="Source"/>'s data.
         /// </summary>
         public int CompressedImageSize
         {
             get
             {
-                Handle.Bind();
+                Source.Bind();
                 int output;
 
-                GL.GetTexLevelParameteriv((uint)Handle.Target, _baseLevel, GLEnum.TextureCompressedImageSize, &output);
+                GL.GetTexLevelParameteriv((uint)Source.Target, _baseLevel, GLEnum.TextureCompressedImageSize, &output);
 
                 return output;
             }
         }
         internal bool _immutableFormat = false;
         /// <summary>
-        /// Returns <see cref="true"/> if <see cref="Handle"/> has an immutable format, otherwise <see cref="false"/>.
+        /// Returns <see cref="true"/> if <see cref="Source"/> has an immutable format, otherwise <see cref="false"/>.
         /// </summary>
         public bool Immutable => _immutableFormat;
 
         /// <summary>
-        /// Determines whether <see cref="Handle"/> is a layered texture.
+        /// Determines whether <see cref="Source"/> is a layered texture.
         /// </summary>
         public bool Layered
         {
             get
             {
-                return Handle.Target switch
+                return Source.Target switch
                 {
                     TextureTarget.CubeMap or TextureTarget.CubeMapArray or
                         TextureTarget.Multisample2DArray or TextureTarget.Texture1DArray or

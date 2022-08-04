@@ -11,7 +11,7 @@ namespace Zene.Graphics
     /// <summary>
     /// Objects that encapsulate an OpenGL shader program.
     /// </summary>
-    public interface IShaderProgram : IDisposable, IBindable, IIdentifiable
+    public interface IShaderProgram : IIdentifiable, IBindable, IDisposable
     {
 
     }

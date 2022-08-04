@@ -78,18 +78,19 @@ namespace Zene.Graphics
         public static FramebufferAttachment None { get; } = new FramebufferAttachment(null, 0, 0, 0);
     }
 
-    public unsafe sealed class FramebufferProperties
+    public unsafe sealed class FramebufferProperties : IProperties
     {
         public FramebufferProperties(IFramebuffer source)
         {
-            Handle = source;
+            Source = source;
             _attachments = new AttachList();
         }
-        public IFramebuffer Handle { get; }
+        public IFramebuffer Source { get; }
+        IGLObject IProperties.Source => Source;
 
         internal FramebufferProperties(IFramebuffer source, int w, int h)
         {
-            Handle = source;
+            Source = source;
             _fromAttach = false;
             _width = w;
             _height = h;
@@ -105,8 +106,13 @@ namespace Zene.Graphics
             _height = height;
         }
 
+        public bool Sync()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
-        /// The width of the attachments attached to <see cref="Handle"/>.
+        /// The width of the attachments attached to <see cref="Source"/>.
         /// </summary>
         public int Width
         {
@@ -121,7 +127,7 @@ namespace Zene.Graphics
             }
         }
         /// <summary>
-        /// The width of the attachments attached to <see cref="Handle"/>.
+        /// The width of the attachments attached to <see cref="Source"/>.
         /// </summary>
         public int Height
         {
@@ -157,27 +163,27 @@ namespace Zene.Graphics
         /// The prefered pixel format for this framebuffer.
         /// </summary>
         [OpenGLSupport(4.5)]
-        public BaseFormat ColourReadFormat => Handle.GetColourReadFormat();
+        public BaseFormat ColourReadFormat => Source.GetColourReadFormat();
         /// <summary>
         /// The prefered pixel data type for this framebuffer.
         /// </summary>
         [OpenGLSupport(4.5)]
-        public TextureData ColourReadType => Handle.GetColourReadType();
+        public TextureData ColourReadType => Source.GetColourReadType();
         /// <summary>
         /// The coverage mask size for this framebuffer.
         /// </summary>
         [OpenGLSupport(4.5)]
-        public int Samples => Handle.GetSamples();
+        public int Samples => Source.GetSamples();
 
         internal AttachList _attachments;
 
         /// <summary>
-        /// Determines whether double buffering is supported by <see cref="Handle"/>.
+        /// Determines whether double buffering is supported by <see cref="Source"/>.
         /// </summary>
         public bool DoubleBuffered { get; internal init; } = false;
         internal int _sampleBuffers;
         /// <summary>
-        /// The number of sample buffers a part of <see cref="Handle"/>.
+        /// The number of sample buffers a part of <see cref="Source"/>.
         /// </summary>
         public int SampleBuffers
         {
@@ -185,7 +191,7 @@ namespace Zene.Graphics
             internal init => _sampleBuffers = value;
         }
         /// <summary>
-        /// Determines whether stereo buffers are support by <see cref="Handle"/>.
+        /// Determines whether stereo buffers are support by <see cref="Source"/>.
         /// </summary>
         public bool Stereo { get; internal init; } = false;
 

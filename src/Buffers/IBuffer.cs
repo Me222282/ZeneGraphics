@@ -137,7 +137,7 @@ namespace Zene.Graphics
     /// <summary>
     /// Object that encapsulate an OpenGL buffer object.
     /// </summary>
-    public interface IBuffer : IIdentifiable, IDisposable, IBindable
+    public interface IBuffer : IGLObject
     {
         /// <summary>
         /// How frequent data is get and set.
@@ -152,7 +152,8 @@ namespace Zene.Graphics
         /// <summary>
         /// The properties of this Buffer.
         /// </summary>
-        public BufferProperties Properties { get; }
+        public new BufferProperties Properties { get; }
+        IProperties IGLObject.Properties => Properties;
 
         /// <summary>
         /// Binds this <see cref="IBuffer"/> to read. Used for copying.

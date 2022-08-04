@@ -721,6 +721,14 @@ namespace Zene.Graphics
             };
         }
         /// <summary>
+        /// Gets the Id of the currently bound vertex array.
+        /// </summary>
+        /// <returns></returns>
+        public static uint GetBoundVertexArray()
+        {
+            return GL.context.boundVertexArray;
+        }
+        /// <summary>
         /// Gets or sets the active texture referance.
         /// </summary>
         /// <returns></returns>

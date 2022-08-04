@@ -2,14 +2,15 @@
 
 namespace Zene.Graphics
 {
-    public unsafe sealed class BufferProperties
+    public unsafe sealed class BufferProperties : IProperties
     {
         public BufferProperties(IBuffer source)
         {
-            Handle = source;
+            Source = source;
         }
 
-        public IBuffer Handle { get; }
+        public IBuffer Source { get; }
+        IGLObject IProperties.Source => Source;
 
         internal int _size = 0;
         public int Size => _size;
@@ -24,5 +25,10 @@ namespace Zene.Graphics
         public int MapLength => _mapLength;
         internal int _mapOffset = 0;
         public int MapOffset => _mapOffset;
+
+        public bool Sync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

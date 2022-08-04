@@ -69,6 +69,8 @@ namespace Zene.Graphics
 
         internal uint boundRenderbuffer = 0;
 
+        internal uint boundVertexArray = 0;
+
         internal uint activeTextureUnit = 0;
         internal GL.TextureBinding[] boundTextures;
 

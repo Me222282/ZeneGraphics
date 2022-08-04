@@ -1,13 +1,14 @@
 ﻿namespace Zene.Graphics
 {
-    public class TexRenProperties
+    public class TexRenProperties : IProperties
     {
         public TexRenProperties(IRenderTexture source)
         {
-            Handle = source;
+            Source = source;
             _oldFormat = 0;
         }
-        public virtual IRenderTexture Handle { get; }
+        public virtual IRenderTexture Source { get; }
+        IGLObject IProperties.Source => Source;
 
         internal TextureFormat _internalFormat;
         /// <summary>
@@ -17,12 +18,12 @@
 
         internal int _width = 0;
         /// <summary>
-        /// The width of <see cref="Handle"/> at base level.
+        /// The width of <see cref="Source"/> at base level.
         /// </summary>
         public int Width => _width;
         internal int _height = 0;
         /// <summary>
-        /// The height of <see cref="Handle"/> at base level.
+        /// The height of <see cref="Source"/> at base level.
         /// </summary>
         public int Height => _height;
         internal int _samples = 0;
@@ -347,5 +348,10 @@
         /// The internal storage resolution of the stencil component at base level.
         /// </summary>
         public int StencilSize => _stencilSize;
+
+        public virtual bool Sync()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -172,12 +172,13 @@ namespace Zene.Graphics
     /// Objects that encapsulate an OpnelGL framebuffer.
     /// </summary>
     [OpenGLSupport(3.0)]
-    public unsafe interface IFramebuffer : IBindable, IIdentifiable, IDisposable
+    public unsafe interface IFramebuffer : IGLObject
     {
         /// <summary>
         /// The properties for this framebuffer.
         /// </summary>
-        public FramebufferProperties Properties { get; }
+        public new FramebufferProperties Properties { get; }
+        IProperties IGLObject.Properties => Properties;
 
         /// <summary>
         /// The framebuffer target this framebuffer was last bound to.

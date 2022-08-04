@@ -272,8 +272,10 @@ namespace Zene.Graphics.Base
 		{
 			Functions.BindVertexArray(array);
 
+			context.boundVertexArray = array;
+
 			// For some reason, binding vertex array objects unbinds any element array buffer
-			GL.context.boundBuffers.ElementArray = 0;
+			context.boundBuffers.ElementArray = 0;
 		}
 
 		[OpenGLSupport(4.3)]
