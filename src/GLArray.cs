@@ -11,6 +11,13 @@ namespace Zene.Graphics
     /// <typeparam name="T"></typeparam>
     public unsafe class GLArray<T> : IEnumerable<T> where T : unmanaged
     {
+        protected internal GLArray(GLArray<T> source)
+        {
+            Size = source.Size;
+            _zSize = source._zSize;
+            _data = source._data;
+        }
+
         /// <summary>
         /// Creates an array from raw values.
         /// </summary>
@@ -19,23 +26,9 @@ namespace Zene.Graphics
         /// <param name="depth">The depth of the array.</param>
         /// <param name="values">The raw data to be stored in the array.</param>
         public GLArray(int width, int height, int depth, params T[] values)
+            : this((width, height, depth), values)
         {
-            if (values.Length != width * height * depth)
-            {
-                throw new Exception($"The data in {nameof(values)} doesn't match the given size.");
-            }
-
-            if (width < 1 || height < 1 || depth < 1)
-            {
-                throw new Exception($"{nameof(width)}, {nameof(height)} and {nameof(depth)} must be greater than 0.");
-            }
-
-            Width = width;
-            Height = height;
-            Depth = depth;
-            _zSize = Width * Height;
-
-            _data = values;
+            
         }
         /// <summary>
         /// Creates an array from raw values.
@@ -54,10 +47,8 @@ namespace Zene.Graphics
                 throw new Exception($"{nameof(size.X)}, {nameof(size.Y)} and {nameof(size.Z)} must be greater than 0.");
             }
 
-            Width = size.X;
-            Height = size.Y;
-            Depth = size.Z;
-            _zSize = Width * Height;
+            Size = size;
+            _zSize = size.X * size.Y;
 
             _data = values;
         }
@@ -66,36 +57,18 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="length">The width of the aray.</param>
         public GLArray(int length)
+            : this((length, 1, 1))
         {
-            _data = new T[length];
-
-            if (length < 1)
-            {
-                throw new Exception($"{nameof(length)} must be greater than 0.");
-            }
-
-            Width = length;
-            Height = 1;
-            Depth = 1;
-            _zSize = Width;
+            
         }
         /// <summary>
         /// Creates an empty 2 dimensional array.
         /// </summary>
         /// <param name="size">The size of both dimensions of the array.</param>
         public GLArray(Vector2I size)
+            : this((size, 1))
         {
-            _data = new T[size.X * size.Y];
-
-            if (size.X < 1 || size.Y < 1)
-            {
-                throw new Exception($"{nameof(size.X)} and {nameof(size.Y)} must be greater than 0.");
-            }
-
-            Width = size.X;
-            Height = size.Y;
-            Depth = 1;
-            _zSize = Width * Height;
+            
         }
         /// <summary>
         /// Creates an empty 2 dimensional array.
@@ -103,18 +76,9 @@ namespace Zene.Graphics
         /// <param name="width">The width of the array.</param>
         /// <param name="height">The height of the array.</param>
         public GLArray(int width, int height)
+            : this((width, height, 1))
         {
-            _data = new T[width * height];
-
-            if (width < 1 || height < 1)
-            {
-                throw new Exception($"{nameof(width)} and {nameof(height)} must be greater than 0.");
-            }
-
-            Width = width;
-            Height = height;
-            Depth = 1;
-            _zSize = Width * Height;
+            
         }
         /// <summary>
         /// Creates an empty 3 dimensional array.
@@ -123,18 +87,9 @@ namespace Zene.Graphics
         /// <param name="height">The height of the array.</param>
         /// <param name="depth">The depth of the array.</param>
         public GLArray(int width, int height, int depth)
+            : this((width, height, depth))
         {
-            _data = new T[width * height * depth];
-
-            if (width < 1 || height < 1 || depth < 1)
-            {
-                throw new Exception($"{nameof(width)}, {nameof(height)} and {nameof(depth)} must be greater than 0.");
-            }
-
-            Width = width;
-            Height = height;
-            Depth = depth;
-            _zSize = Width * Height;
+            
         }
         /// <summary>
         /// Creates an empty 3 dimensional array.
@@ -149,10 +104,8 @@ namespace Zene.Graphics
                 throw new Exception($"{nameof(size.X)}, {nameof(size.Y)} and {nameof(size.Z)} must be greater than 0.");
             }
 
-            Width = size.X;
-            Height = size.Y;
-            Depth = size.Z;
-            _zSize = Width * Height;
+            Size = size;
+            _zSize = size.X * size.Y;
         }
 
         protected GLArray(bool empty)
@@ -160,26 +113,29 @@ namespace Zene.Graphics
             if (empty)
             {
                 _data = Array.Empty<T>();
-                Width = 0;
-                Height = 0;
-                Depth = 0;
+                Size = Vector3I.Zero;
                 _zSize = 0;
             }
         }
 
         /// <summary>
+        /// The size of the array.
+        /// </summary>
+        public Vector3I Size { get; private set; } = Vector3I.One;
+
+        /// <summary>
         /// The width of the array.
         /// </summary>
-        public virtual int Width { get; } = 1;
+        public int Width => Size.X;
         /// <summary>
         /// The height of the array.
         /// </summary>
-        public virtual int Height { get; } = 1;
+        public int Height => Size.Y;
         /// <summary>
         /// The depth of the array.
         /// </summary>
-        public virtual int Depth { get; } = 1;
-        protected readonly int _zSize;
+        public int Depth => Size.Z;
+        protected int _zSize;
 
         private T[] _data;
         /// <summary>
@@ -189,7 +145,7 @@ namespace Zene.Graphics
         /// <summary>
         /// The length of the raw data in the array.
         /// </summary>
-        public int Size => Data.Length;
+        public int Length => Data.Length;
         /// <summary>
         /// The size in bytes of the array.
         /// </summary>
@@ -197,9 +153,21 @@ namespace Zene.Graphics
 
         public void Fill(T value) => Array.Fill(_data, value);
 
-        protected void SetData(T[] values)
+        protected internal void SetData(Vector3I size, T[] values)
         {
-            if (values.Length != Width * Height * Depth)
+            Size = size;
+            _zSize = size.X * size.Y;
+
+            if (values.Length != size.X * size.Y * size.Z)
+            {
+                throw new Exception($"The data in {nameof(values)} doesn't match the given size.");
+            }
+
+            _data = values;
+        }
+        protected internal void SetData(T[] values)
+        {
+            if (values.Length != Size.X * Size.Y * Size.Z)
             {
                 throw new Exception($"The data in {nameof(values)} doesn't match the given size.");
             }
@@ -287,27 +255,7 @@ namespace Zene.Graphics
         /// <returns></returns>
         public GLArray<T> SubSection(IBox box)
         {
-            int width = (int)box.Width;
-            int height = (int)box.Height;
-
-            GLArray<T> output = new GLArray<T>(width, height);
-
-            int x = (int)box.Left;
-            int y = Height - (int)box.Top - 1;
-
-            try
-            {
-                for (int sx = 0; sx < width; sx++)
-                {
-                    for (int sy = 0; sy < height; sy++)
-                    {
-                        output[sx, sy] = this[sx + x, sy + y];
-                    }
-                }
-            }
-            catch { throw; }
-
-            return output;
+            return SubSection((int)box.Width, (int)box.Height, (int)box.Left, Height - (int)box.Top - 1);
         }
         /// <summary>
         /// Gets a 3 dimensional section of the array.
@@ -347,32 +295,7 @@ namespace Zene.Graphics
         /// <returns></returns>
         public GLArray<T> SubSection(IBox3 box)
         {
-            int width = (int)box.Width;
-            int height = (int)box.Height;
-            int depth = (int)box.Depth;
-
-            GLArray<T> output = new GLArray<T>(width, height, depth);
-
-            int x = (int)box.Left;
-            int y = Height - (int)box.Top - 1;
-            int z = (int)box.Front;
-
-            try
-            {
-                for (int sx = 0; sx < width; sx++)
-                {
-                    for (int sy = 0; sy < height; sy++)
-                    {
-                        for (int sz = 0; sz < depth; sz++)
-                        {
-                            output[sx, sy, sz] = this[sx + x, sy + y, sz + z];
-                        }
-                    }
-                }
-            }
-            catch { throw; }
-
-            return output;
+            return SubSection((int)box.Width, (int)box.Height, (int)box.Depth,(int)box.Left, Height - (int)box.Top - 1, (int)box.Front);
         }
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator() => ((IEnumerable<T>)Data).GetEnumerator();
@@ -394,10 +317,12 @@ namespace Zene.Graphics
             _current++;
         }
         */
-        public static implicit operator T[](GLArray<T> glArray)
-        {
-            return glArray.Data;
-        }
+        public static implicit operator T[](GLArray<T> glArray) => glArray.Data;
+        public static implicit operator ReadOnlySpan<T>(GLArray<T> glArray) => glArray.Data;
+        public static implicit operator Span<T>(GLArray<T> glArray) => glArray.Data;
+        public static implicit operator ReadOnlyMemory<T>(GLArray<T> glArray) => glArray.Data;
+        public static implicit operator Memory<T>(GLArray<T> glArray) => glArray.Data;
+
         public static explicit operator GLArray<T>(T[,] array)
         {
             int width = array.GetLength(0);

@@ -62,7 +62,7 @@ namespace Zene.Graphics
             Colour[] array = new Colour[64];
 
             int i = 0;
-            while (i < data.Size)
+            while (i < data.Length)
             {
                 PassValue(data, array, ref i, stream);
             }

@@ -202,7 +202,7 @@ namespace Zene.Graphics.Base
         protected void CompressedTexImage1D<T>(int level, TextureFormat intFormat, int size, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexImage1D(this, level, (uint)intFormat, size, 0, data.Size * sizeof(T), data ?? (void*)0);
+            GL.CompressedTexImage1D(this, level, (uint)intFormat, size, 0, data.Length * sizeof(T), data ?? (void*)0);
         }
         /// <summary>
         /// Specify a one-dimensional texture image in a compressed format.
@@ -258,7 +258,7 @@ namespace Zene.Graphics.Base
         protected void CompressedTexImage2D<T>(int level, TextureFormat intFormat, int width, int height, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexImage2D(this, level, (uint)intFormat, width, height, 0, data.Size * sizeof(T), data ?? (void*)0);
+            GL.CompressedTexImage2D(this, level, (uint)intFormat, width, height, 0, data.Length * sizeof(T), data ?? (void*)0);
         }
         /// <summary>
         /// Specify a two-dimensional texture image in a compressed format.
@@ -274,7 +274,7 @@ namespace Zene.Graphics.Base
         protected void CompressedTexImage2D<T>(CubeMapFace target, int level, TextureFormat intFormat, int width, int height, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexImage2D(this, level, (uint)intFormat, width, height, 0, data.Size * sizeof(T), data ?? (void*)0);
+            GL.CompressedTexImage2D(this, level, (uint)intFormat, width, height, 0, data.Length * sizeof(T), data ?? (void*)0);
         }
         /// <summary>
         /// Specify a two-dimensional texture image in a compressed format.
@@ -358,7 +358,7 @@ namespace Zene.Graphics.Base
         protected void CompressedTexImage3D<T>(int level, TextureFormat intFormat, int width, int height, int depth, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexImage3D(this, level, (uint)intFormat, width, height, depth, 0, data.Size * sizeof(T), data ?? (void*)0);
+            GL.CompressedTexImage3D(this, level, (uint)intFormat, width, height, depth, 0, data.Length * sizeof(T), data ?? (void*)0);
         }
         /// <summary>
         /// Specify a three-dimensional texture image in a compressed format.
@@ -431,7 +431,7 @@ namespace Zene.Graphics.Base
         protected void CompressedTexSubImage1D<T>(int level, int offset, int size, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexSubImage1D((uint)Target, level, offset, size, (uint)InternalFormat, data.Size * sizeof(T), data ?? (void*)0);
+            GL.CompressedTexSubImage1D((uint)Target, level, offset, size, (uint)InternalFormat, data.Length * sizeof(T), data ?? (void*)0);
         }
         /// <summary>
         /// Specify a one-dimensional texture image in a compressed format.
@@ -478,7 +478,7 @@ namespace Zene.Graphics.Base
         protected void CompressedTexSubImage2D<T>(int level, int xOffset, int yOffset, int width, int height, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexSubImage2D((uint)Target, level, xOffset, yOffset, width, height, (uint)InternalFormat, data.Size * sizeof(T), data ?? (void*)0);
+            GL.CompressedTexSubImage2D((uint)Target, level, xOffset, yOffset, width, height, (uint)InternalFormat, data.Length * sizeof(T), data ?? (void*)0);
         }
         /// <summary>
         /// Specify a one-dimensional texture image in a compressed format.
@@ -528,7 +528,7 @@ namespace Zene.Graphics.Base
         protected void CompressedTexSubImage2D<T>(CubeMapFace target, int level, int xOffset, int yOffset, int width, int height, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexSubImage2D((uint)target, level, xOffset, yOffset, width, height, (uint)InternalFormat, data.Size * sizeof(T), data ?? (void*)0);
+            GL.CompressedTexSubImage2D((uint)target, level, xOffset, yOffset, width, height, (uint)InternalFormat, data.Length * sizeof(T), data ?? (void*)0);
         }
         /// <summary>
         /// Specify a one-dimensional texture image in a compressed format.
@@ -581,7 +581,7 @@ namespace Zene.Graphics.Base
         protected void CompressedTexSubImage3D<T>(int level, int xOffset, int yOffset, int zOffset, int width, int height, int depth, GLArray<T> data) where T : unmanaged
         {
             Bind();
-            GL.CompressedTexSubImage3D((uint)Target, level, xOffset, yOffset, zOffset, width, height, depth, (uint)InternalFormat, data.Size * sizeof(T), data ?? (void*)0);
+            GL.CompressedTexSubImage3D((uint)Target, level, xOffset, yOffset, zOffset, width, height, depth, (uint)InternalFormat, data.Length * sizeof(T), data ?? (void*)0);
         }
         /// <summary>
         /// Specify a one-dimensional texture image in a compressed format.

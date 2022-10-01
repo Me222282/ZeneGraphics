@@ -23,25 +23,31 @@ namespace Zene.Graphics
 
     public unsafe class Bitmap : GLArray<Colour>
     {
+        private Bitmap(GLArray<Colour> source)
+            : base(source)
+        {
+
+        }
+
         public Bitmap(int width, int height)
             : base(width, height)
         {
-            Width = width;
-            Height = height;
+            
+        }
+        public Bitmap(Vector2I size)
+            : base(size)
+        {
+            
         }
         public Bitmap(int width, int height, Colour[] data)
             : base(width, height, 1, data)
         {
-            Width = width;
-            Height = height;
+            
         }
         public Bitmap(int width, int height, Colour value)
             : base(width, height, 1)
         {
             Array.Fill(Data, value);
-
-            Width = width;
-            Height = height;
         }
         public Bitmap(string path)
             : this(new FileStream(path, FileMode.Open), true)
@@ -55,10 +61,7 @@ namespace Zene.Graphics
 
             if (close) { stream.Close(); }
 
-            Width = imageData.Width;
-            Height = imageData.Height;
-
-            SetData(new Colour[imageData.Height * imageData.Width]);
+            SetData((imageData.Width, imageData.Height, 1), new Colour[imageData.Height * imageData.Width]);
 
             for (int x = 0; x < Width; x++)
             {
@@ -74,50 +77,26 @@ namespace Zene.Graphics
             }
         }
 
-        public override int Width { get; }
-        public override int Height { get; }
-
-        public Bitmap SubBitmap(int x, int y, int width, int height)
+        /// <summary>
+        /// Gets a 2 dimensional section of the bitmap.
+        /// </summary>
+        /// <param name="x">The x offset into the array.</param>
+        /// <param name="y">The y offset into the array.</param>
+        /// <param name="width">The width of the sub section.</param>
+        /// <param name="height">The height of the sub section.</param>
+        /// <returns></returns>
+        public new Bitmap SubSection(int x, int y, int width, int height)
         {
-            Bitmap output = new Bitmap(width, height);
-
-            try
-            {
-                for (int sx = 0; sx < width; sx++)
-                {
-                    for (int sy = 0; sy < height; sy++)
-                    {
-                        output[sx, sy] = this[sx + x, sy + y];
-                    }
-                }
-            }
-            catch { throw; }
-
-            return output;
+            return new Bitmap(base.SubSection(x, y, width, height));
         }
-        public Bitmap SubBitmap(IBox box)
+        /// <summary>
+        /// Gets a 2 dimensional section of the bitmap.
+        /// </summary>
+        /// <param name="box">The bounding box to source from.</param>
+        /// <returns></returns>
+        public new Bitmap SubSection(IBox box)
         {
-            int width = (int)box.Width;
-            int height = (int)box.Height;
-
-            Bitmap output = new Bitmap(width, height);
-
-            int x = (int)box.Left;
-            int y = Height - (int)box.Top - 1;
-
-            try
-            {
-                for (int sx = 0; sx < width; sx++)
-                {
-                    for (int sy = 0; sy < height; sy++)
-                    {
-                        output[sx, sy] = this[sx + x, sy + y];
-                    }
-                }
-            }
-            catch { throw; }
-
-            return output;
+            return new Bitmap(base.SubSection(box));
         }
 
         public void FlipHorizontally()

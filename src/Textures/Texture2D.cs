@@ -1,6 +1,7 @@
 ﻿using StbImageSharp;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Zene.Graphics.Base;
 using Zene.Structs;
 
@@ -505,7 +506,7 @@ namespace Zene.Graphics
 
             if (close) { stream.Close(); }
 
-            texture.SetData(imageData.Width, imageData.Height, BaseFormat.Rgba, new GLArray<byte>(imageData.Width * 4, imageData.Height, 1, imageData.Data));
+            texture.SetData(imageData.Width, imageData.Height, BaseFormat.Rgba, new GLArray<byte>(imageData.Width, imageData.Height, 4, imageData.Data));
             texture.WrapStyle = wrapStyle;
             texture.MinFilter = textureQuality;
             texture.MagFilter = textureQuality switch
@@ -538,5 +539,42 @@ namespace Zene.Graphics
         }
         public static Texture2D Create(string path, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap) =>
             Create(new FileStream(path, FileMode.Open), wrapStyle, textureQuality, mipmap, true);
+
+        public static Texture2D LoadSync(Stream stream, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap, bool close = false)
+        {
+            Texture2D texture = new Texture2D(TextureFormat.Rgba8, TextureData.Byte);
+
+            GraphicsContext context = GL.context;
+
+            Task.Run(() =>
+            {
+                // Load image
+                ImageResult imageData = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
+
+                if (close) { stream.Close(); }
+
+                context.Actions.Push(() =>
+                {
+                    texture.SetData(imageData.Width, imageData.Height, BaseFormat.Rgba, new GLArray<byte>(imageData.Width, imageData.Height, 4, imageData.Data));
+
+                    if (mipmap) { texture.CreateMipMap(); }
+                });
+            });
+
+            texture.WrapStyle = wrapStyle;
+            texture.MinFilter = textureQuality;
+            texture.MagFilter = textureQuality switch
+            {
+                TextureSampling.BlendMipMapBlend => TextureSampling.Blend,
+                TextureSampling.BlendMipMapNearest => TextureSampling.Blend,
+                TextureSampling.NearestMipMapBlend => TextureSampling.Nearest,
+                TextureSampling.NearestMipMapNearest => TextureSampling.Nearest,
+                _ => textureQuality
+            };
+
+            return texture;
+        }
+        public static Texture2D LoadSync(string path, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap) =>
+            LoadSync(new FileStream(path, FileMode.Open), wrapStyle, textureQuality, mipmap, true);
     }
 }

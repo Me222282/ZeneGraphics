@@ -150,7 +150,7 @@ namespace Zene.Graphics.Base
 
             Bind();
 
-            GL.BufferData(this, data.Size * sizeof(T), data ?? (void*)0, (uint)usage);
+            GL.BufferData(this, data.Length * sizeof(T), data ?? (void*)0, (uint)usage);
 
             UsageType = usage;
         }
@@ -233,7 +233,7 @@ namespace Zene.Graphics.Base
 
             Bind();
 
-            GL.BufferStorage(this, data.Size * sizeof(T), data ?? (void*)0, (uint)usage);
+            GL.BufferStorage(this, data.Length * sizeof(T), data ?? (void*)0, (uint)usage);
 
             UsageType = usage;
         }
@@ -319,7 +319,7 @@ namespace Zene.Graphics.Base
         {
             Bind();
 
-            GL.BufferSubData((uint)Target, offset * sizeof(T), data.Size * sizeof(T), data ?? (void*)0);
+            GL.BufferSubData((uint)Target, offset * sizeof(T), data.Length * sizeof(T), data ?? (void*)0);
         }
         /// <summary>
         /// Updates a subset of a buffer object's data store.
@@ -331,7 +331,7 @@ namespace Zene.Graphics.Base
         {
             Bind();
 
-            GL.BufferSubData((uint)Target, offset, data.Size * sizeof(T), data ?? (void*)0);
+            GL.BufferSubData((uint)Target, offset, data.Length * sizeof(T), data ?? (void*)0);
         }
         /// <summary>
         /// Updates a subset of a buffer object's data store.

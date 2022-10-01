@@ -62,6 +62,8 @@ namespace Zene.Graphics
             }
         }
 
+        public ActionManager Actions { get; } = new ActionManager();
+
         internal uint boundShaderProgram = 0;
         internal GL.BufferBinding boundBuffers;
 
