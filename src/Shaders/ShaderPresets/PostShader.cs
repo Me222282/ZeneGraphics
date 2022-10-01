@@ -145,12 +145,12 @@ namespace Zene.Graphics.Shaders
 
         public void Bind()
         {
-            GL.UseProgram(Program);
+            GL.UseProgram(this);
         }
 
         public void Unbind()
         {
-            GL.UseProgram(0);
+            GL.UseProgram(null);
         }
 
         public static double[] BlurKernel { get; } = new double[]

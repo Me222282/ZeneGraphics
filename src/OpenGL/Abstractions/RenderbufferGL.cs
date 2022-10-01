@@ -40,14 +40,14 @@ namespace Zene.Graphics.Base
         {
             if (this.Bound()) { return; }
 
-            GL.BindRenderbuffer(GLEnum.Renderbuffer, Id);
+            GL.BindRenderbuffer(GLEnum.Renderbuffer, this);
         }
         [OpenGLSupport(3.0)]
         public void Unbind()
         {
             if (!this.Bound()) { return; }
 
-            GL.BindRenderbuffer(GLEnum.Renderbuffer, 0);
+            GL.BindRenderbuffer(GLEnum.Renderbuffer, null);
         }
 
         protected virtual void Dispose(bool dispose)

@@ -411,14 +411,14 @@ namespace Zene.Graphics.Shaders
 
         public void Bind()
         {
-            GL.UseProgram(Program);
+            GL.UseProgram(this);
 
             _Bound = true;
         }
 
         public void Unbind()
         {
-            GL.UseProgram(0);
+            GL.UseProgram(null);
 
             _Bound = false;
         }

@@ -151,14 +151,14 @@ namespace Zene.Graphics.Shaders
 
             GL.Disable(GLEnum.DepthTest);
 
-            GL.UseProgram(Program);
+            GL.UseProgram(this);
             _framebuffer.GetTexture(FrameAttachment.Colour0).Bind(0);
             SetTextureSlot(0);
 
             _drawingObject.Draw();
 
-            GL.BindTexture(GLEnum.Texture2d, 0);
-            GL.UseProgram(0);
+            GL.BindTexture(GLEnum.Texture2d, null);
+            GL.UseProgram(null);
         }
     }
 }

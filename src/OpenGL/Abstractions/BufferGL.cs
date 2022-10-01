@@ -23,7 +23,7 @@ namespace Zene.Graphics.Base
         {
             if (this.Bound()) { return; }
 
-            GL.BindBuffer((uint)Target, Id);
+            GL.BindBuffer((uint)Target, this);
         }
         private bool _disposed = false;
         public void Dispose()
@@ -47,14 +47,14 @@ namespace Zene.Graphics.Base
         {
             if (!this.Bound()) { return; }
 
-            GL.BindBuffer((uint)Target, 0);
+            GL.BindBuffer((uint)Target, null);
         }
 
         public BufferTarget BindRead()
         {
             if (this.Bound()) { return Target; }
 
-            GL.BindBuffer(GLEnum.CopyReadBuffer, Id);
+            GL.BindBuffer(GLEnum.CopyReadBuffer, this);
 
             return BufferTarget.CopyRead;
         }
@@ -62,7 +62,7 @@ namespace Zene.Graphics.Base
         {
             if (this.Bound()) { return Target; }
 
-            GL.BindBuffer(GLEnum.CopyWriteBuffer, Id);
+            GL.BindBuffer(GLEnum.CopyWriteBuffer, this);
 
             return BufferTarget.CopyWrite;
         }
@@ -73,7 +73,7 @@ namespace Zene.Graphics.Base
         {
             if (this.Bound(BufferTarget.DrawIndirect)) { return; }
 
-            GL.BindBuffer(GLEnum.DrawIndirectBuffer, Id);
+            GL.BindBuffer(GLEnum.DrawIndirectBuffer, this);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Zene.Graphics.Base
                 throw new BufferException(this, $"Target must be either {BufferTarget.AtomicCounter}, {BufferTarget.TransformFeedback}, {BufferTarget.Uniform} or {BufferTarget.ShaderStorage} to use BindBase(uint).");
             }
 
-            GL.BindBufferBase((uint)Target, index, Id);
+            GL.BindBufferBase((uint)Target, index, this);
         }
         /// <summary>
         /// Bind a range within a buffer object to an indexed buffer target
@@ -110,7 +110,7 @@ namespace Zene.Graphics.Base
                 throw new BufferException(this, $"Target must be either {BufferTarget.AtomicCounter}, {BufferTarget.TransformFeedback}, {BufferTarget.Uniform} or {BufferTarget.ShaderStorage} to use BindBase(uint, int, int).");
             }
 
-            GL.BindBufferRange((uint)Target, index, Id, offset, size);
+            GL.BindBufferRange((uint)Target, index, this, offset, size);
         }
 
         /// <summary>
@@ -485,7 +485,7 @@ namespace Zene.Graphics.Base
             // Bind param buffer to param reference
             if (!paramSource.Bound(BufferTarget.DrawIndirect))
             {
-                GL.BindBuffer(GLEnum.DrawIndirectBuffer, paramSource.Id);
+                GL.BindBuffer(GLEnum.DrawIndirectBuffer, paramSource);
             }
 
             GL.DrawArraysIndirect((uint)mode, (void*)new IntPtr(offset));
@@ -618,7 +618,7 @@ namespace Zene.Graphics.Base
             // Bind param buffer to param reference
             if (!paramSource.Bound(BufferTarget.DrawIndirect))
             {
-                GL.BindBuffer(GLEnum.DrawIndirectBuffer, paramSource.Id);
+                GL.BindBuffer(GLEnum.DrawIndirectBuffer, paramSource);
             }
 
             GL.DrawElementsIndirect((uint)mode, (uint)type, &offset);

@@ -27,17 +27,17 @@ namespace Zene.Graphics.Base
     {
 		public struct TextureBinding
 		{
-			public uint Texture1D;
-			public uint Texture1DArray;
-			public uint Texture2D;
-			public uint Texture2DArray;
-			public uint Texture2DArrayMS;
-			public uint Texture2DMS;
-			public uint Texture3D;
-			public uint CubeMap;
-			public uint CubeMapArray;
-			public uint Buffer;
-			public uint Rectangle;
+			public ITexture Texture1D;
+			public ITexture Texture1DArray;
+			public ITexture Texture2D;
+			public ITexture Texture2DArray;
+			public ITexture Texture2DArrayMS;
+			public ITexture Texture2DMS;
+			public ITexture Texture3D;
+			public ITexture CubeMap;
+			public ITexture CubeMapArray;
+			public ITexture Buffer;
+			public ITexture Rectangle;
 		}
 
 		[OpenGLSupport(1.3)]
@@ -78,9 +78,9 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(1.1)]
-		public static void BindTexture(uint target, uint texture)
+		public static void BindTexture(uint target, ITexture texture)
 		{
-			Functions.BindTexture(target, texture);
+			Functions.BindTexture(target, texture is not null ? texture.Id : 0);
 
 			switch (target)
 			{
@@ -135,7 +135,7 @@ namespace Zene.Graphics.Base
 				if (textures[i] == null) { continue; }
 
 				ActiveTexture(GLEnum.Texture0 + first + i);
-				BindTexture((uint)textures[i].Target, textures[i].Id);
+				BindTexture((uint)textures[i].Target, textures[i]);
 			}
 		}
 		[OpenGLSupport(4.5)]
@@ -143,42 +143,42 @@ namespace Zene.Graphics.Base
 		{
 			if (texture != null)
 			{
-				Functions.BindTextureUnit(unit, texture.Id);
+				Functions.BindTextureUnit(unit, texture is not null ? texture.Id : 0);
 
 				switch (texture.Target)
 				{
 					case TextureTarget.Texture1D:
-						context.boundTextures[unit].Texture1D = texture.Id;
+						context.boundTextures[unit].Texture1D = texture;
 						return;
 					case TextureTarget.Texture1DArray:
-						context.boundTextures[unit].Texture1DArray = texture.Id;
+						context.boundTextures[unit].Texture1DArray = texture;
 						return;
 					case TextureTarget.Texture2D:
-						context.boundTextures[unit].Texture2D = texture.Id;
+						context.boundTextures[unit].Texture2D = texture;
 						return;
 					case TextureTarget.Texture2DArray:
-						context.boundTextures[unit].Texture2DArray = texture.Id;
+						context.boundTextures[unit].Texture2DArray = texture;
 						return;
 					case TextureTarget.Multisample2D:
-						context.boundTextures[unit].Texture2DMS = texture.Id;
+						context.boundTextures[unit].Texture2DMS = texture;
 						return;
 					case TextureTarget.Multisample2DArray:
-						context.boundTextures[unit].Texture2DArrayMS = texture.Id;
+						context.boundTextures[unit].Texture2DArrayMS = texture;
 						return;
 					case TextureTarget.Texture3D:
-						context.boundTextures[unit].Texture3D = texture.Id;
+						context.boundTextures[unit].Texture3D = texture;
 						return;
 					case TextureTarget.CubeMap:
-						context.boundTextures[unit].CubeMap = texture.Id;
+						context.boundTextures[unit].CubeMap = texture;
 						return;
 					case TextureTarget.CubeMapArray:
-						context.boundTextures[unit].CubeMapArray = texture.Id;
+						context.boundTextures[unit].CubeMapArray = texture;
 						return;
 					case TextureTarget.Buffer:
-						context.boundTextures[unit].Buffer = texture.Id;
+						context.boundTextures[unit].Buffer = texture;
 						return;
 					case TextureTarget.Rectangle:
-						context.boundTextures[unit].Rectangle = texture.Id;
+						context.boundTextures[unit].Rectangle = texture;
 						return;
 				}
 				return;
@@ -193,42 +193,42 @@ namespace Zene.Graphics.Base
 		{
 			if (texture != null)
 			{
-				Functions.BindImageTexture(unit, texture.Id, level, layered, layer, access, format);
+				Functions.BindImageTexture(unit, texture is not null ? texture.Id : 0, level, layered, layer, access, format);
 
 				switch (texture.Target)
 				{
 					case TextureTarget.Texture1D:
-						context.boundTextures[unit].Texture1D = texture.Id;
+						context.boundTextures[unit].Texture1D = texture;
 						return;
 					case TextureTarget.Texture1DArray:
-						context.boundTextures[unit].Texture1DArray = texture.Id;
+						context.boundTextures[unit].Texture1DArray = texture;
 						return;
 					case TextureTarget.Texture2D:
-						context.boundTextures[unit].Texture2D = texture.Id;
+						context.boundTextures[unit].Texture2D = texture;
 						return;
 					case TextureTarget.Texture2DArray:
-						context.boundTextures[unit].Texture2DArray = texture.Id;
+						context.boundTextures[unit].Texture2DArray = texture;
 						return;
 					case TextureTarget.Multisample2D:
-						context.boundTextures[unit].Texture2DMS = texture.Id;
+						context.boundTextures[unit].Texture2DMS = texture;
 						return;
 					case TextureTarget.Multisample2DArray:
-						context.boundTextures[unit].Texture2DArrayMS = texture.Id;
+						context.boundTextures[unit].Texture2DArrayMS = texture;
 						return;
 					case TextureTarget.Texture3D:
-						context.boundTextures[unit].Texture3D = texture.Id;
+						context.boundTextures[unit].Texture3D = texture;
 						return;
 					case TextureTarget.CubeMap:
-						context.boundTextures[unit].CubeMap = texture.Id;
+						context.boundTextures[unit].CubeMap = texture;
 						return;
 					case TextureTarget.CubeMapArray:
-						context.boundTextures[unit].CubeMapArray = texture.Id;
+						context.boundTextures[unit].CubeMapArray = texture;
 						return;
 					case TextureTarget.Buffer:
-						context.boundTextures[unit].Buffer = texture.Id;
+						context.boundTextures[unit].Buffer = texture;
 						return;
 					case TextureTarget.Rectangle:
-						context.boundTextures[unit].Rectangle = texture.Id;
+						context.boundTextures[unit].Rectangle = texture;
 						return;
 				}
 				return;

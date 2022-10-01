@@ -27,20 +27,20 @@ namespace Zene.Graphics.Base
 	{
 		public struct BufferBinding
 		{
-			public uint Array;
-			public uint[] AtomicCounter;
-			public uint CopyRead;
-			public uint CopyWrite;
-			public uint DispatchIndirect;
-			public uint DrawIndirect;
-			public uint ElementArray;
-			public uint PixelPack;
-			public uint PixelUnpack;
-			public uint Query;
-			public uint[] ShaderStorage;
-			public uint Texture;
-			public uint[] TransformFeedback;
-			public uint[] Uniform;
+			public IBuffer Array;
+			public IBuffer[] AtomicCounter;
+			public IBuffer CopyRead;
+			public IBuffer CopyWrite;
+			public IBuffer DispatchIndirect;
+			public IBuffer DrawIndirect;
+			public IBuffer ElementArray;
+			public IBuffer PixelPack;
+			public IBuffer PixelUnpack;
+			public IBuffer Query;
+			public IBuffer[] ShaderStorage;
+			public IBuffer Texture;
+			public IBuffer[] TransformFeedback;
+			public IBuffer[] Uniform;
 		}
 
 		[OpenGLSupport(4.1)]
@@ -86,9 +86,9 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(1.5)]
-		public static void BindBuffer(uint target, uint buffer)
+		public static void BindBuffer(uint target, IBuffer buffer)
 		{
-			Functions.BindBuffer(target, buffer);
+			Functions.BindBuffer(target, buffer is not null ? buffer.Id : 0);
 
 			switch (target)
 			{
@@ -138,9 +138,9 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(3.0)]
-		public static void BindBufferBase(uint target, uint index, uint buffer)
+		public static void BindBufferBase(uint target, uint index, IBuffer buffer)
 		{
-			Functions.BindBufferBase(target, index, buffer);
+			Functions.BindBufferBase(target, index, buffer is not null ? buffer.Id : 0);
 
 			switch (target)
             {
@@ -179,9 +179,9 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(3.0)]
-		public static void BindBufferRange(uint target, uint index, uint buffer, int offset, int size)
+		public static void BindBufferRange(uint target, uint index, IBuffer buffer, int offset, int size)
 		{
-			Functions.BindBufferRange(target, index, buffer, offset, size);
+			Functions.BindBufferRange(target, index, buffer is not null ? buffer.Id : 0, offset, size);
 
 			switch (target)
 			{
@@ -268,14 +268,14 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(3.0)]
-		public static void BindVertexArray(uint array)
+		public static void BindVertexArray(IVertexArray array)
 		{
-			Functions.BindVertexArray(array);
+			Functions.BindVertexArray(array is not null ? array.Id : 0);
 
 			context.boundVertexArray = array;
 
 			// For some reason, binding vertex array objects unbinds any element array buffer
-			context.boundBuffers.ElementArray = 0;
+			context.boundBuffers.ElementArray = null;
 		}
 
 		[OpenGLSupport(4.3)]
@@ -2666,11 +2666,11 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(2.0)]
-		public static void UseProgram(uint program)
+		public static void UseProgram(IShaderProgram program)
 		{
 			context.boundShaderProgram = program;
 
-			Functions.UseProgram(program);
+			Functions.UseProgram(program is not null ? program.Id : 0);
 		}
 
 		[OpenGLSupport(4.1)]

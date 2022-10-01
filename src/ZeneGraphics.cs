@@ -14,7 +14,7 @@ namespace Zene.Graphics
         /// <returns></returns>
         public static bool Bound(this ITexture texture)
         {
-            return texture.Id == State.GetBoundTexture(texture.ReferanceSlot, texture.Target);
+            return texture == State.GetBoundTexture(texture.ReferanceSlot, texture.Target);
         }
         /// <summary>
         /// Determines whether <paramref name="texture"/> is bound to the current context.
@@ -24,7 +24,7 @@ namespace Zene.Graphics
         /// <returns></returns>
         public static bool Bound(this ITexture texture, uint slot)
         {
-            return texture.Id == State.GetBoundTexture(slot, texture.Target);
+            return texture == State.GetBoundTexture(slot, texture.Target);
         }
         /// <summary>
         /// Determines whether <paramref name="framebuffer"/> is bound to the current context.
@@ -35,10 +35,10 @@ namespace Zene.Graphics
         {
             return framebuffer.Binding switch
             {
-                FrameTarget.FrameBuffer => framebuffer.Id == GL.context.boundFrameBuffers.Draw &&
-                                       framebuffer.Id == GL.context.boundFrameBuffers.Read,
-                FrameTarget.Read => framebuffer.Id == GL.context.boundFrameBuffers.Read,
-                FrameTarget.Draw => framebuffer.Id == GL.context.boundFrameBuffers.Draw,
+                FrameTarget.FrameBuffer => framebuffer == GL.context.boundFrameBuffers.Draw &&
+                                       framebuffer == GL.context.boundFrameBuffers.Read,
+                FrameTarget.Read => framebuffer == GL.context.boundFrameBuffers.Read,
+                FrameTarget.Draw => framebuffer == GL.context.boundFrameBuffers.Draw,
                 _ => false,
             };
         }
@@ -52,10 +52,10 @@ namespace Zene.Graphics
         {
             return target switch
             {
-                FrameTarget.FrameBuffer => framebuffer.Id == GL.context.boundFrameBuffers.Draw &&
-                                       framebuffer.Id == GL.context.boundFrameBuffers.Read,
-                FrameTarget.Read => framebuffer.Id == GL.context.boundFrameBuffers.Read,
-                FrameTarget.Draw => framebuffer.Id == GL.context.boundFrameBuffers.Draw,
+                FrameTarget.FrameBuffer => framebuffer == GL.context.boundFrameBuffers.Draw &&
+                                       framebuffer == GL.context.boundFrameBuffers.Read,
+                FrameTarget.Read => framebuffer == GL.context.boundFrameBuffers.Read,
+                FrameTarget.Draw => framebuffer == GL.context.boundFrameBuffers.Draw,
                 _ => false,
             };
         }
@@ -66,7 +66,7 @@ namespace Zene.Graphics
         /// <returns></returns>
         public static bool Bound(this IRenderbuffer renderbuffer)
         {
-            return renderbuffer.Id == State.GetBoundRenderbuffer();
+            return renderbuffer == State.GetBoundRenderbuffer();
         }
         /// <summary>
         /// Determines whether <paramref name="shaderProgram"/> is bound to the current context.
@@ -75,7 +75,7 @@ namespace Zene.Graphics
         /// <returns></returns>
         public static bool Bound(this IShaderProgram shaderProgram)
         {
-            return shaderProgram.Id == State.GetBoundShaderProgram();
+            return shaderProgram == State.GetBoundShaderProgram();
         }
         /// <summary>
         /// Determines whether <paramref name="buffer"/> is bound to the current context.
@@ -84,7 +84,7 @@ namespace Zene.Graphics
         /// <returns></returns>
         public static bool Bound(this IBuffer buffer)
         {
-            return buffer.Id == State.GetBoundBuffer(buffer.Target);
+            return buffer == State.GetBoundBuffer(buffer.Target);
         }
         /// <summary>
         /// Determines whether <paramref name="buffer"/> is bound to <paramref name="target"/> in the current context.
@@ -94,7 +94,7 @@ namespace Zene.Graphics
         /// <returns></returns>
         public static bool Bound(this IBuffer buffer, BufferTarget target)
         {
-            return buffer.Id == State.GetBoundBuffer(target);
+            return buffer == State.GetBoundBuffer(target);
         }
         /// <summary>
         /// Determines whether <paramref name="vertexArray"/> is bound to the current context.
@@ -103,7 +103,7 @@ namespace Zene.Graphics
         /// <returns></returns>
         public static bool Bound(this IVertexArray vertexArray)
         {
-            return vertexArray.Id == State.GetBoundVertexArray();
+            return vertexArray == State.GetBoundVertexArray();
         }
 
         /// <summary>

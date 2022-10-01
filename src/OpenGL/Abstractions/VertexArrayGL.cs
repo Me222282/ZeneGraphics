@@ -19,7 +19,7 @@ namespace Zene.Graphics.Base
         {
             if (this.Bound()) { return; }
 
-            GL.BindVertexArray(Id);
+            GL.BindVertexArray(this);
         }
         private bool _disposed = false;
         public void Dispose()
@@ -42,7 +42,7 @@ namespace Zene.Graphics.Base
         {
             if (!this.Bound()) { return; }
 
-            GL.BindVertexArray(0);
+            GL.BindVertexArray(null);
         }
 
         /// <summary>

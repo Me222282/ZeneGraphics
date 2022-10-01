@@ -58,7 +58,7 @@ namespace Zene.Graphics.Base
             if (this.Bound(ReferanceSlot)) { return; }
 
             GL.ActiveTexture(GLEnum.Texture0 + ReferanceSlot);
-            GL.BindTexture((uint)Target, Id);
+            GL.BindTexture((uint)Target, this);
         }
         [OpenGLSupport(1.3)]
         public void Bind(uint slot)
@@ -67,7 +67,7 @@ namespace Zene.Graphics.Base
             {
                 GL.ActiveTexture(GLEnum.Texture0 + slot);
                 ReferanceSlot = slot;
-                GL.BindTexture((uint)Target, Id);
+                GL.BindTexture((uint)Target, this);
                 return;
             }
 
@@ -115,7 +115,7 @@ namespace Zene.Graphics.Base
             if (!this.Bound()) { return; }
 
             State.ActiveTexture = ReferanceSlot;
-            GL.BindTexture((uint)Target, 0);
+            GL.BindTexture((uint)Target, null);
         }
 
         /// <summary>

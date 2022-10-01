@@ -37,7 +37,7 @@ namespace Zene.Graphics
         {
             if (!this.Bound()) { return; }
 
-            GL.BindFramebuffer((uint)Binding, 0);
+            GL.BindFramebuffer((uint)Binding, null);
         }
 
         /// <summary>

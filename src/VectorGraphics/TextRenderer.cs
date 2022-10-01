@@ -76,11 +76,11 @@ namespace Zene.Graphics
 
         void IBindable.Bind()
         {
-            GL.UseProgram(ShaderId);
+            GL.UseProgram(this);
         }
         void IBindable.Unbind()
         {
-            GL.UseProgram(0);
+            GL.UseProgram(null);
         }
 
         private const int _blockSize = 4;
@@ -282,7 +282,7 @@ namespace Zene.Graphics
             //
 
             // Bind shader
-            GL.UseProgram(ShaderId);
+            GL.UseProgram(this);
 
             // Set texture slot
             GL.ProgramUniform1i(ShaderId, _uniformTexSlot, 0);
@@ -715,7 +715,7 @@ namespace Zene.Graphics
             //
 
             // Bind shader
-            GL.UseProgram(ShaderId);
+            GL.UseProgram(this);
 
             // Set texture slot
             GL.ProgramUniform1i(ShaderId, _uniformTexSlot, 0);

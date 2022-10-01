@@ -100,7 +100,7 @@ namespace Zene.Graphics.Z3D
 
             _framebuffer.Bind(target);
         }
-        void IFramebuffer.Bind(FrameTarget target) => GL.BindFramebuffer((uint)target, Id);
+        void IFramebuffer.Bind(FrameTarget target) => GL.BindFramebuffer((uint)target, this);
         /// <summary>
         /// Bind the framebuffer.
         /// </summary>
@@ -110,7 +110,7 @@ namespace Zene.Graphics.Z3D
 
             _framebuffer.Bind();
         }
-        void IBindable.Bind() => GL.BindFramebuffer(GLEnum.Framebuffer, Id);
+        void IBindable.Bind() => GL.BindFramebuffer(GLEnum.Framebuffer, this);
         private bool _disposed = false;
         public void Dispose()
         {
@@ -131,7 +131,7 @@ namespace Zene.Graphics.Z3D
 
             _framebuffer.Unbind();
         }
-        void IBindable.Unbind() => GL.BindFramebuffer(GLEnum.Framebuffer, 0);
+        void IBindable.Unbind() => GL.BindFramebuffer(GLEnum.Framebuffer, null);
         public bool Validate()
         {
             return _framebuffer.Validate();

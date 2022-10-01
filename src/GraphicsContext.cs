@@ -24,54 +24,54 @@ namespace Zene.Graphics
             {
                 int tfSize = 0;
                 GL.GetIntegerv(GLEnum.MaxTransformFeedbackBuffers, &tfSize);
-                boundBuffers.TransformFeedback = new uint[tfSize];
+                boundBuffers.TransformFeedback = new IBuffer[tfSize];
             }
             else
             {
-                boundBuffers.TransformFeedback = new uint[1];
+                boundBuffers.TransformFeedback = new IBuffer[1];
             }
             if (version >= 3.1)
             {
                 int uSize = 0;
                 GL.GetIntegerv(GLEnum.MaxUniformBufferBindings, &uSize);
-                boundBuffers.Uniform = new uint[uSize];
+                boundBuffers.Uniform = new IBuffer[uSize];
             }
             else
             {
-                boundBuffers.Uniform = new uint[1];
+                boundBuffers.Uniform = new IBuffer[1];
             }
             if (version >= 4.2)
             {
                 int acSize = 0;
                 GL.GetIntegerv(GLEnum.MaxAtomicCounterBufferBindings, &acSize);
-                boundBuffers.AtomicCounter = new uint[acSize];
+                boundBuffers.AtomicCounter = new IBuffer[acSize];
             }
             else
             {
-                boundBuffers.AtomicCounter = new uint[1];
+                boundBuffers.AtomicCounter = new IBuffer[1];
             }
             if (version >= 4.3)
             {
                 int ssSize = 0;
                 GL.GetIntegerv(GLEnum.MaxShaderStorageBufferBindings, &ssSize);
-                boundBuffers.ShaderStorage = new uint[ssSize];
+                boundBuffers.ShaderStorage = new IBuffer[ssSize];
             }
             else
             {
-                boundBuffers.ShaderStorage = new uint[1];
+                boundBuffers.ShaderStorage = new IBuffer[1];
             }
         }
 
         public ActionManager Actions { get; } = new ActionManager();
 
-        internal uint boundShaderProgram = 0;
+        internal IShaderProgram boundShaderProgram;
         internal GL.BufferBinding boundBuffers;
 
         internal GL.FrameBufferBinding boundFrameBuffers = new GL.FrameBufferBinding();
 
-        internal uint boundRenderbuffer = 0;
+        internal IRenderbuffer boundRenderbuffer;
 
-        internal uint boundVertexArray = 0;
+        internal IVertexArray boundVertexArray;
 
         internal uint activeTextureUnit = 0;
         internal GL.TextureBinding[] boundTextures;

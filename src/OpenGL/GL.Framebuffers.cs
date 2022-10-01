@@ -26,8 +26,8 @@ namespace Zene.Graphics.Base
     {
 		public struct FrameBufferBinding
 		{
-			public uint Read;
-			public uint Draw;
+			public IFramebuffer Read;
+			public IFramebuffer Draw;
 		}
 
 		[OpenGLSupport(3.0)]
@@ -50,9 +50,9 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(3.0)]
-		public static void BindFramebuffer(uint target, uint framebuffer)
+		public static void BindFramebuffer(uint target, IFramebuffer framebuffer)
 		{
-			Functions.BindFramebuffer(target, framebuffer);
+			Functions.BindFramebuffer(target, framebuffer is not null ? framebuffer.Id : 0);
 
 			switch (target)
 			{

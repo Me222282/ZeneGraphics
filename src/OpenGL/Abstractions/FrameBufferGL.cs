@@ -45,7 +45,7 @@ namespace Zene.Graphics.Base
             if (this.Bound()) { return; }
 
             Binding = FrameTarget.FrameBuffer;
-            GL.BindFramebuffer(GLEnum.Framebuffer, Id);
+            GL.BindFramebuffer(GLEnum.Framebuffer, this);
         }
         [OpenGLSupport(3.0)]
         public void Bind(FrameTarget target)
@@ -56,7 +56,7 @@ namespace Zene.Graphics.Base
             if (this.Bound(target)) { return; }
 
             Binding = target;
-            GL.BindFramebuffer((uint)target, Id);
+            GL.BindFramebuffer((uint)target, this);
         }
 
         private bool _disposed = false;
@@ -84,7 +84,7 @@ namespace Zene.Graphics.Base
         {
             if (!this.Bound()) { return; }
 
-            GL.BindFramebuffer((uint)Binding, 0);
+            GL.BindFramebuffer((uint)Binding, null);
         }
 
         public bool Validate()

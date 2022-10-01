@@ -25,14 +25,14 @@ namespace Zene.Graphics.Base
     public unsafe partial class GL
     {
 		[OpenGLSupport(3.0)]
-		public static void BindRenderbuffer(uint target, uint renderbuffer)
+		public static void BindRenderbuffer(uint target, IRenderbuffer renderbuffer)
 		{
 			if (target == GLEnum.Renderbuffer)
 			{
 				context.boundRenderbuffer = renderbuffer;
 			}
 
-			Functions.BindRenderbuffer(target, renderbuffer);
+			Functions.BindRenderbuffer(target, renderbuffer is not null ? renderbuffer.Id : 0);
 		}
 
 		[OpenGLSupport(4.5)]

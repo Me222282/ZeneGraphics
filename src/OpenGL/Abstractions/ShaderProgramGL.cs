@@ -16,7 +16,7 @@ namespace Zene.Graphics.Base
         {
             if (this.Bound()) { return; }
 
-            GL.UseProgram(Id);
+            GL.UseProgram(this);
         }
         private bool _disposed = false;
         public void Dispose()
@@ -39,7 +39,7 @@ namespace Zene.Graphics.Base
         {
             if (!this.Bound()) { return; }
 
-            GL.UseProgram(0);
+            GL.UseProgram(null);
         }
 
         /// <summary>
