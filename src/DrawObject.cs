@@ -97,9 +97,7 @@ namespace Zene.Graphics
 
         public virtual void Draw()
         {
-            Bind();
-
-            GL.DrawElements(GLEnum.Triangles, Ibo.Size, _drawType, IntPtr.Zero);
+            Vao.DrawElements(Ibo, DrawMode.Triangles, (IndexType)_drawType, 0);
         }
 
         /// <summary>

@@ -67,11 +67,10 @@ namespace Zene.Graphics
         internal IShaderProgram boundShaderProgram;
         internal GL.BufferBinding boundBuffers;
 
-        internal GL.FrameBufferBinding boundFrameBuffers = new GL.FrameBufferBinding();
-
         internal IRenderbuffer boundRenderbuffer;
 
         internal IVertexArray boundVertexArray;
+        internal VertexArrayGL baseVertexArray = new VertexArrayGL(0);
 
         internal uint activeTextureUnit = 0;
         internal GL.TextureBinding[] boundTextures;
@@ -80,6 +79,7 @@ namespace Zene.Graphics
 
         internal double version;
 
+        internal GL.FrameBufferBinding boundFrameBuffers = new GL.FrameBufferBinding();
         internal FramebufferGL baseFrameBuffer;
         internal ColourF frameClearColour = ColourF.Zero;
         internal double frameClearDepth = 1d;

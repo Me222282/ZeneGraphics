@@ -657,6 +657,17 @@ namespace Zene.Graphics.Base
 		[OpenGLSupport(2.0)]
 		public static void DisableVertexAttribArray(uint index)
 		{
+			if (context.boundVertexArray is not null && index < State.MaxVertexAttributes)
+			{
+				IVertexArray va = context.boundVertexArray;
+
+				va.Properties._attributes[index] = false;
+			}
+			else if (index < State.MaxVertexAttributes)
+			{
+				context.baseVertexArray.Properties._attributes[index] = false;
+			}
+
 			Functions.DisableVertexAttribArray(index);
 		}
 
@@ -795,6 +806,17 @@ namespace Zene.Graphics.Base
 		[OpenGLSupport(2.0)]
 		public static void EnableVertexAttribArray(uint index)
 		{
+			if (context.boundVertexArray is not null && index < State.MaxVertexAttributes)
+			{
+				IVertexArray va = context.boundVertexArray;
+
+				va.Properties._attributes[index] = true;
+			}
+			else if (index < State.MaxVertexAttributes)
+			{
+				context.baseVertexArray.Properties._attributes[index] = true;
+			}
+
 			Functions.EnableVertexAttribArray(index);
 		}
 
@@ -3216,6 +3238,17 @@ namespace Zene.Graphics.Base
 		[OpenGLSupport(2.0)]
 		public static void VertexAttribPointer(uint index, int size, uint type, bool normalized, int stride, void* pointer)
 		{
+			if (context.boundVertexArray is not null && index < State.MaxVertexAttributes)
+			{
+				IVertexArray va = context.boundVertexArray;
+
+				va.Properties._buffers[index] = context.boundBuffers.Array;
+			}
+			else if (index < State.MaxVertexAttributes)
+            {
+				context.baseVertexArray.Properties._buffers[index] = context.boundBuffers.Array;
+			}
+
 			Functions.VertexAttribPointer(index, size, type, normalized, stride, pointer);
 		}
 

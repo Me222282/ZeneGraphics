@@ -104,7 +104,7 @@ void main()
 			break;
 	}
 
-	if (drawLight && colour.a != 0f)
+	if (drawLight && colour.a != 0.0)
 	{
 		if (normalMapping)
 		{

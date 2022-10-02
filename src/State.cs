@@ -1063,6 +1063,9 @@ namespace Zene.Graphics
                 int value = 0;
                 GL.GetIntegerv(GLEnum.MaxDrawBuffers, ref value);
                 MaxDrawBuffers = value;
+
+                GL.GetIntegerv(GLEnum.MaxVertexAttribs, ref value);
+                MaxVertexAttributes = value;
             }
         }
 
@@ -1076,6 +1079,12 @@ namespace Zene.Graphics
         /// </summary>
         [OpenGLSupport(2.0)]
         public static int MaxDrawBuffers { get; private set; } = 1;
+
+        /// <summary>
+        /// Gets the maximum number of vertex attribute indexes.
+        /// </summary>
+        [OpenGLSupport(2.0)]
+        public static int MaxVertexAttributes { get; private set; } = 16;
 
         /// <summary>
         /// Clears all errors in gl error stack.

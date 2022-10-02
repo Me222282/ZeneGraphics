@@ -2656,6 +2656,12 @@ namespace Zene.Graphics.Base
         {
 			throw new OpenGLSupportException("Method not supported");
         }
+		private static void UnsupportedObject(uint id)
+		{
+			if (id == 0) { return; }
+
+			throw new OpenGLSupportException("GL Object not supported");
+		}
 
 		internal static void Init(Func<string, IntPtr> getProcAddress, double version)
 		{
@@ -2742,7 +2748,7 @@ namespace Zene.Graphics.Base
 			}
 			else
             {
-				Functions.BindTexture = (_, _) => UnsupportedMethod();
+				Functions.BindTexture = (_, id) => UnsupportedObject(id);
 				Functions.CopyTexImage1D = (_, _, _, _, _, _, _) => UnsupportedMethod();
 				Functions.CopyTexImage2D = (_, _, _, _, _, _, _, _) => UnsupportedMethod();
 				Functions.CopyTexSubImage1D = (_, _, _, _, _, _) => UnsupportedMethod();
@@ -2853,7 +2859,7 @@ namespace Zene.Graphics.Base
 			else
             {
 				Functions.BeginQuery = (_, _) => UnsupportedMethod();
-				Functions.BindBuffer = (_, _) => UnsupportedMethod();
+				Functions.BindBuffer = (_, id) => UnsupportedObject(id);
 				Functions.BufferData = (_, _, _, _) => UnsupportedMethod();
 				Functions.BufferSubData = (_, _, _, _) => UnsupportedMethod();
 				Functions.DeleteBuffers = (_, _) => UnsupportedMethod();
@@ -3216,12 +3222,12 @@ namespace Zene.Graphics.Base
             {
 				Functions.BeginConditionalRender = (_, _) => UnsupportedMethod();
 				Functions.BeginTransformFeedback = (_) => UnsupportedMethod();
-				Functions.BindBufferBase = (_, _, _) => UnsupportedMethod();
-				Functions.BindBufferRange = (_, _, _, _, _) => UnsupportedMethod();
+				Functions.BindBufferBase = (_, _, id) => UnsupportedObject(id);
+				Functions.BindBufferRange = (_, _, id, _, _) => UnsupportedObject(id);
 				Functions.BindFragDataLocation = (_, _, _) => UnsupportedMethod();
-				Functions.BindFramebuffer = (_, _) => UnsupportedMethod();
-				Functions.BindRenderbuffer = (_, _) => UnsupportedMethod();
-				Functions.BindVertexArray = (_) => UnsupportedMethod();
+				Functions.BindFramebuffer = (_, id) => UnsupportedObject(id);
+				Functions.BindRenderbuffer = (_, id) => UnsupportedObject(id);
+				Functions.BindVertexArray = (id) => UnsupportedObject(id);
 				Functions.BlitFramebuffer = (_, _, _, _, _, _, _, _, _, _) => UnsupportedMethod();
 				Functions.CheckFramebufferStatus = (_) =>
 				{
@@ -3458,7 +3464,7 @@ namespace Zene.Graphics.Base
 			else
             {
 				Functions.BindFragDataLocationIndexed = (_, _, _, _) => UnsupportedMethod();
-				Functions.BindSampler = (_, _) => UnsupportedMethod();
+				Functions.BindSampler = (_, id) => UnsupportedObject(id);
 				Functions.DeleteSamplers = (_, _) => UnsupportedMethod();
 				Functions.GenSamplers = (_, _) => UnsupportedMethod();
 				Functions.GetFragDataIndex = (_, _) =>
@@ -3547,7 +3553,7 @@ namespace Zene.Graphics.Base
 			else
             {
 				Functions.BeginQueryIndexed = (_, _, _) => UnsupportedMethod();
-				Functions.BindTransformFeedback = (_, _) => UnsupportedMethod();
+				Functions.BindTransformFeedback = (_, id) => UnsupportedObject(id);
 				Functions.BlendEquationi = (_, _) => UnsupportedMethod();
 				Functions.BlendEquationSeparatei = (_, _, _) => UnsupportedMethod();
 				Functions.BlendFunci = (_, _, _) => UnsupportedMethod();
@@ -3700,7 +3706,7 @@ namespace Zene.Graphics.Base
 			else
             {
 				Functions.ActiveShaderProgram = (_, _) => UnsupportedMethod();
-				Functions.BindProgramPipeline = (_) => UnsupportedMethod();
+				Functions.BindProgramPipeline = (id) => UnsupportedObject(id);
 				Functions.ClearDepthf = (_) => UnsupportedMethod();
 				Functions.CreateShaderProgramv = (_, _, _) =>
 				{
@@ -3814,7 +3820,7 @@ namespace Zene.Graphics.Base
 			}
 			else
             {
-				Functions.BindImageTexture = (_, _, _, _, _, _, _) => UnsupportedMethod();
+				Functions.BindImageTexture = (_, id, _, _, _, _, _) => UnsupportedObject(id);
 				Functions.DrawArraysInstancedBaseInstance = (_, _, _, _, _) => UnsupportedMethod();
 				Functions.DrawElementsInstancedBaseInstance = (_, _, _, _, _, _) => UnsupportedMethod();
 				Functions.DrawElementsInstancedBaseVertexBaseInstance = (_, _, _, _, _, _, _) => UnsupportedMethod();
@@ -3876,7 +3882,7 @@ namespace Zene.Graphics.Base
 			}
 			else
             {
-				Functions.BindVertexBuffer = (_, _, _, _) => UnsupportedMethod();
+				Functions.BindVertexBuffer = (_, id, _, _) => UnsupportedObject(id);
 				Functions.ClearBufferData = (_, _, _, _, _) => UnsupportedMethod();
 				Functions.ClearBufferSubData = (_, _, _, _, _, _, _) => UnsupportedMethod();
 				Functions.CopyImageSubData = (_, _, _, _, _, _, _, _, _, _, _, _, _, _, _) => UnsupportedMethod();
@@ -4073,7 +4079,7 @@ namespace Zene.Graphics.Base
 			}
 			else
             {
-				Functions.BindTextureUnit = (_, _) => UnsupportedMethod();
+				Functions.BindTextureUnit = (_, id) => UnsupportedObject(id);
 				Functions.BlitNamedFramebuffer = (_, _, _, _, _, _, _, _, _, _, _, _) => UnsupportedMethod();
 				Functions.CheckNamedFramebufferStatus = (_, _) =>
 				{
