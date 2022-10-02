@@ -3,14 +3,18 @@ using Zene.Structs;
 
 namespace Zene.Graphics.Base
 {
-    public unsafe class ShaderProgramGL : IShaderProgram
+    public unsafe partial class ShaderProgramGL : IShaderProgram
     {
         public ShaderProgramGL()
         {
             Id = GL.CreateProgram();
+
+            Properties = new ShaderProgramProperties(this);
         }
 
         public uint Id { get; }
+
+        public ShaderProgramProperties Properties { get; }
 
         public void Bind()
         {
@@ -56,7 +60,7 @@ namespace Zene.Graphics.Base
         /// <param name="shader">Specifies the shader object that is to be attached.</param>
         protected void AttachShader(IShader shader)
         {
-            GL.AttachShader(Id, shader.Id);
+            GL.AttachShader(this, shader);
         }
         /// <summary>
         /// Detaches a shader object from this program to which it was attached.
@@ -64,7 +68,17 @@ namespace Zene.Graphics.Base
         /// <param name="shader">Specifies the shader object to be detached.</param>
         protected void DetachShader(IShader shader)
         {
-            GL.DetachShader(Id, shader.Id);
+            GL.DetachShader(this, shader);
+        }
+
+        protected void DetachAllShaders()
+        {
+            IShader[] shaders = Properties._attachedShaders.ToArray();
+
+            for (int i = 0; i < shaders.Length; i++)
+            {
+                DetachShader(shaders[i]);
+            }
         }
 
         /// <summary>
@@ -154,9 +168,15 @@ namespace Zene.Graphics.Base
             }
         }
 
-        //
-        // Uniforms
-        //
+        /// <summary>
+        /// Returns the location of a uniform variable.
+        /// </summary>
+        /// <param name="name">A string containing the name of the uniform variable whose location is to be queried.</param>
+        /// <returns></returns>
+        protected int GetUniformLocation(string name)
+        {
+            return GL.GetUniformLocation(Id, name);
+        }
 
         /// <summary>
         /// Specify the value of a float uniform variable.
@@ -290,6 +310,62 @@ namespace Zene.Graphics.Base
         }
 
         /// <summary>
+        /// Specify a value of a float array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformF(int location, int index, double value)
+        {
+            Bind();
+
+            GL.Uniform1f(location + index, (float)value);
+        }
+        /// <summary>
+        /// Specify a value of a double array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformD(int location, int index, double value)
+        {
+            Bind();
+
+            GL.Uniform1d(location + index, value);
+        }
+        /// <summary>
+        /// Specify a value of a float array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformF(int location, int index, float value)
+        {
+            Bind();
+
+            GL.Uniform1f(location + index, value);
+        }
+        /// <summary>
+        /// Specify a value of an integer array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformI(int location, int index, int value)
+        {
+            Bind();
+
+            GL.Uniform1i(location + index, value);
+        }
+        /// <summary>
+        /// Specify a value of an unsigned integer array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformUI(int location, int index, uint value)
+        {
+            Bind();
+
+            GL.Uniform1ui(location + index, value);
+        }
+
+        /// <summary>
         /// Specify the value of a float vector2 uniform variable.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
@@ -420,6 +496,62 @@ namespace Zene.Graphics.Base
             {
                 GL.Uniform2uiv(location, values.Length, (uint*)ptr);
             }
+        }
+
+        /// <summary>
+        /// Specify a value of a float vector2 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformF(int location, int index, Vector2 value)
+        {
+            Bind();
+
+            GL.Uniform2f(location + index, (float)value.X, (float)value.Y);
+        }
+        /// <summary>
+        /// Specify a value of a double vector2 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformD(int location, int index, Vector2 value)
+        {
+            Bind();
+
+            GL.Uniform2d(location + index, value.X, value.Y);
+        }
+        /// <summary>
+        /// Specify a value of a float vector2 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformF(int location, int index, Vector2<float> value)
+        {
+            Bind();
+
+            GL.Uniform2f(location + index, value.X, value.Y);
+        }
+        /// <summary>
+        /// Specify a value of an integer vector2 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformI(int location, int index, Vector2I value)
+        {
+            Bind();
+
+            GL.Uniform2i(location + index, value.X, value.Y);
+        }
+        /// <summary>
+        /// Specify a value of an unsigned integer vector2 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformUI(int location, int index, Vector2<uint> value)
+        {
+            Bind();
+
+            GL.Uniform2ui(location + index, value.X, value.Y);
         }
 
         /// <summary>
@@ -557,6 +689,62 @@ namespace Zene.Graphics.Base
         }
 
         /// <summary>
+        /// Specify a value of a float vector3 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformF(int location, int index, Vector3 value)
+        {
+            Bind();
+
+            GL.Uniform3f(location + index, (float)value.X, (float)value.Y, (float)value.Z);
+        }
+        /// <summary>
+        /// Specify a value of a double vector3 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformD(int location, int index, Vector3 value)
+        {
+            Bind();
+
+            GL.Uniform3d(location + index, value.X, value.Y, value.Z);
+        }
+        /// <summary>
+        /// Specify a value of a float vector3 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformF(int location, int index, Vector3<float> value)
+        {
+            Bind();
+
+            GL.Uniform3f(location + index, value.X, value.Y, value.Z);
+        }
+        /// <summary>
+        /// Specify a value of an integer vector3 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformI(int location, int index, Vector3I value)
+        {
+            Bind();
+
+            GL.Uniform3i(location + index, value.X, value.Y, value.Z);
+        }
+        /// <summary>
+        /// Specify a value of an unsigned integer vecotr3 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformUI(int location, int index, Vector3<uint> value)
+        {
+            Bind();
+
+            GL.Uniform3ui(location + index, value.X, value.Y, value.Z);
+        }
+
+        /// <summary>
         /// Specify the value of a float vector4 uniform variable.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
@@ -677,7 +865,7 @@ namespace Zene.Graphics.Base
             }
         }
         /// <summary>
-        /// Specify the value of an unsigned integer vector4 array uniform variable.
+        /// Specify the values of an unsigned integer vector4 array uniform variable.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="values">The values to set the uniform to.</param>
@@ -689,6 +877,62 @@ namespace Zene.Graphics.Base
             {
                 GL.Uniform4uiv(location, values.Length, (uint*)ptr);
             }
+        }
+
+        /// <summary>
+        /// Specify a value of a float vector4 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformF(int location, int index, Vector4 value)
+        {
+            Bind();
+
+            GL.Uniform4f(location + index, (float)value.X, (float)value.Y, (float)value.Z, (float)value.W);
+        }
+        /// <summary>
+        /// Specify a value of a double vector4 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformD(int location, int index, Vector4 value)
+        {
+            Bind();
+
+            GL.Uniform4d(location + index, value.X, value.Y, value.Z, value.W);
+        }
+        /// <summary>
+        /// Specify a value of a float vector4 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformF(int location, int index, Vector4<float> value)
+        {
+            Bind();
+
+            GL.Uniform4f(location + index, value.X, value.Y, value.Z, value.W);
+        }
+        /// <summary>
+        /// Specify a value of an integer vector4 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformI(int location, int index, Vector4I value)
+        {
+            Bind();
+
+            GL.Uniform4i(location + index, value.X, value.Y, value.Z, value.W);
+        }
+        /// <summary>
+        /// Specify a value of an unsigned integer vector4 array uniform variable.
+        /// </summary>
+        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniformUI(int location, int index, Vector4<uint> value)
+        {
+            Bind();
+
+            GL.Uniform4ui(location + index, value.X, value.Y, value.Z, value.W);
         }
 
         //
@@ -706,8 +950,10 @@ namespace Zene.Graphics.Base
 
             float* data = stackalloc float[2 * 2]
             {
-                (float)matrix[0, 0], (float)matrix[0, 1],
-                (float)matrix[1, 0], (float)matrix[1, 1]
+                (float)matrix[0, 0],
+                (float)matrix[0, 1],
+                (float)matrix[1, 0],
+                (float)matrix[1, 1]
             };
 
             GL.UniformMatrix2fv(location, 1, false, data);
@@ -723,9 +969,12 @@ namespace Zene.Graphics.Base
 
             float* data = stackalloc float[2 * 3]
             {
-                (float)matrix[0, 0], (float)matrix[0, 1],
-                (float)matrix[1, 0], (float)matrix[1, 1],
-                (float)matrix[2, 0], (float)matrix[2, 1]
+                (float)matrix[0, 0],
+                (float)matrix[0, 1],
+                (float)matrix[1, 0],
+                (float)matrix[1, 1],
+                (float)matrix[2, 0],
+                (float)matrix[2, 1]
             };
 
             GL.UniformMatrix2x3fv(location, 1, false, data);
@@ -741,10 +990,14 @@ namespace Zene.Graphics.Base
 
             float* data = stackalloc float[2 * 4]
             {
-                (float)matrix[0, 0], (float)matrix[0, 1],
-                (float)matrix[1, 0], (float)matrix[1, 1],
-                (float)matrix[2, 0], (float)matrix[2, 1],
-                (float)matrix[3, 0], (float)matrix[3, 1]
+                (float)matrix[0, 0],
+                (float)matrix[0, 1],
+                (float)matrix[1, 0],
+                (float)matrix[1, 1],
+                (float)matrix[2, 0],
+                (float)matrix[2, 1],
+                (float)matrix[3, 0],
+                (float)matrix[3, 1]
             };
 
             GL.UniformMatrix2x4fv(location, 1, false, data);
@@ -761,9 +1014,15 @@ namespace Zene.Graphics.Base
 
             float* data = stackalloc float[3 * 3]
             {
-                (float)matrix[0, 0], (float)matrix[0, 1], (float)matrix[0, 2],
-                (float)matrix[1, 0], (float)matrix[1, 1], (float)matrix[1, 2],
-                (float)matrix[2, 0], (float)matrix[2, 1], (float)matrix[2, 2]
+                (float)matrix[0, 0],
+                (float)matrix[0, 1],
+                (float)matrix[0, 2],
+                (float)matrix[1, 0],
+                (float)matrix[1, 1],
+                (float)matrix[1, 2],
+                (float)matrix[2, 0],
+                (float)matrix[2, 1],
+                (float)matrix[2, 2]
             };
 
             GL.UniformMatrix3fv(location, 1, false, data);
@@ -779,8 +1038,12 @@ namespace Zene.Graphics.Base
 
             float* data = stackalloc float[3 * 2]
             {
-                (float)matrix[0, 0], (float)matrix[0, 1], (float)matrix[0, 2],
-                (float)matrix[1, 0], (float)matrix[1, 1], (float)matrix[1, 2]
+                (float)matrix[0, 0],
+                (float)matrix[0, 1],
+                (float)matrix[0, 2],
+                (float)matrix[1, 0],
+                (float)matrix[1, 1],
+                (float)matrix[1, 2]
             };
 
             GL.UniformMatrix3x2fv(location, 1, false, data);
@@ -796,10 +1059,18 @@ namespace Zene.Graphics.Base
 
             float* data = stackalloc float[3 * 4]
             {
-                (float)matrix[0, 0], (float)matrix[0, 1], (float)matrix[0, 2],
-                (float)matrix[1, 0], (float)matrix[1, 1], (float)matrix[1, 2],
-                (float)matrix[2, 0], (float)matrix[2, 1], (float)matrix[2, 2],
-                (float)matrix[3, 0], (float)matrix[3, 1], (float)matrix[3, 2]
+                (float)matrix[0, 0],
+                (float)matrix[0, 1],
+                (float)matrix[0, 2],
+                (float)matrix[1, 0],
+                (float)matrix[1, 1],
+                (float)matrix[1, 2],
+                (float)matrix[2, 0],
+                (float)matrix[2, 1],
+                (float)matrix[2, 2],
+                (float)matrix[3, 0],
+                (float)matrix[3, 1],
+                (float)matrix[3, 2]
             };
 
             GL.UniformMatrix3x4fv(location, 1, false, data);
@@ -816,10 +1087,22 @@ namespace Zene.Graphics.Base
 
             float* data = stackalloc float[4 * 4]
             {
-                (float)matrix[0, 0], (float)matrix[0, 1], (float)matrix[0, 2], (float)matrix[0, 3],
-                (float)matrix[1, 0], (float)matrix[1, 1], (float)matrix[1, 2], (float)matrix[1, 3],
-                (float)matrix[2, 0], (float)matrix[2, 1], (float)matrix[2, 2], (float)matrix[2, 3],
-                (float)matrix[3, 0], (float)matrix[3, 1], (float)matrix[3, 2], (float)matrix[3, 3]
+                (float)matrix[0, 0],
+                (float)matrix[1, 0],
+                (float)matrix[2, 0],
+                (float)matrix[3, 0],
+                (float)matrix[0, 1],
+                (float)matrix[1, 1],
+                (float)matrix[2, 1],
+                (float)matrix[3, 1],
+                (float)matrix[0, 2],
+                (float)matrix[1, 2],
+                (float)matrix[2, 2],
+                (float)matrix[3, 2],
+                (float)matrix[0, 3],
+                (float)matrix[1, 3],
+                (float)matrix[2, 3],
+                (float)matrix[3, 3]
             };
 
             GL.UniformMatrix4fv(location, 1, false, data);
@@ -835,9 +1118,18 @@ namespace Zene.Graphics.Base
 
             float* data = stackalloc float[4 * 3]
             {
-                (float)matrix[0, 0], (float)matrix[0, 1], (float)matrix[0, 2], (float)matrix[0, 3],
-                (float)matrix[1, 0], (float)matrix[1, 1], (float)matrix[1, 2], (float)matrix[1, 3],
-                (float)matrix[2, 0], (float)matrix[2, 1], (float)matrix[2, 2], (float)matrix[2, 3]
+                (float)matrix[0, 0],
+                (float)matrix[0, 1],
+                (float)matrix[0, 2],
+                (float)matrix[0, 3],
+                (float)matrix[1, 0],
+                (float)matrix[1, 1],
+                (float)matrix[1, 2],
+                (float)matrix[1, 3],
+                (float)matrix[2, 0],
+                (float)matrix[2, 1],
+                (float)matrix[2, 2],
+                (float)matrix[2, 3]
             };
 
             GL.UniformMatrix4x3fv(location, 1, false, data);
@@ -853,8 +1145,14 @@ namespace Zene.Graphics.Base
 
             float* data = stackalloc float[4 * 2]
             {
-                (float)matrix[0, 0], (float)matrix[0, 1], (float)matrix[0, 2], (float)matrix[0, 3],
-                (float)matrix[1, 0], (float)matrix[1, 1], (float)matrix[1, 2], (float)matrix[1, 3]
+                (float)matrix[0, 0],
+                (float)matrix[0, 1],
+                (float)matrix[0, 2],
+                (float)matrix[0, 3],
+                (float)matrix[1, 0],
+                (float)matrix[1, 1],
+                (float)matrix[1, 2],
+                (float)matrix[1, 3]
             };
 
             GL.UniformMatrix4x2fv(location, 1, false, data);
@@ -870,7 +1168,7 @@ namespace Zene.Graphics.Base
             Bind();
 
             float* data = stackalloc float[2 * 2 * matrices.Length];
-            
+
             for (int i = 0; i < matrices.Length; i++)
             {
                 data[i * 4] = (float)matrices[i][0, 0];
@@ -1339,7 +1637,7 @@ namespace Zene.Graphics.Base
         {
             Bind();
 
-            fixed(double * ptr = &matrices[0].Data[0])
+            fixed (double* ptr = &matrices[0].Data[0])
             {
                 GL.UniformMatrix4dv(location, matrices.Length, false, ptr);
             }
@@ -1630,6 +1928,337 @@ namespace Zene.Graphics.Base
             fixed (float* ptr = matrices[0].Data)
             {
                 GL.UniformMatrix4x2fv(location, matrices.Length, false, ptr);
+            }
+        }
+
+        protected void SetUniform<T>(int location, T value) where T : unmanaged, IUniformStruct
+        {
+            Bind();
+
+            IUniformStruct.Member[] memebers = value.Members();
+
+            int offset = 0;
+            byte* ptr = (byte*)&value;
+
+            for (int i = 0; i < memebers.Length; i++)
+            {
+                switch (memebers[i].Type)
+                {
+                    case IUniformStruct.UniformType.Bool:
+                        GL.Uniform1i(location + i, ptr[offset]);
+                        offset++;
+                        break;
+
+                    case IUniformStruct.UniformType.Int:
+                        GL.Uniform1i(location + i, *(int*)(ptr + offset));
+                        offset += 4;
+                        break;
+
+                    case IUniformStruct.UniformType.Uint:
+                        GL.Uniform1ui(location + i, *(uint*)(ptr + offset));
+                        offset += 4;
+                        break;
+
+                    case IUniformStruct.UniformType.Float:
+                        GL.Uniform1f(location + i, *(float*)(ptr + offset));
+                        offset += 4;
+                        break;
+
+                    case IUniformStruct.UniformType.Double:
+                        if (memebers[i].DoubleAsFloat)
+                        {
+                            GL.Uniform1f(location + i, (float)*(double*)(ptr + offset));
+                            offset += 8;
+                            break;
+                        }
+
+                        GL.Uniform1d(location + i, *(double*)(ptr + offset));
+                        offset += 8;
+                        break;
+
+                    case IUniformStruct.UniformType.BVec2:
+                        GL.Uniform2i(location + i, ptr[offset], ptr[offset + 1]);
+                        offset += 2;
+                        break;
+
+                    case IUniformStruct.UniformType.IVec2:
+                        int* currenti2 = (int*)(ptr + offset);
+
+                        GL.Uniform2i(location + i, *currenti2, *(currenti2 + 1));
+                        offset += 8;
+                        break;
+
+                    case IUniformStruct.UniformType.UiVec2:
+                        uint* currentu2 = (uint*)(ptr + offset);
+
+                        GL.Uniform2ui(location + i, *currentu2, *(currentu2 + 1));
+                        offset += 8;
+                        break;
+
+                    case IUniformStruct.UniformType.FVec2:
+                        float* currentf2 = (float*)(ptr + offset);
+
+                        GL.Uniform2f(location + i, *currentf2, *(currentf2 + 1));
+                        offset += 8;
+                        break;
+
+                    case IUniformStruct.UniformType.DVec2:
+                        double* currentd2 = (double*)(ptr + offset);
+                        offset += 16;
+
+                        if (memebers[i].DoubleAsFloat)
+                        {
+                            GL.Uniform2f(location + i, (float)*currentd2, (float)*(currentd2 + 1));
+                            break;
+                        }
+
+                        GL.Uniform2d(location + i, *currentd2, *(currentd2 + 1));
+                        break;
+
+                    case IUniformStruct.UniformType.BVec3:
+                        GL.Uniform3i(location + i, ptr[offset], ptr[offset + 1], ptr[offset + 2]);
+                        offset += 3;
+                        break;
+
+                    case IUniformStruct.UniformType.IVec3:
+                        int* currenti3 = (int*)(ptr + offset);
+
+                        GL.Uniform3i(location + i, *currenti3, *(currenti3 + 1), *(currenti3 + 2));
+                        offset += 12;
+                        break;
+
+                    case IUniformStruct.UniformType.UiVec3:
+                        uint* currentu3 = (uint*)(ptr + offset);
+
+                        GL.Uniform3ui(location + i, *currentu3, *(currentu3 + 1), *(currentu3 + 2));
+                        offset += 12;
+                        break;
+
+                    case IUniformStruct.UniformType.FVec3:
+                        float* currentf3 = (float*)(ptr + offset);
+
+                        GL.Uniform3f(location + i, *currentf3, *(currentf3 + 1), *(currentf3 + 2));
+                        offset += 12;
+                        break;
+
+                    case IUniformStruct.UniformType.DVec3:
+                        double* currentd3 = (double*)(ptr + offset);
+                        offset += 24;
+
+                        if (memebers[i].DoubleAsFloat)
+                        {
+                            GL.Uniform3f(location + i, (float)*currentd3, (float)*(currentd3 + 1), (float)*(currentd3 + 2));
+                            break;
+                        }
+
+                        GL.Uniform3d(location + i, *currentd3, *(currentd3 + 1), *(currentd3 + 2));
+                        break;
+
+                    case IUniformStruct.UniformType.BVec4:
+                        GL.Uniform4i(location + i, ptr[offset], ptr[offset + 1], ptr[offset + 2], ptr[offset + 3]);
+                        offset += 4;
+                        break;
+
+                    case IUniformStruct.UniformType.IVec4:
+                        int* currenti4 = (int*)(ptr + offset);
+
+                        GL.Uniform4i(location + i, *currenti4, *(currenti4 + 1), *(currenti4 + 2), *(currenti4 + 3));
+                        offset += 16;
+                        break;
+
+                    case IUniformStruct.UniformType.UiVec4:
+                        uint* currentu4 = (uint*)(ptr + offset);
+
+                        GL.Uniform4ui(location + i, *currentu4, *(currentu4 + 1), *(currentu4 + 2), *(currentu4 + 3));
+                        offset += 16;
+                        break;
+
+                    case IUniformStruct.UniformType.FVec4:
+                        float* currentf4 = (float*)(ptr + offset);
+
+                        GL.Uniform4f(location + i, *currentf4, *(currentf4 + 1), *(currentf4 + 2), *(currentf4 + 3));
+                        offset += 16;
+                        break;
+
+                    case IUniformStruct.UniformType.DVec4:
+                        double* currentd4 = (double*)(ptr + offset);
+                        offset += 32;
+
+                        if (memebers[i].DoubleAsFloat)
+                        {
+                            GL.Uniform4f(location + i, (float)*currentd4, (float)*(currentd4 + 1), (float)*(currentd4 + 2), (float)*(currentd4 + 3));
+                            break;
+                        }
+
+                        GL.Uniform4d(location + i, *currentd4, *(currentd4 + 1), *(currentd4 + 2), *(currentd4 + 3));
+                        break;
+                }
+            }
+        }
+        protected void SetUniform<T>(int location, int index, T value) where T : unmanaged, IUniformStruct
+        {
+            Bind();
+
+            IUniformStruct.Member[] memebers = value.Members();
+
+            location += memebers.Length * index;
+
+            int offset = 0;
+            byte* ptr = (byte*)&value;
+
+            for (int i = 0; i < memebers.Length; i++)
+            {
+                switch (memebers[i].Type)
+                {
+                    case IUniformStruct.UniformType.Bool:
+                        GL.Uniform1i(location + i, ptr[offset]);
+                        offset++;
+                        break;
+
+                    case IUniformStruct.UniformType.Int:
+                        GL.Uniform1i(location + i, *(int*)(ptr + offset));
+                        offset += 4;
+                        break;
+
+                    case IUniformStruct.UniformType.Uint:
+                        GL.Uniform1ui(location + i, *(uint*)(ptr + offset));
+                        offset += 4;
+                        break;
+
+                    case IUniformStruct.UniformType.Float:
+                        GL.Uniform1f(location + i, *(float*)(ptr + offset));
+                        offset += 4;
+                        break;
+
+                    case IUniformStruct.UniformType.Double:
+                        if (memebers[i].DoubleAsFloat)
+                        {
+                            GL.Uniform1f(location + i, (float)*(double*)(ptr + offset));
+                            offset += 8;
+                            break;
+                        }
+
+                        GL.Uniform1d(location + i, *(double*)(ptr + offset));
+                        offset += 8;
+                        break;
+
+                    case IUniformStruct.UniformType.BVec2:
+                        GL.Uniform2i(location + i, ptr[offset], ptr[offset + 1]);
+                        offset += 2;
+                        break;
+
+                    case IUniformStruct.UniformType.IVec2:
+                        int* currenti2 = (int*)(ptr + offset);
+
+                        GL.Uniform2i(location + i, *currenti2, *(currenti2 + 1));
+                        offset += 8;
+                        break;
+
+                    case IUniformStruct.UniformType.UiVec2:
+                        uint* currentu2 = (uint*)(ptr + offset);
+
+                        GL.Uniform2ui(location + i, *currentu2, *(currentu2 + 1));
+                        offset += 8;
+                        break;
+
+                    case IUniformStruct.UniformType.FVec2:
+                        float* currentf2 = (float*)(ptr + offset);
+
+                        GL.Uniform2f(location + i, *currentf2, *(currentf2 + 1));
+                        offset += 8;
+                        break;
+
+                    case IUniformStruct.UniformType.DVec2:
+                        double* currentd2 = (double*)(ptr + offset);
+                        offset += 16;
+
+                        if (memebers[i].DoubleAsFloat)
+                        {
+                            GL.Uniform2f(location + i, (float)*currentd2, (float)*(currentd2 + 1));
+                            break;
+                        }
+
+                        GL.Uniform2d(location + i, *currentd2, *(currentd2 + 1));
+                        break;
+
+                    case IUniformStruct.UniformType.BVec3:
+                        GL.Uniform3i(location + i, ptr[offset], ptr[offset + 1], ptr[offset + 2]);
+                        offset += 3;
+                        break;
+
+                    case IUniformStruct.UniformType.IVec3:
+                        int* currenti3 = (int*)(ptr + offset);
+
+                        GL.Uniform3i(location + i, *currenti3, *(currenti3 + 1), *(currenti3 + 2));
+                        offset += 12;
+                        break;
+
+                    case IUniformStruct.UniformType.UiVec3:
+                        uint* currentu3 = (uint*)(ptr + offset);
+
+                        GL.Uniform3ui(location + i, *currentu3, *(currentu3 + 1), *(currentu3 + 2));
+                        offset += 12;
+                        break;
+
+                    case IUniformStruct.UniformType.FVec3:
+                        float* currentf3 = (float*)(ptr + offset);
+
+                        GL.Uniform3f(location + i, *currentf3, *(currentf3 + 1), *(currentf3 + 2));
+                        offset += 12;
+                        break;
+
+                    case IUniformStruct.UniformType.DVec3:
+                        double* currentd3 = (double*)(ptr + offset);
+                        offset += 24;
+
+                        if (memebers[i].DoubleAsFloat)
+                        {
+                            GL.Uniform3f(location + i, (float)*currentd3, (float)*(currentd3 + 1), (float)*(currentd3 + 2));
+                            break;
+                        }
+
+                        GL.Uniform3d(location + i, *currentd3, *(currentd3 + 1), *(currentd3 + 2));
+                        break;
+
+                    case IUniformStruct.UniformType.BVec4:
+                        GL.Uniform4i(location + i, ptr[offset], ptr[offset + 1], ptr[offset + 2], ptr[offset + 3]);
+                        offset += 4;
+                        break;
+
+                    case IUniformStruct.UniformType.IVec4:
+                        int* currenti4 = (int*)(ptr + offset);
+
+                        GL.Uniform4i(location + i, *currenti4, *(currenti4 + 1), *(currenti4 + 2), *(currenti4 + 3));
+                        offset += 16;
+                        break;
+
+                    case IUniformStruct.UniformType.UiVec4:
+                        uint* currentu4 = (uint*)(ptr + offset);
+
+                        GL.Uniform4ui(location + i, *currentu4, *(currentu4 + 1), *(currentu4 + 2), *(currentu4 + 3));
+                        offset += 16;
+                        break;
+
+                    case IUniformStruct.UniformType.FVec4:
+                        float* currentf4 = (float*)(ptr + offset);
+
+                        GL.Uniform4f(location + i, *currentf4, *(currentf4 + 1), *(currentf4 + 2), *(currentf4 + 3));
+                        offset += 16;
+                        break;
+
+                    case IUniformStruct.UniformType.DVec4:
+                        double* currentd4 = (double*)(ptr + offset);
+                        offset += 32;
+
+                        if (memebers[i].DoubleAsFloat)
+                        {
+                            GL.Uniform4f(location + i, (float)*currentd4, (float)*(currentd4 + 1), (float)*(currentd4 + 2), (float)*(currentd4 + 3));
+                            break;
+                        }
+
+                        GL.Uniform4d(location + i, *currentd4, *(currentd4 + 1), *(currentd4 + 2), *(currentd4 + 3));
+                        break;
+                }
             }
         }
     }

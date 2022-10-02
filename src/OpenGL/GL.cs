@@ -50,9 +50,14 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(2.0)]
-		public static void AttachShader(uint program, uint shader)
+		public static void AttachShader(IShaderProgram program, IShader shader)
 		{
-			Functions.AttachShader(program, shader);
+			if (!program.Properties._attachedShaders.Contains(shader))
+            {
+				program.Properties._attachedShaders.Add(shader);
+			}
+
+			Functions.AttachShader(program.Id, shader.Id);
 		}
 
 		[OpenGLSupport(3.0)]
@@ -631,9 +636,11 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(2.0)]
-		public static void DetachShader(uint program, uint shader)
+		public static void DetachShader(IShaderProgram program, IShader shader)
 		{
-			Functions.DetachShader(program, shader);
+			program.Properties._attachedShaders.Remove(shader);
+
+			Functions.DetachShader(program.Id, shader.Id);
 		}
 
 		[OpenGLSupport(1.0)]

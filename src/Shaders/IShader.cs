@@ -34,5 +34,10 @@ namespace Zene.Graphics
         /// The type of shader this object contains.
         /// </summary>
         public ShaderType Type { get; }
+
+        /// <summary>
+        /// Determines whether the last compile operation on this shader object was successful.
+        /// </summary>
+        public bool CompileStatus { get; }
     }
 }

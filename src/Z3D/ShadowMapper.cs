@@ -28,9 +28,9 @@ namespace Zene.Graphics.Z3D
 
         public uint Id => _framebuffer.Id;
         public FrameTarget Binding => _framebuffer.Binding;
-        public uint Program => _shader.Program;
+        public uint Program => _shader.Id;
 
-        FramebufferProperties IFramebuffer.Properties => ((IFramebuffer)_framebuffer).Properties;
+        FramebufferProperties IFramebuffer.Properties => _framebuffer.Properties;
 
         private readonly TextureRenderer _framebuffer;
         private readonly Texture2D _texture;
@@ -181,5 +181,8 @@ namespace Zene.Graphics.Z3D
                 _shader.Matrix1 = value;
             }
         }
+
+        public ShaderProgramProperties Properties => _shader.Properties;
+        IProperties IGLObject.Properties => _framebuffer.Properties;
     }
 }

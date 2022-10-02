@@ -32,7 +32,7 @@ namespace Zene.Graphics
 
         private readonly DrawObject<Vector2I, byte> _drawingObject;
 
-        FramebufferProperties IFramebuffer.Properties => ((IFramebuffer)_multiSFramebuffer).Properties;
+        FramebufferProperties IFramebuffer.Properties => _multiSFramebuffer.Properties;
 
         public FrameTarget Binding => _multiSFramebuffer.Binding;
 
@@ -153,12 +153,14 @@ namespace Zene.Graphics
 
             GL.UseProgram(this);
             _framebuffer.GetTexture(FrameAttachment.Colour0).Bind(0);
-            SetTextureSlot(0);
+            TextureSlot = 0;
 
             _drawingObject.Draw();
 
             GL.BindTexture(GLEnum.Texture2d, null);
             GL.UseProgram(null);
         }
+
+        IProperties IGLObject.Properties => Properties;
     }
 }

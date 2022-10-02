@@ -40,16 +40,26 @@ namespace Zene.Graphics.Base
             }
         }
 
+        public bool CompileStatus
+        {
+            get
+            {
+                int output = 0;
+
+                GL.GetShaderiv(Id, GLEnum.CompileStatus, &output);
+
+                return output == GLEnum.True;
+            }
+        }
+
         public void Compile()
         {
             GL.CompileShader(Id);
 
             // Compile error
-            if (!GetCompileStatus())
+            if (!CompileStatus)
             {
-                int length = GetInfoLogLength();
-                StringBuilder message = new StringBuilder(length);
-                GetShaderInfoLog(message);
+                StringBuilder message = GetShaderInfoLog();
 
                 throw new ShaderException(this, message.ToString());
             }
@@ -63,18 +73,6 @@ namespace Zene.Graphics.Base
             GL.CompileShader(Id);
         }
 
-        /// <summary>
-        /// Determines whether the last compile operation on this shader object was successful.
-        /// </summary>
-        /// <returns></returns>
-        protected bool GetCompileStatus()
-        {
-            int output = 0;
-
-            GL.GetShaderiv(Id, GLEnum.CompileStatus, &output);
-
-            return output == GLEnum.True;
-        }
         /// <summary>
         /// Returns the number of characters in the information log for this shader object, including the null termination character.
         /// </summary>
@@ -104,17 +102,25 @@ namespace Zene.Graphics.Base
         /// Returns the information log for this shader object.
         /// </summary>
         /// <param name="output">The <see cref="StringBuilder"/> to write the log into.</param>
-        protected void GetShaderInfoLog(StringBuilder output)
+        protected StringBuilder GetShaderInfoLog()
         {
-            GL.GetShaderInfoLog(Id, output.Capacity, null, output);
+            int length = GetInfoLogLength();
+            StringBuilder output = new StringBuilder(length);
+            GL.GetShaderInfoLog(Id, length, null, output);
+
+            return output;
         }
         /// <summary>
         /// Returns the source code string from this shader object.
         /// </summary>
         /// <param name="output">The <see cref="StringBuilder"/> to write the source code into.</param>
-        protected void GetShaderSource(StringBuilder output)
+        protected StringBuilder GetShaderSource()
         {
-            GL.GetShaderSource(Id, output.Capacity, null, output);
+            int length = GetShaderSourceLength();
+            StringBuilder output = new StringBuilder(length);
+            GL.GetShaderSource(Id, length, null, output);
+
+            return output;
         }
 
         /// <summary>

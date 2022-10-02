@@ -1,10 +1,9 @@
 ﻿using System;
-using Zene.Graphics.Base;
 using Zene.Structs;
 
 namespace Zene.Graphics
 {
-    public class PostShader : IShaderProgram
+    public class PostShader : BaseShaderProgram
     {
         public enum Location : uint
         {
@@ -14,17 +13,11 @@ namespace Zene.Graphics
 
         public PostShader()
         {
-            
-            Program = CustomShader.CreateShader(ShaderPresets.PostVertex, ShaderPresets.PostFragment);
-
-            FindUniforms();
+            Create(ShaderPresets.PostVertex, ShaderPresets.PostFragment,
+                "screenWidth", "screenHeight", "uTextureSlot",
+                "crushBit", "bitCrush", "greyScale", "invertedColour",
+                "useKernel", "kernel", "kernelOffset");
         }
-
-        public uint Program { get; private set; }
-        uint IIdentifiable.Id => Program;
-
-        private int _uniformWidth;
-        private int _uniformHeight;
 
         private Vector2I _size;
         public Vector2I Size
@@ -33,124 +26,108 @@ namespace Zene.Graphics
             set
             {
                 _size = value;
-                GL.ProgramUniform1i(Program, _uniformWidth, value.X);
-                GL.ProgramUniform1i(Program, _uniformHeight, value.Y);
+                SetUniformI(Uniforms[0], value.X);
+                SetUniformI(Uniforms[1], value.X);
             }
         }
 
-        private int _uniformTexSlot;
-
-        public void SetTextureSlot(int slot)
+        private int _ts;
+        public int TextureSlot
         {
-            GL.ProgramUniform1i(Program, _uniformTexSlot, slot);
-        }
-
-        private int _uniformBitCrush;
-
-        public void Pixelate(bool value)
-        {
-            int i = 1;
-            if (!value) { i = 0; }
-
-            GL.ProgramUniform1i(Program, _uniformBitCrush, i);
-        }
-
-        private int _uniformBitCrushValue;
-
-        public void PixelSize(double width, double height)
-        {
-            GL.ProgramUniform2f(Program, _uniformBitCrushValue, (float)width, (float)height);
-        }
-
-        private int _uniformGreyScale;
-
-        public void GreyScale(bool value)
-        {
-            int i = 1;
-            if (!value) { i = 0; }
-
-            GL.ProgramUniform1i(Program, _uniformGreyScale, i);
-        }
-
-        private int _uniformInvertedColour;
-
-        public void InvertedColour(bool value)
-        {
-            int i = 1;
-            if (!value) { i = 0; }
-
-            GL.ProgramUniform1i(Program, _uniformInvertedColour, i);
-        }
-
-        private int _uniformUseKernel;
-
-        public void UseKernel(bool value)
-        {
-            int i = 1;
-            if (!value) { i = 0; }
-
-            GL.ProgramUniform1i(Program, _uniformUseKernel, i);
-        }
-
-        private int _uniformKernel;
-
-        public unsafe void SetKernel(double[] kernel)
-        {
-            float[] value = new float[9];
-
-            for (int i = 0; i < 9; i++) { value[i] = (float)kernel[i]; }
-
-            fixed (float* valuePtr = &value[0])
+            get => _ts;
+            set
             {
-                GL.ProgramUniform1fv(Program, _uniformKernel, 9, valuePtr);
+                _ts = value;
+                SetUniformI(Uniforms[2], value);
             }
         }
 
-        private int _uniformKernelOffset;
-
-        public void SetKernelOffset(double offset)
+        private bool _pixelate;
+        public bool Pixelated
         {
-            GL.ProgramUniform1f(Program, _uniformKernelOffset, (float)offset);
+            get => _pixelate;
+            set
+            {
+                _pixelate = value;
+
+                SetUniformI(Uniforms[3], value ? 1 : 0);
+            }
         }
 
-        private void FindUniforms()
+        private Vector2 _sixelateSize;
+        public Vector2 PixelateSize
         {
-            _uniformWidth = GL.GetUniformLocation(Program, "screenWidth");
-            _uniformHeight = GL.GetUniformLocation(Program, "screenHeight");
-
-            _uniformTexSlot = GL.GetUniformLocation(Program, "uTextureSlot");
-
-            _uniformBitCrush = GL.GetUniformLocation(Program, "crushBit");
-            _uniformBitCrushValue = GL.GetUniformLocation(Program, "bitCrush");
-
-            _uniformGreyScale = GL.GetUniformLocation(Program, "greyScale");
-            _uniformInvertedColour = GL.GetUniformLocation(Program, "invertedColour");
-
-            _uniformUseKernel = GL.GetUniformLocation(Program, "useKernel");
-            _uniformKernel = GL.GetUniformLocation(Program, "kernel");
-            _uniformKernelOffset = GL.GetUniformLocation(Program, "kernelOffset");
+            get => _sixelateSize;
+            set
+            {
+                _sixelateSize = value;
+                SetUniformF(Uniforms[4], value);
+            }
         }
 
-        private bool _disposed = false;
-        public void Dispose()
+        private bool _greyScale;
+        public bool GreyScale
         {
-            if (_disposed) { return; }
+            get => _greyScale;
+            set
+            {
+                _greyScale = value;
 
-            GL.DeleteProgram(Program);
-
-            _disposed = true;
-
-            GC.SuppressFinalize(this);
+                SetUniformI(Uniforms[5], value ? 1 : 0);
+            }
         }
 
-        public void Bind()
+        private bool _invertedColour;
+        public bool InvertedColour
         {
-            GL.UseProgram(this);
+            get => _invertedColour;
+            set
+            {
+                _invertedColour = value;
+
+                SetUniformI(Uniforms[6], value ? 1 : 0);
+            }
         }
 
-        public void Unbind()
+        private bool _useKernel;
+        public bool UseKernel
         {
-            GL.UseProgram(null);
+            get => _useKernel;
+            set
+            {
+                _useKernel = value;
+
+                SetUniformI(Uniforms[7], value ? 1 : 0);
+            }
+        }
+
+        private double[] _kernel;
+        public double[] Kernel
+        {
+            get => _kernel;
+            set
+            {
+                if (value.Length != 9)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value));
+                }
+
+                _kernel = value;
+
+                SetUniformF(Uniforms[8], value);
+            }
+        }
+
+        private double _kernelOffset;
+        public double KernelOffset
+        {
+            get => _kernelOffset;
+            set
+            {
+                _kernelOffset = value;
+
+                SetUniformF(Uniforms[9], value);
+            }
         }
 
         public static double[] BlurKernel { get; } = new double[]

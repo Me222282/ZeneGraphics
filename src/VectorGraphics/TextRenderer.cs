@@ -5,19 +5,12 @@ using Zene.Structs;
 
 namespace Zene.Graphics
 {
-    public class TextRenderer : IShaderProgram, IDisposable
+    public class TextRenderer : BaseShaderProgram, IDisposable
     {
-        public uint ShaderId { get; }
-        uint IIdentifiable.Id => ShaderId;
-
-        private readonly int _uniformMatrix;
         private Matrix4 _m1 = Matrix4.Identity;
         public Matrix4 Model
         {
-            get
-            {
-                return _m1;
-            }
+            get => _m1;
             set
             {
                 _m1 = value;
@@ -27,10 +20,7 @@ namespace Zene.Graphics
         private Matrix4 _m2 = Matrix4.Identity;
         public Matrix4 View
         {
-            get
-            {
-                return _m2;
-            }
+            get => _m2;
             set
             {
                 _m2 = value;
@@ -40,10 +30,7 @@ namespace Zene.Graphics
         private Matrix4 _m3 = Matrix4.Identity;
         public Matrix4 Projection
         {
-            get
-            {
-                return _m3;
-            }
+            get => _m3;
             set
             {
                 _m3 = value;
@@ -52,34 +39,20 @@ namespace Zene.Graphics
         }
         private void SetMatrices()
         {
-            GL.ProgramUniformMatrix4fv(ShaderId, _uniformMatrix, false, (_m1 * _m2 * _m3).GetGLData());
+            Matrix4 matrix = _m1 * _m2 * _m3;
+            SetUniformF(Uniforms[0], ref matrix);
         }
 
-        private readonly int _uniformColour;
         private Colour _colour;
         public Colour Colour
         {
-            get
-            {
-                return _colour;
-            }
+            get => _colour;
             set
             {
                 _colour = value;
-                ColourF cf = value;
-                GL.ProgramUniform4f(ShaderId, _uniformColour, cf.R, cf.G, cf.B, cf.A);
+
+                SetUniformF(Uniforms[1], (Vector4)value);
             }
-        }
-
-        private readonly int _uniformTexSlot;
-
-        void IBindable.Bind()
-        {
-            GL.UseProgram(this);
-        }
-        void IBindable.Unbind()
-        {
-            GL.UseProgram(null);
         }
 
         private const int _blockSize = 4;
@@ -114,17 +87,13 @@ namespace Zene.Graphics
             // Shader setup
             //
 
-            ShaderId = CustomShader.CreateShader(ShaderPresets.TextVert, ShaderPresets.TextFrag);
-
-            // Fetch uniform locations
-            _uniformMatrix = GL.GetUniformLocation(ShaderId, "matrix");
-            _uniformColour = GL.GetUniformLocation(ShaderId, "uColour");
-            _uniformTexSlot = GL.GetUniformLocation(ShaderId, "uTextureSlot");
+            Create(ShaderPresets.TextVert, ShaderPresets.TextFrag,
+                "matrix", "uColour", "uTextureSlot");
 
             // Set matrices in shader to default
             SetMatrices();
             // Set colour to default
-            GL.ProgramUniform4f(ShaderId, _uniformColour, 1f, 1f, 1f, 1f);
+            Colour = new Colour(255, 255, 255);
         }
         private readonly DrawObject<Vector2, byte> _drawable;
         private readonly ArrayBuffer<Vector2> _instanceData;
@@ -276,7 +245,7 @@ namespace Zene.Graphics
             GL.UseProgram(this);
 
             // Set texture slot
-            GL.ProgramUniform1i(ShaderId, _uniformTexSlot, 0);
+            SetUniformI(Uniforms[2], 0);
             //GL.ProgramUniform1i(ShaderId, _uniformColourSource, 1);
 
             font.BindTexture(0);
@@ -709,7 +678,7 @@ namespace Zene.Graphics
             GL.UseProgram(this);
 
             // Set texture slot
-            GL.ProgramUniform1i(ShaderId, _uniformTexSlot, 0);
+            SetUniformI(Uniforms[2], 0);
             //GL.ProgramUniform1i(ShaderId, _uniformColourSource, 1);
 
             font.BindTexture(0);
@@ -718,17 +687,15 @@ namespace Zene.Graphics
         }
         public void DrawCentred(ReadOnlySpan<char> text, Font font) => DrawCentred(text, font, font.CharSpace, font.LineSpace);
 
-        private bool _disposed = false;
-        public void Dispose()
+        protected override void Dispose(bool dispose)
         {
-            if (_disposed) { return; }
+            base.Dispose(dispose);
 
-            _drawable.Dispose();
-            _instanceData.Dispose();
-            GL.DeleteProgram(ShaderId);
-
-            _disposed = true;
-            GC.SuppressFinalize(this);
+            if (dispose)
+            {
+                _drawable.Dispose();
+                _instanceData.Dispose();
+            }
         }
     }
 }

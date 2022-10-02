@@ -54,26 +54,6 @@ namespace Zene.Graphics.Base
             return shader;
         }
 
-        [OpenGLSupport(2.0)]
-        public static uint CreateAndLinkProgram(params uint[] shaders)
-        {
-            uint program = CreateProgram();
-
-            foreach (var shader in shaders)
-                AttachShader(program, shader);
-
-            LinkProgram(program);
-            CheckErrors(nameof(LinkProgram));
-
-            GetProgramiv(program, GLEnum.LinkStatus, out var result);
-            if (result == GLEnum.False)
-            {
-                string infoLog = GetProgramInfoLog(program);
-                throw new InvalidOperationException($"Failed to link program: {infoLog}");
-            }
-
-            return program;
-        }
 
         public static string GetErrorString(uint error)
         {

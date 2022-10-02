@@ -6,19 +6,12 @@ using Zene.Structs;
 
 namespace Zene.Graphics
 {
-    public class EditTextRenderer : IShaderProgram, IDisposable
+    public class EditTextRenderer : BaseShaderProgram, IDisposable
     {
-        public uint ShaderId { get; }
-        uint IIdentifiable.Id => ShaderId;
-
-        private readonly int _uniformMatrix;
         private Matrix4 _m1 = Matrix4.Identity;
         public Matrix4 Model
         {
-            get
-            {
-                return _m1;
-            }
+            get => _m1;
             set
             {
                 _m1 = value;
@@ -28,10 +21,7 @@ namespace Zene.Graphics
         private Matrix4 _m2 = Matrix4.Identity;
         public Matrix4 View
         {
-            get
-            {
-                return _m2;
-            }
+            get => _m2;
             set
             {
                 _m2 = value;
@@ -41,10 +31,7 @@ namespace Zene.Graphics
         private Matrix4 _m3 = Matrix4.Identity;
         public Matrix4 Projection
         {
-            get
-            {
-                return _m3;
-            }
+            get => _m3;
             set
             {
                 _m3 = value;
@@ -53,25 +40,21 @@ namespace Zene.Graphics
         }
         private void SetMatrices()
         {
-            GL.ProgramUniformMatrix4fv(ShaderId, _uniformMatrix, false, (_m1 * _m2 * _m3).GetGLData());
+            Matrix4 matrix = _m1 * _m2 * _m3;
+            SetUniformF(Uniforms[0], ref matrix);
         }
 
-        private readonly int _uniformColour;
         private Colour _colour;
         public Colour Colour
         {
-            get
-            {
-                return _colour;
-            }
+            get => _colour;
             set
             {
                 _colour = value;
-                ColourF cf = value;
-                GL.ProgramUniform4f(ShaderId, _uniformColour, cf.R, cf.G, cf.B, cf.A);
+
+                SetUniformF(Uniforms[1], (Vector4)value);
             }
         }
-        private readonly int _uniformColourSelectFor;
         private Colour _colourSelectFor;
         public Colour SelectedColour
         {
@@ -79,11 +62,10 @@ namespace Zene.Graphics
             set
             {
                 _colourSelectFor = value;
-                ColourF cf = value;
-                GL.ProgramUniform4f(ShaderId, _uniformColourSelectFor, cf.R, cf.G, cf.B, cf.A);
+
+                SetUniformF(Uniforms[2], (Vector4)value);
             }
         }
-        private readonly int _uniformColourSelectBack;
         private Colour _colourSelectBack;
         public Colour SelectedColourBack
         {
@@ -91,20 +73,9 @@ namespace Zene.Graphics
             set
             {
                 _colourSelectBack = value;
-                ColourF cf = value;
-                GL.ProgramUniform4f(ShaderId, _uniformColourSelectBack, cf.R, cf.G, cf.B, cf.A);
+
+                SetUniformF(Uniforms[3], (Vector4)value);
             }
-        }
-
-        private readonly int _uniformTexSlot;
-
-        void IBindable.Bind()
-        {
-            GL.UseProgram(this);
-        }
-        void IBindable.Unbind()
-        {
-            GL.UseProgram(null);
         }
 
         public EditTextRenderer(int capacity)
@@ -144,14 +115,8 @@ namespace Zene.Graphics
             // Shader setup
             //
 
-            ShaderId = CustomShader.CreateShader(ShaderPresets.TextEditVert, ShaderPresets.TextEditFrag);
-
-            // Fetch uniform locations
-            _uniformMatrix = GL.GetUniformLocation(ShaderId, "matrix");
-            _uniformColour = GL.GetUniformLocation(ShaderId, "uColour");
-            _uniformColourSelectBack = GL.GetUniformLocation(ShaderId, "uSelectColour");
-            _uniformColourSelectFor = GL.GetUniformLocation(ShaderId, "uSelectTextColour");
-            _uniformTexSlot = GL.GetUniformLocation(ShaderId, "uTextureSlot");
+            Create(ShaderPresets.TextEditVert, ShaderPresets.TextEditFrag,
+                "matrix", "uColour", "uSelectColour", "uSelectTextColour", "uTextureSlot");
 
             // Set matrices in shader to default
             SetMatrices();
@@ -311,7 +276,7 @@ namespace Zene.Graphics
             GL.UseProgram(this);
 
             // Set texture slot
-            GL.ProgramUniform1i(ShaderId, _uniformTexSlot, 0);
+            SetUniformI(Uniforms[4], 0);
 
             font.BindTexture(0);
 
@@ -461,7 +426,7 @@ namespace Zene.Graphics
             GL.UseProgram(this);
 
             // Set texture slot
-            GL.ProgramUniform1i(ShaderId, _uniformTexSlot, 0);
+            SetUniformI(Uniforms[4], 0);
 
             font.BindTexture(0);
 
@@ -469,19 +434,17 @@ namespace Zene.Graphics
         }
         public void DrawCentred(ReadOnlySpan<char> text, int selectStart, int selectEnd, Font font) => DrawCentred(text, selectStart, selectEnd, font, 0, 0);
 
-        private bool _disposed = false;
-        public void Dispose()
+        protected override void Dispose(bool dispose)
         {
-            if (_disposed) { return; }
+            base.Dispose(dispose);
 
-            _drawable.Dispose();
-            _instanceData.Dispose();
-            GL.DeleteProgram(ShaderId);
-
-            _disposed = true;
-            GC.SuppressFinalize(this);
+            if (dispose)
+            {
+                _drawable.Dispose();
+                _instanceData.Dispose();
+            }
         }
-        
+
         private static string TrimSpace(ReadOnlySpan<char> text, int selectStart, int selectEnd)
         {
             char[] data = new char[text.Length];

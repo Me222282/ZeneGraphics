@@ -1,5 +1,4 @@
-﻿using Zene.Graphics.Base;
-using Zene.Structs;
+﻿using Zene.Structs;
 
 namespace Zene.Graphics
 {
@@ -11,7 +10,7 @@ namespace Zene.Graphics
         Texture = 3
     }
 
-    public class BasicShader : IMatrixShader
+    public class BasicShader : BaseShaderProgram, IMatrixShader
     {
         public enum Location : uint
         {
@@ -22,84 +21,47 @@ namespace Zene.Graphics
 
         public BasicShader()
         {
-            Program = CustomShader.CreateShader(ShaderPresets.BasicVertex, ShaderPresets.BasicFragment);
+            Create(ShaderPresets.BasicVertex, ShaderPresets.BasicFragment,
+                  "colourType", "uColour", "uTextureSlot", "matrix");
 
-            FindUniforms();
-
-            // Set matrix to "0"
-            GL.ProgramUniformMatrix4fv(Program, _uniformMatrix, false, Matrix4.Identity.GetGLData());
+            SetUniformF(Uniforms[3], ref Matrix4.Identity);
         }
 
-        public uint Program { get; private set; }
-        uint IIdentifiable.Id => Program;
-
-        protected bool _Bound;
-        public bool Bound
+        private ColourSource _source = 0;
+        public ColourSource ColourSource
         {
-            get
-            {
-                return _Bound;
-            }
+            get => _source;
             set
             {
-                if (value && (!_Bound))
-                {
-                    Bind();
-                }
-                else if ((!value) && _Bound)
-                {
-                    Unbind();
-                }
+                _source = value;
+
+                SetUniformI(Uniforms[0], (int)value);
             }
         }
 
-        private int _uniformColourType;
-
-        public void SetColourSource(ColourSource type)
+        private ColourF _colour = ColourF.Zero;
+        public ColourF Colour
         {
-            GL.ProgramUniform1i(Program, _uniformColourType, (int)type);
+            get => _colour;
+            set
+            {
+                _colour = value;
+
+                SetUniformF(Uniforms[0], (Vector4)value);
+            }
         }
 
-        private int _uniformColour;
-
-        public void SetDrawColour(float r, float g, float b, float a)
+        private int _texSlot = 0;
+        public int TextureSlot
         {
-            GL.ProgramUniform4f(Program, _uniformColour,
-                r * ColourF.ByteToFloat,
-                g * ColourF.ByteToFloat,
-                b * ColourF.ByteToFloat,
-                a * ColourF.ByteToFloat);
+            get => _texSlot;
+            set
+            {
+                _texSlot = value;
+
+                SetUniformI(Uniforms[0], value);
+            }
         }
-
-        public void SetDrawColour(float r, float g, float b)
-        {
-            GL.ProgramUniform4f(Program, _uniformColour,
-                r * ColourF.ByteToFloat,
-                g * ColourF.ByteToFloat,
-                b * ColourF.ByteToFloat,
-                1.0f);
-        }
-
-        public void SetDrawColour(Colour colour)
-        {
-            ColourF c = (ColourF)colour;
-
-            SetDrawColour(c.R, c.G, c.B, c.A);
-        }
-
-        public void SetDrawColour(ColourF colour)
-        {
-            SetDrawColour(colour.R, colour.G, colour.B, colour.A);
-        }
-
-        private int _uniformTexture;
-
-        public void SetTextureSlot(int slot)
-        {
-            GL.ProgramUniform1i(Program, _uniformTexture, slot);
-        }
-
-        private int _uniformMatrix;
 
         private Matrix4 _m1 = Matrix4.Identity;
         public Matrix4 Matrix1
@@ -134,37 +96,8 @@ namespace Zene.Graphics
 
         private void SetMatrices()
         {
-            GL.ProgramUniformMatrix4fv(Program, _uniformMatrix, false, (_m1 * _m2 * _m3).GetGLData());
-        }
-
-        private void FindUniforms()
-        {
-            _uniformColourType = GL.GetUniformLocation(Program, "colourType");
-
-            _uniformColour = GL.GetUniformLocation(Program, "uColour");
-
-            _uniformTexture = GL.GetUniformLocation(Program, "uTextureSlot");
-
-            _uniformMatrix = GL.GetUniformLocation(Program, "matrix");
-        }
-
-        public void Dispose()
-        {
-            GL.DeleteProgram(Program);
-        }
-
-        public void Bind()
-        {
-            GL.UseProgram(this);
-
-            _Bound = true;
-        }
-
-        public void Unbind()
-        {
-            GL.UseProgram(null);
-
-            _Bound = false;
+            Matrix4 matrix = _m1 * _m2 * _m3;
+            SetUniformF(Uniforms[3], ref matrix);
         }
     }
 }

@@ -4,7 +4,7 @@ using Zene.Structs;
 
 namespace Zene.Graphics
 {
-    public class LightingShader : IMatrixShader
+    public class LightingShader : BaseShaderProgram, IMatrixShader
     {
         public enum Location : uint
         {
@@ -29,116 +29,76 @@ namespace Zene.Graphics
             fSource = fSource.Replace("##sl##", $"{_uSpotLight}");
             fSource = fSource.Replace("##s##", $"{spotLightNumber}");
 
-            Program = CustomShader.CreateShader(ShaderPresets.LightingVertex, fSource);
+            Create(ShaderPresets.LightingVertex, fSource,
+                "colourType", "uColour", "ambientLight", "cameraPos",
+                "drawLight", "ingorBlackLight", "uTextureSlot", "uNormalMap",
+                "normalMapping", "modelM", "vpM", "lightSpaceMatrix",
+                "uShadowMapSlot", "uMaterial");
 
             LightNumber = lightNumber;
-
-            FindUniforms();
 
             Matrix1 = Matrix4.Identity;
             Matrix2 = Matrix4.Identity;
             Matrix3 = Matrix4.Identity;
         }
 
-        public uint Program { get; private set; }
-        uint IIdentifiable.Id => Program;
-
-        private bool _Bound;
-        public bool Bound
-        {
-            get
-            {
-                return _Bound;
-            }
-            set
-            {
-                if (value && (!_Bound))
-                {
-                    Bind();
-                }
-                else if ((!value) && _Bound)
-                {
-                    Unbind();
-                }
-            }
-        }
-
         public int LightNumber { get; }
 
-        private int _uniformColourType;
-
-        public void SetColourSource(ColourSource type)
+        private ColourSource _source = 0;
+        public ColourSource ColourSource
         {
-            GL.ProgramUniform1i(Program, _uniformColourType, (int)type);
+            get => _source;
+            set
+            {
+                _source = value;
+
+                SetUniformI(Uniforms[0], (int)value);
+            }
         }
 
-        private int _uniformColour;
-
-        public void SetDrawColour(float r, float g, float b, float a)
+        private ColourF _colour = ColourF.Zero;
+        public ColourF Colour
         {
-            GL.ProgramUniform4f(Program, _uniformColour,
-                r,
-                g,
-                b,
-                a);
+            get => _colour;
+            set
+            {
+                _colour = value;
+
+                SetUniformF(Uniforms[1], (Vector4)value);
+            }
         }
 
-        public void SetDrawColour(float r, float g, float b)
+        private ColourF _ambientLight = ColourF.Zero;
+        public ColourF AmbientLight
         {
-            GL.ProgramUniform4f(Program, _uniformColour,
-                r,
-                g,
-                b,
-                1f);
+            get => _ambientLight;
+            set
+            {
+                _ambientLight = value;
+
+                SetUniformF(Uniforms[2], (Vector3)(ColourF3)value);
+            }
         }
 
-        public void SetDrawColour(Colour colour)
-        {
-            ColourF c = (ColourF)colour;
-
-            SetDrawColour(c.R, c.G, c.B, c.A);
-        }
-
-        public void SetDrawColour(ColourF colour)
-        {
-            SetDrawColour(colour.R, colour.G, colour.B, colour.A);
-        }
-
-        private int _uniformAmbientLight;
-
-        public void SetAmbientLight(Colour colour)
-        {
-            ColourF c = (ColourF)colour;
-
-            GL.ProgramUniform3f(Program, _uniformAmbientLight, c.R, c.G, c.B);
-        }
-
-        private int _uLight;
-
+        private readonly int _uLight = 12;
         public void SetLight(int index, Light light)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
+            //SetUniform(_uLight, index, light);
+
             int uIndex = (index * 5) + _uLight;
 
-            ColourF lc = light.LightColour;
+            SetUniformF(uIndex, (Vector3)light.LightColour);
 
-            GL.ProgramUniform3f(Program, uIndex, lc.R, lc.G, lc.B);
+            SetUniformF(uIndex + 1, (Vector3)light.AmbientLight);
 
-            ColourF ac = light.AmbientLight;
+            SetUniformF(uIndex + 2, light.LightVector);
 
-            GL.ProgramUniform3f(Program, uIndex + 1, ac.R, ac.G, ac.B);
-
-            float w = 1;
-            if (light.Direction) { w = 0; }
-
-            GL.ProgramUniform4f(Program, uIndex + 2, (float)light.LightVector.X, 
-                (float)light.LightVector.Y, (float)light.LightVector.Z, w);
-
-            if (!light.Direction)
+            if (light.LightVector.W > 0)
             {
-                GL.ProgramUniform1f(Program, uIndex + 3, (float)light.Linear);
-                GL.ProgramUniform1f(Program, uIndex + 4, (float)light.Quadratic);
+                SetUniformF(uIndex + 3, light.Linear);
+                SetUniformF(uIndex + 4, light.Quadratic);
             }
         }
 
@@ -146,29 +106,21 @@ namespace Zene.Graphics
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            ColourF c = lightColour;
-
-            GL.ProgramUniform3f(Program, (index * 5) + _uLight, c.R, c.G, c.B);
+            SetUniformF(_uLight + (index * 5), (Vector3)(ColourF3)lightColour);
         }
 
         public void SetLightAmbient(int index, ColourF ambientColour)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            ColourF c = ambientColour;
-
-            GL.ProgramUniform3f(Program, (index * 5) + _uLight + 1, c.R, c.G, c.B);
+            SetUniformF(_uLight + (index * 5) + 1, (Vector3)(ColourF3)ambientColour);
         }
 
-        public void SetLightPosition(int index, Vector3 position, bool direction = false)
+        public void SetLightPosition(int index, Vector4 position)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            float w = 1;
-            if (direction) { w = 0; }
-
-            GL.ProgramUniform4f(Program, (index * 5) + _uLight + 2, (float)position.X,
-                (float)position.Y, (float)position.Z, w);
+            SetUniformF(_uLight + (index * 5) + 2, position);
         }
 
         public void SetLightDistance(int index, double linear, double quadratic)
@@ -177,8 +129,8 @@ namespace Zene.Graphics
 
             int uIndex = (index * 5) + _uLight;
 
-            GL.ProgramUniform1f(Program, uIndex + 3, (float)linear);
-            GL.ProgramUniform1f(Program, uIndex + 4, (float)quadratic);
+            SetUniformF(uIndex + 3, linear);
+            SetUniformF(uIndex + 4, quadratic);
         }
 
         private readonly int _uSpotLight;
@@ -187,38 +139,21 @@ namespace Zene.Graphics
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            int uIndex = (index * 7) + _uSpotLight;
-
-            ColourF lc = light.LightColour;
-
-            GL.ProgramUniform3f(Program, uIndex, lc.R, lc.G, lc.B);
-
-            GL.ProgramUniform3f(Program, uIndex + 1, (float)light.LightVector.X,
-                (float)light.LightVector.Y, (float)light.LightVector.Z);
-
-            GL.ProgramUniform3f(Program, uIndex + 2, (float)light.Direction.X,
-                (float)light.Direction.Y, (float)light.Direction.Z);
-
-            GL.ProgramUniform1f(Program, uIndex + 3, (float)light.CosAngle);
-            GL.ProgramUniform1f(Program, uIndex + 4, (float)light.CosOuterAngle);
-            GL.ProgramUniform1f(Program, uIndex + 5, (float)light.Linear);
-            GL.ProgramUniform1f(Program, uIndex + 6, (float)light.Quadratic);
+            SetUniform(_uSpotLight, index, light);
         }
 
         public void SetSpotLightColour(int index, ColourF lightColour)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            ColourF c = lightColour;
-
-            GL.ProgramUniform3f(Program, (index * 7) + _uSpotLight, c.R, c.G, c.B);
+            SetUniformF(_uSpotLight + (index * 7), (Vector3)(ColourF3)lightColour);
         }
 
         public unsafe ColourF GetSpotLightColour(int index)
         {
             ColourF c;
 
-            GL.GetnUniformfv(Program, (index * 7) + _uSpotLight, 3 * sizeof(float), (float*)&c);
+            GL.GetnUniformfv(Id, (index * 7) + _uSpotLight, 3 * sizeof(float), (float*)&c);
 
             return c;
         }
@@ -227,16 +162,14 @@ namespace Zene.Graphics
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            GL.ProgramUniform3f(Program, (index * 7) + _uSpotLight + 1, (float)position.X,
-                (float)position.Y, (float)position.Z);
+            SetUniformF(_uSpotLight + (index * 7) + 1, position);
         }
 
         public void SetSpotLightDirection(int index, Vector3 direction)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            GL.ProgramUniform3f(Program, (index * 7) + _uSpotLight + 2, (float)direction.X,
-                (float)direction.Y, (float)direction.Z);
+            SetUniformF(_uSpotLight + (index * 7) + 2, direction);
         }
 
         public void SetSpotLightAngle(int index, Radian innerAngle, Radian outerAngle)
@@ -245,8 +178,8 @@ namespace Zene.Graphics
 
             int uIndex = (index * 7) + _uSpotLight;
 
-            GL.ProgramUniform1f(Program, uIndex + 3, (float)Math.Cos(innerAngle));
-            GL.ProgramUniform1f(Program, uIndex + 4, (float)Math.Cos(outerAngle));
+            SetUniformF(uIndex + 3, Math.Cos(innerAngle));
+            SetUniformF(uIndex + 4, Math.Cos(outerAngle));
         }
 
         public void SetSpotLightDistance(int index, double linear, double quadratic)
@@ -255,89 +188,107 @@ namespace Zene.Graphics
 
             int uIndex = (index * 7) + _uSpotLight;
 
-            GL.ProgramUniform1f(Program, uIndex + 5, (float)linear);
-            GL.ProgramUniform1f(Program, uIndex + 6, (float)quadratic);
+            SetUniformF(uIndex + 5, linear);
+            SetUniformF(uIndex + 6, quadratic);
         }
 
-        private int _uniformCameraPos;
-
-        public void SetCameraPosition(Vector3 position)
+        private Vector3 _camPos = Vector3.Zero;
+        public Vector3 CameraPosition
         {
-            GL.ProgramUniform3f(Program, _uniformCameraPos, (float)position.X, (float)position.Y, (float)position.Z);
+            get => _camPos;
+            set
+            {
+                _camPos = value;
+
+                SetUniformF(Uniforms[3], value);
+            }
         }
 
-        private int _uniformDrawLight;
-
-        public void DrawLighting(bool value)
+        private bool _drawlight = false;
+        public bool DrawLighting
         {
-            int set = 0;
+            get => _drawlight;
+            set
+            {
+                _drawlight = value;
 
-            if (value) { set = 1; }
+                int set = 0;
+                if (value) { set = 1; }
 
-            GL.ProgramUniform1i(Program, _uniformDrawLight, set);
+                SetUniformI(Uniforms[4], set);
+            }
         }
 
-        private int _uniformIngorBL;
-
-        public void IngorBlackLight(bool value)
+        private bool _ingorBlackLight = false;
+        public bool IngorBlackLight
         {
-            int set = 0;
+            get => _ingorBlackLight;
+            set
+            {
+                _ingorBlackLight = value;
 
-            if (value) { set = 1; }
+                int set = 0;
+                if (value) { set = 1; }
 
-            GL.ProgramUniform1i(Program, _uniformIngorBL, set);
+                SetUniformI(Uniforms[5], set);
+            }
         }
-
-        private UniformMaterial _uMaterial = new UniformMaterial();
 
         public void SetMaterial(Material material)
         {
-            GL.ProgramUniform1i(Program, _uMaterial.Shine, (int)material.Shine);
-            GL.ProgramUniform1i(Program, _uMaterial.DiffuseLightSource, material.DiffuseLightSource);
-
-            ColourF dl = material.DiffuseLight;
-            GL.ProgramUniform3f(Program, _uMaterial.DiffuseLight, dl.R, dl.G, dl.B);
-            GL.ProgramUniform1i(Program, _uMaterial.DiffTextureSlot, material.DiffTextureSlot);
-            GL.ProgramUniform1i(Program, _uMaterial.SpecularLightSource, material.SpecularLightSource);
-
-            ColourF sl = material.SpecularLight;
-            GL.ProgramUniform3f(Program, _uMaterial.SpecularLight, sl.R, sl.G, sl.B);
-            GL.ProgramUniform1i(Program, _uMaterial.SpecTextureSlot, material.SpecTextureSlot);
+            SetUniform(Uniforms[13], material);
         }
 
-        private int _uniformTexture;
-
-        public void SetTextureSlot(int slot)
+        private int _texSlot = 0;
+        public int TextureSlot
         {
-            GL.ProgramUniform1i(Program, _uniformTexture, slot);
+            get => _texSlot;
+            set
+            {
+                _texSlot = value;
+
+                SetUniformI(Uniforms[6], value);
+            }
         }
 
-        private int _uniformNormalSlot;
-
-        public void SetNormalMapSlot(int slot)
+        private int _normalMapSlot = 0;
+        public int NormalMapSlot
         {
-            GL.ProgramUniform1i(Program, _uniformNormalSlot, slot);
+            get => _normalMapSlot;
+            set
+            {
+                _normalMapSlot = value;
+
+                SetUniformI(Uniforms[7], value);
+            }
         }
 
-        private int _uniformShadowMapSlot;
-
-        public void SetShadowMapSlot(int slot)
+        private int _shadowMapSlot = 0;
+        public int ShadowMapSlot
         {
-            GL.ProgramUniform1i(Program, _uniformShadowMapSlot, slot);
+            get => _shadowMapSlot;
+            set
+            {
+                _shadowMapSlot = value;
+
+                SetUniformI(Uniforms[12], value);
+            }
         }
 
-        private int _uniformDoNormMap;
-
-        public void UseNormalMapping(bool value)
+        private bool _normalMapping = false;
+        public bool NormalMapping
         {
-            int b = 0;
-            if (value) { b = 1; }
+            get => _normalMapping;
+            set
+            {
+                _normalMapping = value;
 
-            GL.ProgramUniform1i(Program, _uniformDoNormMap, b);
+                int set = 0;
+                if (value) { set = 1; }
+
+                SetUniformI(Uniforms[8], set);
+            }
         }
-
-        private int _uniformModelM;
-        private int _uniformVpM;
 
         private Matrix4 _m1 = Matrix4.Identity;
         public Matrix4 Matrix1
@@ -347,7 +298,7 @@ namespace Zene.Graphics
             {
                 _m1 = value;
 
-                GL.ProgramUniformMatrix4fv(Program, _uniformModelM, false, _m1.GetGLData());
+                SetUniformF(Uniforms[9], ref value);
             }
         }
         private Matrix4 _m2 = Matrix4.Identity;
@@ -373,85 +324,20 @@ namespace Zene.Graphics
 
         private void SetMatrices()
         {
-            GL.ProgramUniformMatrix4fv(Program, _uniformVpM, false, (_m2 * _m3).GetGLData());
+            Matrix4 matrix = _m2 * _m3;
+            SetUniformF(Uniforms[10], ref matrix);
         }
 
-        private int _uniformMatrixLS;
-
-        public void SetLightSpaceMatrix(Matrix4 matrix)
+        private Matrix4 _lsm = Matrix4.Identity;
+        public Matrix4 LightSpaceMatrix
         {
-            GL.ProgramUniformMatrix4fv(Program, _uniformMatrixLS, false, matrix.GetGLData());
-        }
-
-        private void FindUniforms()
-        {
-            _uniformColourType = GL.GetUniformLocation(Program, "colourType");
-
-            _uniformColour = GL.GetUniformLocation(Program, "uColour");
-
-            _uLight = 12;
-            _uniformAmbientLight = GL.GetUniformLocation(Program, "ambientLight");
-
-            _uniformCameraPos = GL.GetUniformLocation(Program, "cameraPos");
-
-            _uniformDrawLight = GL.GetUniformLocation(Program, "drawLight");
-            _uniformIngorBL = GL.GetUniformLocation(Program, "ingorBlackLight");
-
-            _uniformTexture = GL.GetUniformLocation(Program, "uTextureSlot");
-            _uniformNormalSlot = GL.GetUniformLocation(Program, "uNormalMap");
-            _uniformDoNormMap = GL.GetUniformLocation(Program, "normalMapping");
-
-            _uniformModelM = GL.GetUniformLocation(Program, "modelM");
-            _uniformVpM = GL.GetUniformLocation(Program, "vpM");
-
-            _uniformMatrixLS = GL.GetUniformLocation(Program, "lightSpaceMatrix");
-
-            _uMaterial.DiffuseLightSource = GL.GetUniformLocation(Program, "uMaterial.DiffuseLightSource");
-            _uMaterial.DiffuseLight = GL.GetUniformLocation(Program, "uMaterial.DiffuseLight");
-            _uMaterial.DiffTextureSlot = GL.GetUniformLocation(Program, "uMaterial.DiffTextureSlot");
-            _uMaterial.SpecularLightSource = GL.GetUniformLocation(Program, "uMaterial.SpecularLightSource");
-            _uMaterial.SpecularLight = GL.GetUniformLocation(Program, "uMaterial.SpecularLight");
-            _uMaterial.SpecTextureSlot = GL.GetUniformLocation(Program, "uMaterial.SpecTextureSlot");
-            _uMaterial.Shine = GL.GetUniformLocation(Program, "uMaterial.Shine");
-
-            _uniformShadowMapSlot = GL.GetUniformLocation(Program, "uShadowMapSlot");
-        }
-
-        private bool _disposed = false;
-        public void Dispose()
-        {
-            if (!_disposed)
+            get => _lsm;
+            set
             {
-                GL.DeleteProgram(Program);
-                _disposed = true;
+                _lsm = value;
 
-                GC.SuppressFinalize(this);
+                SetUniformF(Uniforms[11], ref value);
             }
-        }
-
-        public void Bind()
-        {
-            GL.UseProgram(this);
-
-            _Bound = true;
-        }
-
-        public void Unbind()
-        {
-            GL.UseProgram(null);
-
-            _Bound = false;
-        }
-
-        private struct UniformMaterial
-        {
-            public int DiffuseLightSource;
-            public int DiffuseLight;
-            public int DiffTextureSlot;
-            public int SpecularLightSource;
-            public int SpecularLight;
-            public int SpecTextureSlot;
-            public int Shine;
         }
     }
 
@@ -467,7 +353,7 @@ namespace Zene.Graphics
         XXXL = 256
     }
 
-    public struct Material
+    public struct Material : IUniformStruct
     {
         public enum Source
         {
@@ -602,32 +488,55 @@ namespace Zene.Graphics
         public int SpecTextureSlot { get; set; }
 
         public Shine Shine { get; set; }
+
+        private static readonly IUniformStruct.Member[] _members = new IUniformStruct.Member[]
+        {
+            IUniformStruct.UniformType.Int,
+            IUniformStruct.UniformType.FVec4,
+            IUniformStruct.UniformType.Int,
+
+            IUniformStruct.UniformType.Int,
+            IUniformStruct.UniformType.FVec4,
+            IUniformStruct.UniformType.Int,
+
+            IUniformStruct.UniformType.Int
+        };
+        public IUniformStruct.Member[] Members() => _members;
     }
 
-    public struct Light
+    public struct Light : IUniformStruct
     {
-        public Light(ColourF colour, ColourF ambientColour, double linear, double quadratic, Vector3 point, bool direction = false)
+        public Light(ColourF3 colour, ColourF3 ambientColour, double linear, double quadratic, Vector3 point, bool direction = false)
         {
             LightColour = colour;
             AmbientLight = ambientColour;
-            LightVector = point;
-            Direction = direction;
+            LightVector = (point, direction ? 0 : 1);
             Linear = linear;
             Quadratic = quadratic;
         }
 
-        public ColourF LightColour { get; set; }
-        public ColourF AmbientLight { get; set; }
-        public Vector3 LightVector { get; set; }
-        public bool Direction { get; set; }
+        public ColourF3 LightColour { get; set; }
+        public ColourF3 AmbientLight { get; set; }
+        public Vector4 LightVector { get; set; }
 
         public double Linear { get; set; }
         public double Quadratic { get; set; }
+
+        private static readonly IUniformStruct.Member[] _members = new IUniformStruct.Member[]
+        {
+            IUniformStruct.UniformType.FVec3,
+            IUniformStruct.UniformType.FVec3,
+            new IUniformStruct.Member(IUniformStruct.UniformType.DVec4, true),
+
+            new IUniformStruct.Member(IUniformStruct.UniformType.Double, true),
+            new IUniformStruct.Member(IUniformStruct.UniformType.Double, true)
+        };
+        public IUniformStruct.Member[] Members() => _members;
     }
 
-    public struct SpotLight
+    public struct SpotLight : IUniformStruct
     {
-        public SpotLight(ColourF colour, Radian angle, Radian outerAngle, double linear, double quadratic, Vector3 point, Vector3 direction)
+        public SpotLight(ColourF3 colour, Radian angle, Radian outerAngle, double linear, double quadratic, Vector3 point, Vector3 direction)
         {
             LightColour = colour;
             LightVector = point;
@@ -639,7 +548,7 @@ namespace Zene.Graphics
             Quadratic = quadratic;
         }
 
-        public ColourF LightColour { get; set; }
+        public ColourF3 LightColour { get; set; }
         public Vector3 LightVector { get; set; }
         public Vector3 Direction { get; set; }
 
@@ -647,5 +556,18 @@ namespace Zene.Graphics
         public double CosOuterAngle { get; set; }
         public double Linear { get; set; }
         public double Quadratic { get; set; }
+
+        private static readonly IUniformStruct.Member[] _members = new IUniformStruct.Member[]
+        {
+            IUniformStruct.UniformType.FVec3,
+            new IUniformStruct.Member(IUniformStruct.UniformType.DVec3, true),
+            new IUniformStruct.Member(IUniformStruct.UniformType.DVec3, true),
+
+            new IUniformStruct.Member(IUniformStruct.UniformType.Double, true),
+            new IUniformStruct.Member(IUniformStruct.UniformType.Double, true),
+            new IUniformStruct.Member(IUniformStruct.UniformType.Double, true),
+            new IUniformStruct.Member(IUniformStruct.UniformType.Double, true)
+        };
+        public IUniformStruct.Member[] Members() => _members;
     }
 }

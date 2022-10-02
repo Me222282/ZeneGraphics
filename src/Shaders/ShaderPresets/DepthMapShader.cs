@@ -1,61 +1,16 @@
-﻿using System;
-using Zene.Graphics.Base;
-using Zene.Structs;
+﻿using Zene.Structs;
 
 namespace Zene.Graphics
 {
-    public unsafe class DepthMapShader : IMatrixShader
+    public unsafe class DepthMapShader : BaseShaderProgram, IMatrixShader
     {
         public DepthMapShader()
         {
-            _disposed = false;
-            _bound = false;
+            Create(ShaderPresets.DepthMapVertex, ShaderPresets.DepthMapFragment,
+                  "matrix", "depthOffset");
 
-            Program = CustomShader.CreateShader(ShaderPresets.DepthMapVertex, ShaderPresets.DepthMapFragment);
-
-            FindUniforms();
-
-            Matrix1 = Matrix4.Identity;
-            Matrix2 = Matrix4.Identity;
-            Matrix3 = Matrix4.Identity;
+            SetUniformF(Uniforms[0], ref Matrix4.Identity);
         }
-
-        public uint Program { get; }
-        uint IIdentifiable.Id => Program;
-
-        private bool _bound;
-        public bool Bound
-        {
-            get
-            {
-                return _bound;
-            }
-            set
-            {
-                if (value && (!_bound))
-                {
-                    Bind();
-                }
-                else if ((!value) && _bound)
-                {
-                    Unbind();
-                }
-            }
-        }
-
-        private bool _disposed;
-        public void Dispose()
-        {
-            if (!_disposed)
-            {
-                GL.DeleteProgram(Program);
-                _disposed = true;
-
-                GC.SuppressFinalize(this);
-            }
-        }
-
-        private int _uniformMatrix;
 
         private Matrix4 _m1 = Matrix4.Identity;
         public Matrix4 Matrix1
@@ -90,35 +45,20 @@ namespace Zene.Graphics
 
         private void SetMatrices()
         {
-            GL.ProgramUniformMatrix4fv(Program, _uniformMatrix, false, (_m1 * _m2 * _m3).GetGLData());
+            Matrix4 matrix = _m1 * _m2 * _m3;
+            SetUniformF(Uniforms[0], ref matrix);
         }
 
-        private int _uniformDepthOffset;
-
-        public void SetDepthOffset(double value)
+        private double _depthOffset = 0d;
+        public double DepthOffset
         {
-            GL.ProgramUniform1f(Program, _uniformDepthOffset, (float)value);
-        }
+            get => _depthOffset;
+            set
+            {
+                _depthOffset = value;
 
-        private void FindUniforms()
-        {
-            _uniformMatrix = GL.GetUniformLocation(Program, "matrix");
-
-            _uniformDepthOffset = GL.GetUniformLocation(Program, "depthOffset");
-        }
-
-        public void Bind()
-        {
-            GL.UseProgram(this);
-
-            _bound = true;
-        }
-
-        public void Unbind()
-        {
-            GL.UseProgram(null);
-
-            _bound = false;
+                SetUniformF(Uniforms[1], value);
+            }
         }
     }
 }
