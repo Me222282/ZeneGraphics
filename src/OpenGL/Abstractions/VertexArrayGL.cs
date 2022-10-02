@@ -87,6 +87,18 @@ namespace Zene.Graphics.Base
         }
 
         /// <summary>
+        /// Modify the rate at which generic vertex attributes advance during instanced rendering.
+        /// </summary>
+        /// <param name="index">Specify the index of the generic vertex attribute.</param>
+        /// <param name="divisor">Specify the number of instances that will pass between updates of the generic attribute at slot <paramref name="index"/>.</param>
+        public void VertexAttribDivisor(uint index, uint divisor)
+        {
+            Bind();
+
+            GL.VertexAttribDivisor(index, divisor);
+        }
+
+        /// <summary>
         /// Render primitives from array data.
         /// </summary>
         /// <param name="mode">Specifies what kind of primitives to render.</param>

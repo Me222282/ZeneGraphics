@@ -104,20 +104,12 @@ namespace Zene.Graphics
             _instanceData.InitData(capacity * _blockSize);
 
             // Add instance reference
-            _drawable.Vao.AddBuffer(_instanceData, 2, 0, DataType.Double, AttributeSize.D2);
-            _drawable.Vao.AddBuffer(_instanceData, 3, 1, DataType.Double, AttributeSize.D2);
-            _drawable.Vao.AddBuffer(_instanceData, 4, 2, DataType.Double, AttributeSize.D2);
-            _drawable.Vao.AddBuffer(_instanceData, 5, 3, DataType.Double, AttributeSize.D2);
+            _drawable.Vao.AddInstanceBuffer(_instanceData, 2, 0, DataType.Double, AttributeSize.D2, 1);
+            _drawable.Vao.AddInstanceBuffer(_instanceData, 3, 1, DataType.Double, AttributeSize.D2, 1);
+            _drawable.Vao.AddInstanceBuffer(_instanceData, 4, 2, DataType.Double, AttributeSize.D2, 1);
+            _drawable.Vao.AddInstanceBuffer(_instanceData, 5, 3, DataType.Double, AttributeSize.D2, 1);
             // Colour
-            //_drawable.Vao.AddBuffer(_instanceData, 6, 4, DataType.Double, AttributeSize.D4);
-            // Set indexes as instance referances
-            _drawable.Vao.Bind();
-            GL.VertexAttribDivisor(2, 1);
-            GL.VertexAttribDivisor(3, 1);
-            GL.VertexAttribDivisor(4, 1);
-            GL.VertexAttribDivisor(5, 1);
-            //GL.VertexAttribDivisor(6, 1);
-            _drawable.Vao.Unbind();
+            //_drawable.Vao.AddInstanceBuffer(_instanceData, 6, 4, DataType.Double, AttributeSize.D4, 1);
 
             //
             // Shader setup

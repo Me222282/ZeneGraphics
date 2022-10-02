@@ -272,7 +272,7 @@ namespace Zene.Graphics.Base
 		{
 			Functions.BindVertexArray(array is not null ? array.Id : 0);
 
-			context.boundVertexArray = array;
+			context.boundVertexArray = array is null ? context.baseVertexArray : array;
 
 			// For some reason, binding vertex array objects unbinds any element array buffer
 			context.boundBuffers.ElementArray = null;
@@ -657,15 +657,14 @@ namespace Zene.Graphics.Base
 		[OpenGLSupport(2.0)]
 		public static void DisableVertexAttribArray(uint index)
 		{
-			if (context.boundVertexArray is not null && index < State.MaxVertexAttributes)
+			if (index < State.MaxVertexAttributes)
 			{
 				IVertexArray va = context.boundVertexArray;
 
+				// Already false
+				if (!va.Properties._attributes[index]) { return; }
+
 				va.Properties._attributes[index] = false;
-			}
-			else if (index < State.MaxVertexAttributes)
-			{
-				context.baseVertexArray.Properties._attributes[index] = false;
 			}
 
 			Functions.DisableVertexAttribArray(index);
@@ -806,15 +805,14 @@ namespace Zene.Graphics.Base
 		[OpenGLSupport(2.0)]
 		public static void EnableVertexAttribArray(uint index)
 		{
-			if (context.boundVertexArray is not null && index < State.MaxVertexAttributes)
+			if (index < State.MaxVertexAttributes)
 			{
 				IVertexArray va = context.boundVertexArray;
 
+				// Already true
+				if (va.Properties._attributes[index]) { return; }
+
 				va.Properties._attributes[index] = true;
-			}
-			else if (index < State.MaxVertexAttributes)
-			{
-				context.baseVertexArray.Properties._attributes[index] = true;
 			}
 
 			Functions.EnableVertexAttribArray(index);
@@ -2986,6 +2984,19 @@ namespace Zene.Graphics.Base
 		[OpenGLSupport(3.3)]
 		public static void VertexAttribDivisor(uint index, uint divisor)
 		{
+			if (index < State.MaxVertexAttributes)
+            {
+				IVertexArray va = context.boundVertexArray;
+
+				// Divisor already set to value
+				if (va.Properties._divisors[index] == divisor)
+                {
+					return;
+                }
+
+				va.Properties._divisors[index] = divisor;
+            }
+
 			Functions.VertexAttribDivisor(index, divisor);
 		}
 

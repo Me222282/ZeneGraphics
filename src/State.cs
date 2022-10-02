@@ -36,7 +36,9 @@ namespace Zene.Graphics
         BufferQuery = GLEnum.QueryBuffer,
         BufferShaderStorage = GLEnum.ShaderStorageBuffer,
         BufferTransformFeedback = GLEnum.TransformFeedbackBuffer,
-        BufferUniform = GLEnum.UniformBuffer
+        BufferUniform = GLEnum.UniformBuffer,
+
+        VertexArray = GLEnum.VertexArray
     }
 
     public static unsafe class State
@@ -816,6 +818,12 @@ namespace Zene.Graphics
                 case Target.Renderbuffer:
                     if (GL.context.boundRenderbuffer == null) { return; }
                     GL.BindRenderbuffer(GLEnum.Renderbuffer, null);
+                    return;
+
+
+                case Target.VertexArray:
+                    if (GL.context.boundVertexArray == GL.context.baseVertexArray) { return; }
+                    GL.BindVertexArray(null);
                     return;
 
                 case Target.BufferArray:

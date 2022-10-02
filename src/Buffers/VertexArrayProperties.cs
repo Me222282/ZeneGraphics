@@ -12,6 +12,7 @@ namespace Zene.Graphics
 
         internal readonly IBuffer[] _buffers = new IBuffer[State.MaxVertexAttributes];
         internal readonly bool[] _attributes = new bool[State.MaxVertexAttributes];
+        internal readonly uint[] _divisors = new uint[State.MaxVertexAttributes];
 
         public bool this[uint index]
         {
