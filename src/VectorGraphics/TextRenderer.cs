@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Zene.Graphics.Base;
-using Zene.Graphics.Shaders;
 using Zene.Structs;
 
 namespace Zene.Graphics

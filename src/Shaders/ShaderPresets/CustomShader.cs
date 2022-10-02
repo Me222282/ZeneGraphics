@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using Zene.Structs;
 
-namespace Zene.Graphics.Shaders
+namespace Zene.Graphics
 {
     public enum MatrixType
     {

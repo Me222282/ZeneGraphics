@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Zene.Graphics.Shaders {
+namespace Zene.Graphics {
     using System;
     
     

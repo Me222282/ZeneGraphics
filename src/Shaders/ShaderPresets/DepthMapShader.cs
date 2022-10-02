@@ -2,9 +2,9 @@
 using Zene.Graphics.Base;
 using Zene.Structs;
 
-namespace Zene.Graphics.Shaders
+namespace Zene.Graphics
 {
-    public unsafe class DepthMapShader : IMvpShader
+    public unsafe class DepthMapShader : IMatrixShader
     {
         public DepthMapShader()
         {
@@ -15,9 +15,9 @@ namespace Zene.Graphics.Shaders
 
             FindUniforms();
 
-            SetModelMatrix(Matrix4.Identity);
-            SetViewMatrix(Matrix4.Identity);
-            SetProjectionMatrix(Matrix4.Identity);
+            Matrix1 = Matrix4.Identity;
+            Matrix2 = Matrix4.Identity;
+            Matrix3 = Matrix4.Identity;
         }
 
         public uint Program { get; }
@@ -55,23 +55,42 @@ namespace Zene.Graphics.Shaders
             }
         }
 
-        private int _uniformProjMatrix;
-        private int _uniformViewMatrix;
-        private int _uniformModelMatrix;
+        private int _uniformMatrix;
 
-        public void SetProjectionMatrix(Matrix4 matrix)
+        private Matrix4 _m1 = Matrix4.Identity;
+        public Matrix4 Matrix1
         {
-            GL.ProgramUniformMatrix4fv(Program, _uniformProjMatrix, false, matrix.GetGLData());
+            get => _m1;
+            set
+            {
+                _m1 = value;
+                SetMatrices();
+            }
+        }
+        private Matrix4 _m2 = Matrix4.Identity;
+        public Matrix4 Matrix2
+        {
+            get => _m2;
+            set
+            {
+                _m2 = value;
+                SetMatrices();
+            }
+        }
+        private Matrix4 _m3 = Matrix4.Identity;
+        public Matrix4 Matrix3
+        {
+            get => _m3;
+            set
+            {
+                _m3 = value;
+                SetMatrices();
+            }
         }
 
-        public void SetViewMatrix(Matrix4 matrix)
+        private void SetMatrices()
         {
-            GL.ProgramUniformMatrix4fv(Program, _uniformViewMatrix, false, matrix.GetGLData());
-        }
-
-        public void SetModelMatrix(Matrix4 matrix)
-        {
-            GL.ProgramUniformMatrix4fv(Program, _uniformModelMatrix, false, matrix.GetGLData());
+            GL.ProgramUniformMatrix4fv(Program, _uniformMatrix, false, (_m1 * _m2 * _m3).GetGLData());
         }
 
         private int _uniformDepthOffset;
@@ -83,9 +102,7 @@ namespace Zene.Graphics.Shaders
 
         private void FindUniforms()
         {
-            _uniformProjMatrix = GL.GetUniformLocation(Program, "projection");
-            _uniformViewMatrix = GL.GetUniformLocation(Program, "view");
-            _uniformModelMatrix = GL.GetUniformLocation(Program, "model");
+            _uniformMatrix = GL.GetUniformLocation(Program, "matrix");
 
             _uniformDepthOffset = GL.GetUniformLocation(Program, "depthOffset");
         }

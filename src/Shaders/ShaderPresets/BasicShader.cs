@@ -1,7 +1,7 @@
 ﻿using Zene.Graphics.Base;
 using Zene.Structs;
 
-namespace Zene.Graphics.Shaders
+namespace Zene.Graphics
 {
     public enum ColourSource
     {
@@ -11,7 +11,7 @@ namespace Zene.Graphics.Shaders
         Texture = 3
     }
 
-    public class BasicShader : IShaderProgram
+    public class BasicShader : IMatrixShader
     {
         public enum Location : uint
         {
@@ -104,10 +104,7 @@ namespace Zene.Graphics.Shaders
         private Matrix4 _m1 = Matrix4.Identity;
         public Matrix4 Matrix1
         {
-            get
-            {
-                return _m1;
-            }
+            get => _m1;
             set
             {
                 _m1 = value;
@@ -117,10 +114,7 @@ namespace Zene.Graphics.Shaders
         private Matrix4 _m2 = Matrix4.Identity;
         public Matrix4 Matrix2
         {
-            get
-            {
-                return _m2;
-            }
+            get => _m2;
             set
             {
                 _m2 = value;
@@ -130,10 +124,7 @@ namespace Zene.Graphics.Shaders
         private Matrix4 _m3 = Matrix4.Identity;
         public Matrix4 Matrix3
         {
-            get
-            {
-                return _m3;
-            }
+            get => _m3;
             set
             {
                 _m3 = value;

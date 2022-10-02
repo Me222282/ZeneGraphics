@@ -2,7 +2,7 @@
 using Zene.Graphics.Base;
 using Zene.Structs;
 
-namespace Zene.Graphics.Shaders
+namespace Zene.Graphics
 {
     public class PostProcessing : PostShader, IFramebuffer
     {

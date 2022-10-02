@@ -2,9 +2,9 @@
 using Zene.Graphics.Base;
 using Zene.Structs;
 
-namespace Zene.Graphics.Shaders
+namespace Zene.Graphics
 {
-    public class LightingShader : IMvpShader
+    public class LightingShader : IMatrixShader
     {
         public enum Location : uint
         {
@@ -35,9 +35,9 @@ namespace Zene.Graphics.Shaders
 
             FindUniforms();
 
-            SetModelMatrix(Matrix4.Identity);
-            SetViewMatrix(Matrix4.Identity);
-            SetProjectionMatrix(Matrix4.Identity);
+            Matrix1 = Matrix4.Identity;
+            Matrix2 = Matrix4.Identity;
+            Matrix3 = Matrix4.Identity;
         }
 
         public uint Program { get; private set; }
@@ -336,23 +336,44 @@ namespace Zene.Graphics.Shaders
             GL.ProgramUniform1i(Program, _uniformDoNormMap, b);
         }
 
-        private int _uniformMatrixM;
-        private int _uniformMatrixV;
-        private int _uniformMatrixP;
+        private int _uniformModelM;
+        private int _uniformVpM;
 
-        public void SetModelMatrix(Matrix4 matrix)
+        private Matrix4 _m1 = Matrix4.Identity;
+        public Matrix4 Matrix1
         {
-            GL.ProgramUniformMatrix4fv(Program, _uniformMatrixM, false, matrix.GetGLData());
+            get => _m1;
+            set
+            {
+                _m1 = value;
+
+                GL.ProgramUniformMatrix4fv(Program, _uniformModelM, false, _m1.GetGLData());
+            }
+        }
+        private Matrix4 _m2 = Matrix4.Identity;
+        public Matrix4 Matrix2
+        {
+            get => _m2;
+            set
+            {
+                _m2 = value;
+                SetMatrices();
+            }
+        }
+        private Matrix4 _m3 = Matrix4.Identity;
+        public Matrix4 Matrix3
+        {
+            get => _m3;
+            set
+            {
+                _m3 = value;
+                SetMatrices();
+            }
         }
 
-        public void SetViewMatrix(Matrix4 matrix)
+        private void SetMatrices()
         {
-            GL.ProgramUniformMatrix4fv(Program, _uniformMatrixV, false, matrix.GetGLData());
-        }
-
-        public void SetProjectionMatrix(Matrix4 matrix)
-        {
-            GL.ProgramUniformMatrix4fv(Program, _uniformMatrixP, false, matrix.GetGLData());
+            GL.ProgramUniformMatrix4fv(Program, _uniformVpM, false, (_m2 * _m3).GetGLData());
         }
 
         private int _uniformMatrixLS;
@@ -380,9 +401,8 @@ namespace Zene.Graphics.Shaders
             _uniformNormalSlot = GL.GetUniformLocation(Program, "uNormalMap");
             _uniformDoNormMap = GL.GetUniformLocation(Program, "normalMapping");
 
-            _uniformMatrixM = GL.GetUniformLocation(Program, "model");
-            _uniformMatrixV = GL.GetUniformLocation(Program, "view");
-            _uniformMatrixP = GL.GetUniformLocation(Program, "projection");
+            _uniformModelM = GL.GetUniformLocation(Program, "modelM");
+            _uniformVpM = GL.GetUniformLocation(Program, "vpM");
 
             _uniformMatrixLS = GL.GetUniformLocation(Program, "lightSpaceMatrix");
 

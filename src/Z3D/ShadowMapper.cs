@@ -1,6 +1,5 @@
 ﻿using System;
 using Zene.Graphics.Base;
-using Zene.Graphics.Shaders;
 using Zene.Structs;
 
 namespace Zene.Graphics.Z3D
@@ -159,7 +158,7 @@ namespace Zene.Graphics.Z3D
         {
             set
             {
-                _shader.SetProjectionMatrix(value);
+                _shader.Matrix3 = value;
             }
         }
         /// <summary>
@@ -169,7 +168,7 @@ namespace Zene.Graphics.Z3D
         {
             set
             {
-                _shader.SetViewMatrix(value);
+                _shader.Matrix2 = value;
             }
         }
         /// <summary>
@@ -179,7 +178,7 @@ namespace Zene.Graphics.Z3D
         {
             set
             {
-                _shader.SetModelMatrix(value);
+                _shader.Matrix1 = value;
             }
         }
     }

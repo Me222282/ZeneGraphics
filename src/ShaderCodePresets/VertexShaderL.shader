@@ -27,9 +27,8 @@ out mat3 TBN;
 out vec3 fragPos;
 out vec4 lightSpacePos;
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+uniform mat4 modelM;
+uniform mat4 vpM;
 
 uniform mat4 lightSpaceMatrix;
 
@@ -39,14 +38,14 @@ void main()
 	//normal = normalize(nMat * vNormal);
 	//vec3 T = normalize(nMat * vTangent);
 	//vec3 B = normalize(nMat * vBitangent);
-	vec3 T = normalize(vec3(model * vec4(vTangent, 0.0)));
-	normal = normalize(vec3(model * vec4(vNormal, 0.0)));
+	vec3 T = normalize(vec3(modelM * vec4(vTangent, 0.0)));
+	normal = normalize(vec3(modelM * vec4(vNormal, 0.0)));
 	vec3 B = normalize(cross(normal, T));
 	TBN = mat3(T, B, normal);
 
 	normal_Coords = normalTexCoord;
 
-	fragPos = vec3(model * vec4(vPosition, 1.0));
+	fragPos = vec3(modelM * vec4(vPosition, 1.0));
 
 	pos_Colour = colour;
 
@@ -59,5 +58,5 @@ void main()
 
 	lightSpacePos = lightSpaceMatrix * vec4(fragPos, 1.0);
 
-	gl_Position = projection * view * vec4(fragPos, 1.0);
+	gl_Position = vpM * vec4(fragPos, 1.0);
 }
