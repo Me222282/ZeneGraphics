@@ -33,7 +33,9 @@ namespace Zene.Graphics
                 "colourType", "uColour", "ambientLight", "cameraPos",
                 "drawLight", "ingorBlackLight", "uTextureSlot", "uNormalMap",
                 "normalMapping", "modelM", "vpM", "lightSpaceMatrix",
-                "uShadowMapSlot", "uMaterial");
+                "uShadowMapSlot",
+                // Start of uMaterial
+                "uMaterial.DiffuseLightSource");
 
             LightNumber = lightNumber;
 
@@ -362,7 +364,7 @@ namespace Zene.Graphics
             Default = 0
         }
 
-        public Material(ColourF diffuseLight, ColourF specularLight, Shine shine)
+        public Material(ColourF3 diffuseLight, ColourF3 specularLight, Shine shine)
         {
             DiffuseLightSource = 1;
             DiffuseLight = diffuseLight;
@@ -375,23 +377,23 @@ namespace Zene.Graphics
             Shine = shine;
         }
 
-        public Material(ColourF diffuseLight, int specTextureSlot, Shine shine)
+        public Material(ColourF3 diffuseLight, int specTextureSlot, Shine shine)
         {
             DiffuseLightSource = 1;
             DiffuseLight = diffuseLight;
             DiffTextureSlot = 0;
 
             SpecularLightSource = 3;
-            SpecularLight = ColourF.Zero;
+            SpecularLight = ColourF3.Zero;
             SpecTextureSlot = specTextureSlot;
 
             Shine = shine;
         }
 
-        public Material(int diffTextureSlot, ColourF specularLight, Shine shine)
+        public Material(int diffTextureSlot, ColourF3 specularLight, Shine shine)
         {
             DiffuseLightSource = 3;
-            DiffuseLight = ColourF.Zero;
+            DiffuseLight = ColourF3.Zero;
             DiffTextureSlot = diffTextureSlot;
 
             SpecularLightSource = 1;
@@ -404,11 +406,11 @@ namespace Zene.Graphics
         public Material(int diffTextureSlot, int specTextureSlot, Shine shine)
         {
             DiffuseLightSource = 3;
-            DiffuseLight = ColourF.Zero;
+            DiffuseLight = ColourF3.Zero;
             DiffTextureSlot = diffTextureSlot;
 
             SpecularLightSource = 3;
-            SpecularLight = ColourF.Zero;
+            SpecularLight = ColourF3.Zero;
             SpecTextureSlot = specTextureSlot;
 
             Shine = shine;
@@ -417,33 +419,33 @@ namespace Zene.Graphics
         public Material(int diffTextureSlot, Source specSource, Shine shine)
         {
             DiffuseLightSource = 3;
-            DiffuseLight = ColourF.Zero;
+            DiffuseLight = ColourF3.Zero;
             DiffTextureSlot = diffTextureSlot;
 
             SpecularLightSource = (int)specSource;
-            SpecularLight = ColourF.Zero;
+            SpecularLight = ColourF3.Zero;
             SpecTextureSlot = 0;
 
             Shine = shine;
         }
 
-        public Material(ColourF diffuseLight, Source specSource, Shine shine)
+        public Material(ColourF3 diffuseLight, Source specSource, Shine shine)
         {
             DiffuseLightSource = 1;
             DiffuseLight = diffuseLight;
             DiffTextureSlot = 0;
 
             SpecularLightSource = (int)specSource;
-            SpecularLight = ColourF.Zero;
+            SpecularLight = ColourF3.Zero;
             SpecTextureSlot = 0;
 
             Shine = shine;
         }
 
-        public Material(Source diffSource, ColourF specularLight, Shine shine)
+        public Material(Source diffSource, ColourF3 specularLight, Shine shine)
         {
             DiffuseLightSource = (int)diffSource;
-            DiffuseLight = ColourF.Zero;
+            DiffuseLight = ColourF3.Zero;
             DiffTextureSlot = 0;
 
             SpecularLightSource = 1;
@@ -456,11 +458,11 @@ namespace Zene.Graphics
         public Material(Source diffSource, int specTextureSlot, Shine shine)
         {
             DiffuseLightSource = (int)diffSource;
-            DiffuseLight = ColourF.Zero;
+            DiffuseLight = ColourF3.Zero;
             DiffTextureSlot = 0;
 
             SpecularLightSource = 3;
-            SpecularLight = ColourF.Zero;
+            SpecularLight = ColourF3.Zero;
             SpecTextureSlot = specTextureSlot;
 
             Shine = shine;
@@ -469,22 +471,22 @@ namespace Zene.Graphics
         public Material(Source diffSource, Source specSource, Shine shine)
         {
             DiffuseLightSource = (int)diffSource;
-            DiffuseLight = ColourF.Zero;
+            DiffuseLight = ColourF3.Zero;
             DiffTextureSlot = 0;
 
             SpecularLightSource = (int)specSource;
-            SpecularLight = ColourF.Zero;
+            SpecularLight = ColourF3.Zero;
             SpecTextureSlot = 0;
 
             Shine = shine;
         }
 
         public int DiffuseLightSource { get; set; }
-        public ColourF DiffuseLight { get; set; }
+        public ColourF3 DiffuseLight { get; set; }
         public int DiffTextureSlot { get; set; }
 
         public int SpecularLightSource { get; set; }
-        public ColourF SpecularLight { get; set; }
+        public ColourF3 SpecularLight { get; set; }
         public int SpecTextureSlot { get; set; }
 
         public Shine Shine { get; set; }
@@ -492,11 +494,11 @@ namespace Zene.Graphics
         private static readonly IUniformStruct.Member[] _members = new IUniformStruct.Member[]
         {
             IUniformStruct.UniformType.Int,
-            IUniformStruct.UniformType.FVec4,
+            IUniformStruct.UniformType.FVec3,
             IUniformStruct.UniformType.Int,
 
             IUniformStruct.UniformType.Int,
-            IUniformStruct.UniformType.FVec4,
+            IUniformStruct.UniformType.FVec3,
             IUniformStruct.UniformType.Int,
 
             IUniformStruct.UniformType.Int

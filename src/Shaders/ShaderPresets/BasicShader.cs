@@ -47,7 +47,7 @@ namespace Zene.Graphics
             {
                 _colour = value;
 
-                SetUniformF(Uniforms[0], (Vector4)value);
+                SetUniformF(Uniforms[1], (Vector4)value);
             }
         }
 
@@ -59,7 +59,7 @@ namespace Zene.Graphics
             {
                 _texSlot = value;
 
-                SetUniformI(Uniforms[0], value);
+                SetUniformI(Uniforms[2], value);
             }
         }
 

@@ -126,14 +126,17 @@ namespace Zene.Graphics
         public void Bind(FrameTarget target) => _multiSFramebuffer.Bind(target);
         public new void Unbind() => _multiSFramebuffer.Unbind();
 
-        public new void Dispose()
+        protected override void Dispose(bool dispose)
         {
-            base.Dispose();
+            base.Dispose(dispose);
 
-            _multiSFramebuffer.Dispose();
-            _framebuffer.Dispose();
+            if (dispose)
+            {
+                _multiSFramebuffer.Dispose();
+                _framebuffer.Dispose();
 
-            _drawingObject.Dispose();
+                _drawingObject.Dispose();
+            }
         }
 
         public void Draw(IFramebuffer destination = null)
@@ -151,7 +154,7 @@ namespace Zene.Graphics
 
             GL.Disable(GLEnum.DepthTest);
 
-            GL.UseProgram(this);
+            base.Bind();
             _framebuffer.GetTexture(FrameAttachment.Colour0).Bind(0);
             TextureSlot = 0;
 
