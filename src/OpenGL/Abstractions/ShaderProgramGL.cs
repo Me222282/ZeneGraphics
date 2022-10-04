@@ -2261,5 +2261,51 @@ namespace Zene.Graphics.Base
                 }
             }
         }
+
+
+        protected float GetUniformF(int location)
+        {
+            float value = 0;
+
+            GL.GetUniformfv(Id, location, &value);
+
+            return value;
+        }
+
+        protected int GetUniformI(int location)
+        {
+            int value = 0;
+
+            GL.GetUniformiv(Id, location, &value);
+
+            return value;
+        }
+
+        protected Vector2 GetUniformF2(int location)
+        {
+            Vector2<float> value = new Vector2<float>();
+
+            GL.GetUniformfv(Id, location, (float*)&value);
+
+            return new Vector2(value.X, value.Y);
+        }
+
+        protected Vector3 GetUniformF3(int location)
+        {
+            Vector3<float> value = new Vector3<float>();
+
+            GL.GetUniformfv(Id, location, (float*)&value);
+
+            return new Vector3(value.X, value.Y, value.Z);
+        }
+
+        protected Vector4 GetUniformF4(int location)
+        {
+            Vector4<float> value = new Vector4<float>();
+
+            GL.GetUniformfv(Id, location, (float*)&value);
+
+            return new Vector4(value.X, value.Y, value.Z, value.W);
+        }
     }
 }

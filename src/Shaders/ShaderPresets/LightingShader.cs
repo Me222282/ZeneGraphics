@@ -34,8 +34,11 @@ namespace Zene.Graphics
                 "drawLight", "ingorBlackLight", "uTextureSlot", "uNormalMap",
                 "normalMapping", "modelM", "vpM", "lightSpaceMatrix",
                 "uShadowMapSlot",
-                // Start of uMaterial
-                "uMaterial.DiffuseLightSource");
+                // uMaterial
+                "uMaterial.DiffuseLightSource", "uMaterial.DiffuseLight",
+                "uMaterial.DiffTextureSlot", "uMaterial.SpecularLightSource",
+                "uMaterial.SpecularLight", "uMaterial.SpecTextureSlot",
+                "uMaterial.Shine");
 
             LightNumber = lightNumber;
 
@@ -86,9 +89,9 @@ namespace Zene.Graphics
         public void SetLight(int index, Light light)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
-
-            //SetUniform(_uLight, index, light);
-
+            
+            SetUniform(_uLight, index, light);
+            /*
             int uIndex = (index * 5) + _uLight;
 
             SetUniformF(uIndex, (Vector3)light.LightColour);
@@ -101,7 +104,7 @@ namespace Zene.Graphics
             {
                 SetUniformF(uIndex + 3, light.Linear);
                 SetUniformF(uIndex + 4, light.Quadratic);
-            }
+            }*/
         }
 
         public void SetLightColour(int index, ColourF lightColour)
@@ -238,7 +241,17 @@ namespace Zene.Graphics
 
         public void SetMaterial(Material material)
         {
-            SetUniform(Uniforms[13], material);
+            //SetUniform(Uniforms[13], material);
+
+            SetUniformI(Uniforms[19], (int)material.Shine);
+            SetUniformI(Uniforms[13], material.DiffuseLightSource);
+
+            SetUniformF(Uniforms[14], (Vector3)material.DiffuseLight);
+            SetUniformI(Uniforms[15], material.DiffTextureSlot);
+            SetUniformI(Uniforms[16], material.SpecularLightSource);
+
+            SetUniformF(Uniforms[17], (Vector3)material.SpecularLight);
+            SetUniformI(Uniforms[18], material.SpecTextureSlot);
         }
 
         private int _texSlot = 0;
