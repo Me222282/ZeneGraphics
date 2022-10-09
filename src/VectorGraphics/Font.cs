@@ -9,6 +9,17 @@ namespace Zene.Graphics
         {
             SpaceWidth = spaceWidth;
             LineHeight = lineHeight;
+            CharSpaceBase = 0d;
+            LineSpaceBase = 0d;
+
+            Name = GetType().Name;
+        }
+        public Font(double spaceWidth, double lineHeight, double charSpace, double lineSpace)
+        {
+            SpaceWidth = spaceWidth;
+            LineHeight = lineHeight;
+            CharSpaceBase = charSpace;
+            LineSpaceBase = lineSpace;
 
             Name = GetType().Name;
         }
@@ -18,12 +29,15 @@ namespace Zene.Graphics
         public double SpaceWidth { get; }
         public double LineHeight { get; }
 
+        public double CharSpaceBase { get; }
+        public double LineSpaceBase { get; }
+
         public abstract CharFontData GetCharacterData(char character);
 
         public virtual string Name { get; }
 
-        public virtual double CharSpace { get; set; } = 0d;
-        public virtual double LineSpace { get; set; } = 0d;
+        //public virtual double CharSpace { get; set; } = 0d;
+        //public virtual double LineSpace { get; set; } = 0d;
 
         public double GetLineWidth(ReadOnlySpan<char> text, double charSpace, int tabSize) => GetLineWidth(text, charSpace, tabSize, 0, out _);
         public double GetLineWidth(ReadOnlySpan<char> text, double charSpace, int tabSize, int startIndex, out int newLineIndex)
@@ -118,7 +132,7 @@ namespace Zene.Graphics
             return result;
         }
 
-        public double GetLineHeight(ReadOnlySpan<char> text)
+        public double GetLineHeight(ReadOnlySpan<char> text, double lineSpace)
         {
             int count = 1;
 
@@ -136,7 +150,7 @@ namespace Zene.Graphics
                 }
             }
 
-            return (count * LineHeight) + ((count - 1) * LineSpace);
+            return (count * LineHeight) + ((count - 1) * lineSpace);
         }
     }
 }

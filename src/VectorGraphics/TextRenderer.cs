@@ -252,7 +252,7 @@ namespace Zene.Graphics
 
             _drawable.DrawMultiple(compText.Length);
         }
-        public void DrawLeftBound(ReadOnlySpan<char> text, Font font) => DrawLeftBound(text, font, font.CharSpace, font.LineSpace);
+        public void DrawLeftBound(ReadOnlySpan<char> text, Font font) => DrawLeftBound(text, font, 0d, 0d);
 
         /*
         public void DrawLeftBound(ReadOnlySpan<char> text, ReadOnlySpan<Colour> colours, Font font, double charSpace, double lineSpace)
@@ -685,7 +685,7 @@ namespace Zene.Graphics
 
             _drawable.DrawMultiple(compText.Length);
         }
-        public void DrawCentred(ReadOnlySpan<char> text, Font font) => DrawCentred(text, font, font.CharSpace, font.LineSpace);
+        public void DrawCentred(ReadOnlySpan<char> text, Font font) => DrawCentred(text, font, 0d, 0d);
 
         protected override void Dispose(bool dispose)
         {
