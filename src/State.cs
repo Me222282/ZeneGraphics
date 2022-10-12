@@ -656,7 +656,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="target">The framebuffer target to test.</param>
         /// <returns></returns>
-        public static IFramebuffer GetBoundFrameBuffer(FrameTarget target)
+        public static IFramebuffer GetBoundFramebuffer(FrameTarget target)
         {
             return target switch
             {
