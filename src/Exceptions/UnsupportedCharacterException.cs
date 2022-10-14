@@ -12,7 +12,7 @@ namespace Zene.Graphics
         }
 
         public UnsupportedCharacterException(char charater)
-            : base($"\'{Regex.Unescape(charater.ToString())}\' is not supported.")
+            : base($"\'{Regex.Unescape(charater.ToString())}\' is not a supported character.")
         {
 
         }

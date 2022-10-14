@@ -93,7 +93,7 @@ namespace Zene.Graphics
         /// </summary>
         public int ClearStencil { get; set; } = 0;
 
-        public override void Clear(BufferBit buffer)
+        public new void Clear(BufferBit buffer)
         {
             if ((buffer & BufferBit.Colour) == BufferBit.Colour)
             {
@@ -329,8 +329,8 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void CopyFrameBuffer(IFramebuffer destination, BufferBit mask, TextureSampling filter)
         {
-            BlitBuffer(destination, 
-                new Rectangle(0, 0, _targetWidth, _targetHeight), 
+            BlitBuffer(destination,
+                new Rectangle(0, 0, _targetWidth, _targetHeight),
                 new Rectangle(0, 0, destination.Properties.Width, destination.Properties.Height), mask, filter);
         }
 
