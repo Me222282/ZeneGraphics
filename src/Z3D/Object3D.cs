@@ -358,7 +358,7 @@ namespace Zene.Graphics.Z3D
                 {
                     for (int i = 0; i < f.Count; i++)
                     {
-                        Vector3I index = f[i] - 1;
+                        Vector3I index = f[i] - (Vector3I)1;
 
                         indices.Add((uint)(vertices.Count / 3));
 
