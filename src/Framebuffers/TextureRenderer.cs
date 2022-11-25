@@ -281,16 +281,17 @@ namespace Zene.Graphics
                         texture.SetData(0, _targetWidth, _targetHeight, BaseFormat.Rgb, GLArray<byte>.Empty);
                     }
                 }
-                // Unbind texture
-                State.NullBind(Target.Texture2D);
 
                 // Depth attachment
                 if (_depthTex != null)
                 {
-                    _depthTex.SetData(0, _targetWidth, _targetHeight, BaseFormat.Rgb, GLArray<byte>.Empty);
+                    _depthTex.SetData(0, _targetWidth, _targetHeight, BaseFormat.DepthComponent, GLArray<byte>.Empty);
                     _depthTex.Unbind();
                     return;
                 }
+
+                // Unbind texture
+                State.NullBind(Target.Texture2D);
 
                 if (_depthRen != null)
                 {

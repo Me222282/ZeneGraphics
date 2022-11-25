@@ -76,6 +76,11 @@ namespace Zene.Graphics
         internal GL.TextureBinding[] boundTextures;
 
         internal RectangleI viewport;
+        internal DepthFunction depthFunc = DepthFunction.Less;
+        internal bool depthMask = true;
+        internal PolygonMode polygonMode = PolygonMode.Fill;
+        internal BlendFunction sfactorBlendFunc = BlendFunction.One;
+        internal BlendFunction dfactorBlendFunc = BlendFunction.Zero;
 
         internal double version;
 

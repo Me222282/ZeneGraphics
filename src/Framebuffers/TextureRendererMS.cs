@@ -273,8 +273,6 @@ namespace Zene.Graphics
                         texture.CreateData(_targetWidth, _targetHeight, Samples, FixedSampleLocations);
                     }
                 }
-                // Unbind texture
-                State.NullBind(Target.Texture2D);
 
                 // Depth attachment
                 if (_depthTex != null)
@@ -283,6 +281,9 @@ namespace Zene.Graphics
                     _depthTex.Unbind();
                     return;
                 }
+
+                // Unbind texture
+                State.NullBind(Target.Texture2D);
 
                 if (_depthRen != null)
                 {

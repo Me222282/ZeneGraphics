@@ -305,7 +305,7 @@ namespace Zene.Graphics
         /// </summary>
         public int Height => Properties.Height;
 
-        private static void SetEmptyTexture(ITexture texture, int width, int height, int level)
+        private static void SetEmptyTexture(ITexture texture, int width, int height, int level, BaseFormat form)
         {
             // TexImage function dones't work on texture
             if (texture.Properties.Immutable)
@@ -332,18 +332,18 @@ namespace Zene.Graphics
             // 1d texture
             if (texture.Target.Is1D())
             {
-                texture.TexImage1D(level, width, BaseFormat.Rgb, TextureData.Byte, IntPtr.Zero);
+                texture.TexImage1D(level, width, form, TextureData.Byte, IntPtr.Zero);
                 return;
             }
 
             // 2d texture
             if (texture.Target.Is2D())
             {
-                texture.TexImage2D(level, width, height, BaseFormat.Rgb, TextureData.Byte, IntPtr.Zero);
+                texture.TexImage2D(level, width, height, form, TextureData.Byte, IntPtr.Zero);
                 return;
             }
 
-            texture.TexImage3D(level, width, height, texture.GetDepth(level), BaseFormat.Rgb, TextureData.Byte, IntPtr.Zero);
+            texture.TexImage3D(level, width, height, texture.GetDepth(level), form, TextureData.Byte, IntPtr.Zero);
         }
         /// <summary>
         /// Reassigns all attachments at <paramref name="level"/> to the size <paramref name="width"/> and <paramref name="height"/>.
@@ -368,7 +368,7 @@ namespace Zene.Graphics
                 // Make sure texture exists
                 if (texture != null)
                 {
-                    SetEmptyTexture(texture, width, height, level);
+                    SetEmptyTexture(texture, width, height, level, BaseFormat.Rgb);
                     texture.Unbind();
                 }
             }
@@ -382,7 +382,7 @@ namespace Zene.Graphics
             {
                 ITexture texture = (ITexture)_depth;
 
-                SetEmptyTexture(texture, width, height, level);
+                SetEmptyTexture(texture, width, height, level, BaseFormat.DepthComponent);
                 texture.Unbind();
                 return;
             }

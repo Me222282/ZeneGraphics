@@ -41,6 +41,47 @@ namespace Zene.Graphics
         VertexArray = GLEnum.VertexArray
     }
 
+    public enum DepthFunction : uint
+    {
+        Never = GLEnum.Never,
+        Less = GLEnum.Less,
+        Equal = GLEnum.Equal,
+        LessEqual = GLEnum.Lequal,
+        GreaterEqual = GLEnum.Gequal,
+        NotEqual = GLEnum.Notequal,
+        Always = GLEnum.Always
+    }
+
+    public enum PolygonMode : uint
+    {
+        Point = GLEnum.Point,
+        Line = GLEnum.Line,
+        Fill = GLEnum.Fill,
+    }
+
+    public enum BlendFunction : uint
+    {
+        Zero = GLEnum.Zero,
+        One = GLEnum.One,
+        SourceColour = GLEnum.SrcColour,
+        OneMinusSourceColour = GLEnum.OneMinusSrcColour,
+        DestinationColour = GLEnum.DstColour,
+        OneMinusDestinationColour = GLEnum.OneMinusDstColour,
+        SourceAlpha = GLEnum.SrcAlpha,
+        OneMinusSourceAlpha = GLEnum.OneMinusSrcAlpha,
+        DestinationAlpha = GLEnum.DstAlpha,
+        OneMinusDestinationAlpha = GLEnum.OneMinusDstAlpha,
+        ConstantColour = GLEnum.ConstantColour,
+        OneMinusConstantColour = GLEnum.OneMinusConstantColour,
+        ConstantAlpha = GLEnum.ConstantAlpha,
+        OneMinusConstantAlpha = GLEnum.OneMinusConstantAlpha,
+        SourceAlphaSaturate = GLEnum.SrcAlphaSaturate,
+        SourceOneColour = GLEnum.Src1Colour,
+        OneMinusSourceOneColour = GLEnum.OneMinusSrc1Colour,
+        SourceOneAlpha = GLEnum.Src1Alpha,
+        OneMinusSourceOneAlpha = GLEnum.OneMinusSrc1Alpha
+    }
+
     public static unsafe class State
     {
         public static void Init(Func<string, IntPtr> func, double version)
@@ -85,6 +126,40 @@ namespace Zene.Graphics
         {
             get => GL.context.viewport.Location;
             set => GL.Viewport(value.X, value.Y, GL.context.viewport.Width, GL.context.viewport.Height);
+        }
+
+        /// <summary>
+        /// Specify the function used for depth buffer comparisons.
+        /// </summary>
+        public static DepthFunction DepthFunction
+        {
+            get => GL.context.depthFunc;
+            set => GL.DepthFunc(value);
+        }
+        /// <summary>
+        /// Select a polygon rasterization mode.
+        /// </summary>
+        public static PolygonMode PolygonMode
+        {
+            get => GL.context.polygonMode;
+            set => GL.PolygonMode(GLEnum.FrontAndBack, value);
+        }
+
+        /// <summary>
+        /// Get or set blend function applied to the source colour.
+        /// </summary>
+        public static BlendFunction SourceScaleBlending
+        {
+            get => GL.context.sfactorBlendFunc;
+            set => GL.BlendFunc(value, GL.context.dfactorBlendFunc);
+        }
+        /// <summary>
+        /// Get or set blend function applied to the destination colour.
+        /// </summary>
+        public static BlendFunction DestinationScaleBlending
+        {
+            get => GL.context.dfactorBlendFunc;
+            set => GL.BlendFunc(GL.context.sfactorBlendFunc, value);
         }
 
         /// <summary>
@@ -226,6 +301,14 @@ namespace Zene.Graphics
 
                 GL.Disable(GLEnum.DepthTest);
             }
+        }
+        /// <summary>
+        /// Enable or disable writing into the depth buffer.
+        /// </summary>
+        public static bool DepthMask
+        {
+            get => GL.context.depthMask;
+            set => GL.DepthMask(value);
         }
         /// <summary>
         /// Determines whether to dither colour components or indices before they are written to the colour buffer.

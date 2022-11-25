@@ -326,9 +326,18 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(1.0)]
-		public static void BlendFunc(uint sfactor, uint dfactor)
+		public static void BlendFunc(BlendFunction sfactor, BlendFunction dfactor)
 		{
-			Functions.BlendFunc(sfactor, dfactor);
+			if (sfactor == context.sfactorBlendFunc &&
+				dfactor == context.dfactorBlendFunc)
+            {
+				return;
+            }
+
+			context.sfactorBlendFunc = sfactor;
+			context.dfactorBlendFunc = dfactor;
+
+			Functions.BlendFunc((uint)sfactor, (uint)dfactor);
 		}
 
 		[OpenGLSupport(4.0)]
@@ -600,14 +609,22 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(1.0)]
-		public static void DepthFunc(uint func)
+		public static void DepthFunc(DepthFunction func)
 		{
-			Functions.DepthFunc(func);
+			if (context.depthFunc == func) { return; }
+
+			context.depthFunc = func;
+
+			Functions.DepthFunc((uint)func);
 		}
 
 		[OpenGLSupport(1.0)]
 		public static void DepthMask(bool flag)
 		{
+			if (context.depthMask == flag) { return; }
+
+			context.depthMask = flag;
+
 			Functions.DepthMask(flag);
 		}
 
@@ -1819,9 +1836,13 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(1.0)]
-		public static void PolygonMode(uint face, uint mode)
+		public static void PolygonMode(uint face, PolygonMode mode)
 		{
-			Functions.PolygonMode(face, mode);
+			if (context.polygonMode == mode) { return; }
+
+			context.polygonMode = mode;
+
+			Functions.PolygonMode(face, (uint)mode);
 		}
 
 		[OpenGLSupport(1.1)]

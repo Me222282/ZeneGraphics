@@ -4233,7 +4233,11 @@ namespace Zene.Graphics.Base
 		[OpenGLSupport(1.0)]
 		public static void Viewport(int x, int y, int width, int height)
 		{
-			context.viewport = new RectangleI(x, y, width, height);
+			RectangleI vp = new RectangleI(x, y, width, height);
+
+			if (context.viewport == vp) { return; }
+
+			context.viewport = vp;
 
 			Functions.Viewport(x, y, width, height);
 		}

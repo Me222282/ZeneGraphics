@@ -151,10 +151,10 @@ namespace Zene.Graphics
 
             if (Manager == Type.Exception)
             {
-                throw new Exception($"{GetGLError(error)}");
+                throw new Exception($"{GetGLErrorName(error)}");
             }
 
-            string message = $"{GetGLError(error)} thrown at \n{Environment.StackTrace}.";
+            string message = $"{GetGLErrorName(error)} thrown at \n{Environment.StackTrace}.";
 
             if ((GL.Version >= 4.3) && State.OutputDebug && !ResolveGLError)
             {
@@ -203,7 +203,7 @@ namespace Zene.Graphics
         /// Determines the string equivalent of OpenGL error <paramref name="error"/>.
         /// </summary>
         /// <param name="error">The error to retrieve the string of.</param>
-        public static string GetGLError(uint error)
+        public static string GetGLErrorName(uint error)
         {
             return error switch
             {
