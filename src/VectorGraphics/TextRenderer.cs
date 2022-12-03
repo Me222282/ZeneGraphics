@@ -19,7 +19,7 @@ namespace Zene.Graphics
 
             public void SetMatrix(Matrix4 m)
             {
-                SetUniformF(Uniforms[0], ref m);
+                SetUniformF(Uniforms[0], m);
             }
 
             public Colour Colour
@@ -43,7 +43,7 @@ namespace Zene.Graphics
 
             public void SetMatrix(Matrix4 m)
             {
-                SetUniformF(Uniforms[0], ref m);
+                SetUniformF(Uniforms[0], m);
             }
 
             public Colour Colour

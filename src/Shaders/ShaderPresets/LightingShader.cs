@@ -147,6 +147,11 @@ namespace Zene.Graphics
             SetUniform(_uSpotLight, index, light);
         }
 
+        public void TEMP()
+        {
+            Console.WriteLine(GetUniformF3(_uSpotLight + 2));
+        }
+
         public void SetSpotLightColour(int index, ColourF lightColour)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
@@ -313,7 +318,7 @@ namespace Zene.Graphics
             {
                 _m1 = value;
 
-                SetUniformF(Uniforms[9], ref value);
+                SetUniformF(Uniforms[9], value);
             }
         }
         private Matrix4 _m2 = Matrix4.Identity;
@@ -339,8 +344,7 @@ namespace Zene.Graphics
 
         private void SetMatrices()
         {
-            Matrix4 matrix = _m2 * _m3;
-            SetUniformF(Uniforms[10], ref matrix);
+            SetUniformF(Uniforms[10], _m2 * _m3);
         }
 
         private Matrix4 _lsm = Matrix4.Identity;
@@ -351,7 +355,7 @@ namespace Zene.Graphics
             {
                 _lsm = value;
 
-                SetUniformF(Uniforms[11], ref value);
+                SetUniformF(Uniforms[11], value);
             }
         }
     }

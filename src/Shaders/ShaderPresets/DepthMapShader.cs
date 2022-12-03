@@ -9,7 +9,7 @@ namespace Zene.Graphics
             Create(ShaderPresets.DepthMapVertex, ShaderPresets.DepthMapFragment,
                   "matrix", "depthOffset");
 
-            SetUniformF(Uniforms[0], ref Matrix4.Identity);
+            SetUniformF(Uniforms[0], Matrix4.Identity);
         }
 
         private Matrix4 _m1 = Matrix4.Identity;
@@ -45,8 +45,7 @@ namespace Zene.Graphics
 
         private void SetMatrices()
         {
-            Matrix4 matrix = _m1 * _m2 * _m3;
-            SetUniformF(Uniforms[0], ref matrix);
+            SetUniformF(Uniforms[0], _m1 * _m2 * _m3);
         }
 
         private double _depthOffset = 0d;

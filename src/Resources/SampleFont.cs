@@ -1,6 +1,4 @@
 ﻿using System.IO;
-using Zene.Graphics;
-using Zene.Structs;
 
 namespace Zene.Graphics
 {
@@ -11,12 +9,7 @@ namespace Zene.Graphics
         {
             // Load font image
             byte[] byteData = Bitmap.ExtractData(new MemoryStream(Resources.SampleFont), out int w, out int h, close:true);
-            // Convert to one channel GLArray
-            GLArray<Vector2<byte>> texData = new GLArray<Vector2<byte>>(w, h);
-            for (int i = 0; i < texData.Length; i++)
-            {
-                texData[i] = new Vector2<byte>(byteData[i * 4], 0);
-            }
+
             // Create and setup texture
             SourceTexture = new Texture2D(TextureFormat.R8, TextureData.Byte)
             {
@@ -25,7 +18,7 @@ namespace Zene.Graphics
                 MagFilter = TextureSampling.Blend
             };
             // Assign data
-            SourceTexture.SetData(w, h, BaseFormat.Rg, texData);
+            SourceTexture.SetData(w, h, BaseFormat.Rgba, new GLArray<byte>(w, h, 4, byteData));
 
             SourceTexture.CreateMipMap();
         }

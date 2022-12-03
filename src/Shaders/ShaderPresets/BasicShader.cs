@@ -24,7 +24,7 @@ namespace Zene.Graphics
             Create(ShaderPresets.BasicVertex, ShaderPresets.BasicFragment,
                   "colourType", "uColour", "uTextureSlot", "matrix");
 
-            SetUniformF(Uniforms[3], ref Matrix4.Identity);
+            SetUniformF(Uniforms[3], Matrix4.Identity);
         }
 
         private ColourSource _source = 0;
@@ -96,8 +96,7 @@ namespace Zene.Graphics
 
         private void SetMatrices()
         {
-            Matrix4 matrix = _m1 * _m2 * _m3;
-            SetUniformF(Uniforms[3], ref matrix);
+            SetUniformF(Uniforms[3], _m1 * _m2 * _m3);
         }
     }
 }
