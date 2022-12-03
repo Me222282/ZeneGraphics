@@ -7,55 +7,51 @@ namespace Zene.Graphics
     /// </summary>
     public struct CharFontData
     {
-        public CharFontData(Vector2 texCoordOffset, Vector2 texSize, Vector2 size, Vector2 extraOffset)
+        public CharFontData(Vector2I texPos, Vector2I texSize)
         {
-            TextureCoordOffset = texCoordOffset;
-            TextureRefSize = texSize;
-            Size = size;
-            ExtraOffset = extraOffset;
+            TexturePosision = texPos;
+            Size = texSize;
+            ExtraOffset = 0;
             Buffer = 0;
 
             Supported = true;
         }
-        public CharFontData(Vector2 texCoordOffset, Vector2 texSize, Vector2 size, Vector2 extraOffset, double buffer)
+        public CharFontData(Vector2I texPos, Vector2I texSize, Vector2I offset)
         {
-            TextureCoordOffset = texCoordOffset;
-            TextureRefSize = texSize;
-            Size = size;
-            ExtraOffset = extraOffset;
+            TexturePosision = texPos;
+            Size = texSize;
+            ExtraOffset = offset;
+            Buffer = 0;
+
+            Supported = true;
+        }
+        public CharFontData(Vector2I texPos, Vector2I texSize, Vector2I offset, int buffer)
+        {
+            TexturePosision = texPos;
+            Size = texSize;
+            ExtraOffset = offset;
             Buffer = buffer;
 
             Supported = true;
         }
-        public CharFontData(Vector2 texCoordOffset, Vector2 texSize)
-        {
-            TextureCoordOffset = texCoordOffset;
-            TextureRefSize = texSize;
-            Size = Vector2.One;
-            ExtraOffset = Vector2.Zero;
-            Buffer = 0;
 
-            Supported = true;
-        }
-
-        public Vector2 TextureCoordOffset { get; set; }
-        public Vector2 TextureRefSize { get; set; }
-        public Vector2 Size { get; set; }
-        public Vector2 ExtraOffset { get; set; }
-        public double Buffer { get; set; }
+        public Vector2I TexturePosision { get; set; }
+        public Vector2I Size { get; set; }
+        public Vector2I ExtraOffset { get; set; }
+        public int Buffer { get; set; }
         public bool Supported { get; }
 
         public override string ToString()
         {
             if (!Supported) { return "Unsupported character"; }
 
-            return $"CharFontData\n{{\n    Size: [{Size}]\n    Offset: [{ExtraOffset}]\n    TexSize: [{TextureRefSize}]\n    TexOffset: [{TextureCoordOffset}]\n     Buffer: [{Buffer}]\n}}";
+            return $"CharFontData\n{{\n    Offset: [{ExtraOffset}]\n    Size: [{Size}]\n    TexPos: [{TexturePosision}]\n     Buffer: [{Buffer}]\n}}";
         }
         public string ToString(string format)
         {
             if (!Supported) { return "Unsupported character"; }
 
-            return $"CharFontData\n{{\n    Size: [{Size.ToString(format)}]\n    Offset: [{ExtraOffset.ToString(format)}]\n    TexSize: [{TextureRefSize.ToString(format)}]\n    TexOffset: [{TextureCoordOffset.ToString(format)}]\n     Buffer: [{Buffer.ToString(format)}]\n}}";
+            return $"CharFontData\n{{\n    Offset: [{ExtraOffset.ToString(format)}]\n    Size: [{Size.ToString(format)}]\n    TexPos: [{TexturePosision.ToString(format)}]\n     Buffer: [{Buffer.ToString(format)}]\n}}";
         }
 
         public static CharFontData Unsupported { get; } = new CharFontData();

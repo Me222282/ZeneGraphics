@@ -1,96 +1,117 @@
 ﻿using System;
 using System.Collections.Generic;
+using Zene.Structs;
 
 namespace Zene.Graphics
 {
     public abstract class Font
     {
-        public Font(double spaceWidth, double lineHeight)
+        public Font(int spaceWidth, int lineHeight, int baseLineSpace = 0)
         {
             SpaceWidth = spaceWidth;
             LineHeight = lineHeight;
-            CharSpaceBase = 0d;
-            LineSpaceBase = 0d;
-
-            Name = GetType().Name;
-        }
-        public Font(double spaceWidth, double lineHeight, double charSpace, double lineSpace)
-        {
-            SpaceWidth = spaceWidth;
-            LineHeight = lineHeight;
-            CharSpaceBase = charSpace;
-            LineSpaceBase = lineSpace;
+            BaseLineSpace = baseLineSpace;
 
             Name = GetType().Name;
         }
 
-        public abstract void BindTexture(uint slot);
+        public abstract ITexture SourceTexture { get; }
 
-        public double SpaceWidth { get; }
-        public double LineHeight { get; }
-
-        public double CharSpaceBase { get; }
-        public double LineSpaceBase { get; }
+        public int SpaceWidth { get; }
+        public int LineHeight { get; }
+        public int BaseLineSpace { get; }
 
         public abstract CharFontData GetCharacterData(char character);
 
         public virtual string Name { get; }
 
-        //public virtual double CharSpace { get; set; } = 0d;
-        //public virtual double LineSpace { get; set; } = 0d;
-
-        public double GetLineWidth(ReadOnlySpan<char> text, double charSpace, int tabSize) => GetLineWidth(text, charSpace, tabSize, 0, out _);
-        public double GetLineWidth(ReadOnlySpan<char> text, double charSpace, int tabSize, int startIndex, out int newLineIndex)
+        public Vector2I GetFrameSize(ReadOnlySpan<char> text, int charSpace, int lineSpace, int tabSize)
         {
-            newLineIndex = 0;
-
             // No text
-            if (text.Length == 0){ return 0; }
+            if (text.Length == 0) { return 0; }
 
-            // Width of line - starts with all the line spaces between each charater
-            double result = 0;
+            int maxWidth = 0;
+            int maxHeight = LineHeight;
 
-            for (int i = startIndex; i < text.Length; i++)
+            int currentWidth = 0;
+            int extraHeight = 0;
+
+            for (int i = 0; i < text.Length; i++)
             {
                 // No character - it is null
                 if (text[i] == '\0') { continue; }
 
                 if (text[i] == ' ')
                 {
-                    result += SpaceWidth + charSpace;
+                    currentWidth += SpaceWidth + charSpace;
                     continue;
                 }
                 if (text[i] == '\t')
                 {
-                    result += (SpaceWidth * tabSize) + charSpace;
+                    currentWidth += (SpaceWidth * tabSize) + charSpace;
                     continue;
                 }
                 // End of line
                 if (text[i] == '\n')
                 {
-                    newLineIndex = i;
-                    break;
+                    // Sometimes there is both
+                    if (text.Length > (i + 1) && text[i + 1] == '\r')
+                    {
+                        continue;
+                    }
+
+                    if (maxWidth < currentWidth)
+                    {
+                        maxWidth = currentWidth;
+                    }
+                    currentWidth = 0;
+                    extraHeight = 0;
+                    maxHeight += LineHeight + lineSpace;
+                    continue;
+                }
+                // New lines for some operating systems
+                if (text[i] == '\r')
+                {
+                    // Sometimes there is both
+                    if (text.Length > (i + 1) && text[i + 1] != '\n')
+                    {
+                        if (maxWidth < currentWidth)
+                        {
+                            maxWidth = currentWidth;
+                        }
+                        currentWidth = 0;
+                        extraHeight = 0;
+                        maxHeight += LineHeight + lineSpace;
+                    }
+                    continue;
                 }
 
                 CharFontData charData = GetCharacterData(text[i]);
 
                 // Add charater width
-                result += charData.Size.X + charData.Buffer + charSpace;
+                currentWidth += charData.Size.X + charData.Buffer + charSpace;
+
+                int height = -charData.ExtraOffset.Y - BaseLineSpace;
+                if (extraHeight < height)
+                {
+                    extraHeight = height;
+                }
             }
 
-            // If there was no new line character found - newLineIndex doesn't exist
-            if (newLineIndex == 0 && result != 0)
+            if (maxWidth < currentWidth)
             {
-                newLineIndex = text.Length;
+                maxWidth = currentWidth;
             }
-            // Remove extra line space at end
-            return result - charSpace;
+
+            return (maxWidth, maxHeight + extraHeight + BaseLineSpace);
         }
 
-        public List<double> GetLineWidths(ReadOnlySpan<char> text, double charSpace, int tabSize)
+        internal List<double> GetLineWidths(ReadOnlySpan<char> text, double charSpace, int tabSize, double multiplier)
         {
             // No text
             if (text.Length == 0) { return new List<double>(); }
+
+            double sw = SpaceWidth * multiplier;
 
             // Width of line - starts with all the line spaces between each charater
             List<double> result = new List<double>()
@@ -107,12 +128,12 @@ namespace Zene.Graphics
 
                 if (text[i] == ' ')
                 {
-                    result[currentLine] += SpaceWidth + charSpace;
+                    result[currentLine] += sw + charSpace;
                     continue;
                 }
                 if (text[i] == '\t')
                 {
-                    result[currentLine] += (SpaceWidth * tabSize) + charSpace;
+                    result[currentLine] += (sw * tabSize) + charSpace;
                     continue;
                 }
                 // End of line
@@ -126,31 +147,10 @@ namespace Zene.Graphics
                 CharFontData charData = GetCharacterData(text[i]);
 
                 // Add charater width
-                result[currentLine] += charData.Size.X + charData.Buffer + charSpace;
+                result[currentLine] += ((charData.Size.X + charData.Buffer) * multiplier) + charSpace;
             }
 
             return result;
-        }
-
-        public double GetLineHeight(ReadOnlySpan<char> text, double lineSpace)
-        {
-            int count = 1;
-
-            for (int i = 0; i < text.Length; i++)
-            {
-                if (text[i] == '\n')
-                {
-                    count++;
-                    continue;
-                }
-                if (text[i] == '\r' && (text.Length > (i + 1) && text[i + 1] != '\n'))
-                {
-                    count++;
-                    continue;
-                }
-            }
-
-            return (count * LineHeight) + ((count - 1) * lineSpace);
         }
     }
 }

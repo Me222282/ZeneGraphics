@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Zene.Graphics.Base;
@@ -485,3 +486,4 @@ namespace Zene.Graphics
         }
     }
 }
+*/

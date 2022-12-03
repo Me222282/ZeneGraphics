@@ -1,35 +1,56 @@
 ﻿#version 330 core
 
-layout(location = 0) out vec4 colour;
+/***********************************************************************
+*
+* Copyright (c) 2019-2022 Barbara Geller
+* Copyright (c) 2019-2022 Ansel Sermersheim
+*
+* This file is part of CsPaint.
+*
+* CsPaint is free software, released under the BSD 2-Clause license.
+* For license details refer to LICENSE provided with this project.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* https://opensource.org/licenses/BSD-2-Clause
+*
+***********************************************************************/
 
+layout(location = 0) out vec4 outColour;
+
+//in vec3 inColour;
 in vec2 tex_Coords;
 in vec4 charColour;
-
-uniform sampler2D uTextureSlot;
 uniform vec4 uColour;
-uniform int uColurSource;
+
+uniform sampler2D fontSampler;
+
+float median(float r, float g, float b)
+{
+    return max(min(r, g), min(max(r, g), b));
+}
+
+const float smoothing = 1.0 / 64.0;
+//const float smoothing = 0.0;
+const float thickness = 0.25;
 
 void main()
 {
-	// Get texel
-	vec4 tex = texture(uTextureSlot, tex_Coords);
+    vec3 fontSample = texture(fontSampler, tex_Coords).rgb;
+    //float sigDist = median(fontSample.r, fontSample.g, fontSample.b);
+    //float opacity = smoothstep(0.5 - smoothing, 0.5 + smoothing, fontSample.r);
+    //float opacity = smoothstep(0.5 - smoothing, 0.5 + smoothing, sigDist);
+    //float opacity = fontSample.r;
 
-	colour = vec4(uColour.rgb, uColour.a * tex.r);
-	return;
+    float opacity = smoothstep(1.0 - thickness - smoothing, 1.0 - thickness + smoothing, fontSample.r);
 
-	// Use texel as opacity
-	switch (uColurSource)
-	{
-		case 1:
-			colour = vec4(uColour.rgb, uColour.a * tex.r);
-			return;
+    //if (opacity < 0.5) { discard; }
 
-		case 2:
-			colour = vec4(charColour.rgb, charColour.a * tex.r);
-			return;
+    // Insignificant
+    if (opacity < 0.05) { discard; }
 
-		default:
-			colour = vec4(1.0, 1.0, 1.0, tex.r);
-			return;
-	}
+    //outColour = vec4(charColour.rgb, charColour.a * opacity);
+    outColour = vec4(uColour.rgb, uColour.a * opacity);
 }

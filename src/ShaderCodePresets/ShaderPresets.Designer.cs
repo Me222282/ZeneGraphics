@@ -89,7 +89,7 @@ namespace Zene.Graphics {
         ///			break;
         ///
         ///		default:
-        ///			colour = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        ///			colour = vec4(1.0, 1.0, 1.0, 1.0);
         ///			break;
         ///	}
         ///}.
@@ -146,15 +146,13 @@ namespace Zene.Graphics {
         ///
         ///layout(location = 0) in vec3 vPosition;
         ///
-        ///uniform mat4 projection;
-        ///uniform mat4 view;
-        ///uniform mat4 model;
+        ///uniform mat4 matrix;
         ///
         ///uniform float depthOffset;
         ///
         ///void main()
         ///{
-        ///	vec4 pos = (projection * view * model) * vec4(vPosition, 1.0);
+        ///	vec4 pos = (matrix) * vec4(vPosition, 1.0);
         ///
         ///	pos.z += depthOffset;
         ///
@@ -329,7 +327,7 @@ namespace Zene.Graphics {
         ///
         ///layout(location = 0) in vec3 vPosition;
         ///layout(location = 1) in vec2 texCoord;
-        ///// Instance data
+        /// // Instance data
         ///layout(location = 2) in vec2 offset;
         ///layout(location = 5) in vec2 size;
         ///layout(location = 3) in vec2 texOffset;
@@ -360,20 +358,19 @@ namespace Zene.Graphics {
         /// <summary>
         ///   Looks up a localized string similar to #version 330 core
         ///
-        ///layout(location = 0) out vec4 colour;
-        ///
-        ///in vec2 tex_Coords;
-        ///
-        ///uniform sampler2D uTextureSlot;
-        ///uniform vec4 uColour;
-        ///
-        ///void main()
-        ///{
-        ///	// Get texel
-        ///	vec4 tex = texture(uTextureSlot, tex_Coords);
-        ///	// Use texel as opacity
-        ///	colour = vec4(uColour.rgb, uColour.a * tex.r);
-        ///}.
+        /// /***********************************************************************
+        ///*
+        ///* Copyright (c) 2019-2022 Barbara Geller
+        ///* Copyright (c) 2019-2022 Ansel Sermersheim
+        ///*
+        ///* This file is part of CsPaint.
+        ///*
+        ///* CsPaint is free software, released under the BSD 2-Clause license.
+        ///* For license details refer to LICENSE provided with this project.
+        ///*
+        ///* CopperSpice is distributed in the hope that it will be useful,
+        ///* but WITHOUT ANY WARRANTY; without even the implied warranty of
+        ///* MERCHANTABILI [rest of string was truncated]&quot;;.
         /// </summary>
         public static string TextFrag {
             get {
@@ -384,23 +381,26 @@ namespace Zene.Graphics {
         /// <summary>
         ///   Looks up a localized string similar to #version 330 core
         ///
-        ///layout(location = 0) in vec3 vPosition;
-        ///layout(location = 1) in vec2 texCoord;
-        ///layout(location = 2) in vec2 offset;
-        ///layout(location = 5) in vec2 size;
-        ///layout(location = 3) in vec2 texOffset;
-        ///layout(location = 4) in vec2 texSize;
+        ///layout(location = 1) in vec3 vPosition;
+        ///layout(location = 2) in vec2 texCoord;
+        /// // Instance data
+        ///layout(location = 3) in vec2 offset;
+        ///layout(location = 6) in vec2 size;
+        ///layout(location = 4) in vec2 texOffset;
+        ///layout(location = 5) in vec2 texSize;
+        ///layout(location = 7) in vec4 colour;
         ///
         ///out vec2 tex_Coords;
+        ///out vec4 charColour;
         ///
         ///uniform mat4 matrix;
         ///
         ///void main()
         ///{
+        ///	charColour = colour;
         ///	tex_Coords = (texCoord * texSize) + texOffset;
         ///
-        ///	gl_Position = matrix * vec4((vPosition.xy * size) + offset, vPosition.z, 1);
-        ///}.
+        ///	gl_Position = matrix * vec4((vPositio [rest of string was truncated]&quot;;.
         /// </summary>
         public static string TextVert {
             get {

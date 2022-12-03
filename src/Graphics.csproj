@@ -24,6 +24,9 @@
     <None Update="glfw\win64\glfw3.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\SampleFont.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ShaderPresets\FragmentShaderDM.shader">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
@@ -55,10 +58,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="ShaderCodePresets.Designer.cs">
+    <Compile Update="Resources\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>ShaderPresets.resx</DependentUpon>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Update="ShaderCodePresets\ShaderPresets.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -68,6 +71,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="ShaderCodePresets\ShaderPresets.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ShaderPresets.Designer.cs</LastGenOutput>
