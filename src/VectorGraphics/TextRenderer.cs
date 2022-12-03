@@ -257,7 +257,7 @@ namespace Zene.Graphics
                     // Index in compressed text shouldn't be changed - it has no white space
                     continue;
                 }
-                CharFontData charData = font.GetCharacterData(text[i]);
+                CharFontData charData = font.GetCharacterData(text[i], Clamp(text, i - 1), Clamp(text, i + 1));
 
                 if (!charData.Supported)
                 {
@@ -301,6 +301,17 @@ namespace Zene.Graphics
 
         private readonly M2Shader _m2Shader;
         private readonly ArrayBuffer<Vector2> _instanceData;
+
+        private static T Clamp<T>(ReadOnlySpan<T> a, int index)
+        {
+            if (a.Length <= index ||
+                index < 0)
+            {
+                return default;
+            }
+
+            return a[index];
+        }
 
         private const int _blockSize = 4;
         private int _m2Capacity;
@@ -420,7 +431,7 @@ namespace Zene.Graphics
                     // Index in compressed text shouldn't be changed - it has no white space
                     continue;
                 }
-                CharFontData charData = font.GetCharacterData(text[i]);
+                CharFontData charData = font.GetCharacterData(text[i], Clamp(text, i - 1), Clamp(text, i + 1));
 
                 if (!charData.Supported)
                 {

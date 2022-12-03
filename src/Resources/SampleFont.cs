@@ -238,5 +238,24 @@ namespace Zene.Graphics
 
             return CharFontData.Unsupported;
         }
+
+        public override CharFontData GetCharacterData(char character, char pre, char post)
+        {
+            CharFontData cfd = GetCharacterData(character);
+
+            if (character != '_') { return cfd; }
+
+            if (pre == '_')
+            {
+                cfd.TexturePosision = (cfd.TexturePosision.X + 1, cfd.TexturePosision.Y);
+                cfd.Size = (cfd.Size.X - 1, cfd.Size.Y);
+            }
+            if (post == '_')
+            {
+                cfd.Size = (cfd.Size.X - 1, cfd.Size.Y);
+            }
+
+            return cfd;
+        }
     }
 }

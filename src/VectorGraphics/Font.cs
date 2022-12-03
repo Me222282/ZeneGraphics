@@ -22,6 +22,7 @@ namespace Zene.Graphics
         public int BaseLineSpace { get; }
 
         public abstract CharFontData GetCharacterData(char character);
+        public virtual CharFontData GetCharacterData(char character, char pre, char post) => GetCharacterData(character);
 
         public virtual string Name { get; }
 
@@ -86,7 +87,7 @@ namespace Zene.Graphics
                     continue;
                 }
 
-                CharFontData charData = GetCharacterData(text[i]);
+                CharFontData charData = GetCharacterData(text[i], Clamp(text, i - 1), Clamp(text, i + 1));
 
                 // Add charater width
                 currentWidth += charData.Size.X + charData.Buffer + charSpace;
@@ -144,13 +145,24 @@ namespace Zene.Graphics
                     continue;
                 }
 
-                CharFontData charData = GetCharacterData(text[i]);
+                CharFontData charData = GetCharacterData(text[i], Clamp(text, i - 1), Clamp(text, i + 1));
 
                 // Add charater width
                 result[currentLine] += ((charData.Size.X + charData.Buffer) * multiplier) + charSpace;
             }
 
             return result;
+        }
+
+        private static T Clamp<T>(ReadOnlySpan<T> a, int index)
+        {
+            if (a.Length <= index ||
+                index < 0)
+            {
+                return default;
+            }
+
+            return a[index];
         }
     }
 }
