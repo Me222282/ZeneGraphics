@@ -8,6 +8,8 @@ namespace Zene.Graphics
         public unsafe GraphicsContext(bool stereo, bool doubleBuffered, int width, int height, double version)
         {
             baseFrameBuffer = new FramebufferGL(0, stereo, doubleBuffered, width, height);
+            boundFrameBuffers.Draw = baseFrameBuffer;
+            boundFrameBuffers.Read = baseFrameBuffer;
 
             this.version = version;
             viewport = new RectangleI(0, 0, width, height);

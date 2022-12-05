@@ -76,7 +76,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="buffer">The buffers to clear</param>
         [OpenGLSupport(1.0)]
-        void IFramebuffer.Clear(BufferBit buffer) => GL.context.baseFrameBuffer.Clear(buffer);
+        void IFramebuffer.Clear(BufferBit buffer) => Clear(buffer);
 
         void IDisposable.Dispose()
         {
