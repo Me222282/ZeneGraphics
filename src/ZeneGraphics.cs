@@ -458,13 +458,17 @@ namespace Zene.Graphics
             ColourF f = colour;
             GL.ClearColour(f.R, f.G, f.B, f.A);
 
-            framebuffer.Clear(BufferBit.Colour);
+            framebuffer.Bind();
+
+            GL.Clear((uint)BufferBit.Colour);
         }
         public static void Clear(this IFramebuffer framebuffer, ColourF colour)
         {
             GL.ClearColour(colour.R, colour.G, colour.B, colour.A);
 
-            framebuffer.Clear(BufferBit.Colour);
+            framebuffer.Bind();
+
+            GL.Clear((uint)BufferBit.Colour);
         }
         public static void Clear(this IFramebuffer framebuffer, Colour colour, double depth)
         {
@@ -472,14 +476,18 @@ namespace Zene.Graphics
             GL.ClearColour(f.R, f.G, f.B, f.A);
             GL.ClearDepth(depth);
 
-            framebuffer.Clear(BufferBit.Colour);
+            framebuffer.Bind();
+
+            GL.Clear((uint)(BufferBit.Colour | BufferBit.Depth));
         }
         public static void Clear(this IFramebuffer framebuffer, ColourF colour, double depth)
         {
             GL.ClearColour(colour.R, colour.G, colour.B, colour.A);
             GL.ClearDepth(depth);
 
-            framebuffer.Clear(BufferBit.Colour);
+            framebuffer.Bind();
+
+            GL.Clear((uint)(BufferBit.Colour | BufferBit.Depth));
         }
         public static void Clear(this IFramebuffer framebuffer, Colour colour, double depth, int stencil)
         {
@@ -488,7 +496,9 @@ namespace Zene.Graphics
             GL.ClearDepth(depth);
             GL.ClearStencil(stencil);
 
-            framebuffer.Clear(BufferBit.Colour);
+            framebuffer.Bind();
+
+            GL.Clear((uint)(BufferBit.Colour | BufferBit.Depth | BufferBit.Stencil));
         }
         public static void Clear(this IFramebuffer framebuffer, ColourF colour, double depth, int stencil)
         {
@@ -496,7 +506,9 @@ namespace Zene.Graphics
             GL.ClearDepth(depth);
             GL.ClearStencil(stencil);
 
-            framebuffer.Clear(BufferBit.Colour);
+            framebuffer.Bind();
+
+            GL.Clear((uint)(BufferBit.Colour | BufferBit.Depth | BufferBit.Stencil));
         }
         public static void Clear(this IFramebuffer framebuffer, Colour colour, int stencil)
         {
@@ -504,33 +516,43 @@ namespace Zene.Graphics
             GL.ClearColour(f.R, f.G, f.B, f.A);
             GL.ClearStencil(stencil);
 
-            framebuffer.Clear(BufferBit.Colour);
+            framebuffer.Bind();
+
+            GL.Clear((uint)(BufferBit.Colour | BufferBit.Stencil));
         }
         public static void Clear(this IFramebuffer framebuffer, ColourF colour, int stencil)
         {
             GL.ClearColour(colour.R, colour.G, colour.B, colour.A);
             GL.ClearStencil(stencil);
 
-            framebuffer.Clear(BufferBit.Colour);
+            framebuffer.Bind();
+
+            GL.Clear((uint)(BufferBit.Colour | BufferBit.Stencil));
         }
         public static void Clear(this IFramebuffer framebuffer, double depth)
         {
             GL.ClearDepth(depth);
 
-            framebuffer.Clear(BufferBit.Colour);
+            framebuffer.Bind();
+
+            GL.Clear((uint)BufferBit.Depth);
         }
         public static void Clear(this IFramebuffer framebuffer, double depth, int stencil)
         {
             GL.ClearDepth(depth);
             GL.ClearStencil(stencil);
 
-            framebuffer.Clear(BufferBit.Colour);
+            framebuffer.Bind();
+
+            GL.Clear((uint)(BufferBit.Depth | BufferBit.Stencil));
         }
         public static void Clear(this IFramebuffer framebuffer, int stencil)
         {
             GL.ClearStencil(stencil);
 
-            framebuffer.Clear(BufferBit.Colour);
+            framebuffer.Bind();
+
+            GL.Clear((uint)BufferBit.Stencil);
         }
 
         public static byte[] ReadAllBytes(this Stream stream)

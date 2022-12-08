@@ -4,7 +4,7 @@ using Zene.Structs;
 
 namespace Zene.Graphics
 {
-    public class LightingShader : BaseShaderProgram, IMatrixShader
+    public class LightingShader : BaseShaderProgram, IBasicShader
     {
         public enum Location : uint
         {

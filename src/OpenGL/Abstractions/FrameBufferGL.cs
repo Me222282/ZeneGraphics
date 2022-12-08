@@ -168,7 +168,7 @@ namespace Zene.Graphics.Base
             }
         }
 
-        public void Clear(BufferBit buffer)
+        public virtual void Clear(BufferBit buffer)
         {
             Bind();
 

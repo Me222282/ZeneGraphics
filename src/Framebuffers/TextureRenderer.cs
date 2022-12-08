@@ -98,7 +98,7 @@ namespace Zene.Graphics
         /// </summary>
         public int CLearStencil { get; set; } = 0;
 
-        public new void Clear(BufferBit buffer)
+        public override void Clear(BufferBit buffer)
         {
             if ((buffer & BufferBit.Colour) == BufferBit.Colour)
             {

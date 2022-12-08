@@ -10,7 +10,7 @@ namespace Zene.Graphics
         Texture = 3
     }
 
-    public class BasicShader : BaseShaderProgram, IMatrixShader
+    public class BasicShader : BaseShaderProgram, IBasicShader
     {
         public enum Location : uint
         {
