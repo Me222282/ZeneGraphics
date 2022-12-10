@@ -43,6 +43,14 @@ namespace Zene.Graphics
             }
         }
 
+        public void SetMatrices(Matrix4 a, Matrix4 b, Matrix4 c)
+        {
+            _m1 = a;
+            _m2 = b;
+            _m3 = c;
+            SetMatrices();
+        }
+
         private void SetMatrices()
         {
             SetUniformF(Uniforms[0], _m1 * _m2 * _m3);
