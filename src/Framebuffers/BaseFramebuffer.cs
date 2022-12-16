@@ -97,6 +97,8 @@ namespace Zene.Graphics
         /// </summary>
         public static FrameTarget Binding => GL.context.baseFrameBuffer.Binding;
 
+        public static FramebufferProperties Properties => GL.context.baseFrameBuffer.Properties;
+
         /// <summary>
         /// Bind the framebuffer.
         /// </summary>

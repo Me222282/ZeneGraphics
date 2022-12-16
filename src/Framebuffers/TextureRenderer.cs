@@ -137,6 +137,7 @@ namespace Zene.Graphics
 
             Texture2D texture = new Texture2D(intFormat, TextureData.Byte);
             texture.SetData(0, _targetWidth, _targetHeight, BaseFormat.Rgb, GLArray<byte>.Empty);
+            texture.WrapStyle = WrapStyle.EdgeClamp;
             texture.MinFilter = TextureSampling.Blend;
             texture.MagFilter = TextureSampling.Blend;
 
@@ -167,6 +168,7 @@ namespace Zene.Graphics
             {
                 Texture2D texture = new Texture2D(intFormat, TextureData.Byte);
                 texture.SetData(0, _targetWidth, _targetHeight, BaseFormat.DepthComponent, GLArray<byte>.Empty);
+                texture.WrapStyle = WrapStyle.EdgeClamp;
                 texture.MinFilter = TextureSampling.Nearest;
                 texture.MagFilter = TextureSampling.Nearest;
 
