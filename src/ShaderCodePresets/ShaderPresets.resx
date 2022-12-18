@@ -154,4 +154,16 @@
   <data name="TextVert" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>.\TextVert.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="CircleVert" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>.\CircleShaderVert.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="CircleFrag" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>.\CircleShaderFrag.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="BorderVert" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>.\BorderShaderVert.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="BorderFrag" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>.\BorderShaderFrag.shader;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>

@@ -128,6 +128,140 @@ namespace Zene.Graphics {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #version 430 core
+        ///
+        ///layout(location = 0) out vec4 colour;
+        ///
+        ///in vec4 pos_Colour;
+        ///in vec2 tex_Coords;
+        ///
+        ///uniform int colourType;
+        ///uniform vec4 uColour;
+        ///uniform vec4 uBorderColour;
+        ///uniform sampler2D uTextureSlot;
+        ///
+        ///uniform vec2 outerDimensions;
+        ///uniform vec2 innerDimensions;
+        ///uniform float radius;
+        ///
+        ///float squaredLength(vec2 v)
+        ///{
+        ///	return (v.x * v.x) + (v.y * v.y);
+        ///}
+        ///
+        ///void main()
+        ///{
+        ///	vec2 coords = tex_Coords * innerDimensions;
+        ///
+        ///	// On border or outside box
+        ///	if (squaredLength(coords) &lt; radius ||
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string BorderFrag {
+            get {
+                return ResourceManager.GetString("BorderFrag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #version 330 core
+        ///
+        ///layout(location = 0) in vec3 vPosition;
+        ///layout(location = 1) in vec4 colour;
+        ///layout(location = 2) in vec2 texCoord;
+        ///
+        ///out vec4 pos_Colour;
+        ///out vec2 tex_Coords;
+        ///
+        ///uniform mat4 matrix;
+        ///uniform vec2 size;
+        ///uniform vec2 hSize;
+        ///
+        ///void main()
+        ///{
+        ///    pos_Colour = colour;
+        ///
+        ///    tex_Coords = ((texCoord - 0.5) * size) + hSize;
+        ///    
+        ///	gl_Position = matrix * vec4(vPosition, 1);
+        ///}.
+        /// </summary>
+        public static string BorderVert {
+            get {
+                return ResourceManager.GetString("BorderVert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #version 430 core
+        ///
+        ///layout(location = 0) out vec4 colour;
+        ///
+        ///in vec4 pos_Colour;
+        ///in vec2 tex_Coords;
+        ///in vec2 pos;
+        ///
+        ///uniform int colourType;
+        ///uniform vec4 uColour;
+        ///uniform sampler2D uTextureSlot;
+        ///
+        ///uniform float minRadius;
+        ///uniform float radius;
+        ///
+        ///void main()
+        ///{
+        ///	float len = (pos.x * pos.x) + (pos.y * pos.y);
+        ///
+        ///	// Outside main circle
+        ///	if (len &gt; radius) { discard; }
+        ///	// Inside mini circle
+        ///	if (len &lt; minRadius) { discard; }
+        ///
+        ///	switch (colourType)
+        ///	{
+        ///		case 1:
+        ///			colour = uColour;
+        ///			break;
+        ///
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string CircleFrag {
+            get {
+                return ResourceManager.GetString("CircleFrag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #version 330 core
+        ///
+        ///layout(location = 0) in vec3 vPosition;
+        ///layout(location = 1) in vec4 colour;
+        ///layout(location = 2) in vec2 texCoord;
+        ///
+        ///out vec4 pos_Colour;
+        ///out vec2 tex_Coords;
+        ///out vec2 pos;
+        ///
+        ///uniform mat4 matrix;
+        ///uniform float size;
+        ///
+        ///void main()
+        ///{
+        ///    pos_Colour = colour;
+        ///    tex_Coords = texCoord;
+        ///
+        ///    pos = (texCoord - 0.5) * size;
+        ///    
+        ///	gl_Position = matrix * vec4(vPosition, 1);
+        ///}.
+        /// </summary>
+        public static string CircleVert {
+            get {
+                return ResourceManager.GetString("CircleVert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to #version 330 core
         ///
         ///void main()
@@ -327,7 +461,7 @@ namespace Zene.Graphics {
         ///
         ///layout(location = 0) in vec3 vPosition;
         ///layout(location = 1) in vec2 texCoord;
-        /// // Instance data
+        ///// Instance data
         ///layout(location = 2) in vec2 offset;
         ///layout(location = 5) in vec2 size;
         ///layout(location = 3) in vec2 texOffset;
@@ -358,7 +492,7 @@ namespace Zene.Graphics {
         /// <summary>
         ///   Looks up a localized string similar to #version 330 core
         ///
-        /// /***********************************************************************
+        ////***********************************************************************
         ///*
         ///* Copyright (c) 2019-2022 Barbara Geller
         ///* Copyright (c) 2019-2022 Ansel Sermersheim
@@ -383,7 +517,7 @@ namespace Zene.Graphics {
         ///
         ///layout(location = 1) in vec3 vPosition;
         ///layout(location = 2) in vec2 texCoord;
-        /// // Instance data
+        ///// Instance data
         ///layout(location = 3) in vec2 offset;
         ///layout(location = 6) in vec2 size;
         ///layout(location = 4) in vec2 texOffset;
