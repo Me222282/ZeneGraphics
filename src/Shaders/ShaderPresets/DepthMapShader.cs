@@ -2,7 +2,7 @@
 
 namespace Zene.Graphics
 {
-    public unsafe class DepthMapShader : BaseShaderProgram, IMatrixShader
+    public sealed unsafe class DepthMapShader : BaseShaderProgram, IMatrixShader
     {
         public DepthMapShader()
         {

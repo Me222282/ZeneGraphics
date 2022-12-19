@@ -2,7 +2,7 @@
 
 namespace Zene.Graphics
 {
-    public class CircleShader : BaseShaderProgram, IBasicShader
+    public sealed class CircleShader : BaseShaderProgram, IBasicShader
     {
         public enum Location : uint
         {

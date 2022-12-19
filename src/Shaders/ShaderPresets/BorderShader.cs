@@ -3,7 +3,7 @@ using Zene.Structs;
 
 namespace Zene.Graphics
 {
-    public class BorderShader : BaseShaderProgram, IBasicShader
+    public sealed class BorderShader : BaseShaderProgram, IBasicShader
     {
         public enum Location : uint
         {
