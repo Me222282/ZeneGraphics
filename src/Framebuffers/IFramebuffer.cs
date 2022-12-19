@@ -186,15 +186,21 @@ namespace Zene.Graphics
         public FrameTarget Binding { get; }
 
         /// <summary>
-        /// Gets or sets the render size and location for the framebuffer.
+        /// Determines whether the framebuffer can be used with different <see cref="Viewport"/> and <see cref="DepthState"/> than the ones currently set.
         /// </summary>
-        [OpenGLSupport(1.0)]
-        public RectangleI View { get; set; }
+        public bool LockedState { get; }
+
         /// <summary>
-        /// Sets the render size for the framebuffer.
+        /// The render size and location of the framebuffer.
         /// </summary>
         [OpenGLSupport(1.0)]
-        public Vector2I ViewSize { get; set; }
+        public Viewport Viewport { get; }
+
+        /// <summary>
+        /// How the depth buffer is managed and drawn to.
+        /// </summary>
+        [OpenGLSupport(1.0)]
+        public DepthState DepthState { get; }
 
         /// <summary>
         /// Gets or sets a colour buffer as a source for pixel reads.

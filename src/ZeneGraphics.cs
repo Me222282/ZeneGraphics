@@ -445,10 +445,10 @@ namespace Zene.Graphics
             framebuffer.Bind();
 
             GLArray<T> data = new GLArray<T>(
-                (framebuffer.View.Width * format.GetSize() * type.GetSize()) / sizeof(T),
-                framebuffer.View.Height);
+                (framebuffer.Properties.Width * format.GetSize() * type.GetSize()) / sizeof(T),
+                framebuffer.Properties.Height);
 
-            GL.ReadPixels(0, 0, framebuffer.View.Width, framebuffer.View.Height, (uint)format, (uint)type, data);
+            GL.ReadPixels(0, 0, framebuffer.Properties.Width, framebuffer.Properties.Height, (uint)format, (uint)type, data);
 
             return data;
         }

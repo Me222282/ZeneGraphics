@@ -12,7 +12,7 @@ namespace Zene.Graphics
             boundFrameBuffers.Read = baseFrameBuffer;
 
             this.version = version;
-            viewport = new RectangleI(0, 0, width, height);
+            viewport = new Viewport(0, 0, width, height);
 
             // Setup texture binding referance
             int size = 0;
@@ -77,9 +77,8 @@ namespace Zene.Graphics
         internal uint activeTextureUnit = 0;
         internal GL.TextureBinding[] boundTextures;
 
-        internal RectangleI viewport;
-        internal DepthFunction depthFunc = DepthFunction.Less;
-        internal bool depthMask = true;
+        internal Viewport viewport;
+        internal DepthState depth = new DepthState();
         internal PolygonMode polygonMode = PolygonMode.Fill;
         internal BlendFunction sfactorBlendFunc = BlendFunction.One;
         internal BlendFunction dfactorBlendFunc = BlendFunction.Zero;

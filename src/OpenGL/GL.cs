@@ -608,32 +608,6 @@ namespace Zene.Graphics.Base
 			Functions.DeleteVertexArrays(n, arrays);
 		}
 
-		[OpenGLSupport(1.0)]
-		public static void DepthFunc(DepthFunction func)
-		{
-			if (context.depthFunc == func) { return; }
-
-			context.depthFunc = func;
-
-			Functions.DepthFunc((uint)func);
-		}
-
-		[OpenGLSupport(1.0)]
-		public static void DepthMask(bool flag)
-		{
-			if (context.depthMask == flag) { return; }
-
-			context.depthMask = flag;
-
-			Functions.DepthMask(flag);
-		}
-
-		[OpenGLSupport(1.0)]
-		public static void DepthRange(double n, double f)
-		{
-			Functions.DepthRange(n, f);
-		}
-
 		[OpenGLSupport(4.1)]
 		public static void DepthRangeArrayv(uint first, int count, double* v)
 		{
@@ -658,12 +632,6 @@ namespace Zene.Graphics.Base
 			program.Properties._attachedShaders.Remove(shader);
 
 			Functions.DetachShader(program.Id, shader.Id);
-		}
-
-		[OpenGLSupport(1.0)]
-		public static void Disable(uint cap)
-		{
-			Functions.Disable(cap);
 		}
 
 		[OpenGLSupport(3.0)]
@@ -806,12 +774,6 @@ namespace Zene.Graphics.Base
 		public static void DrawTransformFeedbackStreamInstanced(uint mode, uint id, uint stream, int instancecount)
 		{
 			Functions.DrawTransformFeedbackStreamInstanced(mode, id, stream, instancecount);
-		}
-
-		[OpenGLSupport(1.0)]
-		public static void Enable(uint cap)
-		{
-			Functions.Enable(cap);
 		}
 
 		[OpenGLSupport(3.0)]

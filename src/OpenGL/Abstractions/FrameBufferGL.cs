@@ -22,7 +22,7 @@ namespace Zene.Graphics.Base
         {
             Id = id;
 
-            _view = new RectangleI(0, 0, width, height);
+            Viewport = new Viewport(0, 0, width, height);
 
             Properties = new FramebufferProperties(this, width, height)
             {
@@ -40,7 +40,8 @@ namespace Zene.Graphics.Base
         public void Bind()
         {
             // Set viewport
-            GL.Viewport(_view.X, _view.Y, _view.Width, _view.Height);
+            GL.SetViewState(Viewport);
+            GL.SetDepthState(DepthState);
 
             if (this.Bound()) { return; }
 
@@ -51,7 +52,8 @@ namespace Zene.Graphics.Base
         public void Bind(FrameTarget target)
         {
             // Set viewport
-            GL.Viewport(_view.X, _view.Y, _view.Width, _view.Height);
+            GL.SetViewState(Viewport);
+            GL.SetDepthState(DepthState);
 
             if (this.Bound(target)) { return; }
 
@@ -92,48 +94,48 @@ namespace Zene.Graphics.Base
             return CheckStatus() == FrameBufferStatus.Complete;
         }
 
-        private RectangleI _view = new RectangleI(0, 0, 1, 1);
-        public RectangleI View
+        public bool LockedState { get; protected set; } = false;
+
+        protected bool LockViewport
         {
-            get => _view;
+            get => Viewport.Locked;
+            set => Viewport.Locked = value;
+        }
+        public Viewport Viewport { get; } = new Viewport(0, 0, 1, 1);
+        protected bool LockDepthState
+        {
+            get
+            {
+                if (DepthState == null) { return false; }
+
+                return DepthState.Locked;
+            }
             set
             {
-                _view = value;
+                if (DepthState == null) { return; }
 
-                if (this.Bound(FrameTarget.Draw))
-                {
-                    GL.Viewport(_view.X, _view.Y, _view.Width, _view.Height);
-                }
+                DepthState.Locked = value;
             }
+        }
+        public DepthState DepthState { get; protected set; } = null;
+
+        public RectangleI View
+        {
+            get => Viewport.view;
+            set => Viewport.View = value;
         }
         public Vector2I ViewSize
         {
-            get => _view.Size;
-            set
-            {
-                _view.Size = value;
-
-                if (this.Bound(FrameTarget.Draw))
-                {
-                    GL.Viewport(_view.X, _view.Y, _view.Width, _view.Height);
-                }
-            }
+            get => Viewport.Size;
+            set => Viewport.Size = value;
         }
         /// <summary>
         /// Sets the render location for the framebuffer.
         /// </summary>
         public Vector2I ViewLocation
         {
-            get => _view.Location;
-            set
-            {
-                _view.Location = value;
-
-                if (this.Bound(FrameTarget.Draw))
-                {
-                    GL.Viewport(_view.X, _view.Y, _view.Width, _view.Height);
-                }
-            }
+            get => Viewport.Location;
+            set => Viewport.Location = value;
         }
 
         private FrameDrawTarget _readBuffer = FrameDrawTarget.Colour0;

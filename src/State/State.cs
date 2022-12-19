@@ -103,13 +103,24 @@ namespace Zene.Graphics
             set => GL.context = value;
         }
 
+        public static DepthState DepthState
+        {
+            get => GL.context.depth;
+            set => GL.SetDepthState(value);
+        }
+        public static Viewport Viewport
+        {
+            get => GL.context.viewport;
+            set => GL.SetViewState(value);
+        }
+
         /// <summary>
         /// The render area used by any draws to the bound framebuffer.
         /// </summary>
         public static RectangleI DrawView
         {
-            get => GL.context.viewport;
-            set => GL.Viewport(value.X, value.Y, value.Width, value.Height);
+            get => GL.context.viewport.view;
+            set => GL.context.viewport.View = value;
         }
         /// <summary>
         /// The size of the render area used by any draws to the bound framebuffer.
@@ -117,7 +128,7 @@ namespace Zene.Graphics
         public static Vector2I DrawViewSize
         {
             get => GL.context.viewport.Size;
-            set => GL.Viewport(GL.context.viewport.X, GL.context.viewport.Y, value.X, value.Y);
+            set => GL.context.viewport.Size = value;
         }
         /// <summary>
         /// The location of the render area used by any draws to the bound framebuffer.
@@ -125,7 +136,7 @@ namespace Zene.Graphics
         public static Vector2I DrawViewLocation
         {
             get => GL.context.viewport.Location;
-            set => GL.Viewport(value.X, value.Y, GL.context.viewport.Width, GL.context.viewport.Height);
+            set => GL.context.viewport.Location = value;
         }
 
         /// <summary>
@@ -133,8 +144,8 @@ namespace Zene.Graphics
         /// </summary>
         public static DepthFunction DepthFunction
         {
-            get => GL.context.depthFunc;
-            set => GL.DepthFunc(value);
+            get => GL.context.depth.func;
+            set => GL.context.depth.Function = value;
         }
         /// <summary>
         /// Select a polygon rasterization mode.
@@ -263,52 +274,28 @@ namespace Zene.Graphics
             }
         }
         /// <summary>
-        /// Determines whether there is no near or far plane clipping.
+        /// Determines whether there is near or far plane clipping.
         /// </summary>
         public static bool ClampDepth
         {
-            get
-            {
-                return GL.IsEnabled(GLEnum.DepthClamp);
-            }
-            set
-            {
-                if (value)
-                {
-                    GL.Enable(GLEnum.DepthClamp);
-                    return;
-                }
-
-                GL.Disable(GLEnum.DepthClamp);
-            }
+            get => GL.context.depth.clamp;
+            set => GL.context.depth.Clamp = value;
         }
         /// <summary>
         /// Determines whether to do depth comparisons and update the depth buffer.
         /// </summary>
         public static bool DepthTesting
         {
-            get
-            {
-                return GL.IsEnabled(GLEnum.DepthTest);
-            }
-            set
-            {
-                if (value)
-                {
-                    GL.Enable(GLEnum.DepthTest);
-                    return;
-                }
-
-                GL.Disable(GLEnum.DepthTest);
-            }
+            get => GL.context.depth.testing;
+            set => GL.context.depth.Testing = value;
         }
         /// <summary>
         /// Enable or disable writing into the depth buffer.
         /// </summary>
         public static bool DepthMask
         {
-            get => GL.context.depthMask;
-            set => GL.DepthMask(value);
+            get => GL.context.depth.mask;
+            set => GL.context.depth.Mask = value;
         }
         /// <summary>
         /// Determines whether to dither colour components or indices before they are written to the colour buffer.

@@ -63,11 +63,11 @@ namespace Zene.Graphics
                 Size = value.Size;
             }
         }
-        Vector2I IFramebuffer.ViewSize
-        {
-            get => Size;
-            set => Size = value;
-        }
+
+        bool IFramebuffer.LockedState => _multiSFramebuffer.LockedState;
+        Viewport IFramebuffer.Viewport => _multiSFramebuffer.Viewport;
+        DepthState IFramebuffer.DepthState => _multiSFramebuffer.DepthState;
+
 
         public FrameDrawTarget ReadBuffer
         {

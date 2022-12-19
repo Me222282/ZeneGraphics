@@ -50,6 +50,17 @@ namespace Zene.Graphics
         private int _targetWidth;
         private int _targetHeight;
 
+        public new bool LockedState
+        {
+            get => base.LockedState;
+            set => base.LockedState = value;
+        }
+        public new DepthState DepthState
+        {
+            get => base.DepthState;
+            set => base.DepthState = value;
+        }
+
         [OpenGLSupport(3.0)]
         protected override void Dispose(bool dispose)
         {

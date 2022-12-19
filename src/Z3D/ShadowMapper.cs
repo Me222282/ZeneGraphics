@@ -37,6 +37,10 @@ namespace Zene.Graphics.Z3D
 
         private readonly DepthMapShader _shader;
 
+        bool IFramebuffer.LockedState => _framebuffer.LockedState;
+        Viewport IFramebuffer.Viewport => _framebuffer.Viewport;
+        DepthState IFramebuffer.DepthState => _framebuffer.DepthState;
+
         public RectangleI View
         {
             get

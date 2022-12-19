@@ -39,6 +39,17 @@ namespace Zene.Graphics
         private IRenderTexture _depth;
         private ITexture _stencil;
 
+        public new bool LockedState
+        {
+            get => base.LockedState;
+            set => base.LockedState = value;
+        }
+        public new DepthState DepthState
+        {
+            get => base.DepthState;
+            set => base.DepthState = value;
+        }
+
         /// <summary>
         /// The clear colour that is used when <see cref="Clear(BufferBit)"/> is called.
         /// </summary>

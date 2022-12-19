@@ -40,24 +40,12 @@ namespace Zene.Graphics
             GL.BindFramebuffer((uint)Binding, null);
         }
 
-        /// <summary>
-        /// Gets or sets the render size and location for the framebuffer.
-        /// </summary>
+
+        bool IFramebuffer.LockedState => GL.context.baseFrameBuffer.LockedState;
+        DepthState IFramebuffer.DepthState => GL.context.baseFrameBuffer.DepthState;
+
         [OpenGLSupport(1.0)]
-        RectangleI IFramebuffer.View
-        {
-            get => GL.context.baseFrameBuffer.View;
-            set => GL.context.baseFrameBuffer.View = value;
-        }
-        /// <summary>
-        /// Sets the render size for the framebuffer.
-        /// </summary>
-        [OpenGLSupport(1.0)]
-        Vector2I IFramebuffer.ViewSize
-        {
-            get => GL.context.baseFrameBuffer.ViewSize;
-            set => GL.context.baseFrameBuffer.ViewSize = value;
-        }
+        Viewport IFramebuffer.Viewport => GL.context.baseFrameBuffer.Viewport;
 
         FrameDrawTarget IFramebuffer.ReadBuffer
         {
