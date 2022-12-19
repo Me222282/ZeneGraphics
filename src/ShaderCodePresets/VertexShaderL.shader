@@ -3,7 +3,7 @@
 layout(location = locations.vertex) in vec3 vPosition;
 layout(location = locations.colour) in vec4 colour;
 layout(location = locations.texture) in vec2 texCoord;
-layout(location = locations.noraml) in vec3 vNormal;
+layout(location = locations.normal) in vec3 vNormal;
 
 layout(location = 6) in vec3 ambientLight;
 layout(location = 7) in vec2 ambientTexture;
