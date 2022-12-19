@@ -14,9 +14,10 @@ namespace Zene.Graphics
         public CircleShader()
         {
             Create(ShaderPresets.CircleVert, ShaderPresets.CircleFrag,
-                  "colourType", "uColour", "uTextureSlot", "matrix", "size", "radius", "minRadius");
+                  "colourType", "uInnerColour", "uTextureSlot", "matrix", "size", "radius", "minRadius", "uColour");
 
             SetUniformF(Uniforms[3], Matrix4.Identity);
+            Size = 1d;
         }
 
         private ColourSource _source = 0;
@@ -58,6 +59,18 @@ namespace Zene.Graphics
             }
         }
 
+        private ColourF _innerColour = ColourF.Zero;
+        public ColourF InnerColour
+        {
+            get => _innerColour;
+            set
+            {
+                _innerColour = value;
+
+                SetUniformF(Uniforms[1], (Vector4)value);
+            }
+        }
+
         private ColourF _colour = ColourF.Zero;
         public ColourF Colour
         {
@@ -66,7 +79,7 @@ namespace Zene.Graphics
             {
                 _colour = value;
 
-                SetUniformF(Uniforms[1], (Vector4)value);
+                SetUniformF(Uniforms[7], (Vector4)value);
             }
         }
 

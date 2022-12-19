@@ -8,6 +8,7 @@ in vec2 pos;
 
 uniform int colourType;
 uniform vec4 uColour;
+uniform vec4 uInnerColour;
 uniform sampler2D uTextureSlot;
 
 uniform float minRadius;
@@ -20,7 +21,11 @@ void main()
 	// Outside main circle
 	if (len > radius) { discard; }
 	// Inside mini circle
-	if (len < minRadius) { discard; }
+	if (len < minRadius)
+	{
+		colour = uInnerColour;
+		return;
+	}
 
 	switch (colourType)
 	{
