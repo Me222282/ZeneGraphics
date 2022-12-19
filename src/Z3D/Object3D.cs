@@ -36,13 +36,11 @@ namespace Zene.Graphics.Z3D
         //
 
         /// <summary>
-        /// Creates a 3D object from a .obj file.
+        /// Creates a 3D object from a .obj file with normals and texture coordinates.
         /// </summary>
         /// <param name="path">The path to the file</param>
-        /// <param name="texCoordI">The shader location of for texture coords</param>
-        /// <param name="normalI">The shader location of for normals</param>
         /// <returns></returns>
-        public static Object3D FromObj(string path, uint texCoordI, uint normalI)
+        public static Object3D FromObjNT(string path)
         {
             ExtractObj(path, out List<Vector3> data, out List<uint> indexData);
 
@@ -50,19 +48,18 @@ namespace Zene.Graphics.Z3D
             {
                 _object = new DrawObject<Vector3, uint>(data.ToArray(), indexData.ToArray(), 3, 0, AttributeSize.D3, BufferUsage.DrawFrequent)
             };
-            o._object.AddAttribute(texCoordI, 1, AttributeSize.D2); // Texture coords
-            o._object.AddAttribute(normalI, 2, AttributeSize.D3); // Normals
+            o._object.AddAttribute(ShaderLocation.TextureCoords, 1, AttributeSize.D2); // Texture coords
+            o._object.AddAttribute(ShaderLocation.Normal, 2, AttributeSize.D3); // Normals
 
             return o;
         }
 
         /// <summary>
-        /// Creates a 3D object from a .obj file without texture coords.
+        /// Creates a 3D object from a .obj file without texture coordinates.
         /// </summary>
         /// <param name="path">The path to the file</param>
-        /// <param name="normalI">The shader location of for normals</param>
         /// <returns></returns>
-        public static Object3D FromObj(string path, uint normalI)
+        public static Object3D FromObjN(string path)
         {
             ExtractObjVt(path, out List<Vector3> data, out List<uint> indexData);
 
@@ -70,20 +67,17 @@ namespace Zene.Graphics.Z3D
             {
                 _object = new DrawObject<Vector3, uint>(data.ToArray(), indexData.ToArray(), 2, 0, AttributeSize.D3, BufferUsage.DrawFrequent)
             };
-            o._object.AddAttribute(normalI, 1, AttributeSize.D3); // Normals
+            o._object.AddAttribute(ShaderLocation.Normal, 1, AttributeSize.D3); // Normals
 
             return o;
         }
 
         /// <summary>
-        /// Creates a 3D object from a .obj file with auto asigned tangents.
+        /// Creates a 3D object from a .obj file with normals, texture coordinates and auto asigned tangents.
         /// </summary>
         /// <param name="path">The path to the file</param>
-        /// <param name="texCoordI">The shader location of for texture coords</param>
-        /// <param name="normalI">The shader location of for normals</param>
-        /// <param name="tangentI">The shader location of for tangents</param>
         /// <returns></returns>
-        public static Object3D FromObj(string path, uint texCoordI, uint normTexCoordI, uint normalI, uint tangentI)
+        public static Object3D FromObjNMT(string path)
         {
             ExtractObjVta(path, out List<Vector3> data, out List<uint> indexData);
 
@@ -91,10 +85,10 @@ namespace Zene.Graphics.Z3D
             {
                 _object = new DrawObject<Vector3, uint>(data.ToArray(), indexData.ToArray(), 4, 0, AttributeSize.D3, BufferUsage.DrawFrequent)
             };
-            o._object.AddAttribute(texCoordI, 1, AttributeSize.D2); // Texture coords
-            o._object.AddAttribute(normTexCoordI, 1, AttributeSize.D2); // Normal map texture coords
-            o._object.AddAttribute(normalI, 2, AttributeSize.D3); // Normals
-            o._object.AddAttribute(tangentI, 3, AttributeSize.D3); // Tangents
+            o._object.AddAttribute(ShaderLocation.TextureCoords, 1, AttributeSize.D2); // Texture coords
+            o._object.AddAttribute(ShaderLocation.NormalTexture, 1, AttributeSize.D2); // Normal map texture coords
+            o._object.AddAttribute(ShaderLocation.Normal, 2, AttributeSize.D3); // Normals
+            o._object.AddAttribute(ShaderLocation.Tangent, 3, AttributeSize.D3); // Tangents
 
             return o;
         }
