@@ -1,13 +1,13 @@
 ﻿#version 330 core
 
-layout(location = 0) in vec3 vPosition;
-layout(location = 1) in vec2 texCoord;
+layout(location = locations.vertex) in vec3 vPosition;
+layout(location = locations.texture) in vec2 texCoord;
 // Instance data
-layout(location = 2) in vec2 offset;
-layout(location = 5) in vec2 size;
-layout(location = 3) in vec2 texOffset;
-layout(location = 4) in vec2 texSize;
-layout(location = 6) in vec2 selected;
+layout(location = 3) in vec2 offset;
+layout(location = 6) in vec2 size;
+layout(location = 4) in vec2 texOffset;
+layout(location = 5) in vec2 texSize;
+layout(location = 7) in vec2 selected;
 
 out vec2 tex_Coords;
 out float charSelect;

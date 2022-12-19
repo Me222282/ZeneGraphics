@@ -5,12 +5,6 @@ namespace Zene.Graphics
 {
     public class PostShader : BaseShaderProgram
     {
-        public enum Location : uint
-        {
-            Positions = 0,
-            TextureCoords = 1
-        }
-
         public PostShader()
         {
             Create(ShaderPresets.PostVertex, ShaderPresets.PostFragment,

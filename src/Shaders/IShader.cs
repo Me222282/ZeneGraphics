@@ -23,6 +23,16 @@ namespace Zene.Graphics
         HighInt = GLEnum.HighInt
     }
 
+    public enum ShaderLocation : uint
+    {
+        Vertex = 0,
+        Colour = 1,
+        TextureCoords = 2,
+        Normal = 3,
+        Tangent = 4,
+        NormalTexture = 5
+    }
+
     public interface IShader : IDisposable, IIdentifiable
     {
         /// <summary>

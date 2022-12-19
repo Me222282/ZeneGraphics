@@ -143,6 +143,13 @@ namespace Zene.Graphics.Base
         [OpenGLSupport(2.0)]
         public static void ShaderSource(uint shader, string @string)
         {
+            @string.Replace("locations.vertex", "0");
+            @string.Replace("locations.colour", "1");
+            @string.Replace("locations.texture", "2");
+            @string.Replace("locations.normal", "3");
+            @string.Replace("locations.tangent", "4");
+            @string.Replace("locations.norm_tex", "5");
+
             var stringArray = new string[] { @string };
             int length = @string.Length;
             ShaderSource(shader, 1, stringArray, &length);

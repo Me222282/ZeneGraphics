@@ -2264,7 +2264,7 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(2.0)]
-		public static void ShaderSource(uint shader, int count, string[] @string, int* length)
+		internal static void ShaderSource(uint shader, int count, string[] @string, int* length)
 		{
 			Functions.ShaderSource(shader, count, @string, length);
 		}

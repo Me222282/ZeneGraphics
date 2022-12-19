@@ -15,22 +15,10 @@ namespace Zene.Graphics
             _framebuffer.SetColourAttachment(0, TextureFormat.Rgb8);
 
             base.Size = new Vector2I(width, height);
-
-            _drawingObject = new DrawObject<Vector2I, byte>(new Vector2I[]
-            {
-                new Vector2I(-1, -1), new Vector2I(0, 0),
-                new Vector2I(1, -1), new Vector2I(1, 0),
-                new Vector2I(1, 1), new Vector2I(1, 1),
-                new Vector2I(-1, 1), new Vector2I(0, 1)
-            }, new byte[] { 0, 1, 2, 2, 3, 0 }, 2, 0, AttributeSize.D2, BufferUsage.DrawFrequent);
-            // Texture coordinate attribute
-            _drawingObject.AddAttribute((uint)Location.TextureCoords, 1, AttributeSize.D2);
         }
 
         private readonly TextureRendererMS _multiSFramebuffer;
         private readonly TextureRenderer _framebuffer;
-
-        private readonly DrawObject<Vector2I, byte> _drawingObject;
 
         FramebufferProperties IFramebuffer.Properties => _multiSFramebuffer.Properties;
 
@@ -134,8 +122,6 @@ namespace Zene.Graphics
             {
                 _multiSFramebuffer.Dispose();
                 _framebuffer.Dispose();
-
-                _drawingObject.Dispose();
             }
         }
 
@@ -158,7 +144,7 @@ namespace Zene.Graphics
             _framebuffer.GetTexture(FrameAttachment.Colour0).Bind(0);
             TextureSlot = 0;
 
-            _drawingObject.Draw();
+            Shapes.Square.Draw();
 
             GL.BindTexture(GLEnum.Texture2d, null);
             GL.UseProgram(null);

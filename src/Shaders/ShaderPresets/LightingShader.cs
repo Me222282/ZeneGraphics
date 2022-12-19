@@ -8,16 +8,16 @@ namespace Zene.Graphics
     {
         public enum Location : uint
         {
-            Positions = 0,
-            ColourAttribute = 1,
-            TextureCoords = 2,
-            Normal = 3,
-            AmbientLightColur = 4,
-            AmbientLightTextureCoords = 5,
-            SpecularLightColur = 6,
-            SpecularLightTextureCoords = 7,
-            NormalMapTextureCoords = 8,
-            Tangents = 9
+            Positions = ShaderLocation.Vertex,
+            ColourAttribute = ShaderLocation.Colour,
+            TextureCoords = ShaderLocation.TextureCoords,
+            Normal = ShaderLocation.Normal,
+            Tangents = ShaderLocation.Tangent,
+            NormalMapTextureCoords = ShaderLocation.NormalTexture,
+            AmbientLightColur = 6,
+            AmbientLightTextureCoords = 7,
+            SpecularLightColur = 8,
+            SpecularLightTextureCoords = 9
         }
 
         public LightingShader(int lightNumber, int spotLightNumber)
@@ -316,8 +316,12 @@ namespace Zene.Graphics
             get => _m1;
             set
             {
-                _m1 = value;
+                if (value == null)
+                {
+                    value = Matrix4.Identity;
+                }
 
+                _m1 = value;
                 SetUniformF(Uniforms[9], value);
             }
         }
@@ -327,6 +331,11 @@ namespace Zene.Graphics
             get => _m2;
             set
             {
+                if (value == null)
+                {
+                    value = Matrix4.Identity;
+                }
+
                 _m2 = value;
                 SetMatrices();
             }
@@ -337,6 +346,11 @@ namespace Zene.Graphics
             get => _m3;
             set
             {
+                if (value == null)
+                {
+                    value = Matrix4.Identity;
+                }
+
                 _m3 = value;
                 SetMatrices();
             }
@@ -344,7 +358,21 @@ namespace Zene.Graphics
 
         public void SetMatrices(Matrix4 a, Matrix4 b, Matrix4 c)
         {
+            if (a == null)
+            {
+                a = Matrix4.Identity;
+            }
+            if (b == null)
+            {
+                b = Matrix4.Identity;
+            }
+            if (c == null)
+            {
+                c = Matrix4.Identity;
+            }
+
             _m1 = a;
+            SetUniformF(Uniforms[9], _m1);
             _m2 = b;
             _m3 = c;
             SetMatrices();
@@ -361,6 +389,11 @@ namespace Zene.Graphics
             get => _lsm;
             set
             {
+                if (value == null)
+                {
+                    value = Matrix4.Identity;
+                }
+
                 _lsm = value;
 
                 SetUniformF(Uniforms[11], value);

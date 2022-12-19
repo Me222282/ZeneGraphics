@@ -22,11 +22,11 @@ namespace Zene.Graphics
                 SetUniformF(Uniforms[0], m);
             }
 
-            public Colour Colour
+            public ColourF Colour
             {
                 set
                 {
-                    SetUniformF(Uniforms[1], (Vector4)(ColourF)value);
+                    SetUniformF(Uniforms[1], (Vector4)value);
                 }
             }
         }
@@ -46,11 +46,11 @@ namespace Zene.Graphics
                 SetUniformF(Uniforms[0], m);
             }
 
-            public Colour Colour
+            public ColourF Colour
             {
                 set
                 {
-                    SetUniformF(Uniforms[1], (Vector4)(ColourF)value);
+                    SetUniformF(Uniforms[1], (Vector4)value);
                 }
             }
         }
@@ -83,8 +83,8 @@ namespace Zene.Graphics
             }
         }
 
-        private Colour _colour;
-        public Colour Colour
+        private ColourF _colour;
+        public ColourF Colour
         {
             get => _colour;
             set
@@ -108,7 +108,7 @@ namespace Zene.Graphics
                 new Vector2(0.5, 0.5), new Vector2(1d, 0d), new Vector2(1d, 1d)
             }, new byte[] { 0, 1, 2, 2, 3, 0 }, 3, 0, AttributeSize.D2, BufferUsage.DrawFrequent);
             _drawable.AddAttribute(1, 1, AttributeSize.D2); // M2 position
-            _drawable.AddAttribute(2, 2, AttributeSize.D2); // Texture Coordinates
+            _drawable.AddAttribute(ShaderLocation.TextureCoords, 2, AttributeSize.D2); // Texture Coordinates
 
             //
             // M1

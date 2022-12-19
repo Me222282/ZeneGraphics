@@ -1,17 +1,17 @@
 ﻿#version 330 core
 
-layout(location = 0) in vec3 vPosition;
-layout(location = 1) in vec4 colour;
-layout(location = 2) in vec2 texCoord;
-layout(location = 3) in vec3 vNormal;
+layout(location = locations.vertex) in vec3 vPosition;
+layout(location = locations.colour) in vec4 colour;
+layout(location = locations.texture) in vec2 texCoord;
+layout(location = locations.noraml) in vec3 vNormal;
 
-layout(location = 4) in vec3 ambientLight;
-layout(location = 5) in vec2 ambientTexture;
-layout(location = 6) in vec3 specularLight;
-layout(location = 7) in vec2 specularTexture;
+layout(location = 6) in vec3 ambientLight;
+layout(location = 7) in vec2 ambientTexture;
+layout(location = 8) in vec3 specularLight;
+layout(location = 9) in vec2 specularTexture;
 
-layout(location = 8) in vec2 normalTexCoord;
-layout(location = 9) in vec3 vTangent;
+layout(location = locations.norm_tex) in vec2 normalTexCoord;
+layout(location = locations.tangent) in vec3 vTangent;
 
 out vec4 pos_Colour;
 out vec2 tex_Coords;

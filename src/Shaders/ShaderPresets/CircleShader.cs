@@ -4,13 +4,6 @@ namespace Zene.Graphics
 {
     public sealed class CircleShader : BaseShaderProgram, IBasicShader
     {
-        public enum Location : uint
-        {
-            Positions = 0,
-            ColourAttribute = 1,
-            TextureCoords = 2
-        }
-
         public CircleShader()
         {
             Create(ShaderPresets.CircleVert, ShaderPresets.CircleFrag,
@@ -101,6 +94,11 @@ namespace Zene.Graphics
             get => _m1;
             set
             {
+                if (value == null)
+                {
+                    value = Matrix4.Identity;
+                }
+
                 _m1 = value;
                 SetMatrices();
             }
@@ -111,6 +109,11 @@ namespace Zene.Graphics
             get => _m2;
             set
             {
+                if (value == null)
+                {
+                    value = Matrix4.Identity;
+                }
+
                 _m2 = value;
                 SetMatrices();
             }
@@ -121,6 +124,11 @@ namespace Zene.Graphics
             get => _m3;
             set
             {
+                if (value == null)
+                {
+                    value = Matrix4.Identity;
+                }
+
                 _m3 = value;
                 SetMatrices();
             }
@@ -128,6 +136,19 @@ namespace Zene.Graphics
 
         public void SetMatrices(Matrix4 a, Matrix4 b, Matrix4 c)
         {
+            if (a == null)
+            {
+                a = Matrix4.Identity;
+            }
+            if (b == null)
+            {
+                b = Matrix4.Identity;
+            }
+            if (c == null)
+            {
+                c = Matrix4.Identity;
+            }
+
             _m1 = a;
             _m2 = b;
             _m3 = c;

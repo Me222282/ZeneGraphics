@@ -1,7 +1,7 @@
 ﻿#version 330 core
 
 layout(location = 1) in vec3 vPosition;
-layout(location = 2) in vec2 texCoord;
+layout(location = locations.texture) in vec2 texCoord;
 // Instance data
 layout(location = 3) in vec2 offset;
 layout(location = 6) in vec2 size;

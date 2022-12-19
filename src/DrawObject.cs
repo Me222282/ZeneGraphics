@@ -34,7 +34,7 @@ namespace Zene.Graphics
                 _ => 0,
             };
 
-            Vao.AddBuffer(Buffer, 0, vertexIndex, _dataType, vertexSize);
+            Vao.AddBuffer(Buffer, ShaderLocation.Vertex, vertexIndex, _dataType, vertexSize);
 
             IndexT indexType = default;
             _drawType = indexType switch
@@ -79,6 +79,10 @@ namespace Zene.Graphics
         }
 
         public void AddAttribute(uint index, int dataStart, AttributeSize attributeSize)
+        {
+            Vao.AddBuffer(Buffer, index, dataStart, _dataType, attributeSize);
+        }
+        public void AddAttribute(ShaderLocation index, int dataStart, AttributeSize attributeSize)
         {
             Vao.AddBuffer(Buffer, index, dataStart, _dataType, attributeSize);
         }
