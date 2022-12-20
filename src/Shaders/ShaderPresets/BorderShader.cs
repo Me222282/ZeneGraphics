@@ -28,12 +28,15 @@ namespace Zene.Graphics
         }
 
         private double _radiusPercent;
+        /// <summary>
+        /// The percentage of the border that is curved; values between 0.0 - 0.5.
+        /// </summary>
         public double Radius
         {
             get => _radiusPercent;
             set
             {
-                _radiusPercent = value;
+                _radiusPercent = Math.Clamp(value, 0d, 0.5);
 
                 SetRadius();
                 SetIDMR();
@@ -42,6 +45,9 @@ namespace Zene.Graphics
 
         private Vector2 _size;
         private Vector2 _aspect;
+        /// <summary>
+        /// The target size of the box being drawn.
+        /// </summary>
         public Vector2 Size
         {
             get => _size;
@@ -59,6 +65,9 @@ namespace Zene.Graphics
         private double _bWidth;
         private double _widthPercent;
         private double _halfWidth;
+        /// <summary>
+        /// The width, in pixels, of the border.
+        /// </summary>
         public double BorderWidth
         {
             get => _bWidth;
@@ -96,13 +105,16 @@ namespace Zene.Graphics
         }
         private void SetRadius()
         {
-            SetUniformF(Uniforms[5], (_radiusPercent - _halfWidth) * (_radiusPercent - _halfWidth));
-            SetUniformF(Uniforms[7], (_radiusPercent + _halfWidth) * (_radiusPercent + _halfWidth));
+            double radius = _radiusPercent - _halfWidth;
+            double outerRadius = Math.Max(_radiusPercent + _halfWidth, _widthPercent);
+            SetUniformF(Uniforms[5], radius * radius);
+            SetUniformF(Uniforms[7], outerRadius * outerRadius);
         }
         private void SetIDMR()
         {
-            SetUniformF(Uniforms[10], _radiusPercent);
-            SetUniformF(Uniforms[9], _aspect - _radiusPercent);
+            double innerOffset = Math.Max(_radiusPercent, _halfWidth);
+            SetUniformF(Uniforms[10], innerOffset);
+            SetUniformF(Uniforms[9], _aspect - innerOffset);
         }
 
         private ColourF _colour = ColourF.Zero;
@@ -118,6 +130,9 @@ namespace Zene.Graphics
         }
 
         private ColourF _borderColour = ColourF.Zero;
+        /// <summary>
+        /// THe colour of the border of the box.
+        /// </summary>
         public ColourF BorderColour
         {
             get => _borderColour;
@@ -209,7 +224,6 @@ namespace Zene.Graphics
             _m3 = c;
             SetMatrices();
         }
-
         private void SetMatrices()
         {
             SetUniformF(Uniforms[3], _m1 * _m2 * _m3);
