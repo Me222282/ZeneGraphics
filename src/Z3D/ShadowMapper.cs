@@ -186,6 +186,8 @@ namespace Zene.Graphics.Z3D
             }
         }
 
+        void IShaderProgram.PrepareDraw() => _shader.PrepareDraw();
+
         public ShaderProgramProperties Properties => _shader.Properties;
         IProperties IGLObject.Properties => _framebuffer.Properties;
     }

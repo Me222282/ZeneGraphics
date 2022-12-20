@@ -100,7 +100,7 @@ namespace Zene.Graphics
             if (_m1 == Matrix4.Identity)
             {
                 _m1 = _borderScaleMatrix;
-                SetMatrices();
+                //SetMatrices();
             }
         }
         private void SetRadius()
@@ -170,63 +170,14 @@ namespace Zene.Graphics
                 }
 
                 _m1 = _borderScaleMatrix * value;
-                SetMatrices();
             }
         }
-        private Matrix4 _m2 = Matrix4.Identity;
-        public Matrix4 Matrix2
-        {
-            get => _m2;
-            set
-            {
-                if (value == null)
-                {
-                    value = Matrix4.Identity;
-                }
+        public Matrix4 Matrix2 { get; set; } = Matrix4.Identity;
+        public Matrix4 Matrix3 { get; set; } = Matrix4.Identity;
 
-                _m2 = value;
-                SetMatrices();
-            }
-        }
-        private Matrix4 _m3 = Matrix4.Identity;
-        public Matrix4 Matrix3
+        public override void PrepareDraw()
         {
-            get => _m3;
-            set
-            {
-                if (value == null)
-                {
-                    value = Matrix4.Identity;
-                }
-
-                _m3 = value;
-                SetMatrices();
-            }
-        }
-
-        public void SetMatrices(Matrix4 a, Matrix4 b, Matrix4 c)
-        {
-            if (a == null)
-            {
-                a = Matrix4.Identity;
-            }
-            if (b == null)
-            {
-                b = Matrix4.Identity;
-            }
-            if (c == null)
-            {
-                c = Matrix4.Identity;
-            }
-
-            _m1 = _borderScaleMatrix * a;
-            _m2 = b;
-            _m3 = c;
-            SetMatrices();
-        }
-        private void SetMatrices()
-        {
-            SetUniformF(Uniforms[3], _m1 * _m2 * _m3);
+            SetUniformF(Uniforms[3], Matrix1 * Matrix2 * Matrix3);
         }
     }
 }

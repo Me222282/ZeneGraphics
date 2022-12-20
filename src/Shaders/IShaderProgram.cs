@@ -15,6 +15,8 @@ namespace Zene.Graphics
     {
         public new ShaderProgramProperties Properties { get; }
         IProperties IGLObject.Properties => Properties;
+
+        public void PrepareDraw();
     }
 
     public interface IUniformStruct

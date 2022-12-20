@@ -54,6 +54,8 @@ namespace Zene.Graphics.Base
             GL.ValidateProgram(Id);
         }
 
+        public virtual void PrepareDraw() { }
+
         /// <summary>
         /// Attaches a shader object to this program.
         /// </summary>

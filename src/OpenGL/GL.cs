@@ -677,78 +677,104 @@ namespace Zene.Graphics.Base
 		[OpenGLSupport(1.1)]
 		public static void DrawArrays(uint mode, int first, int count)
 		{
+			context.boundShaderProgram.PrepareDraw();
+
 			Functions.DrawArrays(mode, first, count);
 		}
 
 		[OpenGLSupport(4.0)]
 		public static void DrawArraysIndirect(uint mode, void* indirect)
 		{
+			context.boundShaderProgram.PrepareDraw();
+
 			Functions.DrawArraysIndirect(mode, indirect);
 		}
 
 		[OpenGLSupport(3.1)]
 		public static void DrawArraysInstanced(uint mode, int first, int count, int instancecount)
 		{
+			context.boundShaderProgram.PrepareDraw();
+
 			Functions.DrawArraysInstanced(mode, first, count, instancecount);
 		}
 
 		[OpenGLSupport(4.2)]
 		public static void DrawArraysInstancedBaseInstance(uint mode, int first, int count, int instancecount, uint baseinstance)
 		{
+			context.boundShaderProgram.PrepareDraw();
+
 			Functions.DrawArraysInstancedBaseInstance(mode, first, count, instancecount, baseinstance);
 		}
 
 		[OpenGLSupport(1.1)]
 		public static void DrawElements(uint mode, int count, uint type, void* indices)
 		{
+			context.boundShaderProgram.PrepareDraw();
+
 			Functions.DrawElements(mode, count, type, indices);
 		}
 
 		[OpenGLSupport(3.2)]
 		public static void DrawElementsBaseVertex(uint mode, int count, uint type, void* indices, int basevertex)
 		{
+			context.boundShaderProgram.PrepareDraw();
+
 			Functions.DrawElementsBaseVertex(mode, count, type, indices, basevertex);
 		}
 
 		[OpenGLSupport(4.0)]
 		public static void DrawElementsIndirect(uint mode, uint type, void* indirect)
 		{
+			context.boundShaderProgram.PrepareDraw();
+
 			Functions.DrawElementsIndirect(mode, type, indirect);
 		}
 
 		[OpenGLSupport(3.1)]
 		public static void DrawElementsInstanced(uint mode, int count, uint type, void* indices, int instancecount)
 		{
+			context.boundShaderProgram.PrepareDraw();
+
 			Functions.DrawElementsInstanced(mode, count, type, indices, instancecount);
 		}
 
 		[OpenGLSupport(4.2)]
 		public static void DrawElementsInstancedBaseInstance(uint mode, int count, uint type, void* indices, int instancecount, uint baseinstance)
 		{
+			context.boundShaderProgram.PrepareDraw();
+
 			Functions.DrawElementsInstancedBaseInstance(mode, count, type, indices, instancecount, baseinstance);
 		}
 
 		[OpenGLSupport(3.2)]
 		public static void DrawElementsInstancedBaseVertex(uint mode, int count, uint type, void* indices, int instancecount, int basevertex)
 		{
+			context.boundShaderProgram.PrepareDraw();
+
 			Functions.DrawElementsInstancedBaseVertex(mode, count, type, indices, instancecount, basevertex);
 		}
 
 		[OpenGLSupport(4.2)]
 		public static void DrawElementsInstancedBaseVertexBaseInstance(uint mode, int count, uint type, void* indices, int instancecount, int basevertex, uint baseinstance)
 		{
+			context.boundShaderProgram.PrepareDraw();
+
 			Functions.DrawElementsInstancedBaseVertexBaseInstance(mode, count, type, indices, instancecount, basevertex, baseinstance);
 		}
 
 		[OpenGLSupport(1.2)]
 		public static void DrawRangeElements(uint mode, uint start, uint end, int count, uint type, void* indices)
 		{
+			context.boundShaderProgram.PrepareDraw();
+
 			Functions.DrawRangeElements(mode, start, end, count, type, indices);
 		}
 
 		[OpenGLSupport(3.2)]
 		public static void DrawRangeElementsBaseVertex(uint mode, uint start, uint end, int count, uint type, void* indices, int basevertex)
 		{
+			context.boundShaderProgram.PrepareDraw();
+
 			Functions.DrawRangeElementsBaseVertex(mode, start, end, count, type, indices, basevertex);
 		}
 
