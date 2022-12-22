@@ -1,4 +1,6 @@
-﻿using Zene.Graphics.Base;
+﻿using System;
+using System.Collections.Generic;
+using Zene.Graphics.Base;
 using Zene.Structs;
 
 namespace Zene.Graphics
@@ -92,5 +94,11 @@ namespace Zene.Graphics
         internal int frameClearStencil = 0;
 
         public static GraphicsContext None { get; } = new GraphicsContext(false, false, 0, 0, 0d);
+
+        private readonly List<IIdentifiable> _tracked = new List<IIdentifiable>();
+
+        public void TrackObject(IIdentifiable obj) => _tracked.Add(obj);
+        public bool RemoveTrack(IIdentifiable obj) => _tracked.Remove(obj);
+        public IIdentifiable GetTrack(Type type) => _tracked.Find((i) => i.GetType() == type);
     }
 }

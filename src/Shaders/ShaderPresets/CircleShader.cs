@@ -96,5 +96,17 @@ namespace Zene.Graphics
         {
             SetUniformF(Uniforms[3], Matrix1 * Matrix2 * Matrix3);
         }
+
+        protected override void Dispose(bool dispose)
+        {
+            base.Dispose(dispose);
+
+            State.CurrentContext.RemoveTrack(this);
+        }
+        /// <summary>
+        /// Gets the instance of the <see cref="CircleShader"/> for this <see cref="GraphicsContext"/>.
+        /// </summary>
+        /// <returns></returns>
+        public static CircleShader GetInstance() => GetInstance<CircleShader>();
     }
 }

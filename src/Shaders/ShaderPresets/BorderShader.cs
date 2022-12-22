@@ -179,5 +179,17 @@ namespace Zene.Graphics
         {
             SetUniformF(Uniforms[3], Matrix1 * Matrix2 * Matrix3);
         }
+
+        protected override void Dispose(bool dispose)
+        {
+            base.Dispose(dispose);
+
+            State.CurrentContext.RemoveTrack(this);
+        }
+        /// <summary>
+        /// Gets the instance of the <see cref="BorderShader"/> for this <see cref="GraphicsContext"/>.
+        /// </summary>
+        /// <returns></returns>
+        public static BorderShader GetInstance() => GetInstance<BorderShader>();
     }
 }

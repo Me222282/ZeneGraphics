@@ -32,5 +32,17 @@ namespace Zene.Graphics
                 SetUniformF(Uniforms[1], value);
             }
         }
+
+        protected override void Dispose(bool dispose)
+        {
+            base.Dispose(dispose);
+
+            State.CurrentContext.RemoveTrack(this);
+        }
+        /// <summary>
+        /// Gets the instance of the <see cref="DepthMapShader"/> for this <see cref="GraphicsContext"/>.
+        /// </summary>
+        /// <returns></returns>
+        public static DepthMapShader GetInstance() => GetInstance<DepthMapShader>();
     }
 }

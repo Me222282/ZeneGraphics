@@ -2,7 +2,7 @@
 
 namespace Zene.Graphics
 {
-    public class SampleFont : Font
+    public sealed class SampleFont : Font, IIdentifiable
     {
         public SampleFont()
             : base(11, 21, 6)
@@ -24,6 +24,7 @@ namespace Zene.Graphics
         }
 
         public override Texture2D SourceTexture { get; }
+        uint IIdentifiable.Id => SourceTexture.Id;
 
         private static CharFontData GetChar(int ox, int oy, int sx, int sy)
         {
@@ -238,7 +239,6 @@ namespace Zene.Graphics
 
             return CharFontData.Unsupported;
         }
-
         public override CharFontData GetCharacterData(char character, char pre, char post)
         {
             CharFontData cfd = GetCharacterData(character);
@@ -256,6 +256,21 @@ namespace Zene.Graphics
             }
 
             return cfd;
+        }
+
+        public static SampleFont GetInstance()
+        {
+            IIdentifiable i = State.CurrentContext.GetTrack(typeof(SampleFont));
+
+            if (i != null)
+            {
+                return i as SampleFont;
+            }
+
+            SampleFont font = new SampleFont();
+            State.CurrentContext.TrackObject(font);
+
+            return font;
         }
     }
 }
