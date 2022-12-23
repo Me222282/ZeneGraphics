@@ -9,6 +9,8 @@ namespace Zene.Graphics
     {
         public unsafe GraphicsContext(bool stereo, bool doubleBuffered, int width, int height, double version)
         {
+            ThreadChange();
+
             baseFrameBuffer = new FramebufferGL(0, stereo, doubleBuffered, width, height);
             boundFrameBuffers.Draw = baseFrameBuffer;
             boundFrameBuffers.Read = baseFrameBuffer;
@@ -100,5 +102,7 @@ namespace Zene.Graphics
         public void TrackObject(IIdentifiable obj) => _tracked.Add(obj);
         public bool RemoveTrack(IIdentifiable obj) => _tracked.Remove(obj);
         public IIdentifiable GetTrack(Type type) => _tracked.Find((i) => i.GetType() == type);
+        
+        public void ThreadChange() => Actions.ThreadChange();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Zene.Graphics
 {
@@ -12,8 +13,7 @@ namespace Zene.Graphics
         {
             if (action == null) { return; }
 
-
-            if (_temporary)
+            if (_temporary || _manageThread == Thread.CurrentThread)
             {
                 action.Invoke();
                 return;
@@ -28,6 +28,12 @@ namespace Zene.Graphics
         private readonly List<Action> _actions = new List<Action>();
         private readonly object _threadRef = new object();
         private readonly bool _temporary;
+        private Thread _manageThread;
+
+        /// <summary>
+        /// Determines whether the current thread is the managing thread for this <see cref="ActionManager"/>.
+        /// </summary>
+        public bool CurrentThread => _manageThread == Thread.CurrentThread;
 
         public void Flush()
         {
@@ -43,6 +49,8 @@ namespace Zene.Graphics
                 _actions.Clear();
             }
         }
+
+        public void ThreadChange() => _manageThread = Thread.CurrentThread;
 
         public static ActionManager Temporary { get; } = new ActionManager(true);
     }
