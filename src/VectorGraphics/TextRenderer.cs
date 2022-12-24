@@ -17,10 +17,7 @@ namespace Zene.Graphics
                 SetMatrix(Matrix4.Identity);
             }
 
-            public void SetMatrix(Matrix4 m)
-            {
-                SetUniformF(Uniforms[0], m);
-            }
+            public void SetMatrix(Matrix4 m) => SetUniformF(Uniforms[0], m);
 
             public ColourF Colour
             {
@@ -41,10 +38,7 @@ namespace Zene.Graphics
                 SetMatrix(Matrix4.Identity);
             }
 
-            public void SetMatrix(Matrix4 m)
-            {
-                SetUniformF(Uniforms[0], m);
-            }
+            public void SetMatrix(Matrix4 m) => SetUniformF(Uniforms[0], m);
 
             public ColourF Colour
             {
@@ -171,7 +165,7 @@ namespace Zene.Graphics
             GC.SuppressFinalize(this);
         }
 
-        public void DrawLeftBound(ReadOnlySpan<char> text, Font font, int charSpace, int lineSpace)
+        public void DrawLeftBound(ReadOnlySpan<char> text, Font font, int charSpace, int lineSpace, int caretIndex, bool drawCaret)
         {
             if (font == null)
             {
@@ -196,15 +190,30 @@ namespace Zene.Graphics
             _source[0] = font.SourceTexture;
 
             // Set frame size
-            _frame.Size = font.GetFrameSize(text, charSpace, lineSpace, TabSize);
+            Vector2I frameSize = font.GetFrameSize(text, charSpace, lineSpace, TabSize);
+            // Add space for caret
+            if (caretIndex >= 0)
+            {
+                frameSize.X += font.GetCharacterData('|').Size.X;
+            }
+            // Set framebuffer's size property
+            _frame.Size = frameSize;
 
             _frame.Clear(BufferBit.Colour);
+
+            Vector2I caretOffset = 0;
 
             Vector2I offset = (0, _frame.Height - font.LineHeight);
             int i = 0;
             int count = 0;
-            while (count < compText.Length)
+            //while (count < compText.Length)
+            while (i < text.Length)
             {
+                if (i == caretIndex)
+                {
+                    caretOffset = offset;
+                }
+
                 // No character
                 if (text[i] == '\0' || text[i] == '\a')
                 {
@@ -281,6 +290,29 @@ namespace Zene.Graphics
                 i++;
             }
 
+            // Add caret
+            if (caretIndex >= 0 && drawCaret)
+            {
+                if (caretIndex > 0 && caretOffset == 0)
+                {
+                    caretOffset = offset;
+                }
+
+                CharFontData caret = font.GetCharacterData('|');
+
+                if (!caret.Supported)
+                {
+                    throw new UnsupportedCharacterException('|', font);
+                }
+
+                Vector2I position = caretOffset + caret.ExtraOffset;
+                position.X -= (caret.Size.X + charSpace) / 2;
+                _source.CopyFrameBuffer(_frame,
+                    new Rectangle(position, caret.Size),
+                    new Rectangle(caret.TexturePosision, caret.Size),
+                    BufferBit.Colour, TextureSampling.Nearest);
+            }
+
             // Bind framebuffer to draw to
             drawFrame.Bind();
 
@@ -298,6 +330,8 @@ namespace Zene.Graphics
 
             _drawable.Draw();
         }
+        public void DrawLeftBound(ReadOnlySpan<char> text, Font font, int charSpace, int lineSpace)
+            => DrawLeftBound(text, font, charSpace, lineSpace, -1, false);
 
         private readonly M2Shader _m2Shader;
         private readonly ArrayBuffer<Vector2> _instanceData;
