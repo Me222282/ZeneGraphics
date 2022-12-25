@@ -153,5 +153,64 @@ namespace Zene.Graphics.Base
 
 			Functions.Viewport(view.X, view.Y, view.Width, view.Height);
 		}
+
+		internal static void SetScissorState(Scissor s)
+		{
+			if (s == null || context.scissor == s) { return; }
+
+			if (context.boundFrameBuffers.Draw.LockedState &&
+				context.boundFrameBuffers.Draw.Scissor != null)
+			{
+				return;
+			}
+
+			Scissor old = context.scissor;
+			context.scissor = s;
+
+			if (old.enabled != s.enabled)
+			{
+				if (s.enabled)
+				{
+					Functions.Enable(GLEnum.ScissorTest);
+				}
+				else
+				{
+					Functions.Disable(GLEnum.ScissorTest);
+				}
+			}
+
+			if (old.view != s.view)
+			{
+				Functions.Scissor(s.view.X, s.view.Y, s.view.Width, s.view.Height);
+			}
+		}
+
+		[OpenGLSupport(1.0)]
+		internal static void Scissor(RectangleI bounds)
+		{
+			if (context.scissor.view == bounds) { return; }
+
+			context.scissor.view = bounds;
+
+			Functions.Scissor(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+		}
+
+		[OpenGLSupport(4.1)]
+		public static void ScissorArrayv(uint first, int count, int* v)
+		{
+			Functions.ScissorArrayv(first, count, v);
+		}
+
+		[OpenGLSupport(4.1)]
+		public static void ScissorIndexed(uint index, int left, int bottom, int width, int height)
+		{
+			Functions.ScissorIndexed(index, left, bottom, width, height);
+		}
+
+		[OpenGLSupport(4.1)]
+		public static void ScissorIndexedv(uint index, int* v)
+		{
+			Functions.ScissorIndexedv(index, v);
+		}
 	}
 }

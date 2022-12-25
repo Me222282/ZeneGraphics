@@ -49,6 +49,11 @@ namespace Zene.Graphics
             get => base.DepthState;
             set => base.DepthState = value;
         }
+        public new Scissor Scissor
+        {
+            get => base.Scissor;
+            set => base.Scissor = value;
+        }
 
         /// <summary>
         /// The clear colour that is used when <see cref="Clear(BufferBit)"/> is called.

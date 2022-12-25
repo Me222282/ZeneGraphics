@@ -2259,30 +2259,6 @@ namespace Zene.Graphics.Base
 			Functions.SamplerParameteriv(sampler, pname, param);
 		}
 
-		[OpenGLSupport(1.0)]
-		public static void Scissor(int x, int y, int width, int height)
-		{
-			Functions.Scissor(x, y, width, height);
-		}
-
-		[OpenGLSupport(4.1)]
-		public static void ScissorArrayv(uint first, int count, int* v)
-		{
-			Functions.ScissorArrayv(first, count, v);
-		}
-
-		[OpenGLSupport(4.1)]
-		public static void ScissorIndexed(uint index, int left, int bottom, int width, int height)
-		{
-			Functions.ScissorIndexed(index, left, bottom, width, height);
-		}
-
-		[OpenGLSupport(4.1)]
-		public static void ScissorIndexedv(uint index, int* v)
-		{
-			Functions.ScissorIndexedv(index, v);
-		}
-
 		[OpenGLSupport(4.1)]
 		public static void ShaderBinary(int count, uint* shaders, uint binaryformat, void* binary, int length)
 		{

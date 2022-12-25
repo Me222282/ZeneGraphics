@@ -17,6 +17,7 @@ namespace Zene.Graphics
 
             this.version = version;
             viewport = new Viewport(0, 0, width, height);
+            scissor = new Scissor(0, 0, width, height);
 
             // Setup texture binding referance
             int size = 0;
@@ -82,6 +83,7 @@ namespace Zene.Graphics
         internal GL.TextureBinding[] boundTextures;
 
         internal Viewport viewport;
+        internal Scissor scissor;
         internal DepthState depth = new DepthState();
         internal PolygonMode polygonMode = PolygonMode.Fill;
         internal BlendFunction sfactorBlendFunc = BlendFunction.One;

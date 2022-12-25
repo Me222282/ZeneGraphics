@@ -60,6 +60,11 @@ namespace Zene.Graphics
             get => base.DepthState;
             set => base.DepthState = value;
         }
+        public new Scissor Scissor
+        {
+            get => base.Scissor;
+            set => base.Scissor = value;
+        }
 
         [OpenGLSupport(3.0)]
         protected override void Dispose(bool dispose)

@@ -53,6 +53,11 @@ namespace Zene.Graphics
             get => base.DepthState;
             set => base.DepthState = value;
         }
+        public new Scissor Scissor
+        {
+            get => base.Scissor;
+            set => base.Scissor = value;
+        }
 
         /// <summary>
         /// Gets or sets a colour buffer as a destination for draw calls.

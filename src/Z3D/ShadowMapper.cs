@@ -40,6 +40,7 @@ namespace Zene.Graphics.Z3D
         bool IFramebuffer.LockedState => _framebuffer.LockedState;
         Viewport IFramebuffer.Viewport => _framebuffer.Viewport;
         DepthState IFramebuffer.DepthState => _framebuffer.DepthState;
+        Scissor IFramebuffer.Scissor => _framebuffer.Scissor;
 
         public RectangleI View
         {

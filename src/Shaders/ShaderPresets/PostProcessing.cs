@@ -55,6 +55,7 @@ namespace Zene.Graphics
         bool IFramebuffer.LockedState => _multiSFramebuffer.LockedState;
         Viewport IFramebuffer.Viewport => _multiSFramebuffer.Viewport;
         DepthState IFramebuffer.DepthState => _multiSFramebuffer.DepthState;
+        Scissor IFramebuffer.Scissor => _multiSFramebuffer.Scissor;
 
 
         public FrameDrawTarget ReadBuffer

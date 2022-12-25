@@ -47,6 +47,9 @@ namespace Zene.Graphics
         [OpenGLSupport(1.0)]
         Viewport IFramebuffer.Viewport => GL.context.baseFrameBuffer.Viewport;
 
+        [OpenGLSupport(1.0)]
+        Scissor IFramebuffer.Scissor => GL.context.baseFrameBuffer.Scissor;
+
         FrameDrawTarget IFramebuffer.ReadBuffer
         {
             get => FrameDrawTarget.Colour0;

@@ -113,6 +113,11 @@ namespace Zene.Graphics
             get => GL.context.viewport;
             set => GL.SetViewState(value);
         }
+        public static Scissor Scissor
+        {
+            get => GL.context.scissor;
+            set => GL.SetScissorState(value);
+        }
 
         /// <summary>
         /// The render area used by any draws to the bound framebuffer.
@@ -605,7 +610,9 @@ namespace Zene.Graphics
         /// </summary>
         public static bool ScissorTesting
         {
-            get
+            get => GL.context.scissor.enabled;
+            set => GL.context.scissor.Enabled = value;
+            /*get
             {
                 return GL.IsEnabled(GLEnum.ScissorTest);
             }
@@ -618,7 +625,7 @@ namespace Zene.Graphics
                 }
 
                 GL.Disable(GLEnum.ScissorTest);
-            }
+            }*/
         }
         /// <summary>
         /// Determines whether to do stencil testing and update the stencil buffer.

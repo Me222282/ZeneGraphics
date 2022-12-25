@@ -23,6 +23,7 @@ namespace Zene.Graphics.Base
             Id = id;
 
             Viewport = new Viewport(0, 0, width, height);
+            Scissor = new Scissor(0, 0, width, height);
 
             Properties = new FramebufferProperties(this, width, height)
             {
@@ -39,9 +40,10 @@ namespace Zene.Graphics.Base
         [OpenGLSupport(3.0)]
         public void Bind()
         {
-            // Set viewport
+            // Set states
             GL.SetViewState(Viewport);
             GL.SetDepthState(DepthState);
+            //GL.SetScissorState(Scissor);
 
             if (this.Bound()) { return; }
 
@@ -51,9 +53,14 @@ namespace Zene.Graphics.Base
         [OpenGLSupport(3.0)]
         public void Bind(FrameTarget target)
         {
-            // Set viewport
-            GL.SetViewState(Viewport);
-            GL.SetDepthState(DepthState);
+            // Set states
+            if (target == FrameTarget.Draw ||
+                target == FrameTarget.FrameBuffer)
+            {
+                GL.SetViewState(Viewport);
+                GL.SetDepthState(DepthState);
+                GL.SetScissorState(Scissor);
+            }
 
             if (this.Bound(target)) { return; }
 
@@ -118,6 +125,12 @@ namespace Zene.Graphics.Base
             }
         }
         public DepthState DepthState { get; protected set; } = null;
+        protected bool LockScissor
+        {
+            get => Scissor.Locked;
+            set => Scissor.Locked = value;
+        }
+        public Scissor Scissor { get; protected set; } = null;
 
         public RectangleI View
         {
