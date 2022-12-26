@@ -43,7 +43,7 @@ namespace Zene.Graphics.Base
             // Set states
             GL.SetViewState(Viewport);
             GL.SetDepthState(DepthState);
-            //GL.SetScissorState(Scissor);
+            GL.SetScissorState(Scissor);
 
             if (this.Bound()) { return; }
 
@@ -127,8 +127,18 @@ namespace Zene.Graphics.Base
         public DepthState DepthState { get; protected set; } = null;
         protected bool LockScissor
         {
-            get => Scissor.Locked;
-            set => Scissor.Locked = value;
+            get
+            {
+                if (Scissor == null) { return false; }
+
+                return Scissor.Locked;
+            }
+            set
+            {
+                if (Scissor == null) { return; }
+
+                Scissor.Locked = value;
+            }
         }
         public Scissor Scissor { get; protected set; } = null;
 
