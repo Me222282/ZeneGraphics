@@ -379,6 +379,7 @@ namespace Zene.Graphics
                 (Vector2)(font.SourceTexture.Properties.Width, font.SourceTexture.Properties.Height);
             double sizeMultiplier = 1d / font.LineHeight;
 
+            double lineSpaceD = lineSpace * sizeMultiplier;
             double cs = charSpace * sizeMultiplier;
             double sw = font.SpaceWidth * sizeMultiplier;
 
@@ -391,7 +392,7 @@ namespace Zene.Graphics
                 // The offset for Y
                 (
                     lineWidths.Count +
-                    ((lineWidths.Count - 1) * lineSpace)
+                    ((lineWidths.Count - 1) * lineSpaceD)
                 ) * 0.5);
             // The instance data containing offsets for each character
             Vector2[] data = new Vector2[compText.Length * _blockSize];
@@ -435,7 +436,7 @@ namespace Zene.Graphics
                         continue;
                     }
 
-                    offsetCurrent.Y -= 1d + lineSpace;
+                    offsetCurrent.Y -= 1d + lineSpaceD;
                     lineCurrent++;
                     offsetCurrent.X = lineWidths[lineCurrent] * -0.5;
                     i++;
@@ -448,7 +449,7 @@ namespace Zene.Graphics
                     // Sometimes there is both
                     if (text.Length > (i + 1) && text[i + 1] != '\n')
                     {
-                        offsetCurrent.Y -= 1d + lineSpace;
+                        offsetCurrent.Y -= 1d + lineSpaceD;
                         lineCurrent++;
                         offsetCurrent.X = lineWidths[lineCurrent] * -0.5;
                     }
