@@ -9,13 +9,20 @@ namespace Zene.Graphics
 
         public bool Current => GL.context.scissor == this;
 
+        public Scissor(bool enabled = false)
+        {
+            view = new RectangleI();
+            this.enabled = enabled;
+        }
         public Scissor(int x, int y, int width, int height)
         {
             view = new RectangleI(x, y, width, height);
+            enabled = true;
         }
         public Scissor(IBox bounds)
         {
             view = new RectangleI(bounds);
+            enabled = true;
         }
 
         internal bool enabled = false;

@@ -53,28 +53,19 @@ namespace Zene.Graphics
         public Matrix4 Model
         {
             get => _m1;
-            set
-            {
-                _m1 = value;
-            }
+            set => _m1 = value;
         }
         private Matrix4 _m2 = Matrix4.Identity;
         public Matrix4 View
         {
             get => _m2;
-            set
-            {
-                _m2 = value;
-            }
+            set => _m2 = value;
         }
         private Matrix4 _m3 = Matrix4.Identity;
         public Matrix4 Projection
         {
             get => _m3;
-            set
-            {
-                _m3 = value;
-            }
+            set => _m3 = value;
         }
 
         private ColourF _colour;
@@ -111,6 +102,7 @@ namespace Zene.Graphics
             _frame = new TextureRenderer(1, 1);
             _frame.SetColourAttachment(0, TextureFormat.R8);
             _frame.ClearColour = new ColourF(0f, 0f, 0f, 0f);
+            _frame.Scissor = new Scissor(false);
             _source = new Framebuffer();
 
             _m1Shader = new M1Shader();
