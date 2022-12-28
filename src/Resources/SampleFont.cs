@@ -20,7 +20,7 @@ namespace Zene.Graphics
             // Assign data
             SourceTexture.SetData(w, h, BaseFormat.Rgba, new GLArray<byte>(w, h, 4, byteData));
 
-            SourceTexture.CreateMipMap();
+            //SourceTexture.CreateMipMap();
         }
 
         public override Texture2D SourceTexture { get; }

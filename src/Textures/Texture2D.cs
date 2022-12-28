@@ -411,10 +411,7 @@ namespace Zene.Graphics
         /// <summary>
         /// Creates all levels for a mipmaped texture.
         /// </summary>
-        public void CreateMipMap()
-        {
-            GenerateMipmap();
-        }
+        public void CreateMipMap() => GenerateMipmap();
 
         public static Texture2D Create(GLArray<Colour> data, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap)
         {
