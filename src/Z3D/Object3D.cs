@@ -7,16 +7,11 @@ using Zene.Structs;
 
 namespace Zene.Graphics.Z3D
 {
-    public class Object3D : IDrawable, IDisposable
+    public class Object3D : IDisposable
     {
         private DrawObject<Vector3, uint> _object;
 
         //private Material _mat;
-
-        public void Draw()
-        {
-            _object.Draw();
-        }
 
         private bool _disposed = false;
         public void Dispose()

@@ -103,7 +103,9 @@ namespace Zene.Graphics
         /// <returns></returns>
         public static bool Bound(this IVertexArray vertexArray)
         {
-            return vertexArray == State.GetBoundVertexArray();
+            return vertexArray == State.GetBoundVertexArray() &&
+                (vertexArray == null ||
+                vertexArray.Properties._elementBuffer == State.GetBoundBuffer(BufferTarget.ElementArray));
         }
 
         /// <summary>

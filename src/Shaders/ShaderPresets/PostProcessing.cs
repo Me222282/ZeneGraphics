@@ -126,29 +126,18 @@ namespace Zene.Graphics
             }
         }
 
-        public void Draw(IFramebuffer destination = null)
+        public void Draw(IDrawingContext context)
         {
             _multiSFramebuffer.CopyFrameBuffer(_framebuffer, BufferBit.Colour, TextureSampling.Nearest);
 
-            if (destination == null)
-            {
-                BaseFramebuffer.Bind(FrameTarget.FrameBuffer);
-            }
-            else
-            {
-                destination.Bind(FrameTarget.FrameBuffer);
-            }
+            context.Shader = this;
 
             GL.Disable(GLEnum.DepthTest);
 
-            base.Bind();
             _framebuffer.GetTexture(FrameAttachment.Colour0).Bind(0);
             TextureSlot = 0;
 
-            Shapes.Square.Draw();
-
-            GL.BindTexture(GLEnum.Texture2d, null);
-            GL.UseProgram(null);
+            context.DrawObject(Shapes.Square);
         }
 
         IProperties IGLObject.Properties => Properties;

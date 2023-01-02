@@ -118,10 +118,10 @@ namespace Zene.Graphics
             _instanceData.InitData(_m2Capacity * _blockSize);
 
             // Add instance reference
-            _drawable.Vao.AddInstanceBuffer(_instanceData, 3, 0, DataType.Double, AttributeSize.D2, 1);
-            _drawable.Vao.AddInstanceBuffer(_instanceData, 4, 1, DataType.Double, AttributeSize.D2, 1);
-            _drawable.Vao.AddInstanceBuffer(_instanceData, 5, 2, DataType.Double, AttributeSize.D2, 1);
-            _drawable.Vao.AddInstanceBuffer(_instanceData, 6, 3, DataType.Double, AttributeSize.D2, 1);
+            _drawable.AddInstanceBuffer(_instanceData, 3, 0, DataType.Double, AttributeSize.D2, 1);
+            _drawable.AddInstanceBuffer(_instanceData, 4, 1, DataType.Double, AttributeSize.D2, 1);
+            _drawable.AddInstanceBuffer(_instanceData, 5, 2, DataType.Double, AttributeSize.D2, 1);
+            _drawable.AddInstanceBuffer(_instanceData, 6, 3, DataType.Double, AttributeSize.D2, 1);
             // Colour
             //_drawable.Vao.AddInstanceBuffer(_instanceData, 7, 4, DataType.Double, AttributeSize.D4, 1);
             // Set indexes as instance referances
@@ -157,7 +157,7 @@ namespace Zene.Graphics
             GC.SuppressFinalize(this);
         }
 
-        public void DrawLeftBound(ReadOnlySpan<char> text, Font font, int charSpace, int lineSpace, int caretIndex, bool drawCaret)
+        public void DrawLeftBound(IDrawingContext dc, ReadOnlySpan<char> text, Font font, int charSpace, int lineSpace, int caretIndex, bool drawCaret)
         {
             if (font == null)
             {
@@ -309,7 +309,7 @@ namespace Zene.Graphics
             drawFrame.Bind();
 
             // Bind shader
-            _m1Shader.Bind();
+            dc.Shader = _m1Shader;
 
             // Set texture slot - already 0
             //_m1Shader.SetUniformI(Uniforms[2], 0);
@@ -320,10 +320,10 @@ namespace Zene.Graphics
             //_frame.Bind(0);
             _frame.GetTexture(FrameAttachment.Colour0).Bind(0);
 
-            _drawable.Draw();
+            dc.DrawObject(_drawable);
         }
-        public void DrawLeftBound(ReadOnlySpan<char> text, Font font, int charSpace, int lineSpace)
-            => DrawLeftBound(text, font, charSpace, lineSpace, -1, false);
+        public void DrawLeftBound(IDrawingContext dc, ReadOnlySpan<char> text, Font font, int charSpace, int lineSpace)
+            => DrawLeftBound(dc, text, font, charSpace, lineSpace, -1, false);
 
         private readonly M2Shader _m2Shader;
         private readonly ArrayBuffer<Vector2> _instanceData;
@@ -348,7 +348,7 @@ namespace Zene.Graphics
             _instanceData.InitData(_m2Capacity * _blockSize);
         }
 
-        public void DrawCentred(ReadOnlySpan<char> text, Font font, int charSpace, int lineSpace)
+        public void DrawCentred(IDrawingContext dc, ReadOnlySpan<char> text, Font font, int charSpace, int lineSpace)
         {
             if (font == null)
             {
@@ -488,14 +488,14 @@ namespace Zene.Graphics
             //
 
             // Bind shader
-            _m2Shader.Bind();
+            dc.Shader = _m2Shader;
             _m2Shader.SetMatrix(_m1 * _m2 * _m3);
 
             // Set texture slot - already 0
             //SetUniformI(Uniforms[2], 0);
             font.SourceTexture.Bind(0);
 
-            _drawable.DrawMultiple(compText.Length);
+            dc.DrawObject(_drawable, compText.Length);
         }
     }
 }

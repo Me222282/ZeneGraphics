@@ -43,18 +43,7 @@ namespace Zene.Graphics
             VertexAttribPointer(index, attributeSize, dataType, false, typeSize * (int)buffer.DataSplit, dataStart * typeSize);
         }
 
-        public void Draw(DrawMode mode, int first, int size) => DrawArrays(mode, first, size);
-        public void DrawElements(IBuffer elements, DrawMode mode, IndexType type, int offset)
-        {
-            int tSize = type switch
-            {
-                IndexType.Byte => 1,
-                IndexType.Uint => 4,
-                IndexType.Ushort => 2,
-                _ => 1
-            };
-
-            DrawElements(elements, mode, elements.Properties.Size / tSize, type, offset);
-        }
+        public void SetElementBuffer<T>(IndexBuffer<T> buffer) where T : unmanaged
+            => ElementBuffer(buffer);
     }
 }

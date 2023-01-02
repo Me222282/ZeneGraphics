@@ -279,8 +279,10 @@ namespace Zene.Graphics.Base
 
 			context.boundVertexArray = array is null ? context.baseVertexArray : array;
 
-			// For some reason, binding vertex array objects unbinds any element array buffer
-			context.boundBuffers.ElementArray = null;
+			// Set element buffer
+			IBuffer ebo = array.Properties._elementBuffer;
+
+			BindBuffer(GLEnum.ElementArrayBuffer, ebo);
 		}
 
 		[OpenGLSupport(4.3)]
@@ -2733,10 +2735,19 @@ namespace Zene.Graphics.Base
 			Functions.VertexArrayBindingDivisor(vaobj, bindingindex, divisor);
 		}
 
-		[OpenGLSupport(4.5)]
-		public static void VertexArrayElementBuffer(uint vaobj, uint buffer)
+		//[OpenGLSupport(4.5)]
+		[OpenGLSupport(3.0)]
+		public static void VertexArrayElementBuffer(IVertexArray vaobj, IBuffer buffer)
 		{
-			Functions.VertexArrayElementBuffer(vaobj, buffer);
+			if (buffer != null &&
+				buffer.Target != BufferTarget.ElementArray)
+			{
+				throw new BufferException(buffer, $"Buffer must have a {BufferTarget.ElementArray} target type.");
+			}
+
+			vaobj.Properties._elementBuffer = buffer;
+
+			//Functions.VertexArrayElementBuffer(vaobj, buffer);
 		}
 
 		[OpenGLSupport(4.5)]

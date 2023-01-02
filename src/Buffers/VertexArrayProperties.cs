@@ -14,6 +14,8 @@ namespace Zene.Graphics
         internal readonly bool[] _attributes = new bool[State.MaxVertexAttributes];
         internal readonly uint[] _divisors = new uint[State.MaxVertexAttributes];
 
+        internal IBuffer _elementBuffer;
+
         public bool this[uint index]
         {
             get
@@ -46,6 +48,8 @@ namespace Zene.Graphics
 
         public IVertexArray Source { get; }
         IGLObject IProperties.Source => Source;
+
+        public IBuffer ElementBuffer => _elementBuffer;
 
         public IBuffer GetBuffer(int index)
         {
