@@ -44,12 +44,8 @@ namespace Zene.Graphics
         {
             if (renderable.FromFramebuffer)
             {
-                renderable.framebuffer.BlitBuffer(
-                    dc.Framebuffer,
-                    renderable.framebufferBounds,
-                    new GLBox(Vector2I.Zero, dc.Framebuffer.Properties.Size),
-                    renderable.bufferBit,
-                    renderable.sampling);
+                WriteFramebuffer(dc, renderable.framebuffer, renderable.framebufferBounds,
+                    renderable.bufferBit, renderable.sampling);
                 return;
             }
 
@@ -75,5 +71,10 @@ namespace Zene.Graphics
 
             Draw(dc, renderable.vertexArray, renderable.Info, instances);
         }
+
+        public static void WriteFramebuffer(this IDrawingContext dc, IFramebuffer framebuffer, BufferBit mask, TextureSampling filter)
+            => WriteFramebuffer(dc, framebuffer, new GLBox(Vector2I.Zero, framebuffer.Properties.Size), mask, filter);
+        public static void WriteFramebuffer(this IDrawingContext dc, IFramebuffer framebuffer, IBox source, BufferBit mask, TextureSampling filter)
+            => framebuffer.BlitBuffer(dc.Framebuffer, source, dc.FrameBounds, mask, filter);
     }
 }

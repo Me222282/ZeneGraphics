@@ -1,5 +1,6 @@
 ﻿using System;
 using Zene.Graphics.Base;
+using Zene.Structs;
 
 namespace Zene.Graphics
 {
@@ -21,5 +22,9 @@ namespace Zene.Graphics
 
         public IFramebuffer Framebuffer { get; set; }
         public IShaderProgram Shader { get; set; }
+
+        //public GLBox FrameBounds { get; set; }
+        //IBox IDrawingContext.FrameBounds => FrameBounds;
+        IBox IDrawingContext.FrameBounds => new GLBox(Vector2I.Zero, Framebuffer.Properties.Size);
     }
 }

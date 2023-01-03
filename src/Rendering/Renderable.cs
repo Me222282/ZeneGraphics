@@ -19,6 +19,12 @@ namespace Zene.Graphics
             Info = info;
             Instances = instances;
         }
+
+        public Renderable(IFramebuffer framebuffer, BufferBit bb, TextureSampling sampling)
+            : this(framebuffer, new GLBox(Vector2I.Zero, framebuffer.Properties.Size), bb, sampling)
+        {
+            
+        }
         public Renderable(IFramebuffer framebuffer, IBox bounds, BufferBit bb, TextureSampling sampling)
         {
             FromFramebuffer = true;

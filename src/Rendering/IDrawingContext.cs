@@ -1,4 +1,5 @@
 ﻿using System;
+using Zene.Structs;
 
 namespace Zene.Graphics
 {
@@ -6,6 +7,8 @@ namespace Zene.Graphics
     {
         public IFramebuffer Framebuffer { get; }
         public IShaderProgram Shader { get; set; }
+
+        public IBox FrameBounds { get; }
 
         void IBindable.Bind()
         {
