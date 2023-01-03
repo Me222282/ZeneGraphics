@@ -11,15 +11,15 @@ namespace Zene.Graphics
 
         public Viewport(int x, int y, int width, int height)
         {
-            view = new RectangleI(x, y, width, height);
+            view = new GLBox(x, y, width, height);
         }
         public Viewport(IBox bounds)
         {
-            view = new RectangleI(bounds);
+            view = new GLBox(bounds);
         }
 
-        internal RectangleI view;
-        public RectangleI View
+        internal GLBox view;
+        public GLBox View
         {
             get => view;
             set
@@ -49,7 +49,7 @@ namespace Zene.Graphics
                     return;
                 }
 
-                GL.Viewport(new RectangleI(view.Location, value));
+                GL.Viewport(new GLBox(view.Location, value));
             }
         }
         public int Width
@@ -65,7 +65,7 @@ namespace Zene.Graphics
                     return;
                 }
 
-                GL.Viewport(new RectangleI(view.Location, (value, view.Height)));
+                GL.Viewport(new GLBox(view.Location, (value, view.Height)));
             }
         }
         public int Height
@@ -81,7 +81,7 @@ namespace Zene.Graphics
                     return;
                 }
 
-                GL.Viewport(new RectangleI(view.Location, (view.Width, value)));
+                GL.Viewport(new GLBox(view.Location, (view.Width, value)));
             }
         }
 
@@ -98,7 +98,7 @@ namespace Zene.Graphics
                     return;
                 }
 
-                GL.Viewport(new RectangleI(value, view.Size));
+                GL.Viewport(new GLBox(value, view.Size));
             }
         }
         public int X
@@ -114,7 +114,7 @@ namespace Zene.Graphics
                     return;
                 }
 
-                GL.Viewport(new RectangleI((value, view.Y), view.Size));
+                GL.Viewport(new GLBox((value, view.Y), view.Size));
             }
         }
         public int Y
@@ -130,7 +130,7 @@ namespace Zene.Graphics
                     return;
                 }
 
-                GL.Viewport(new RectangleI((view.X, value), view.Size));
+                GL.Viewport(new GLBox((view.X, value), view.Size));
             }
         }
     }

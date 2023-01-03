@@ -145,7 +145,7 @@ namespace Zene.Graphics.Base
         }
 
 		[OpenGLSupport(1.0)]
-		internal static void Viewport(RectangleI view)
+		internal static void Viewport(GLBox view)
 		{
 			if (context.viewport.view == view) { return; }
 
@@ -186,7 +186,7 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(1.0)]
-		internal static void Scissor(RectangleI bounds)
+		internal static void Scissor(GLBox bounds)
 		{
 			if (context.scissor.view == bounds) { return; }
 

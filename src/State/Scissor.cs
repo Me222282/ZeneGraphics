@@ -11,17 +11,22 @@ namespace Zene.Graphics
 
         public Scissor(bool enabled = false)
         {
-            view = new RectangleI();
+            view = new GLBox();
             this.enabled = enabled;
         }
         public Scissor(int x, int y, int width, int height)
         {
-            view = new RectangleI(x, y, width, height);
+            view = new GLBox(x, y, width, height);
+            enabled = true;
+        }
+        public Scissor(Vector2I location, Vector2I size)
+        {
+            view = new GLBox(location, size);
             enabled = true;
         }
         public Scissor(IBox bounds)
         {
-            view = new RectangleI(bounds);
+            view = new GLBox(bounds);
             enabled = true;
         }
 
@@ -49,8 +54,8 @@ namespace Zene.Graphics
             }
         }
 
-        internal RectangleI view;
-        public RectangleI View
+        internal GLBox view;
+        public GLBox View
         {
             get => view;
             set
@@ -80,7 +85,7 @@ namespace Zene.Graphics
                     return;
                 }
 
-                GL.Scissor(new RectangleI(view.Location, value));
+                GL.Scissor(new GLBox(view.Location, value));
             }
         }
         public int Width
@@ -96,7 +101,7 @@ namespace Zene.Graphics
                     return;
                 }
 
-                GL.Scissor(new RectangleI(view.Location, (value, view.Height)));
+                GL.Scissor(new GLBox(view.Location, (value, view.Height)));
             }
         }
         public int Height
@@ -112,7 +117,7 @@ namespace Zene.Graphics
                     return;
                 }
 
-                GL.Scissor(new RectangleI(view.Location, (view.Width, value)));
+                GL.Scissor(new GLBox(view.Location, (view.Width, value)));
             }
         }
 
@@ -129,7 +134,7 @@ namespace Zene.Graphics
                     return;
                 }
 
-                GL.Scissor(new RectangleI(value, view.Size));
+                GL.Scissor(new GLBox(value, view.Size));
             }
         }
         public int X
@@ -145,7 +150,7 @@ namespace Zene.Graphics
                     return;
                 }
 
-                GL.Scissor(new RectangleI((value, view.Y), view.Size));
+                GL.Scissor(new GLBox((value, view.Y), view.Size));
             }
         }
         public int Y
@@ -161,7 +166,7 @@ namespace Zene.Graphics
                     return;
                 }
 
-                GL.Scissor(new RectangleI((view.X, value), view.Size));
+                GL.Scissor(new GLBox((view.X, value), view.Size));
             }
         }
     }

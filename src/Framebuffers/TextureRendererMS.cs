@@ -27,7 +27,7 @@ namespace Zene.Graphics
             _targetHeight = height;
             Samples = samples;
 
-            View = new RectangleI(0, 0, width, height);
+            View = new GLBox(0, 0, width, height);
 
             _colourAttachs = new Texture2DMultisample[State.MaxColourAttach];
         }
@@ -322,7 +322,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void CopyFrameBuffer(IFramebuffer destination, IBox dstBox, BufferBit mask, TextureSampling filter)
         {
-            BlitBuffer(destination, new Rectangle(0, 0, _targetWidth, _targetHeight), dstBox, mask, filter);
+            BlitBuffer(destination, new GLBox(0, 0, _targetWidth, _targetHeight), dstBox, mask, filter);
         }
         /// <summary>
         /// Copies the data from this framebuffer to <paramref name="destination"/>.
@@ -347,8 +347,8 @@ namespace Zene.Graphics
         public void CopyFrameBuffer(IFramebuffer destination, BufferBit mask, TextureSampling filter)
         {
             BlitBuffer(destination,
-                new Rectangle(0, 0, _targetWidth, _targetHeight),
-                new Rectangle(0, 0, destination.Properties.Width, destination.Properties.Height), mask, filter);
+                new GLBox(0, 0, _targetWidth, _targetHeight),
+                new GLBox(0, 0, destination.Properties.Width, destination.Properties.Height), mask, filter);
         }
 
         /// <summary>
@@ -360,7 +360,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void CopyFrameBuffer(IBox dstBox, BufferBit mask, TextureSampling filter)
         {
-            BlitBuffer(null, new Rectangle(0, 0, _targetWidth, _targetHeight), dstBox, mask, filter);
+            BlitBuffer(null, new GLBox(0, 0, _targetWidth, _targetHeight), dstBox, mask, filter);
         }
         /// <summary>
         /// Copies the data from this framebuffer to OpenGL Context's framebuffer.

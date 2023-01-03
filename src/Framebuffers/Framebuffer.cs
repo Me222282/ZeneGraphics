@@ -431,7 +431,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void CopyFrameBuffer(IFramebuffer destination, IBox dstBox, BufferBit mask, TextureSampling filter)
         {
-            BlitBuffer(destination, new Rectangle(0d, 0d, Width, Height), dstBox, mask, filter);
+            BlitBuffer(destination, new GLBox(0d, 0d, Width, Height), dstBox, mask, filter);
         }
         /// <summary>
         /// Copies the data from this framebuffer to <paramref name="destination"/>.
@@ -456,8 +456,8 @@ namespace Zene.Graphics
         public void CopyFrameBuffer(IFramebuffer destination, BufferBit mask, TextureSampling filter)
         {
             BlitBuffer(destination,
-                new Rectangle(0, 0d, Width, Height),
-                new Rectangle(0, 0d, destination.Properties.Width, destination.Properties.Height), mask, filter);
+                new GLBox(0, 0d, Width, Height),
+                new GLBox(0, 0d, destination.Properties.Width, destination.Properties.Height), mask, filter);
         }
 
         /// <summary>
@@ -469,7 +469,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void CopyFrameBuffer(IBox dstBox, BufferBit mask, TextureSampling filter)
         {
-            BlitBuffer(null, new Rectangle(0, 0, Width, Height), dstBox, mask, filter);
+            BlitBuffer(null, new GLBox(0, 0, Width, Height), dstBox, mask, filter);
         }
         /// <summary>
         /// Copies the data from this framebuffer to OpenGL Context's framebuffer.
@@ -488,200 +488,92 @@ namespace Zene.Graphics
         /// The number of bits in the alpha component channel of <see cref="MainAttachment"/>.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int AlphaSize
-        {
-            get
-            {
-                return Properties[MainAttachment].Attachment.Properties.AlphaSize;
-            }
-        }
+        public int AlphaSize => Properties[MainAttachment].Attachment.Properties.AlphaSize;
         /// <summary>
         /// The number of bits in the blue component channel of <see cref="MainAttachment"/>.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int BlueSize
-        {
-            get
-            {
-                return Properties[MainAttachment].Attachment.Properties.BlueSize;
-            }
-        }
+        public int BlueSize => Properties[MainAttachment].Attachment.Properties.BlueSize;
         /// <summary>
         /// The colour encoding components of <see cref="MainAttachment"/>.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public ColourEncode ColourEncoding
-        {
-            get
-            {
-                return GetColourEncoding(MainAttachment);
-            }
-        }
+        public ColourEncode ColourEncoding => GetColourEncoding(MainAttachment);
         /// <summary>
         /// The format of the <see cref="MainAttachment"/> components.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public ChannelType ComponentReadType
-        {
-            get
-            {
-                return GetComponentType(MainAttachment);
-            }
-        }
+        public ChannelType ComponentReadType => GetComponentType(MainAttachment);
         /// <summary>
         /// The number of bits in the depth component channel of <see cref="MainAttachment"/>.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int DepthSize
-        {
-            get
-            {
-                return Properties[MainAttachment].Attachment.Properties.DepthSize;
-            }
-        }
+        public int DepthSize => Properties[MainAttachment].Attachment.Properties.DepthSize;
         /// <summary>
         /// The number of bits in the green component channel of <see cref="MainAttachment"/>.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int GreenSize
-        {
-            get
-            {
-                return Properties[MainAttachment].Attachment.Properties.GreenSize;
-            }
-        }
+        public int GreenSize => Properties[MainAttachment].Attachment.Properties.GreenSize;
         /// <summary>
         /// Determiens whether <see cref="MainAttachment"/> is a layered object.
         /// </summary>
         [OpenGLSupport(3.2)]
-        public bool Layered
-        {
-            get
-            {
-                return Properties[MainAttachment].Layered;
-            }
-        }
+        public bool Layered => Properties[MainAttachment].Layered;
         /// <summary>
         /// The number of bits in the red component channel of <see cref="MainAttachment"/>.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int RedSize
-        {
-            get
-            {
-                return Properties[MainAttachment].Attachment.Properties.RedSize;
-            }
-        }
+        public int RedSize => Properties[MainAttachment].Attachment.Properties.RedSize;
         /// <summary>
         /// The number of bits in the stencil component channel of <see cref="MainAttachment"/>.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int StencilSize
-        {
-            get
-            {
-                return Properties[MainAttachment].Attachment.Properties.StencilSize;
-            }
-        }
+        public int StencilSize => Properties[MainAttachment].Attachment.Properties.StencilSize;
         /// <summary>
         /// The cube map face from <see cref="MainAttachment"/> that is attached to this framebuffer.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public CubeMapFace TextureCubeFace
-        {
-            get
-            {
-                return Properties[MainAttachment].Face;
-            }
-        }
+        public CubeMapFace TextureCubeFace => Properties[MainAttachment].Face;
         /// <summary>
         /// The texture layer of <see cref="MainAttachment"/> that is attached to this framebuffer.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int TextureLayer
-        {
-            get
-            {
-                return Properties[MainAttachment].Layer;
-            }
-        }
+        public int TextureLayer => Properties[MainAttachment].Layer;
         /// <summary>
         /// The texture level of <see cref="MainAttachment"/> that is attached to this framebuffer.
         /// </summary>
         [OpenGLSupport(3.0)]
-        public int TextureLevel
-        {
-            get
-            {
-                return Properties[MainAttachment].Level;
-            }
-        }
+        public int TextureLevel => Properties[MainAttachment].Level;
 
         /// <summary>
         /// The prefered pixel format for this framebuffer.
         /// </summary>
         [OpenGLSupport(4.5)]
-        public BaseFormat ColourReadFormat
-        {
-            get
-            {
-                return Properties.ColourReadFormat;
-            }
-        }
+        public BaseFormat ColourReadFormat => Properties.ColourReadFormat;
         /// <summary>
         /// The prefered pixel data type for this framebuffer.
         /// </summary>
         [OpenGLSupport(4.5)]
-        public TextureData ColourReadType
-        {
-            get
-            {
-                return Properties.ColourReadType;
-            }
-        }
+        public TextureData ColourReadType => Properties.ColourReadType;
         /// <summary>
         /// Determines whether double buffering is supported by this framebuffer.
         /// </summary>
         [OpenGLSupport(4.5)]
-        public bool DoubleBuffered
-        {
-            get
-            {
-                return Properties.DoubleBuffered;
-            }
-        }
+        public bool DoubleBuffered => Properties.DoubleBuffered;
         /// <summary>
         /// The coverage mask size for this framebuffer.
         /// </summary>
         [OpenGLSupport(4.5)]
-        public int Samples
-        {
-            get
-            {
-                return Properties.Samples;
-            }
-        }
+        public int Samples => Properties.Samples;
         /// <summary>
         /// The number of sample buffers a part of this framebuffer.
         /// </summary>
         [OpenGLSupport(4.5)]
-        public int SampleBuffers
-        {
-            get
-            {
-                return Properties.SampleBuffers;
-            }
-        }
+        public int SampleBuffers => Properties.SampleBuffers;
         /// <summary>
         /// Determines whether stereo buffers are support by this framebuffer.
         /// </summary>
         [OpenGLSupport(4.5)]
-        public bool Stereo
-        {
-            get
-            {
-                return Properties.Stereo;
-            }
-        }
+        public bool Stereo => Properties.Stereo;
     }
 }
