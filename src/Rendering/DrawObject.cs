@@ -3,7 +3,7 @@ using Zene.Structs;
 
 namespace Zene.Graphics
 {
-    public class DrawObject<T, IndexT> : VertexArray, IBindable, IDisposable
+    public class DrawObject<T, IndexT> : VertexArray, IBindable, IDisposable, IDrawObject
         where T : unmanaged where IndexT : unmanaged
     {
         public DrawObject(ReadOnlySpan<T> vertices, ReadOnlySpan<IndexT> indices, uint dataSplit, int vertexIndex, AttributeSize vertexSize, BufferUsage usage)
@@ -37,12 +37,14 @@ namespace Zene.Graphics
             AddBuffer(Buffer, ShaderLocation.Vertex, vertexIndex, _dataType, vertexSize);
 
             IndexT indexType = default;
-            IndexType = indexType switch
+            IndexType it = indexType switch
             {
                 byte => IndexType.Byte,
                 ushort => IndexType.Ushort,
                 _ => IndexType.Uint,
             };
+
+            _renderable = new Renderable(this, new RenderInfo(Ibo.Size, it));
         }
 
         public ArrayBuffer<T> Buffer { get; private set; }
@@ -51,7 +53,7 @@ namespace Zene.Graphics
         public BufferUsage Usage => Buffer.UsageType;
 
         private uint _vertexNumber;
-        public IndexType IndexType { get; }
+        private Renderable _renderable;
         private readonly DataType _dataType;
 
         public virtual void SetData(ReadOnlySpan<T> vertices)
@@ -70,6 +72,8 @@ namespace Zene.Graphics
             Buffer.SetData(vertices.ToArray());
 
             Ibo.SetData(indices.ToArray());
+
+            _renderable = new Renderable(this, new RenderInfo(Ibo.Size, _renderable.Info.IndexType));
         }
 
         public void AddAttribute(uint index, int dataStart, AttributeSize attributeSize)
@@ -88,5 +92,7 @@ namespace Zene.Graphics
             Buffer.Dispose();
             Ibo.Dispose();
         }
+
+        public Renderable GetRenderable(IDrawingContext context) => _renderable;
     }
 }

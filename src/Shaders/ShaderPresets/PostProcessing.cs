@@ -137,7 +137,7 @@ namespace Zene.Graphics
             _framebuffer.GetTexture(FrameAttachment.Colour0).Bind(0);
             TextureSlot = 0;
 
-            context.DrawObject(Shapes.Square);
+            context.Draw(Shapes.Square);
         }
 
         IProperties IGLObject.Properties => Properties;

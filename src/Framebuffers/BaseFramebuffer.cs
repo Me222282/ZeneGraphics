@@ -20,7 +20,7 @@ namespace Zene.Graphics
 
         FramebufferProperties IFramebuffer.Properties => GL.context.baseFrameBuffer.Properties;
 
-        public void Size(int width, int height) => GL.context.baseFrameBuffer.Properties.Size(width, height);
+        public void Size(int width, int height) => GL.context.baseFrameBuffer.Properties.SetSize(width, height);
 
         /// <summary>
         /// Bind the framebuffer.

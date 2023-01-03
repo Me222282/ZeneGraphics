@@ -3252,10 +3252,10 @@ namespace Zene.Graphics.Base
 		[OpenGLSupport(2.0)]
 		public static void VertexAttribPointer(uint index, int size, uint type, bool normalized, int stride, void* pointer)
 		{
-			if (context.boundVertexArray is not null && index < State.MaxVertexAttributes)
-			{
-				IVertexArray va = context.boundVertexArray;
+			IVertexArray va = context.boundVertexArray;
 
+			if (va is not null && index < State.MaxVertexAttributes)
+			{
 				va.Properties._buffers[index] = context.boundBuffers.Array;
 			}
 			else if (index < State.MaxVertexAttributes)

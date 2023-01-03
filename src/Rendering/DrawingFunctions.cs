@@ -1,38 +1,79 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Zene.Graphics.Base;
+using Zene.Graphics.Base.Extensions;
+using Zene.Structs;
 
 namespace Zene.Graphics
 {
     public static class DrawingFunctions
     {
-        /*
-        public static void DrawVertexArray(this IDrawingContext dc, IVertexArray va, int points)
+        public static void Draw(this IDrawingContext dc, IVertexArray va, RenderInfo info)
         {
-            if (va.Properties._elementBuffer == null)
+            if (va.Properties._elementBuffer == null && info.Indexed)
             {
-                dc.DrawArrays(va, DrawMode.Triangles, 0, points);
+                throw new VertexArrayException(va, "Attempted to draw object indexed without an element array buffer.");
+            }
+
+            if (!info.Indexed)
+            {
+                dc.DrawArrays(va, info.DrawMode, info.VertexOffset, info.VertexCount);
                 return;
             }
 
-            dc.DrawElements(va, DrawMode.Triangles, points, va.Properties._elementBuffer.Properties, 0);
+            dc.DrawElements(va, info.DrawMode, info.VertexCount, info.IndexType, info.VertexOffset);
             return;
-        }*/
-
-        public static void DrawObject<T, I>(this IDrawingContext dc, DrawObject<T, I> obj)
-            where T : unmanaged
-            where I : unmanaged
-        {
-            dc.DrawElements(obj, DrawMode.Triangles, obj.Ibo.Size, obj.IndexType, 0);
         }
-        public static void DrawObject<T, I>(this IDrawingContext dc, DrawObject<T, I> obj, int instances)
-            where T : unmanaged
-            where I : unmanaged
+        public static void Draw(this IDrawingContext dc, IVertexArray va, RenderInfo info, int instances)
         {
-            dc.DrawElementsInstanced(obj, DrawMode.Triangles, obj.Ibo.Size, obj.IndexType, 0, instances);
+            if (va.Properties._elementBuffer == null && info.Indexed)
+            {
+                throw new VertexArrayException(va, "Attempted to draw object indexed without an element array buffer.");
+            }
+
+            if (!info.Indexed)
+            {
+                dc.DrawArraysInstanced(va, info.DrawMode, info.VertexOffset, info.VertexCount, instances);
+                return;
+            }
+
+            dc.DrawElementsInstanced(va, info.DrawMode, info.VertexCount, info.IndexType, info.VertexOffset, instances);
+            return;
+        }
+
+        public static void Draw(this IDrawingContext dc, Renderable renderable)
+        {
+            if (renderable.FromFramebuffer)
+            {
+                renderable.framebuffer.BlitBuffer(
+                    dc.Framebuffer,
+                    renderable.framebufferBounds,
+                    new GLBox(Vector2I.Zero, dc.Framebuffer.Properties.Size),
+                    renderable.bufferBit,
+                    renderable.sampling);
+                return;
+            }
+
+            if (renderable.Instances > 1)
+            {
+                Draw(dc, renderable.vertexArray, renderable.Info, renderable.Instances);
+                return;
+            }
+
+            Draw(dc, renderable.vertexArray, renderable.Info);
+        }
+        public static void Draw(this IDrawingContext dc, IDrawObject obj)
+            => Draw(dc, obj.GetRenderable(dc));
+
+        public static void Draw(this IDrawingContext dc, IDrawObject obj, int instances)
+        {
+            Renderable renderable = obj.GetRenderable(dc);
+
+            if (renderable.FromFramebuffer)
+            {
+                throw new DrawingException(dc, "Cannot draw framebuffer with instancing.");
+            }
+
+            Draw(dc, renderable.vertexArray, renderable.Info, instances);
         }
     }
 }

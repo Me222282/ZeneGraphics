@@ -129,6 +129,7 @@ namespace Zene.Graphics
 
     public enum IndexType : uint
     {
+        None = 0,
         Byte = GLEnum.UByte,
         Ushort = GLEnum.UShort,
         Uint = GLEnum.UInt

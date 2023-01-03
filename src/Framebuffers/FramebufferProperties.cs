@@ -1,6 +1,7 @@
 ﻿using System;
 using Zene.Graphics.Base;
 using Zene.Graphics.Base.Extensions;
+using Zene.Structs;
 
 namespace Zene.Graphics
 {
@@ -100,7 +101,7 @@ namespace Zene.Graphics
         private int _width = 0;
         private int _height = 0;
 
-        internal void Size(int width, int height)
+        internal void SetSize(int width, int height)
         {
             _width = width;
             _height = height;
@@ -139,6 +140,24 @@ namespace Zene.Graphics
                 }
 
                 return _height;
+            }
+        }
+
+        /// <summary>
+        /// The width and height of the attachments attached to <see cref="Source"/>.
+        /// </summary>
+        public Vector2I Size
+        {
+            get
+            {
+                if (_fromAttach)
+                {
+                    return new Vector2I(
+                        _attachments.AttahcObject.Properties._width,
+                        _attachments.AttahcObject.Properties._height);
+                }
+
+                return new Vector2I(_width, _height);
             }
         }
 

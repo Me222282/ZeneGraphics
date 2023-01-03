@@ -44,8 +44,8 @@ namespace Zene.Graphics.Base.Extensions
             framebuffer.Bind(FrameTarget.Read);
 
             GL.BlitFramebuffer(
-                (int)srcBox.Left, (int)srcBox.Top, (int)srcBox.Right, (int)(srcBox.Top + srcBox.Height),
-                (int)dstBox.Left, (int)dstBox.Top, (int)dstBox.Right, (int)(dstBox.Top + dstBox.Height),
+                (int)srcBox.Left, (int)srcBox.Bottom, (int)srcBox.Right, (int)srcBox.Top,
+                (int)dstBox.Left, (int)dstBox.Bottom, (int)dstBox.Right, (int)dstBox.Top,
                 (uint)mask, (uint)filter);
         }
         /// <summary>

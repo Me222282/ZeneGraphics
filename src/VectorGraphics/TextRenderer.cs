@@ -320,7 +320,7 @@ namespace Zene.Graphics
             //_frame.Bind(0);
             _frame.GetTexture(FrameAttachment.Colour0).Bind(0);
 
-            dc.DrawObject(_drawable);
+            dc.Draw(_drawable);
         }
         public void DrawLeftBound(IDrawingContext dc, ReadOnlySpan<char> text, Font font, int charSpace, int lineSpace)
             => DrawLeftBound(dc, text, font, charSpace, lineSpace, -1, false);
@@ -495,7 +495,7 @@ namespace Zene.Graphics
             //SetUniformI(Uniforms[2], 0);
             font.SourceTexture.Bind(0);
 
-            dc.DrawObject(_drawable, compText.Length);
+            dc.Draw(_drawable, compText.Length);
         }
     }
 }
