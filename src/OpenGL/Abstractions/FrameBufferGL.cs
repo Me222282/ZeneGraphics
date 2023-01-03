@@ -24,6 +24,7 @@ namespace Zene.Graphics.Base
 
             Viewport = new Viewport(0, 0, width, height);
             Scissor = new Scissor(0, 0, width, height);
+            DepthState = new DepthState();
 
             Properties = new FramebufferProperties(this, width, height)
             {

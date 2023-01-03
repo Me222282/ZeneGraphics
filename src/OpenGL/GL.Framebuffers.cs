@@ -54,6 +54,18 @@ namespace Zene.Graphics.Base
 		{
 			Functions.BindFramebuffer(target, framebuffer is not null ? framebuffer.Id : 0);
 
+			if (framebuffer == null)
+            {
+				framebuffer = context.baseFrameBuffer;
+
+				if (target != GLEnum.ReadFramebuffer)
+                {
+					SetViewState(framebuffer.Viewport);
+					SetDepthState(framebuffer.DepthState);
+					SetScissorState(framebuffer.Scissor);
+				}
+            }
+
 			switch (target)
 			{
 				case GLEnum.Framebuffer:
