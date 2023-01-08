@@ -40,37 +40,27 @@ namespace Zene.Graphics
             return;
         }
 
-        public static void Draw(this IDrawingContext dc, Renderable renderable)
+        public static void Draw(this IDrawingContext dc, Drawable renderable)
         {
-            if (renderable.FromFramebuffer)
-            {
-                WriteFramebuffer(dc, renderable.framebuffer, renderable.framebufferBounds,
-                    renderable.bufferBit, renderable.sampling);
-                return;
-            }
-
             if (renderable.Instances > 1)
             {
-                Draw(dc, renderable.vertexArray, renderable.Info, renderable.Instances);
+                Draw(dc, renderable.VertexArray, renderable.Info, renderable.Instances);
                 return;
             }
 
-            Draw(dc, renderable.vertexArray, renderable.Info);
+            Draw(dc, renderable.VertexArray, renderable.Info);
         }
         public static void Draw(this IDrawingContext dc, IDrawObject obj)
             => Draw(dc, obj.GetRenderable(dc));
 
         public static void Draw(this IDrawingContext dc, IDrawObject obj, int instances)
         {
-            Renderable renderable = obj.GetRenderable(dc);
+            Drawable renderable = obj.GetRenderable(dc);
 
-            if (renderable.FromFramebuffer)
-            {
-                throw new DrawingException(dc, "Cannot draw framebuffer with instancing.");
-            }
-
-            Draw(dc, renderable.vertexArray, renderable.Info, instances);
+            Draw(dc, renderable.VertexArray, renderable.Info, instances);
         }
+
+        public static void Render(this IDrawingContext dc, IRenderable renderable) => renderable.OnRender(dc);
 
         public static void WriteFramebuffer(this IDrawingContext dc, IFramebuffer framebuffer, BufferBit mask, TextureSampling filter)
             => WriteFramebuffer(dc, framebuffer, new GLBox(Vector2I.Zero, framebuffer.Properties.Size), mask, filter);

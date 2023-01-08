@@ -44,7 +44,7 @@ namespace Zene.Graphics
                 _ => IndexType.Uint,
             };
 
-            _renderable = new Renderable(this, new RenderInfo(Ibo.Size, it));
+            _renderable = new Drawable(this, new RenderInfo(Ibo.Size, it));
         }
 
         public ArrayBuffer<T> Buffer { get; private set; }
@@ -53,7 +53,7 @@ namespace Zene.Graphics
         public BufferUsage Usage => Buffer.UsageType;
 
         private uint _vertexNumber;
-        private Renderable _renderable;
+        private Drawable _renderable;
         private readonly DataType _dataType;
 
         public virtual void SetData(ReadOnlySpan<T> vertices)
@@ -73,7 +73,7 @@ namespace Zene.Graphics
 
             Ibo.SetData(indices.ToArray());
 
-            _renderable = new Renderable(this, new RenderInfo(Ibo.Size, _renderable.Info.IndexType));
+            _renderable = new Drawable(this, new RenderInfo(Ibo.Size, _renderable.Info.IndexType));
         }
 
         public void AddAttribute(uint index, int dataStart, AttributeSize attributeSize)
@@ -93,6 +93,6 @@ namespace Zene.Graphics
             Ibo.Dispose();
         }
 
-        public Renderable GetRenderable(IDrawingContext context) => _renderable;
+        public Drawable GetRenderable(IDrawingContext context) => _renderable;
     }
 }
