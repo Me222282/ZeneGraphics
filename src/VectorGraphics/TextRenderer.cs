@@ -271,8 +271,8 @@ namespace Zene.Graphics
                 //Console.WriteLine($"{_frame.Height} | {size.Y}");
                 //_frame.CopyTexture(fontTexture, src.X, src.Y, 0, size.X, size.Y, pos.X, pos.Y);
                 _source.CopyFrameBuffer(_frame,
-                    new Rectangle(pos, size),
-                    new Rectangle(src, size),
+                    new GLBox(pos, size),
+                    new GLBox(src, size),
                     BufferBit.Colour, TextureSampling.Nearest);
 
                 // Adjust offset for next character
@@ -300,8 +300,8 @@ namespace Zene.Graphics
                 Vector2I position = caretOffset + caret.ExtraOffset;
                 position.X -= (caret.Size.X + charSpace) / 2;
                 _source.CopyFrameBuffer(_frame,
-                    new Rectangle(position, caret.Size),
-                    new Rectangle(caret.TexturePosision, caret.Size),
+                    new GLBox(position, caret.Size),
+                    new GLBox(caret.TexturePosision, caret.Size),
                     BufferBit.Colour, TextureSampling.Nearest);
             }
 
