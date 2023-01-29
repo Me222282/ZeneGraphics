@@ -31,7 +31,7 @@ namespace Zene.Graphics
         }
 
         internal bool enabled = false;
-        public bool Enabled
+        public virtual bool Enabled
         {
             get => enabled;
             set
@@ -55,7 +55,7 @@ namespace Zene.Graphics
         }
 
         internal GLBox view;
-        public GLBox View
+        public virtual GLBox View
         {
             get => view;
             set

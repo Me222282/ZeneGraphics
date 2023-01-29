@@ -9,7 +9,7 @@ namespace Zene.Graphics
         public bool Current => GL.context.depth == this;
 
         internal bool testing = false;
-        public bool Testing
+        public virtual bool Testing
         {
             get => testing;
             set
@@ -31,7 +31,7 @@ namespace Zene.Graphics
         }
 
         internal bool mask = true;
-        public bool Mask
+        public virtual bool Mask
         {
             get => mask;
             set
@@ -49,7 +49,7 @@ namespace Zene.Graphics
         }
 
         internal bool clamp = true;
-        public bool Clamp
+        public virtual bool Clamp
         {
             get => clamp;
             set
@@ -71,7 +71,7 @@ namespace Zene.Graphics
         }
 
         internal DepthFunction func = DepthFunction.Less;
-        public DepthFunction Function
+        public virtual DepthFunction Function
         {
             get => func;
             set
@@ -89,7 +89,7 @@ namespace Zene.Graphics
         }
 
         internal double near = 0d;
-        public double Near
+        public virtual double Near
         {
             get => near;
             set
@@ -107,7 +107,7 @@ namespace Zene.Graphics
         }
 
         internal double far = 1d;
-        public double Far
+        public virtual double Far
         {
             get => far;
             set

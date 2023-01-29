@@ -19,7 +19,7 @@ namespace Zene.Graphics
         }
 
         internal GLBox view;
-        public GLBox View
+        public virtual GLBox View
         {
             get => view;
             set

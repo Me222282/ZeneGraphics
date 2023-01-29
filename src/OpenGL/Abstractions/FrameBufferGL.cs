@@ -22,7 +22,7 @@ namespace Zene.Graphics.Base
         {
             Id = id;
 
-            Viewport = new Viewport(0, 0, width, height);
+            _viewport = new Viewport(0, 0, width, height);
             Scissor = new Scissor(0, 0, width, height);
             DepthState = new DepthState();
 
@@ -42,7 +42,7 @@ namespace Zene.Graphics.Base
         public void Bind()
         {
             // Set states
-            GL.SetViewState(Viewport);
+            GL.SetViewState(_viewport);
             GL.SetDepthState(DepthState);
             GL.SetScissorState(Scissor);
 
@@ -58,7 +58,7 @@ namespace Zene.Graphics.Base
             if (target == FrameTarget.Draw ||
                 target == FrameTarget.FrameBuffer)
             {
-                GL.SetViewState(Viewport);
+                GL.SetViewState(_viewport);
                 GL.SetDepthState(DepthState);
                 GL.SetScissorState(Scissor);
             }
@@ -106,18 +106,28 @@ namespace Zene.Graphics.Base
 
         protected bool LockViewport
         {
-            get => Viewport.Locked;
-            set => Viewport.Locked = value;
+            get => Viewport != null && Viewport.Locked;
+            set
+            {
+                if (Viewport == null) { return; }
+
+                Viewport.Locked = value;
+            }
         }
-        public Viewport Viewport { get; } = new Viewport(0, 0, 1, 1);
+        private Viewport _viewport = new Viewport(0, 0, 1, 1);
+        public Viewport Viewport
+        {
+            get => _viewport;
+            set
+            {
+                if (value == null) { return; }
+
+                _viewport = value;
+            }
+        }
         protected bool LockDepthState
         {
-            get
-            {
-                if (DepthState == null) { return false; }
-
-                return DepthState.Locked;
-            }
+            get => DepthState != null && DepthState.Locked;
             set
             {
                 if (DepthState == null) { return; }
@@ -128,12 +138,7 @@ namespace Zene.Graphics.Base
         public DepthState DepthState { get; protected set; } = null;
         protected bool LockScissor
         {
-            get
-            {
-                if (Scissor == null) { return false; }
-
-                return Scissor.Locked;
-            }
+            get => Scissor != null && Scissor.Locked;
             set
             {
                 if (Scissor == null) { return; }
@@ -145,21 +150,21 @@ namespace Zene.Graphics.Base
 
         public GLBox View
         {
-            get => Viewport.view;
-            set => Viewport.View = value;
+            get => _viewport.view;
+            set => _viewport.View = value;
         }
         public Vector2I ViewSize
         {
-            get => Viewport.Size;
-            set => Viewport.Size = value;
+            get => _viewport.Size;
+            set => _viewport.Size = value;
         }
         /// <summary>
         /// Sets the render location for the framebuffer.
         /// </summary>
         public Vector2I ViewLocation
         {
-            get => Viewport.Location;
-            set => Viewport.Location = value;
+            get => _viewport.Location;
+            set => _viewport.Location = value;
         }
 
         private FrameDrawTarget _readBuffer = FrameDrawTarget.Colour0;

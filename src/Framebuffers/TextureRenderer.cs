@@ -48,6 +48,11 @@ namespace Zene.Graphics
             get => base.LockedState;
             set => base.LockedState = value;
         }
+        public new Viewport Viewport
+        {
+            get => base.Viewport;
+            set => base.Viewport = value;
+        }
         public new DepthState DepthState
         {
             get => base.DepthState;

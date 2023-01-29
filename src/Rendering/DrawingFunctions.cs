@@ -61,6 +61,7 @@ namespace Zene.Graphics
         }
 
         public static void Render(this IDrawingContext dc, IRenderable renderable) => renderable.OnRender(dc);
+        public static void Render<T>(this IDrawingContext dc, IRenderable<T> renderable, T param) => renderable.OnRender(dc, param);
 
         public static void WriteFramebuffer(this IDrawingContext dc, IFramebuffer framebuffer, BufferBit mask, TextureSampling filter)
             => WriteFramebuffer(dc, framebuffer, new GLBox(Vector2I.Zero, framebuffer.Properties.Size), mask, filter);

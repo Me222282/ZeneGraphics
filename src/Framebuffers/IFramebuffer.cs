@@ -152,6 +152,7 @@ namespace Zene.Graphics
     /// <summary>
     /// The buffer attachment types for <see cref="TextureRendererOld"/>.
     /// </summary>
+    [Flags]
     public enum BufferBit : uint
     {
         /// <summary>
