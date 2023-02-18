@@ -23,8 +23,11 @@ namespace Zene.Graphics.Base
             Id = id;
 
             _viewport = new Viewport(0, 0, width, height);
-            Scissor = new Scissor(0, 0, width, height);
-            DepthState = new DepthState();
+            _scissor = new Scissor(0, 0, width, height)
+            {
+                enabled = false
+            };
+            _depthState = new DepthState();
 
             Properties = new FramebufferProperties(this, width, height)
             {
@@ -123,6 +126,11 @@ namespace Zene.Graphics.Base
                 if (value == null) { return; }
 
                 _viewport = value;
+
+                if (this.Bound())
+                {
+                    GL.SetViewState(_viewport);
+                }
             }
         }
         protected bool LockDepthState
@@ -135,7 +143,20 @@ namespace Zene.Graphics.Base
                 DepthState.Locked = value;
             }
         }
-        public DepthState DepthState { get; protected set; } = null;
+        private DepthState _depthState = null;
+        public DepthState DepthState
+        {
+            get => _depthState;
+            set
+            {
+                _depthState = value;
+
+                if (this.Bound())
+                {
+                    GL.SetDepthState(_depthState);
+                }
+            }
+        }
         protected bool LockScissor
         {
             get => Scissor != null && Scissor.Locked;
@@ -146,7 +167,20 @@ namespace Zene.Graphics.Base
                 Scissor.Locked = value;
             }
         }
-        public Scissor Scissor { get; protected set; } = null;
+        private Scissor _scissor = null;
+        public Scissor Scissor
+        {
+            get => _scissor;
+            set
+            {
+                _scissor = value;
+
+                if (this.Bound())
+                {
+                    GL.SetScissorState(_scissor);
+                }
+            }
+        }
 
         public GLBox View
         {

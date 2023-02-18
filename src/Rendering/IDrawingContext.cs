@@ -10,6 +10,8 @@ namespace Zene.Graphics
 
         public IBox FrameBounds { get; }
 
+        public void PrepareDraw();
+
         void IBindable.Bind()
         {
             if (Framebuffer == null)
@@ -20,7 +22,6 @@ namespace Zene.Graphics
             Framebuffer.Bind();
             Shader?.Bind();
         }
-
         void IBindable.Unbind()
         {
             if (Framebuffer == null)

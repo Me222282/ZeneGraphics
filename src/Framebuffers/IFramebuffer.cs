@@ -156,17 +156,21 @@ namespace Zene.Graphics
     public enum BufferBit : uint
     {
         /// <summary>
-        /// Colour attachment
+        /// Colour attachment.
         /// </summary>
         Colour = GLEnum.ColourBufferBit,
         /// <summary>
-        /// Depth attachment
+        /// Depth attachment.
         /// </summary>
         Depth = GLEnum.DepthBufferBit,
         /// <summary>
-        /// Stencil attachment
+        /// Stencil attachment.
         /// </summary>
-        Stencil = GLEnum.StencilBufferBit
+        Stencil = GLEnum.StencilBufferBit,
+        /// <summary>
+        /// All framebuffer attachments.
+        /// </summary>
+        All = Colour | Depth | Stencil
     }
 
     /// <summary>

@@ -14,17 +14,60 @@ namespace Zene.Graphics
         {
             Framebuffer = framebuffer;
         }
-        public DrawManager(IFramebuffer framebuffer, IShaderProgram shader)
+        public DrawManager(IFramebuffer framebuffer, IBasicShader shader)
         {
             Framebuffer = framebuffer;
             Shader = shader;
         }
 
         public IFramebuffer Framebuffer { get; set; }
-        public IShaderProgram Shader { get; set; }
+        private bool _basicShader;
+        private IShaderProgram _shader;
+        IShaderProgram IDrawingContext.Shader
+        {
+            get => _shader;
+            set
+            {
+                if (value is IBasicShader ibs)
+                {
+                    _basicShader = true;
+                    _bShader = ibs;
+                }
+                else
+                {
+                    _basicShader = false;
+                }
+
+                _shader = value;
+            }
+        }
+        private IBasicShader _bShader;
+        public IBasicShader Shader
+        {
+            get => _bShader;
+            set
+            {
+                _basicShader = true;
+                _shader = value;
+                _bShader = value;
+            }
+        }
+
+        public Matrix4 Projection { get; set; }
+        public Matrix4 View { get; set; }
+        public Matrix4 Model { get; set; }
 
         //public GLBox FrameBounds { get; set; }
         //IBox IDrawingContext.FrameBounds => FrameBounds;
         IBox IDrawingContext.FrameBounds => new GLBox(Vector2I.Zero, Framebuffer.Properties.Size);
+
+        public void PrepareDraw()
+        {
+            if (!_basicShader || _bShader == null) { return; }
+
+            _bShader.Matrix1 = Model;
+            _bShader.Matrix2 = View;
+            _bShader.Matrix3 = Projection;
+        }
     }
 }

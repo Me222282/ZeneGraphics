@@ -90,7 +90,7 @@ namespace Zene.Graphics
 
             GL.Init(func, version);
 
-            SetConstants();
+            SetConstants(version);
 
             Initialised = true;
         }
@@ -122,7 +122,7 @@ namespace Zene.Graphics
         /// <summary>
         /// The render area used by any draws to the bound framebuffer.
         /// </summary>
-        public static RectangleI DrawView
+        public static GLBox DrawView
         {
             get => GL.context.viewport.view;
             set => GL.context.viewport.View = value;
@@ -693,17 +693,11 @@ namespace Zene.Graphics
         /// <summary>
         /// Force execution of GL commands in finite time.
         /// </summary>
-        public static void Flush()
-        {
-            GL.Flush();
-        }
+        public static void Flush() => GL.Flush();
         /// <summary>
         /// Block until all GL execution is complete.
         /// </summary>
-        public static void Finish()
-        {
-            GL.Finish();
-        }
+        public static void Finish() => GL.Finish();
 
         /// <summary>
         /// Gets the Id of the currently bound texture.
@@ -1135,15 +1129,15 @@ namespace Zene.Graphics
             GL.ReleaseShaderCompiler();
         }
 
-        private static void SetConstants()
+        private static void SetConstants(double version)
         {
-            if (GL.Version >= 3.0)
+            if (version >= 3.0)
             {
                 int value = 0;
                 GL.GetIntegerv(GLEnum.MaxColourAttachments, ref value);
                 MaxColourAttach = value;
             }
-            if (GL.Version >= 2.0)
+            if (version >= 2.0)
             {
                 int value = 0;
                 GL.GetIntegerv(GLEnum.MaxDrawBuffers, ref value);

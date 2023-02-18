@@ -67,5 +67,14 @@ namespace Zene.Graphics
             => WriteFramebuffer(dc, framebuffer, new GLBox(Vector2I.Zero, framebuffer.Properties.Size), mask, filter);
         public static void WriteFramebuffer(this IDrawingContext dc, IFramebuffer framebuffer, IBox source, BufferBit mask, TextureSampling filter)
             => framebuffer.BlitBuffer(dc.Framebuffer, source, dc.FrameBounds, mask, filter);
+
+        public static void Copy(this IDrawingContext dc, IDrawingContext source)
+            => WriteFramebuffer(dc, source.Framebuffer, source.FrameBounds, BufferBit.All, TextureSampling.Nearest);
+        public static void Copy(this IDrawingContext dc, IDrawingContext source, BufferBit mask)
+            => WriteFramebuffer(dc, source.Framebuffer, source.FrameBounds, mask, TextureSampling.Nearest);
+        public static void Copy(this IDrawingContext dc, IDrawingContext source, IBox bounds, BufferBit mask)
+            => WriteFramebuffer(dc, source.Framebuffer, bounds, mask, TextureSampling.Nearest);
+        public static void Copy(this IDrawingContext dc, IDrawingContext source, IBox bounds)
+            => WriteFramebuffer(dc, source.Framebuffer, bounds, BufferBit.All, TextureSampling.Nearest);
     }
 }
