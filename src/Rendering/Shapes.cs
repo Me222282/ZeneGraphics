@@ -21,5 +21,11 @@ namespace Zene.Graphics
         }
 
         public static DrawObject<float, byte> Square { get; }
+
+        public static BasicShader BasicShader { get; } = BasicShader.GetInstance();
+        public static BorderShader BorderShader { get; } = BorderShader.GetInstance();
+        public static CircleShader CircleShader { get; } = CircleShader.GetInstance();
+
+        public static SampleFont SampleFont { get; } = SampleFont.GetInstance();
     }
 }

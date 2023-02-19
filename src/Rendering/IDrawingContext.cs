@@ -32,5 +32,15 @@ namespace Zene.Graphics
             Framebuffer.Unbind();
             Shader?.Unbind();
         }
+
+        public Matrix4 GetMatrix()
+        {
+            if (this is not DrawManager dm)
+            {
+                return null;
+            }
+
+            return dm.Model * dm.View * dm.Projection;
+        }
     }
 }
