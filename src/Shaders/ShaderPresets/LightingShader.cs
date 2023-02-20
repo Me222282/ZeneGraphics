@@ -55,7 +55,7 @@ namespace Zene.Graphics
             {
                 _source = value;
 
-                SetUniformI(Uniforms[0], (int)value);
+                SetUniform(Uniforms[0], (int)value);
             }
         }
 
@@ -67,7 +67,7 @@ namespace Zene.Graphics
             {
                 _colour = value;
 
-                SetUniformF(Uniforms[1], (Vector4)value);
+                SetUniform(Uniforms[1], (Vector4)value);
             }
         }
 
@@ -79,7 +79,7 @@ namespace Zene.Graphics
             {
                 _ambientLight = value;
 
-                SetUniformF(Uniforms[2], (Vector3)(ColourF3)value);
+                SetUniform(Uniforms[2], (Vector3)(ColourF3)value);
             }
         }
 
@@ -109,21 +109,21 @@ namespace Zene.Graphics
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            SetUniformF(_uLight + (index * 5), (Vector3)(ColourF3)lightColour);
+            SetUniform(_uLight + (index * 5), (Vector3)(ColourF3)lightColour);
         }
 
         public void SetLightAmbient(int index, ColourF ambientColour)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            SetUniformF(_uLight + (index * 5) + 1, (Vector3)(ColourF3)ambientColour);
+            SetUniform(_uLight + (index * 5) + 1, (Vector3)(ColourF3)ambientColour);
         }
 
         public void SetLightPosition(int index, Vector4 position)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            SetUniformF(_uLight + (index * 5) + 2, position);
+            SetUniform(_uLight + (index * 5) + 2, position);
         }
 
         public void SetLightDistance(int index, double linear, double quadratic)
@@ -132,8 +132,8 @@ namespace Zene.Graphics
 
             int uIndex = (index * 5) + _uLight;
 
-            SetUniformF(uIndex + 3, linear);
-            SetUniformF(uIndex + 4, quadratic);
+            SetUniform(uIndex + 3, linear);
+            SetUniform(uIndex + 4, quadratic);
         }
 
         private readonly int _uSpotLight;
@@ -154,7 +154,7 @@ namespace Zene.Graphics
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            SetUniformF(_uSpotLight + (index * 7), (Vector3)(ColourF3)lightColour);
+            SetUniform(_uSpotLight + (index * 7), (Vector3)(ColourF3)lightColour);
         }
 
         public unsafe ColourF GetSpotLightColour(int index)
@@ -170,14 +170,14 @@ namespace Zene.Graphics
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            SetUniformF(_uSpotLight + (index * 7) + 1, position);
+            SetUniform(_uSpotLight + (index * 7) + 1, position);
         }
 
         public void SetSpotLightDirection(int index, Vector3 direction)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            SetUniformF(_uSpotLight + (index * 7) + 2, direction);
+            SetUniform(_uSpotLight + (index * 7) + 2, direction);
         }
 
         public void SetSpotLightAngle(int index, Radian innerAngle, Radian outerAngle)
@@ -186,8 +186,8 @@ namespace Zene.Graphics
 
             int uIndex = (index * 7) + _uSpotLight;
 
-            SetUniformF(uIndex + 3, Math.Cos(innerAngle));
-            SetUniformF(uIndex + 4, Math.Cos(outerAngle));
+            SetUniform(uIndex + 3, Math.Cos(innerAngle));
+            SetUniform(uIndex + 4, Math.Cos(outerAngle));
         }
 
         public void SetSpotLightDistance(int index, double linear, double quadratic)
@@ -196,8 +196,8 @@ namespace Zene.Graphics
 
             int uIndex = (index * 7) + _uSpotLight;
 
-            SetUniformF(uIndex + 5, linear);
-            SetUniformF(uIndex + 6, quadratic);
+            SetUniform(uIndex + 5, linear);
+            SetUniform(uIndex + 6, quadratic);
         }
 
         private Vector3 _camPos = Vector3.Zero;
@@ -208,7 +208,7 @@ namespace Zene.Graphics
             {
                 _camPos = value;
 
-                SetUniformF(Uniforms[3], value);
+                SetUniform(Uniforms[3], value);
             }
         }
 
@@ -223,7 +223,7 @@ namespace Zene.Graphics
                 int set = 0;
                 if (value) { set = 1; }
 
-                SetUniformI(Uniforms[4], set);
+                SetUniform(Uniforms[4], set);
             }
         }
 
@@ -238,7 +238,7 @@ namespace Zene.Graphics
                 int set = 0;
                 if (value) { set = 1; }
 
-                SetUniformI(Uniforms[5], set);
+                SetUniform(Uniforms[5], set);
             }
         }
 
@@ -246,15 +246,15 @@ namespace Zene.Graphics
         {
             //SetUniform(Uniforms[13], material);
 
-            SetUniformI(Uniforms[19], (int)material.Shine);
-            SetUniformI(Uniforms[13], material.DiffuseLightSource);
+            SetUniform(Uniforms[19], (int)material.Shine);
+            SetUniform(Uniforms[13], material.DiffuseLightSource);
 
-            SetUniformF(Uniforms[14], (Vector3)material.DiffuseLight);
-            SetUniformI(Uniforms[15], material.DiffTextureSlot);
-            SetUniformI(Uniforms[16], material.SpecularLightSource);
+            SetUniform(Uniforms[14], (Vector3)material.DiffuseLight);
+            SetUniform(Uniforms[15], material.DiffTextureSlot);
+            SetUniform(Uniforms[16], material.SpecularLightSource);
 
-            SetUniformF(Uniforms[17], (Vector3)material.SpecularLight);
-            SetUniformI(Uniforms[18], material.SpecTextureSlot);
+            SetUniform(Uniforms[17], (Vector3)material.SpecularLight);
+            SetUniform(Uniforms[18], material.SpecTextureSlot);
         }
 
         private int _texSlot = 0;
@@ -265,7 +265,7 @@ namespace Zene.Graphics
             {
                 _texSlot = value;
 
-                SetUniformI(Uniforms[6], value);
+                SetUniform(Uniforms[6], value);
             }
         }
 
@@ -277,7 +277,7 @@ namespace Zene.Graphics
             {
                 _normalMapSlot = value;
 
-                SetUniformI(Uniforms[7], value);
+                SetUniform(Uniforms[7], value);
             }
         }
 
@@ -289,7 +289,7 @@ namespace Zene.Graphics
             {
                 _shadowMapSlot = value;
 
-                SetUniformI(Uniforms[12], value);
+                SetUniform(Uniforms[12], value);
             }
         }
 
@@ -304,7 +304,7 @@ namespace Zene.Graphics
                 int set = 0;
                 if (value) { set = 1; }
 
-                SetUniformI(Uniforms[8], set);
+                SetUniform(Uniforms[8], set);
             }
         }
 
@@ -324,10 +324,10 @@ namespace Zene.Graphics
 
         public override void PrepareDraw()
         {
-            SetUniformF(Uniforms[9], Matrix1);
-            SetUniformF(Uniforms[10], _m2m3);
+            SetUniform(Uniforms[9], Matrix1);
+            SetUniform(Uniforms[10], _m2m3);
 
-            SetUniformF(Uniforms[11], LightSpaceMatrix);
+            SetUniform(Uniforms[11], LightSpaceMatrix);
         }
 
         public IMatrix LightSpaceMatrix { get; set; }
@@ -483,15 +483,15 @@ namespace Zene.Graphics
 
         private static readonly IUniformStruct.Member[] _members = new IUniformStruct.Member[]
         {
-            IUniformStruct.UniformType.Int,
-            IUniformStruct.UniformType.FVec3,
-            IUniformStruct.UniformType.Int,
+            UniformType.Int,
+            UniformType.FVec3,
+            UniformType.Int,
 
-            IUniformStruct.UniformType.Int,
-            IUniformStruct.UniformType.FVec3,
-            IUniformStruct.UniformType.Int,
+            UniformType.Int,
+            UniformType.FVec3,
+            UniformType.Int,
 
-            IUniformStruct.UniformType.Int
+            UniformType.Int
         };
         public IUniformStruct.Member[] Members() => _members;
     }
@@ -516,12 +516,12 @@ namespace Zene.Graphics
 
         private static readonly IUniformStruct.Member[] _members = new IUniformStruct.Member[]
         {
-            IUniformStruct.UniformType.FVec3,
-            IUniformStruct.UniformType.FVec3,
-            new IUniformStruct.Member(IUniformStruct.UniformType.DVec4, true),
+            UniformType.FVec3,
+            UniformType.FVec3,
+            new IUniformStruct.Member(UniformType.DVec4, true),
 
-            new IUniformStruct.Member(IUniformStruct.UniformType.Double, true),
-            new IUniformStruct.Member(IUniformStruct.UniformType.Double, true)
+            new IUniformStruct.Member(UniformType.Double, true),
+            new IUniformStruct.Member(UniformType.Double, true)
         };
         public IUniformStruct.Member[] Members() => _members;
     }
@@ -551,14 +551,14 @@ namespace Zene.Graphics
 
         private static readonly IUniformStruct.Member[] _members = new IUniformStruct.Member[]
         {
-            IUniformStruct.UniformType.FVec3,
-            new IUniformStruct.Member(IUniformStruct.UniformType.DVec3, true),
-            new IUniformStruct.Member(IUniformStruct.UniformType.DVec3, true),
+            UniformType.FVec3,
+            new IUniformStruct.Member(UniformType.DVec3, true),
+            new IUniformStruct.Member(UniformType.DVec3, true),
 
-            new IUniformStruct.Member(IUniformStruct.UniformType.Double, true),
-            new IUniformStruct.Member(IUniformStruct.UniformType.Double, true),
-            new IUniformStruct.Member(IUniformStruct.UniformType.Double, true),
-            new IUniformStruct.Member(IUniformStruct.UniformType.Double, true)
+            new IUniformStruct.Member(UniformType.Double, true),
+            new IUniformStruct.Member(UniformType.Double, true),
+            new IUniformStruct.Member(UniformType.Double, true),
+            new IUniformStruct.Member(UniformType.Double, true)
         };
         public IUniformStruct.Member[] Members() => _members;
     }

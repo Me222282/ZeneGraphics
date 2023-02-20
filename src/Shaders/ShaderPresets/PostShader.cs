@@ -20,8 +20,8 @@ namespace Zene.Graphics
             set
             {
                 _size = value;
-                SetUniformI(Uniforms[0], value.X);
-                SetUniformI(Uniforms[1], value.X);
+                SetUniform(Uniforms[0], value.X);
+                SetUniform(Uniforms[1], value.X);
             }
         }
 
@@ -32,7 +32,7 @@ namespace Zene.Graphics
             set
             {
                 _ts = value;
-                SetUniformI(Uniforms[2], value);
+                SetUniform(Uniforms[2], value);
             }
         }
 
@@ -44,7 +44,7 @@ namespace Zene.Graphics
             {
                 _pixelate = value;
 
-                SetUniformI(Uniforms[3], value ? 1 : 0);
+                SetUniform(Uniforms[3], value);
             }
         }
 
@@ -55,7 +55,7 @@ namespace Zene.Graphics
             set
             {
                 _sixelateSize = value;
-                SetUniformF(Uniforms[4], value);
+                SetUniform(Uniforms[4], value);
             }
         }
 
@@ -67,7 +67,7 @@ namespace Zene.Graphics
             {
                 _greyScale = value;
 
-                SetUniformI(Uniforms[5], value ? 1 : 0);
+                SetUniform(Uniforms[5], value);
             }
         }
 
@@ -79,7 +79,7 @@ namespace Zene.Graphics
             {
                 _invertedColour = value;
 
-                SetUniformI(Uniforms[6], value ? 1 : 0);
+                SetUniform(Uniforms[6], value);
             }
         }
 
@@ -91,7 +91,7 @@ namespace Zene.Graphics
             {
                 _useKernel = value;
 
-                SetUniformI(Uniforms[7], value ? 1 : 0);
+                SetUniform(Uniforms[7], value);
             }
         }
 
@@ -108,7 +108,7 @@ namespace Zene.Graphics
 
                 _kernel = value;
 
-                SetUniformF(Uniforms[8], value);
+                SetUniform(Uniforms[8], value);
             }
         }
 
@@ -120,7 +120,7 @@ namespace Zene.Graphics
             {
                 _kernelOffset = value;
 
-                SetUniformF(Uniforms[9], value);
+                SetUniform(Uniforms[9], value);
             }
         }
 

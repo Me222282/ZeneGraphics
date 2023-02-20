@@ -16,7 +16,7 @@ namespace Zene.Graphics
             _m1Mm2m3 = Matrix.Identity * _m2m3;
             _bsmMm1Mm2m3 = Matrix.Identity * _m1Mm2m3;
 
-            SetUniformF(Uniforms[3], Matrix.Identity);
+            SetUniform(Uniforms[3], Matrix.Identity);
         }
 
         private ColourSource _source = 0;
@@ -27,7 +27,7 @@ namespace Zene.Graphics
             {
                 _source = value;
 
-                SetUniformI(Uniforms[0], (int)value);
+                SetUniform(Uniforms[0], (int)value);
             }
         }
 
@@ -60,7 +60,7 @@ namespace Zene.Graphics
                 _size = value;
                 _aspect = value / Math.Min(value.X, value.Y);
 
-                SetUniformF(Uniforms[6], _aspect);
+                SetUniform(Uniforms[6], _aspect);
 
                 BorderWidth = _bWidth;
             }
@@ -84,8 +84,8 @@ namespace Zene.Graphics
                 _widthPercent = value / Math.Min(_size.X, _size.Y);
                 _halfWidth = _widthPercent * 0.5;
 
-                SetUniformF(Uniforms[11], _halfWidth);
-                SetUniformF(Uniforms[12], _aspect - _halfWidth);
+                SetUniform(Uniforms[11], _halfWidth);
+                SetUniform(Uniforms[12], _aspect - _halfWidth);
 
                 SetScale();
                 SetRadius();
@@ -98,21 +98,21 @@ namespace Zene.Graphics
             Vector2 scale = (_size + (2 * _bWidth)) / _size;
             scale = 1d + ((scale - 1d) * 0.5);
 
-            SetUniformF(Uniforms[4], scale);
+            SetUniform(Uniforms[4], scale);
             _bsmMm1Mm2m3.Left = Matrix4.CreateScale(scale);
         }
         private void SetRadius()
         {
             double radius = _radiusPercent - _halfWidth;
             double outerRadius = Math.Max(_radiusPercent + _halfWidth, _widthPercent);
-            SetUniformF(Uniforms[5], radius * radius);
-            SetUniformF(Uniforms[7], outerRadius * outerRadius);
+            SetUniform(Uniforms[5], radius * radius);
+            SetUniform(Uniforms[7], outerRadius * outerRadius);
         }
         private void SetIDMR()
         {
             double innerOffset = Math.Max(_radiusPercent, _halfWidth);
-            SetUniformF(Uniforms[10], innerOffset);
-            SetUniformF(Uniforms[9], _aspect - innerOffset);
+            SetUniform(Uniforms[10], innerOffset);
+            SetUniform(Uniforms[9], _aspect - innerOffset);
         }
 
         private ColourF _colour = ColourF.Zero;
@@ -123,7 +123,7 @@ namespace Zene.Graphics
             {
                 _colour = value;
 
-                SetUniformF(Uniforms[1], (Vector4)value);
+                SetUniform(Uniforms[1], (Vector4)value);
             }
         }
 
@@ -138,7 +138,7 @@ namespace Zene.Graphics
             {
                 _borderColour = value;
 
-                SetUniformF(Uniforms[8], (Vector4)value);
+                SetUniform(Uniforms[8], (Vector4)value);
             }
         }
 
@@ -150,7 +150,7 @@ namespace Zene.Graphics
             {
                 _texSlot = value;
 
-                SetUniformI(Uniforms[2], value);
+                SetUniform(Uniforms[2], value);
             }
         }
 
@@ -173,7 +173,7 @@ namespace Zene.Graphics
         private readonly MultiplyMatrix _bsmMm1Mm2m3;
         private readonly MultiplyMatrix _m1Mm2m3;
         private readonly MultiplyMatrix _m2m3;
-        public override void PrepareDraw() => SetUniformF(Uniforms[3], _bsmMm1Mm2m3);
+        public override void PrepareDraw() => SetUniform(Uniforms[3], _bsmMm1Mm2m3);
 
         protected override void Dispose(bool dispose)
         {

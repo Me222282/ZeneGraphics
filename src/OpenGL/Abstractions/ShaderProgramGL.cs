@@ -118,6 +118,8 @@ namespace Zene.Graphics.Base
         protected void LinkProgram()
         {
             GL.LinkProgram(Id);
+
+            Properties.SyncUniforms();
         }
         /// <summary>
         /// Loads this program with the binary representation of <paramref name="program"/>'s compiled and linked executable source.
@@ -181,1716 +183,611 @@ namespace Zene.Graphics.Base
         }
 
         /// <summary>
-        /// Specify the value of a float uniform variable.
+        /// Specify the value of a uniform variable with a double.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformF(int location, double value)
+        protected void SetUniform(int location, double value)
         {
             Bind();
 
-            GL.Uniform1f(location, (float)value);
+            UniformVariable uv = Properties._uniforms[location];
+
+            if (uv.Type == UniformType.Float)
+            {
+                uv.su(location, 1, 0, (float)value);
+                return;
+            }
+            if (uv.Type == UniformType.Double)
+            {
+                uv.su(location, 1, 0, value);
+                return;
+            }
+            if (uv.Type == UniformType.Int)
+            {
+                uv.su(location, 1, 0, (int)value);
+                return;
+            }
+            if (uv.Type == UniformType.Uint)
+            {
+                uv.su(location, 1, 0, (uint)value);
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
         /// <summary>
-        /// Specify the value of a double uniform variable.
+        /// Specify the value of a uniform variable with a float.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformD(int location, double value)
+        protected void SetUniform(int location, float value)
         {
             Bind();
 
-            GL.Uniform1d(location, value);
+            UniformVariable uv = Properties._uniforms[location];
+
+            if (uv.Type == UniformType.Float)
+            {
+                uv.su(location, 1, 0, value);
+                return;
+            }
+            if (uv.Type == UniformType.Double)
+            {
+                uv.su(location, 1, 0, (double)value);
+                return;
+            }
+            if (uv.Type == UniformType.Int)
+            {
+                uv.su(location, 1, 0, (int)value);
+                return;
+            }
+            if (uv.Type == UniformType.Uint)
+            {
+                uv.su(location, 1, 0, (uint)value);
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
         /// <summary>
-        /// Specify the value of a float uniform variable.
+        /// Specify the value of a uniform variable with an integer.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformF(int location, float value)
+        protected void SetUniform(int location, int value)
         {
             Bind();
 
-            GL.Uniform1f(location, value);
+            UniformVariable uv = Properties._uniforms[location];
+
+            if (uv.Type == UniformType.Int)
+            {
+                uv.su(location, 1, 0, value);
+                return;
+            }
+            if (uv.Type == UniformType.Float)
+            {
+                uv.su(location, 1, 0, (float)value);
+                return;
+            }
+            if (uv.Type == UniformType.Double)
+            {
+                uv.su(location, 1, 0, (double)value);
+                return;
+            }
+            if (uv.Type == UniformType.Uint)
+            {
+                uv.su(location, 1, 0, (uint)value);
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
         /// <summary>
-        /// Specify the value of an integer uniform variable.
+        /// Specify the value of a uniform variable with an unsigned integer.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformI(int location, int value)
+        protected void SetUniform(int location, uint value)
         {
             Bind();
 
-            GL.Uniform1i(location, value);
+            UniformVariable uv = Properties._uniforms[location];
+
+            if (uv.Type == UniformType.Uint)
+            {
+                uv.su(location, 1, 0, value);
+                return;
+            }
+            if (uv.Type == UniformType.Int)
+            {
+                uv.su(location, 1, 0, (int)value);
+                return;
+            }
+            if (uv.Type == UniformType.Float)
+            {
+                uv.su(location, 1, 0, (float)value);
+                return;
+            }
+            if (uv.Type == UniformType.Double)
+            {
+                uv.su(location, 1, 0, (double)value);
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
         /// <summary>
-        /// Specify the value of an unsigned integer uniform variable.
+        /// Specify the value of a uniform variable with a boolean.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformUI(int location, uint value)
+        protected void SetUniform(int location, bool value)
         {
             Bind();
 
-            GL.Uniform1ui(location, value);
-        }
+            UniformVariable uv = Properties._uniforms[location];
 
-        /// <summary>
-        /// Specify the values of a float array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, double[] values)
-        {
-            Bind();
-
-            float* data = stackalloc float[values.Length];
-
-            for (int i = 0; i < values.Length; i++)
+            if (uv.Type == UniformType.Bool)
             {
-                data[i] = (float)values[i];
+                uv.su(location, 1, 0, value);
+                return;
             }
 
-            GL.Uniform1fv(location, values.Length, data);
-        }
-        /// <summary>
-        /// Specify the values of a double array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformD(int location, double[] values)
-        {
-            Bind();
-
-            fixed (double* ptr = &values[0])
-            {
-                GL.Uniform1dv(location, values.Length, ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the values of a float array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, float[] values)
-        {
-            Bind();
-
-            fixed (float* ptr = &values[0])
-            {
-                GL.Uniform1fv(location, values.Length, ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the values of an integer array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformI(int location, int[] values)
-        {
-            Bind();
-
-            fixed (int* ptr = &values[0])
-            {
-                GL.Uniform1iv(location, values.Length, ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the values of an unsigned integer array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformUI(int location, uint[] values)
-        {
-            Bind();
-
-            fixed (uint* ptr = &values[0])
-            {
-                GL.Uniform1uiv(location, values.Length, ptr);
-            }
+            throw new Exception("Invalid data type.");
         }
 
         /// <summary>
-        /// Specify a value of a float array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, int index, double value)
-        {
-            Bind();
-
-            GL.Uniform1f(location + index, (float)value);
-        }
-        /// <summary>
-        /// Specify a value of a double array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformD(int location, int index, double value)
-        {
-            Bind();
-
-            GL.Uniform1d(location + index, value);
-        }
-        /// <summary>
-        /// Specify a value of a float array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, int index, float value)
-        {
-            Bind();
-
-            GL.Uniform1f(location + index, value);
-        }
-        /// <summary>
-        /// Specify a value of an integer array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformI(int location, int index, int value)
-        {
-            Bind();
-
-            GL.Uniform1i(location + index, value);
-        }
-        /// <summary>
-        /// Specify a value of an unsigned integer array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformUI(int location, int index, uint value)
-        {
-            Bind();
-
-            GL.Uniform1ui(location + index, value);
-        }
-
-        /// <summary>
-        /// Specify the value of a float vector2 uniform variable.
+        /// Specify the value of a uniform variable with a double array.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformF(int location, Vector2 value)
+        protected void SetUniform(int location, double[] values)
         {
             Bind();
 
-            GL.Uniform2f(location, (float)value.X, (float)value.Y);
+            UniformVariable uv = Properties._uniforms[location];
+
+            if (uv.Type == UniformType.Float)
+            {
+                float* data = stackalloc float[values.Length];
+
+                for (int i = 0; i < values.Length; i++)
+                {
+                    data[i] = (float)values[i];
+                }
+
+                uv.su(location, 1, 0, new IntPtr(data));
+                return;
+            }
+            if (uv.Type == UniformType.Double)
+            {
+                fixed (double* ptr = &values[0])
+                {
+                    uv.su(location, values.Length, 0, new IntPtr(ptr));
+                }
+                return;
+            }
+            if (uv.Type == UniformType.Int)
+            {
+                int* data = stackalloc int[values.Length];
+
+                for (int i = 0; i < values.Length; i++)
+                {
+                    data[i] = (int)values[i];
+                }
+
+                uv.su(location, 1, 0, new IntPtr(data));
+                return;
+            }
+            if (uv.Type == UniformType.Uint)
+            {
+                uint* data = stackalloc uint[values.Length];
+
+                for (int i = 0; i < values.Length; i++)
+                {
+                    data[i] = (uint)values[i];
+                }
+
+                uv.su(location, 1, 0, new IntPtr(data));
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
         /// <summary>
-        /// Specify the value of a double vector2 uniform variable.
+        /// Specify the value of a uniform variable with a float array.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformD(int location, Vector2 value)
+        protected void SetUniform(int location, float[] values)
         {
             Bind();
 
-            GL.Uniform2d(location, value.X, value.Y);
+            UniformVariable uv = Properties._uniforms[location];
+
+            if (uv.Type == UniformType.Float)
+            {
+                fixed (float* ptr = &values[0])
+                {
+                    uv.su(location, values.Length, 0, new IntPtr(ptr));
+                }
+                return;
+            }
+            if (uv.Type == UniformType.Double)
+            {
+                double* data = stackalloc double[values.Length];
+
+                for (int i = 0; i < values.Length; i++)
+                {
+                    data[i] = values[i];
+                }
+
+                uv.su(location, 1, 0, new IntPtr(data));
+                return;
+            }
+            if (uv.Type == UniformType.Int)
+            {
+                int* data = stackalloc int[values.Length];
+
+                for (int i = 0; i < values.Length; i++)
+                {
+                    data[i] = (int)values[i];
+                }
+
+                uv.su(location, 1, 0, new IntPtr(data));
+                return;
+            }
+            if (uv.Type == UniformType.Uint)
+            {
+                uint* data = stackalloc uint[values.Length];
+
+                for (int i = 0; i < values.Length; i++)
+                {
+                    data[i] = (uint)values[i];
+                }
+
+                uv.su(location, 1, 0, new IntPtr(data));
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
         /// <summary>
-        /// Specify the value of a float vector2 uniform variable.
+        /// Specify the value of a uniform variable with an integer array.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformF(int location, Vector2<float> value)
+        protected void SetUniform(int location, int[] values)
         {
             Bind();
 
-            GL.Uniform2f(location, value.X, value.Y);
+            UniformVariable uv = Properties._uniforms[location];
+
+            if (uv.Type == UniformType.Int)
+            {
+                fixed (int* ptr = &values[0])
+                {
+                    uv.su(location, values.Length, 0, new IntPtr(ptr));
+                }
+                return;
+            }
+            if (uv.Type == UniformType.Float)
+            {
+                float* data = stackalloc float[values.Length];
+
+                for (int i = 0; i < values.Length; i++)
+                {
+                    data[i] = values[i];
+                }
+
+                uv.su(location, 1, 0, new IntPtr(data));
+                return;
+            }
+            if (uv.Type == UniformType.Double)
+            {
+                double* data = stackalloc double[values.Length];
+
+                for (int i = 0; i < values.Length; i++)
+                {
+                    data[i] = values[i];
+                }
+
+                uv.su(location, 1, 0, new IntPtr(data));
+                return;
+            }
+            if (uv.Type == UniformType.Uint)
+            {
+                uint* data = stackalloc uint[values.Length];
+
+                for (int i = 0; i < values.Length; i++)
+                {
+                    data[i] = (uint)values[i];
+                }
+
+                uv.su(location, 1, 0, new IntPtr(data));
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
         /// <summary>
-        /// Specify the value of an integer vector2 uniform variable.
+        /// Specify the value of a uniform variable with an unsigned integer array.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformI(int location, Vector2I value)
+        protected void SetUniform(int location, uint[] values)
         {
             Bind();
 
-            GL.Uniform2i(location, value.X, value.Y);
+            UniformVariable uv = Properties._uniforms[location];
+
+            if (uv.Type == UniformType.Uint)
+            {
+                fixed (uint* ptr = &values[0])
+                {
+                    uv.su(location, values.Length, 0, new IntPtr(ptr));
+                }
+                return;
+            }
+            if (uv.Type == UniformType.Int)
+            {
+                int* data = stackalloc int[values.Length];
+
+                for (int i = 0; i < values.Length; i++)
+                {
+                    data[i] = (int)values[i];
+                }
+
+                uv.su(location, 1, 0, new IntPtr(data));
+                return;
+            }
+            if (uv.Type == UniformType.Float)
+            {
+                float* data = stackalloc float[values.Length];
+
+                for (int i = 0; i < values.Length; i++)
+                {
+                    data[i] = values[i];
+                }
+
+                uv.su(location, 1, 0, new IntPtr(data));
+                return;
+            }
+            if (uv.Type == UniformType.Double)
+            {
+                double* data = stackalloc double[values.Length];
+
+                for (int i = 0; i < values.Length; i++)
+                {
+                    data[i] = values[i];
+                }
+
+                uv.su(location, 1, 0, new IntPtr(data));
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
+
         /// <summary>
-        /// Specify the value of an unsigned integer vector2 uniform variable.
+        /// Specify the value of a uniform variable with a vector2 double.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformUI(int location, Vector2<uint> value)
+        protected void SetUniform(int location, Vector2 value)
         {
             Bind();
 
-            GL.Uniform2ui(location, value.X, value.Y);
-        }
+            UniformVariable uv = Properties._uniforms[location];
 
-        /// <summary>
-        /// Specify the values of a float vector2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, Vector2[] values)
-        {
-            Bind();
-
-            int size = values.Length * 2;
-            float* data = stackalloc float[size];
-
-            for (int i = 0; i < size; i += 2)
+            if (uv.Type == UniformType.FVec2)
             {
-                data[i] = (float)values[i].X;
-                data[i + 1] = (float)values[i].Y;
+                uv.su(location, 1, 0, ((float)value.X, (float)value.Y));
+                return;
+            }
+            if (uv.Type == UniformType.DVec2)
+            {
+                uv.su(location, 1, 0, (value.X, value.Y));
+                return;
+            }
+            if (uv.Type == UniformType.IVec2)
+            {
+                uv.su(location, 1, 0, ((int)value.X, (int)value.Y));
+                return;
+            }
+            if (uv.Type == UniformType.UiVec2)
+            {
+                uv.su(location, 1, 0, ((uint)value.X, (uint)value.Y));
+                return;
             }
 
-            GL.Uniform2fv(location, values.Length, data);
+            throw new Exception("Invalid data type.");
         }
         /// <summary>
-        /// Specify the values of a double vector2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformD(int location, Vector2[] values)
-        {
-            Bind();
-
-            fixed (Vector2* ptr = &values[0])
-            {
-                GL.Uniform2dv(location, values.Length, (double*)ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the values of a float vector2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, Vector2<float>[] values)
-        {
-            Bind();
-
-            fixed (Vector2<float>* ptr = &values[0])
-            {
-                GL.Uniform2fv(location, values.Length, (float*)ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the values of an integer vector2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformI(int location, Vector2I[] values)
-        {
-            Bind();
-
-            fixed (Vector2I* ptr = &values[0])
-            {
-                GL.Uniform2iv(location, values.Length, (int*)ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the values of an unsigned integer vector2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformUI(int location, Vector2<uint>[] values)
-        {
-            Bind();
-
-            fixed (Vector2<uint>* ptr = &values[0])
-            {
-                GL.Uniform2uiv(location, values.Length, (uint*)ptr);
-            }
-        }
-
-        /// <summary>
-        /// Specify a value of a float vector2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, int index, Vector2 value)
-        {
-            Bind();
-
-            GL.Uniform2f(location + index, (float)value.X, (float)value.Y);
-        }
-        /// <summary>
-        /// Specify a value of a double vector2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformD(int location, int index, Vector2 value)
-        {
-            Bind();
-
-            GL.Uniform2d(location + index, value.X, value.Y);
-        }
-        /// <summary>
-        /// Specify a value of a float vector2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, int index, Vector2<float> value)
-        {
-            Bind();
-
-            GL.Uniform2f(location + index, value.X, value.Y);
-        }
-        /// <summary>
-        /// Specify a value of an integer vector2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformI(int location, int index, Vector2I value)
-        {
-            Bind();
-
-            GL.Uniform2i(location + index, value.X, value.Y);
-        }
-        /// <summary>
-        /// Specify a value of an unsigned integer vector2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformUI(int location, int index, Vector2<uint> value)
-        {
-            Bind();
-
-            GL.Uniform2ui(location + index, value.X, value.Y);
-        }
-
-        /// <summary>
-        /// Specify the value of a float vector3 uniform variable.
+        /// Specify the value of a uniform variable with a vector2 integer.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformF(int location, Vector3 value)
+        protected void SetUniform(int location, Vector2I value)
         {
             Bind();
 
-            GL.Uniform3f(location, (float)value.X, (float)value.Y, (float)value.Z);
+            UniformVariable uv = Properties._uniforms[location];
+
+            if (uv.Type == UniformType.IVec2)
+            {
+                uv.su(location, 1, 0, (value.X, value.Y));
+                return;
+            }
+            if (uv.Type == UniformType.FVec2)
+            {
+                uv.su(location, 1, 0, ((float)value.X, (float)value.Y));
+                return;
+            }
+            if (uv.Type == UniformType.DVec2)
+            {
+                uv.su(location, 1, 0, new ValueTuple<double, double>(value.X, value.Y));
+                return;
+            }
+            if (uv.Type == UniformType.UiVec2)
+            {
+                uv.su(location, 1, 0, ((uint)value.X, (uint)value.Y));
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
         /// <summary>
-        /// Specify the value of a double vector3 uniform variable.
+        /// Specify the value of a uniform variable with a vector3 double.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformD(int location, Vector3 value)
+        protected void SetUniform(int location, Vector3 value)
         {
             Bind();
 
-            GL.Uniform3d(location, value.X, value.Y, value.Z);
+            UniformVariable uv = Properties._uniforms[location];
+
+            if (uv.Type == UniformType.FVec3)
+            {
+                uv.su(location, 1, 0, ((float)value.X, (float)value.Y, (float)value.Z));
+                return;
+            }
+            if (uv.Type == UniformType.DVec3)
+            {
+                uv.su(location, 1, 0, (value.X, value.Y, value.Z));
+                return;
+            }
+            if (uv.Type == UniformType.IVec3)
+            {
+                uv.su(location, 1, 0, ((int)value.X, (int)value.Y, (int)value.Z));
+                return;
+            }
+            if (uv.Type == UniformType.UiVec3)
+            {
+                uv.su(location, 1, 0, ((uint)value.X, (uint)value.Y, (uint)value.Z));
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
         /// <summary>
-        /// Specify the value of a float vector3 uniform variable.
+        /// Specify the value of a uniform variable with a vector3 integer.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformF(int location, Vector3<float> value)
+        protected void SetUniform(int location, Vector3I value)
         {
             Bind();
 
-            GL.Uniform3f(location, value.X, value.Y, value.Z);
+            UniformVariable uv = Properties._uniforms[location];
+
+            if (uv.Type == UniformType.IVec3)
+            {
+                uv.su(location, 1, 0, (value.X, value.Y, value.Z));
+                return;
+            }
+            if (uv.Type == UniformType.FVec3)
+            {
+                uv.su(location, 1, 0, ((float)value.X, (float)value.Y, (float)value.Z));
+                return;
+            }
+            if (uv.Type == UniformType.DVec3)
+            {
+                uv.su(location, 1, 0, new ValueTuple<double, double, double>(value.X, value.Y, value.Z));
+                return;
+            }
+            if (uv.Type == UniformType.UiVec3)
+            {
+                uv.su(location, 1, 0, ((uint)value.X, (uint)value.Y, (uint)value.Z));
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
         /// <summary>
-        /// Specify the value of an integer vector3 uniform variable.
+        /// Specify the value of a uniform variable with a vector4 double.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformI(int location, Vector3I value)
+        protected void SetUniform(int location, Vector4 value)
         {
             Bind();
 
-            GL.Uniform3i(location, value.X, value.Y, value.Z);
+            UniformVariable uv = Properties._uniforms[location];
+
+            if (uv.Type == UniformType.FVec4)
+            {
+                uv.su(location, 1, 0, ((float)value.X, (float)value.Y, (float)value.Z, (float)value.W));
+                return;
+            }
+            if (uv.Type == UniformType.DVec4)
+            {
+                uv.su(location, 1, 0, (value.X, value.Y, value.Z, value.W));
+                return;
+            }
+            if (uv.Type == UniformType.IVec4)
+            {
+                uv.su(location, 1, 0, ((int)value.X, (int)value.Y, (int)value.Z, (int)value.W));
+                return;
+            }
+            if (uv.Type == UniformType.UiVec4)
+            {
+                uv.su(location, 1, 0, ((uint)value.X, (uint)value.Y, (uint)value.Z, (uint)value.W));
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
         /// <summary>
-        /// Specify the value of an unsigned integer vector3 uniform variable.
+        /// Specify the value of a uniform variable with a vector4 integer.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformUI(int location, Vector3<uint> value)
+        protected void SetUniform(int location, Vector4I value)
         {
             Bind();
 
-            GL.Uniform3ui(location, value.X, value.Y, value.Z);
-        }
+            UniformVariable uv = Properties._uniforms[location];
 
-        /// <summary>
-        /// Specify the values of a float vector3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, Vector3[] values)
-        {
-            Bind();
-
-            int size = values.Length * 3;
-            float* data = stackalloc float[size];
-
-            for (int i = 0; i < size; i += 3)
+            if (uv.Type == UniformType.IVec4)
             {
-                data[i] = (float)values[i].X;
-                data[i + 1] = (float)values[i].Y;
-                data[i + 2] = (float)values[i].Z;
+                uv.su(location, 1, 0, (value.X, value.Y, value.Z, value.W));
+                return;
+            }
+            if (uv.Type == UniformType.FVec4)
+            {
+                uv.su(location, 1, 0, ((float)value.X, (float)value.Y, (float)value.Z, (float)value.W));
+                return;
+            }
+            if (uv.Type == UniformType.DVec4)
+            {
+                uv.su(location, 1, 0, new ValueTuple<double, double, double, double>(value.X, value.Y, value.Z, value.W));
+                return;
+            }
+            if (uv.Type == UniformType.UiVec4)
+            {
+                uv.su(location, 1, 0, ((uint)value.X, (uint)value.Y, (uint)value.Z, (uint)value.W));
+                return;
             }
 
-            GL.Uniform3fv(location, values.Length, data);
-        }
-        /// <summary>
-        /// Specify the values of a double vector3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformD(int location, Vector3[] values)
-        {
-            Bind();
-
-            fixed (Vector3* ptr = &values[0])
-            {
-                GL.Uniform3dv(location, values.Length, (double*)ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the values of a float vector3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, Vector3<float>[] values)
-        {
-            Bind();
-
-            fixed (Vector3<float>* ptr = &values[0])
-            {
-                GL.Uniform3fv(location, values.Length, (float*)ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the values of an integer vector3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformI(int location, Vector3I[] values)
-        {
-            Bind();
-
-            fixed (Vector3I* ptr = &values[0])
-            {
-                GL.Uniform3iv(location, values.Length, (int*)ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the values of an unsigned integer vecotr3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformUI(int location, Vector3<uint>[] values)
-        {
-            Bind();
-
-            fixed (Vector3<uint>* ptr = &values[0])
-            {
-                GL.Uniform3uiv(location, values.Length, (uint*)ptr);
-            }
+            throw new Exception("Invalid data type.");
         }
 
         /// <summary>
-        /// Specify a value of a float vector3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, int index, Vector3 value)
-        {
-            Bind();
-
-            GL.Uniform3f(location + index, (float)value.X, (float)value.Y, (float)value.Z);
-        }
-        /// <summary>
-        /// Specify a value of a double vector3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformD(int location, int index, Vector3 value)
-        {
-            Bind();
-
-            GL.Uniform3d(location + index, value.X, value.Y, value.Z);
-        }
-        /// <summary>
-        /// Specify a value of a float vector3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, int index, Vector3<float> value)
-        {
-            Bind();
-
-            GL.Uniform3f(location + index, value.X, value.Y, value.Z);
-        }
-        /// <summary>
-        /// Specify a value of an integer vector3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformI(int location, int index, Vector3I value)
-        {
-            Bind();
-
-            GL.Uniform3i(location + index, value.X, value.Y, value.Z);
-        }
-        /// <summary>
-        /// Specify a value of an unsigned integer vecotr3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformUI(int location, int index, Vector3<uint> value)
-        {
-            Bind();
-
-            GL.Uniform3ui(location + index, value.X, value.Y, value.Z);
-        }
-
-        /// <summary>
-        /// Specify the value of a float vector4 uniform variable.
+        /// Specify the value of a uniform variable with a matrix.
         /// </summary>
         /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformF(int location, Vector4 value)
+        protected void SetUniform(int location, IMatrix value)
         {
             Bind();
 
-            GL.Uniform4f(location, (float)value.X, (float)value.Y, (float)value.Z, (float)value.W);
+            UniformVariable uv = Properties._uniforms[location];
+            uv.su(location, 1, 0, value);
         }
-        /// <summary>
-        /// Specify the value of a double vector4 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformD(int location, Vector4 value)
-        {
-            Bind();
-
-            GL.Uniform4d(location, value.X, value.Y, value.Z, value.W);
-        }
-        /// <summary>
-        /// Specify the value of a float vector4 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformF(int location, Vector4<float> value)
-        {
-            Bind();
-
-            GL.Uniform4f(location, value.X, value.Y, value.Z, value.W);
-        }
-        /// <summary>
-        /// Specify the value of an integer vector4 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformI(int location, Vector4I value)
-        {
-            Bind();
-
-            GL.Uniform4i(location, value.X, value.Y, value.Z, value.W);
-        }
-        /// <summary>
-        /// Specify the value of an unsigned integer vector4 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniformUI(int location, Vector4<uint> value)
-        {
-            Bind();
-
-            GL.Uniform4ui(location, value.X, value.Y, value.Z, value.W);
-        }
-
-        /// <summary>
-        /// Specify the values of a float vector4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, Vector4[] values)
-        {
-            Bind();
-
-            int size = values.Length * 4;
-            float* data = stackalloc float[size];
-
-            for (int i = 0; i < size; i += 4)
-            {
-                data[i] = (float)values[i].X;
-                data[i + 1] = (float)values[i].Y;
-                data[i + 2] = (float)values[i].Z;
-                data[i + 3] = (float)values[i].W;
-            }
-
-            GL.Uniform4fv(location, values.Length, data);
-        }
-        /// <summary>
-        /// Specify the values of a double vector4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformD(int location, Vector4[] values)
-        {
-            Bind();
-
-            fixed (Vector4* ptr = &values[0])
-            {
-                GL.Uniform4dv(location, values.Length, (double*)ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the values of a float vector4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, Vector4<float>[] values)
-        {
-            Bind();
-
-            fixed (Vector4<float>* ptr = &values[0])
-            {
-                GL.Uniform4fv(location, values.Length, (float*)ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the values of an integer vector4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformI(int location, Vector4I[] values)
-        {
-            Bind();
-
-            fixed (Vector4I* ptr = &values[0])
-            {
-                GL.Uniform4iv(location, values.Length, (int*)ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the values of an unsigned integer vector4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformUI(int location, Vector4<uint>[] values)
-        {
-            Bind();
-
-            fixed (Vector4<uint>* ptr = &values[0])
-            {
-                GL.Uniform4uiv(location, values.Length, (uint*)ptr);
-            }
-        }
-
-        /// <summary>
-        /// Specify a value of a float vector4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, int index, Vector4 value)
-        {
-            Bind();
-
-            GL.Uniform4f(location + index, (float)value.X, (float)value.Y, (float)value.Z, (float)value.W);
-        }
-        /// <summary>
-        /// Specify a value of a double vector4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformD(int location, int index, Vector4 value)
-        {
-            Bind();
-
-            GL.Uniform4d(location + index, value.X, value.Y, value.Z, value.W);
-        }
-        /// <summary>
-        /// Specify a value of a float vector4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformF(int location, int index, Vector4<float> value)
-        {
-            Bind();
-
-            GL.Uniform4f(location + index, value.X, value.Y, value.Z, value.W);
-        }
-        /// <summary>
-        /// Specify a value of an integer vector4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformI(int location, int index, Vector4I value)
-        {
-            Bind();
-
-            GL.Uniform4i(location + index, value.X, value.Y, value.Z, value.W);
-        }
-        /// <summary>
-        /// Specify a value of an unsigned integer vector4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniformUI(int location, int index, Vector4<uint> value)
-        {
-            Bind();
-
-            GL.Uniform4ui(location + index, value.X, value.Y, value.Z, value.W);
-        }
-
-        //
-        // Matrix uniforms
-        //
-
-        /// <summary>
-        /// Specify the value of a float matrix2 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix2 matrix)
-        {
-            Bind();
-
-            float* data = stackalloc float[2 * 2]
-            {
-                (float)matrix[0, 0],
-                (float)matrix[0, 1],
-                (float)matrix[1, 0],
-                (float)matrix[1, 1]
-            };
-
-            GL.UniformMatrix2fv(location, 1, false, data);
-        }
-        /// <summary>
-        /// Specify the value of a float matrix2x3 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix2x3 matrix)
-        {
-            Bind();
-
-            float* data = stackalloc float[2 * 3]
-            {
-                (float)matrix[0, 0],
-                (float)matrix[0, 1],
-                (float)matrix[1, 0],
-                (float)matrix[1, 1],
-                (float)matrix[2, 0],
-                (float)matrix[2, 1]
-            };
-
-            GL.UniformMatrix2x3fv(location, 1, false, data);
-        }
-        /// <summary>
-        /// Specify the value of a float matrix2x4 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix2x4 matrix)
-        {
-            Bind();
-
-            float* data = stackalloc float[2 * 4]
-            {
-                (float)matrix[0, 0],
-                (float)matrix[0, 1],
-                (float)matrix[1, 0],
-                (float)matrix[1, 1],
-                (float)matrix[2, 0],
-                (float)matrix[2, 1],
-                (float)matrix[3, 0],
-                (float)matrix[3, 1]
-            };
-
-            GL.UniformMatrix2x4fv(location, 1, false, data);
-        }
-
-        /// <summary>
-        /// Specify the value of a float matrix3 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix3 matrix)
-        {
-            Bind();
-
-            float* data = stackalloc float[3 * 3]
-            {
-                (float)matrix[0, 0],
-                (float)matrix[0, 1],
-                (float)matrix[0, 2],
-                (float)matrix[1, 0],
-                (float)matrix[1, 1],
-                (float)matrix[1, 2],
-                (float)matrix[2, 0],
-                (float)matrix[2, 1],
-                (float)matrix[2, 2]
-            };
-
-            GL.UniformMatrix3fv(location, 1, false, data);
-        }
-        /// <summary>
-        /// Specify the value of a float matrix3x2 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix3x2 matrix)
-        {
-            Bind();
-
-            float* data = stackalloc float[3 * 2]
-            {
-                (float)matrix[0, 0],
-                (float)matrix[0, 1],
-                (float)matrix[0, 2],
-                (float)matrix[1, 0],
-                (float)matrix[1, 1],
-                (float)matrix[1, 2]
-            };
-
-            GL.UniformMatrix3x2fv(location, 1, false, data);
-        }
-        /// <summary>
-        /// Specify the value of a float matrix3x4 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix3x4 matrix)
-        {
-            Bind();
-
-            float* data = stackalloc float[3 * 4]
-            {
-                (float)matrix[0, 0],
-                (float)matrix[0, 1],
-                (float)matrix[0, 2],
-                (float)matrix[1, 0],
-                (float)matrix[1, 1],
-                (float)matrix[1, 2],
-                (float)matrix[2, 0],
-                (float)matrix[2, 1],
-                (float)matrix[2, 2],
-                (float)matrix[3, 0],
-                (float)matrix[3, 1],
-                (float)matrix[3, 2]
-            };
-
-            GL.UniformMatrix3x4fv(location, 1, false, data);
-        }
-
-        /// <summary>
-        /// Specify the value of a float matrix4 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix4 matrix)
-        {
-            Bind();
-
-            float* data = stackalloc float[4 * 4]
-            {
-                (float)matrix[0, 0],
-                (float)matrix[1, 0],
-                (float)matrix[2, 0],
-                (float)matrix[3, 0],
-                (float)matrix[0, 1],
-                (float)matrix[1, 1],
-                (float)matrix[2, 1],
-                (float)matrix[3, 1],
-                (float)matrix[0, 2],
-                (float)matrix[1, 2],
-                (float)matrix[2, 2],
-                (float)matrix[3, 2],
-                (float)matrix[0, 3],
-                (float)matrix[1, 3],
-                (float)matrix[2, 3],
-                (float)matrix[3, 3]
-            };
-
-            GL.UniformMatrix4fv(location, 1, false, data);
-        }
-        /// <summary>
-        /// Specify the value of a float matrix4x3 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix4x3 matrix)
-        {
-            Bind();
-
-            float* data = stackalloc float[4 * 3]
-            {
-                (float)matrix[0, 0],
-                (float)matrix[0, 1],
-                (float)matrix[0, 2],
-                (float)matrix[0, 3],
-                (float)matrix[1, 0],
-                (float)matrix[1, 1],
-                (float)matrix[1, 2],
-                (float)matrix[1, 3],
-                (float)matrix[2, 0],
-                (float)matrix[2, 1],
-                (float)matrix[2, 2],
-                (float)matrix[2, 3]
-            };
-
-            GL.UniformMatrix4x3fv(location, 1, false, data);
-        }
-        /// <summary>
-        /// Specify the value of a float matrix4x2 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix4x2 matrix)
-        {
-            Bind();
-
-            float* data = stackalloc float[4 * 2]
-            {
-                (float)matrix[0, 0],
-                (float)matrix[0, 1],
-                (float)matrix[0, 2],
-                (float)matrix[0, 3],
-                (float)matrix[1, 0],
-                (float)matrix[1, 1],
-                (float)matrix[1, 2],
-                (float)matrix[1, 3]
-            };
-
-            GL.UniformMatrix4x2fv(location, 1, false, data);
-        }
-
-        /// <summary>
-        /// Specify the value of a float matrix uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformF(int location, IMatrix matrix)
-        {
-            Bind();
-
-            MatrixSpan ms = matrix.MatrixData();
-
-            switch (ms.Rows, ms.Columns)
-            {
-                case (4, 4):
-                    float* data4 = stackalloc float[4 * 4]
-                    {
-                        (float)ms[0, 0],
-                        (float)ms[1, 0],
-                        (float)ms[2, 0],
-                        (float)ms[3, 0],
-                        (float)ms[0, 1],
-                        (float)ms[1, 1],
-                        (float)ms[2, 1],
-                        (float)ms[3, 1],
-                        (float)ms[0, 2],
-                        (float)ms[1, 2],
-                        (float)ms[2, 2],
-                        (float)ms[3, 2],
-                        (float)ms[0, 3],
-                        (float)ms[1, 3],
-                        (float)ms[2, 3],
-                        (float)ms[3, 3]
-                    };
-
-                    GL.UniformMatrix4fv(location, 1, false, data4);
-                    return;
-
-                case (3, 3):
-                    float* data3 = stackalloc float[3 * 3]
-                    {
-                        (float)ms[0, 0],
-                        (float)ms[0, 1],
-                        (float)ms[0, 2],
-                        (float)ms[1, 0],
-                        (float)ms[1, 1],
-                        (float)ms[1, 2],
-                        (float)ms[2, 0],
-                        (float)ms[2, 1],
-                        (float)ms[2, 2]
-                    };
-
-                    GL.UniformMatrix3fv(location, 1, false, data3);
-                    return;
-
-                case (2, 2):
-                    float* data2 = stackalloc float[2 * 2]
-                    {
-                        (float)ms[0, 0],
-                        (float)ms[0, 1],
-                        (float)ms[1, 0],
-                        (float)ms[1, 1]
-                    };
-
-                    GL.UniformMatrix2fv(location, 1, false, data2);
-                    return;
-
-                case (2, 3):
-                    float* data23 = stackalloc float[2 * 3]
-                    {
-                        (float)ms[0, 0],
-                        (float)ms[0, 1],
-                        (float)ms[1, 0],
-                        (float)ms[1, 1],
-                        (float)ms[2, 0],
-                        (float)ms[2, 1]
-                    };
-
-                    GL.UniformMatrix2x3fv(location, 1, false, data23);
-                    return;
-
-                case (2, 4):
-                    float* data24 = stackalloc float[2 * 4]
-                    {
-                        (float)ms[0, 0],
-                        (float)ms[0, 1],
-                        (float)ms[1, 0],
-                        (float)ms[1, 1],
-                        (float)ms[2, 0],
-                        (float)ms[2, 1],
-                        (float)ms[3, 0],
-                        (float)ms[3, 1]
-                    };
-
-                    GL.UniformMatrix2x4fv(location, 1, false, data24);
-                    return;
-
-                case (3, 2):
-                    float* data32 = stackalloc float[3 * 2]
-                    {
-                        (float)ms[0, 0],
-                        (float)ms[0, 1],
-                        (float)ms[0, 2],
-                        (float)ms[1, 0],
-                        (float)ms[1, 1],
-                        (float)ms[1, 2]
-                    };
-
-                    GL.UniformMatrix3x2fv(location, 1, false, data32);
-                    return;
-
-                case (3, 4):
-                    float* data34 = stackalloc float[3 * 4]
-                    {
-                        (float)ms[0, 0],
-                        (float)ms[0, 1],
-                        (float)ms[0, 2],
-                        (float)ms[1, 0],
-                        (float)ms[1, 1],
-                        (float)ms[1, 2],
-                        (float)ms[2, 0],
-                        (float)ms[2, 1],
-                        (float)ms[2, 2],
-                        (float)ms[3, 0],
-                        (float)ms[3, 1],
-                        (float)ms[3, 2]
-                    };
-
-                    GL.UniformMatrix3x4fv(location, 1, false, data34);
-                    return;
-
-                case (4, 3):
-                    float* data43 = stackalloc float[4 * 3]
-                    {
-                        (float)ms[0, 0],
-                        (float)ms[0, 1],
-                        (float)ms[0, 2],
-                        (float)ms[0, 3],
-                        (float)ms[1, 0],
-                        (float)ms[1, 1],
-                        (float)ms[1, 2],
-                        (float)ms[1, 3],
-                        (float)ms[2, 0],
-                        (float)ms[2, 1],
-                        (float)ms[2, 2],
-                        (float)ms[2, 3]
-                    };
-
-                    GL.UniformMatrix4x3fv(location, 1, false, data43);
-                    return;
-
-                case (4, 2):
-                    float* data42 = stackalloc float[4 * 2]
-                    {
-                        (float)ms[0, 0],
-                        (float)ms[0, 1],
-                        (float)ms[0, 2],
-                        (float)ms[0, 3],
-                        (float)ms[1, 0],
-                        (float)ms[1, 1],
-                        (float)ms[1, 2],
-                        (float)ms[1, 3]
-                    };
-
-                    GL.UniformMatrix4x2fv(location, 1, false, data42);
-                    return;
-            }
-        }
-        /*
-        /// <summary>
-        /// Specify the value of a float matrix2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix2[] matrices)
-        {
-            Bind();
-
-            float* data = stackalloc float[2 * 2 * matrices.Length];
-
-            for (int i = 0; i < matrices.Length; i++)
-            {
-                data[i * 4] = (float)matrices[i][0, 0];
-                data[(i * 4) + 1] = (float)matrices[i][0, 1];
-
-                data[(i * 4) + 2] = (float)matrices[i][1, 0];
-                data[(i * 4) + 3] = (float)matrices[i][1, 1];
-            }
-
-            GL.UniformMatrix2fv(location, matrices.Length, false, data);
-        }
-        /// <summary>
-        /// Specify the value of a float matrix2x3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix2x3[] matrices)
-        {
-            Bind();
-
-            float* data = stackalloc float[2 * 3 * matrices.Length];
-
-            for (int i = 0; i < matrices.Length; i++)
-            {
-                data[i * 6] = (float)matrices[i][0, 0];
-                data[(i * 6) + 1] = (float)matrices[i][0, 1];
-
-                data[(i * 6) + 2] = (float)matrices[i][1, 0];
-                data[(i * 6) + 3] = (float)matrices[i][1, 1];
-
-                data[(i * 6) + 4] = (float)matrices[i][2, 0];
-                data[(i * 6) + 5] = (float)matrices[i][2, 1];
-            }
-
-            GL.UniformMatrix2x3fv(location, matrices.Length, false, data);
-        }
-        /// <summary>
-        /// Specify the value of a float matrix2x4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix2x4[] matrices)
-        {
-            Bind();
-
-            float* data = stackalloc float[2 * 4 * matrices.Length];
-
-            for (int i = 0; i < matrices.Length; i++)
-            {
-                data[i * 8] = (float)matrices[i][0, 0];
-                data[(i * 8) + 1] = (float)matrices[i][0, 1];
-
-                data[(i * 8) + 2] = (float)matrices[i][1, 0];
-                data[(i * 8) + 3] = (float)matrices[i][1, 1];
-
-                data[(i * 8) + 4] = (float)matrices[i][2, 0];
-                data[(i * 8) + 5] = (float)matrices[i][2, 1];
-
-                data[(i * 8) + 6] = (float)matrices[i][3, 0];
-                data[(i * 8) + 7] = (float)matrices[i][3, 1];
-            }
-
-            GL.UniformMatrix2x4fv(location, matrices.Length, false, data);
-        }
-
-        /// <summary>
-        /// Specify the value of a float matrix3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix3[] matrices)
-        {
-            Bind();
-
-            float* data = stackalloc float[3 * 3 * matrices.Length];
-
-            for (int i = 0; i < matrices.Length; i++)
-            {
-                data[i * 9] = (float)matrices[i][0, 0];
-                data[(i * 9) + 1] = (float)matrices[i][0, 1];
-                data[(i * 9) + 2] = (float)matrices[i][0, 2];
-
-                data[(i * 9) + 3] = (float)matrices[i][1, 0];
-                data[(i * 9) + 4] = (float)matrices[i][1, 1];
-                data[(i * 9) + 5] = (float)matrices[i][1, 2];
-
-                data[(i * 9) + 6] = (float)matrices[i][2, 0];
-                data[(i * 9) + 7] = (float)matrices[i][2, 1];
-                data[(i * 9) + 8] = (float)matrices[i][2, 2];
-            }
-
-            GL.UniformMatrix3fv(location, matrices.Length, false, data);
-        }
-        /// <summary>
-        /// Specify the value of a float matrix3x2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix3x2[] matrices)
-        {
-            Bind();
-
-            float* data = stackalloc float[3 * 2 * matrices.Length];
-
-            for (int i = 0; i < matrices.Length; i++)
-            {
-                data[i * 6] = (float)matrices[i][0, 0];
-                data[(i * 6) + 1] = (float)matrices[i][0, 1];
-                data[(i * 6) + 2] = (float)matrices[i][0, 2];
-
-                data[(i * 6) + 3] = (float)matrices[i][1, 0];
-                data[(i * 6) + 4] = (float)matrices[i][1, 1];
-                data[(i * 6) + 5] = (float)matrices[i][1, 2];
-            }
-
-            GL.UniformMatrix3x2fv(location, matrices.Length, false, data);
-        }
-        /// <summary>
-        /// Specify the value of a float matrix3x4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix3x4[] matrices)
-        {
-            Bind();
-
-            float* data = stackalloc float[3 * 4 * matrices.Length];
-
-            for (int i = 0; i < matrices.Length; i++)
-            {
-                data[i * 12] = (float)matrices[i][0, 0];
-                data[(i * 12) + 1] = (float)matrices[i][0, 1];
-                data[(i * 12) + 2] = (float)matrices[i][0, 2];
-
-                data[(i * 12) + 3] = (float)matrices[i][1, 0];
-                data[(i * 12) + 4] = (float)matrices[i][1, 1];
-                data[(i * 12) + 5] = (float)matrices[i][1, 2];
-
-                data[(i * 12) + 6] = (float)matrices[i][2, 0];
-                data[(i * 12) + 7] = (float)matrices[i][2, 1];
-                data[(i * 12) + 8] = (float)matrices[i][2, 2];
-
-                data[(i * 12) + 9] = (float)matrices[i][3, 0];
-                data[(i * 12) + 10] = (float)matrices[i][3, 1];
-                data[(i * 12) + 11] = (float)matrices[i][3, 2];
-            }
-
-            GL.UniformMatrix3x4fv(location, matrices.Length, false, data);
-        }
-
-        /// <summary>
-        /// Specify the value of a float matrix4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix4[] matrices)
-        {
-            Bind();
-
-            float* data = stackalloc float[4 * 4 * matrices.Length];
-
-            for (int i = 0; i < matrices.Length; i++)
-            {
-                data[i * 16] = (float)matrices[i][0, 0];
-                data[(i * 16) + 1] = (float)matrices[i][0, 1];
-                data[(i * 16) + 2] = (float)matrices[i][0, 2];
-                data[(i * 16) + 3] = (float)matrices[i][0, 3];
-
-                data[(i * 16) + 4] = (float)matrices[i][1, 0];
-                data[(i * 16) + 5] = (float)matrices[i][1, 1];
-                data[(i * 16) + 6] = (float)matrices[i][1, 2];
-                data[(i * 16) + 7] = (float)matrices[i][1, 3];
-
-                data[(i * 16) + 8] = (float)matrices[i][2, 0];
-                data[(i * 16) + 9] = (float)matrices[i][2, 1];
-                data[(i * 16) + 10] = (float)matrices[i][2, 2];
-                data[(i * 16) + 11] = (float)matrices[i][2, 3];
-
-                data[(i * 16) + 12] = (float)matrices[i][3, 0];
-                data[(i * 16) + 13] = (float)matrices[i][3, 1];
-                data[(i * 16) + 14] = (float)matrices[i][3, 2];
-                data[(i * 16) + 15] = (float)matrices[i][3, 3];
-            }
-
-            GL.UniformMatrix4fv(location, matrices.Length, false, data);
-        }
-        /// <summary>
-        /// Specify the value of a float matrix4x3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix4x3[] matrices)
-        {
-            Bind();
-
-            float* data = stackalloc float[4 * 3 * matrices.Length];
-
-            for (int i = 0; i < matrices.Length; i++)
-            {
-                data[i * 16] = (float)matrices[i][0, 0];
-                data[(i * 16) + 1] = (float)matrices[i][0, 1];
-                data[(i * 16) + 2] = (float)matrices[i][0, 2];
-                data[(i * 16) + 3] = (float)matrices[i][0, 3];
-
-                data[(i * 16) + 4] = (float)matrices[i][1, 0];
-                data[(i * 16) + 5] = (float)matrices[i][1, 1];
-                data[(i * 16) + 6] = (float)matrices[i][1, 2];
-                data[(i * 16) + 7] = (float)matrices[i][1, 3];
-
-                data[(i * 16) + 8] = (float)matrices[i][2, 0];
-                data[(i * 16) + 9] = (float)matrices[i][2, 1];
-                data[(i * 16) + 10] = (float)matrices[i][2, 2];
-                data[(i * 16) + 11] = (float)matrices[i][2, 3];
-            }
-
-            GL.UniformMatrix4x3fv(location, matrices.Length, false, data);
-        }
-        /// <summary>
-        /// Specify the value of a float matrix4x2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformF(int location, Matrix4x2[] matrices)
-        {
-            Bind();
-
-            float* data = stackalloc float[4 * 2 * matrices.Length];
-
-            for (int i = 0; i < matrices.Length; i++)
-            {
-                data[i * 16] = (float)matrices[i][0, 0];
-                data[(i * 16) + 1] = (float)matrices[i][0, 1];
-                data[(i * 16) + 2] = (float)matrices[i][0, 2];
-                data[(i * 16) + 3] = (float)matrices[i][0, 3];
-
-                data[(i * 16) + 4] = (float)matrices[i][1, 0];
-                data[(i * 16) + 5] = (float)matrices[i][1, 1];
-                data[(i * 16) + 6] = (float)matrices[i][1, 2];
-                data[(i * 16) + 7] = (float)matrices[i][1, 3];
-            }
-
-            GL.UniformMatrix4x2fv(location, matrices.Length, false, data);
-        }*/
-
-        /// <summary>
-        /// Specify the value of a double matrix2 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix2 matrix)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrix.Data[0])
-            {
-                GL.UniformMatrix2dv(location, 1, false, ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the value of a double matrix2x3 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix2x3 matrix)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrix.Data[0])
-            {
-                GL.UniformMatrix2x3dv(location, 1, false, ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the value of a double matrix2x4 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix2x4 matrix)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrix.Data[0])
-            {
-                GL.UniformMatrix2x4dv(location, 1, false, ptr);
-            }
-        }
-
-        /// <summary>
-        /// Specify the value of a double matrix3 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix3 matrix)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrix.Data[0])
-            {
-                GL.UniformMatrix3dv(location, 1, false, ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the value of a double matrix3x2 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix3x2 matrix)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrix.Data[0])
-            {
-                GL.UniformMatrix3x2dv(location, 1, false, ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the value of a double matrix3x4 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix3x4 matrix)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrix.Data[0])
-            {
-                GL.UniformMatrix3x4dv(location, 1, false, ptr);
-            }
-        }
-
-        /// <summary>
-        /// Specify the value of a double matrix4 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix4 matrix)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrix.Data[0])
-            {
-                GL.UniformMatrix4dv(location, 1, false, ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the value of a double matrix4x3 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix4x3 matrix)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrix.Data[0])
-            {
-                GL.UniformMatrix4x3dv(location, 1, false, ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the value of a double matrix4x2 uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix4x2 matrix)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrix.Data[0])
-            {
-                GL.UniformMatrix4x2dv(location, 1, false, ptr);
-            }
-        }
-
-        /// <summary>
-        /// Specify the value of a double matrix uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrix">The matrix to set the uniform to.</param>
-        protected void SetUniformD(int location, IMatrix matrix)
-        {
-            Bind();
-
-            MatrixSpan ms = matrix.MatrixData();
-
-            switch (ms.Rows, ms.Columns)
-            {
-                case (4, 4):
-                    GL.UniformMatrix4dv(location, 1, false, ms.Pointer);
-                    return;
-
-                case (3, 3):
-                    GL.UniformMatrix3dv(location, 1, false, ms.Pointer);
-                    return;
-
-                case (2, 2):
-                    GL.UniformMatrix2dv(location, 1, false, ms.Pointer);
-                    return;
-
-                case (2, 3):
-                    GL.UniformMatrix2x3dv(location, 1, false, ms.Pointer);
-                    return;
-
-                case (2, 4):
-                    GL.UniformMatrix2x4dv(location, 1, false, ms.Pointer);
-                    return;
-
-                case (3, 2):
-                    GL.UniformMatrix3x2dv(location, 1, false, ms.Pointer);
-                    return;
-
-                case (3, 4):
-                    GL.UniformMatrix3x4dv(location, 1, false, ms.Pointer);
-                    return;
-
-                case (4, 3):
-                    GL.UniformMatrix4x3dv(location, 1, false, ms.Pointer);
-                    return;
-
-                case (4, 2):
-                    GL.UniformMatrix4x2dv(location, 1, false, ms.Pointer);
-                    return;
-            }
-        }
-        /*
-        /// <summary>
-        /// Specify the value of a double matrix2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix2[] matrices)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrices[0].Data[0])
-            {
-                GL.UniformMatrix2dv(location, matrices.Length, false, ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the value of a double matrix2x3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix2x3[] matrices)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrices[0].Data[0])
-            {
-                GL.UniformMatrix2x3dv(location, matrices.Length, false, ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the value of a double matrix2x4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix2x4[] matrices)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrices[0].Data[0])
-            {
-                GL.UniformMatrix2x4dv(location, matrices.Length, false, ptr);
-            }
-        }
-
-        /// <summary>
-        /// Specify the value of a double matrix3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix3[] matrices)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrices[0].Data[0])
-            {
-                GL.UniformMatrix3dv(location, matrices.Length, false, ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the value of a double matrix3x2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix3x2[] matrices)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrices[0].Data[0])
-            {
-                GL.UniformMatrix3x2dv(location, matrices.Length, false, ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the value of a double matrix3x4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix3x4[] matrices)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrices[0].Data[0])
-            {
-                GL.UniformMatrix3x4dv(location, matrices.Length, false, ptr);
-            }
-        }
-
-        /// <summary>
-        /// Specify the value of a double matrix4 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix4[] matrices)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrices[0].Data[0])
-            {
-                GL.UniformMatrix4dv(location, matrices.Length, false, ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the value of a double matrix4x3 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix4x3[] matrices)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrices[0].Data[0])
-            {
-                GL.UniformMatrix4x3dv(location, matrices.Length, false, ptr);
-            }
-        }
-        /// <summary>
-        /// Specify the value of a double matrix4x2 array uniform variable.
-        /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="matrices">The array of matrices to set the uniform to.</param>
-        protected void SetUniformD(int location, Matrix4x2[] matrices)
-        {
-            Bind();
-
-            fixed (double* ptr = &matrices[0].Data[0])
-            {
-                GL.UniformMatrix4x2dv(location, matrices.Length, false, ptr);
-            }
-        }*/
 
         protected void SetUniform<T>(int location, T value) where T : unmanaged, IUniformStruct
         {
@@ -1905,27 +802,27 @@ namespace Zene.Graphics.Base
             {
                 switch (memebers[i].Type)
                 {
-                    case IUniformStruct.UniformType.Bool:
+                    case UniformType.Bool:
                         GL.Uniform1i(location + i, ptr[offset]);
                         offset++;
                         break;
 
-                    case IUniformStruct.UniformType.Int:
+                    case UniformType.Int:
                         GL.Uniform1i(location + i, *(int*)(ptr + offset));
                         offset += 4;
                         break;
 
-                    case IUniformStruct.UniformType.Uint:
+                    case UniformType.Uint:
                         GL.Uniform1ui(location + i, *(uint*)(ptr + offset));
                         offset += 4;
                         break;
 
-                    case IUniformStruct.UniformType.Float:
+                    case UniformType.Float:
                         GL.Uniform1f(location + i, *(float*)(ptr + offset));
                         offset += 4;
                         break;
 
-                    case IUniformStruct.UniformType.Double:
+                    case UniformType.Double:
                         if (memebers[i].DoubleAsFloat)
                         {
                             GL.Uniform1f(location + i, (float)*(double*)(ptr + offset));
@@ -1937,33 +834,33 @@ namespace Zene.Graphics.Base
                         offset += 8;
                         break;
 
-                    case IUniformStruct.UniformType.BVec2:
+                    case UniformType.BVec2:
                         GL.Uniform2i(location + i, ptr[offset], ptr[offset + 1]);
                         offset += 2;
                         break;
 
-                    case IUniformStruct.UniformType.IVec2:
+                    case UniformType.IVec2:
                         int* currenti2 = (int*)(ptr + offset);
 
                         GL.Uniform2i(location + i, *currenti2, *(currenti2 + 1));
                         offset += 8;
                         break;
 
-                    case IUniformStruct.UniformType.UiVec2:
+                    case UniformType.UiVec2:
                         uint* currentu2 = (uint*)(ptr + offset);
 
                         GL.Uniform2ui(location + i, *currentu2, *(currentu2 + 1));
                         offset += 8;
                         break;
 
-                    case IUniformStruct.UniformType.FVec2:
+                    case UniformType.FVec2:
                         float* currentf2 = (float*)(ptr + offset);
 
                         GL.Uniform2f(location + i, *currentf2, *(currentf2 + 1));
                         offset += 8;
                         break;
 
-                    case IUniformStruct.UniformType.DVec2:
+                    case UniformType.DVec2:
                         double* currentd2 = (double*)(ptr + offset);
                         offset += 16;
 
@@ -1976,33 +873,33 @@ namespace Zene.Graphics.Base
                         GL.Uniform2d(location + i, *currentd2, *(currentd2 + 1));
                         break;
 
-                    case IUniformStruct.UniformType.BVec3:
+                    case UniformType.BVec3:
                         GL.Uniform3i(location + i, ptr[offset], ptr[offset + 1], ptr[offset + 2]);
                         offset += 3;
                         break;
 
-                    case IUniformStruct.UniformType.IVec3:
+                    case UniformType.IVec3:
                         int* currenti3 = (int*)(ptr + offset);
 
                         GL.Uniform3i(location + i, *currenti3, *(currenti3 + 1), *(currenti3 + 2));
                         offset += 12;
                         break;
 
-                    case IUniformStruct.UniformType.UiVec3:
+                    case UniformType.UiVec3:
                         uint* currentu3 = (uint*)(ptr + offset);
 
                         GL.Uniform3ui(location + i, *currentu3, *(currentu3 + 1), *(currentu3 + 2));
                         offset += 12;
                         break;
 
-                    case IUniformStruct.UniformType.FVec3:
+                    case UniformType.FVec3:
                         float* currentf3 = (float*)(ptr + offset);
 
                         GL.Uniform3f(location + i, *currentf3, *(currentf3 + 1), *(currentf3 + 2));
                         offset += 12;
                         break;
 
-                    case IUniformStruct.UniformType.DVec3:
+                    case UniformType.DVec3:
                         double* currentd3 = (double*)(ptr + offset);
                         offset += 24;
 
@@ -2015,33 +912,33 @@ namespace Zene.Graphics.Base
                         GL.Uniform3d(location + i, *currentd3, *(currentd3 + 1), *(currentd3 + 2));
                         break;
 
-                    case IUniformStruct.UniformType.BVec4:
+                    case UniformType.BVec4:
                         GL.Uniform4i(location + i, ptr[offset], ptr[offset + 1], ptr[offset + 2], ptr[offset + 3]);
                         offset += 4;
                         break;
 
-                    case IUniformStruct.UniformType.IVec4:
+                    case UniformType.IVec4:
                         int* currenti4 = (int*)(ptr + offset);
 
                         GL.Uniform4i(location + i, *currenti4, *(currenti4 + 1), *(currenti4 + 2), *(currenti4 + 3));
                         offset += 16;
                         break;
 
-                    case IUniformStruct.UniformType.UiVec4:
+                    case UniformType.UiVec4:
                         uint* currentu4 = (uint*)(ptr + offset);
 
                         GL.Uniform4ui(location + i, *currentu4, *(currentu4 + 1), *(currentu4 + 2), *(currentu4 + 3));
                         offset += 16;
                         break;
 
-                    case IUniformStruct.UniformType.FVec4:
+                    case UniformType.FVec4:
                         float* currentf4 = (float*)(ptr + offset);
 
                         GL.Uniform4f(location + i, *currentf4, *(currentf4 + 1), *(currentf4 + 2), *(currentf4 + 3));
                         offset += 16;
                         break;
 
-                    case IUniformStruct.UniformType.DVec4:
+                    case UniformType.DVec4:
                         double* currentd4 = (double*)(ptr + offset);
                         offset += 32;
 
@@ -2071,27 +968,27 @@ namespace Zene.Graphics.Base
             {
                 switch (memebers[i].Type)
                 {
-                    case IUniformStruct.UniformType.Bool:
+                    case UniformType.Bool:
                         GL.Uniform1i(location + i, ptr[offset]);
                         offset++;
                         break;
 
-                    case IUniformStruct.UniformType.Int:
+                    case UniformType.Int:
                         GL.Uniform1i(location + i, *(int*)(ptr + offset));
                         offset += 4;
                         break;
 
-                    case IUniformStruct.UniformType.Uint:
+                    case UniformType.Uint:
                         GL.Uniform1ui(location + i, *(uint*)(ptr + offset));
                         offset += 4;
                         break;
 
-                    case IUniformStruct.UniformType.Float:
+                    case UniformType.Float:
                         GL.Uniform1f(location + i, *(float*)(ptr + offset));
                         offset += 4;
                         break;
 
-                    case IUniformStruct.UniformType.Double:
+                    case UniformType.Double:
                         offset += 8;
 
                         if (memebers[i].DoubleAsFloat)
@@ -2103,33 +1000,33 @@ namespace Zene.Graphics.Base
                         GL.Uniform1d(location + i, *(double*)(ptr + offset));
                         break;
 
-                    case IUniformStruct.UniformType.BVec2:
+                    case UniformType.BVec2:
                         GL.Uniform2i(location + i, ptr[offset], ptr[offset + 1]);
                         offset += 2;
                         break;
 
-                    case IUniformStruct.UniformType.IVec2:
+                    case UniformType.IVec2:
                         int* currenti2 = (int*)(ptr + offset);
 
                         GL.Uniform2i(location + i, *currenti2, *(currenti2 + 1));
                         offset += 8;
                         break;
 
-                    case IUniformStruct.UniformType.UiVec2:
+                    case UniformType.UiVec2:
                         uint* currentu2 = (uint*)(ptr + offset);
 
                         GL.Uniform2ui(location + i, *currentu2, *(currentu2 + 1));
                         offset += 8;
                         break;
 
-                    case IUniformStruct.UniformType.FVec2:
+                    case UniformType.FVec2:
                         float* currentf2 = (float*)(ptr + offset);
 
                         GL.Uniform2f(location + i, *currentf2, *(currentf2 + 1));
                         offset += 8;
                         break;
 
-                    case IUniformStruct.UniformType.DVec2:
+                    case UniformType.DVec2:
                         double* currentd2 = (double*)(ptr + offset);
                         offset += 16;
 
@@ -2142,33 +1039,33 @@ namespace Zene.Graphics.Base
                         GL.Uniform2d(location + i, *currentd2, *(currentd2 + 1));
                         break;
 
-                    case IUniformStruct.UniformType.BVec3:
+                    case UniformType.BVec3:
                         GL.Uniform3i(location + i, ptr[offset], ptr[offset + 1], ptr[offset + 2]);
                         offset += 3;
                         break;
 
-                    case IUniformStruct.UniformType.IVec3:
+                    case UniformType.IVec3:
                         int* currenti3 = (int*)(ptr + offset);
 
                         GL.Uniform3i(location + i, *currenti3, *(currenti3 + 1), *(currenti3 + 2));
                         offset += 12;
                         break;
 
-                    case IUniformStruct.UniformType.UiVec3:
+                    case UniformType.UiVec3:
                         uint* currentu3 = (uint*)(ptr + offset);
 
                         GL.Uniform3ui(location + i, *currentu3, *(currentu3 + 1), *(currentu3 + 2));
                         offset += 12;
                         break;
 
-                    case IUniformStruct.UniformType.FVec3:
+                    case UniformType.FVec3:
                         float* currentf3 = (float*)(ptr + offset);
 
                         GL.Uniform3f(location + i, *currentf3, *(currentf3 + 1), *(currentf3 + 2));
                         offset += 12;
                         break;
 
-                    case IUniformStruct.UniformType.DVec3:
+                    case UniformType.DVec3:
                         double* currentd3 = (double*)(ptr + offset);
                         offset += 24;
 
@@ -2181,33 +1078,33 @@ namespace Zene.Graphics.Base
                         GL.Uniform3d(location + i, *currentd3, *(currentd3 + 1), *(currentd3 + 2));
                         break;
 
-                    case IUniformStruct.UniformType.BVec4:
+                    case UniformType.BVec4:
                         GL.Uniform4i(location + i, ptr[offset], ptr[offset + 1], ptr[offset + 2], ptr[offset + 3]);
                         offset += 4;
                         break;
 
-                    case IUniformStruct.UniformType.IVec4:
+                    case UniformType.IVec4:
                         int* currenti4 = (int*)(ptr + offset);
 
                         GL.Uniform4i(location + i, *currenti4, *(currenti4 + 1), *(currenti4 + 2), *(currenti4 + 3));
                         offset += 16;
                         break;
 
-                    case IUniformStruct.UniformType.UiVec4:
+                    case UniformType.UiVec4:
                         uint* currentu4 = (uint*)(ptr + offset);
 
                         GL.Uniform4ui(location + i, *currentu4, *(currentu4 + 1), *(currentu4 + 2), *(currentu4 + 3));
                         offset += 16;
                         break;
 
-                    case IUniformStruct.UniformType.FVec4:
+                    case UniformType.FVec4:
                         float* currentf4 = (float*)(ptr + offset);
 
                         GL.Uniform4f(location + i, *currentf4, *(currentf4 + 1), *(currentf4 + 2), *(currentf4 + 3));
                         offset += 16;
                         break;
 
-                    case IUniformStruct.UniformType.DVec4:
+                    case UniformType.DVec4:
                         double* currentd4 = (double*)(ptr + offset);
                         offset += 32;
                         

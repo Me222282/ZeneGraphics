@@ -17,13 +17,13 @@ namespace Zene.Graphics
                 SetMatrix(Matrix.Identity);
             }
 
-            public void SetMatrix(IMatrix m) => SetUniformF(Uniforms[0], m);
+            public void SetMatrix(IMatrix m) => SetUniform(Uniforms[0], m);
 
             public ColourF Colour
             {
                 set
                 {
-                    SetUniformF(Uniforms[1], (Vector4)value);
+                    SetUniform(Uniforms[1], (Vector4)value);
                 }
             }
         }
@@ -38,13 +38,13 @@ namespace Zene.Graphics
                 SetMatrix(Matrix.Identity);
             }
 
-            public void SetMatrix(IMatrix m) => SetUniformF(Uniforms[0], m);
+            public void SetMatrix(IMatrix m) => SetUniform(Uniforms[0], m);
 
             public ColourF Colour
             {
                 set
                 {
-                    SetUniformF(Uniforms[1], (Vector4)value);
+                    SetUniform(Uniforms[1], (Vector4)value);
                 }
             }
         }

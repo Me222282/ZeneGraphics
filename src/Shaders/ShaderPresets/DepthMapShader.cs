@@ -12,7 +12,7 @@ namespace Zene.Graphics
             _m2m3 = Matrix.Identity * Matrix.Identity;
             _m1Mm2m3 = Matrix.Identity * _m2m3;
 
-            SetUniformF(Uniforms[0], Matrix.Identity);
+            SetUniform(Uniforms[0], Matrix.Identity);
         }
 
         public IMatrix Matrix1
@@ -33,7 +33,7 @@ namespace Zene.Graphics
 
         private readonly MultiplyMatrix _m1Mm2m3;
         private readonly MultiplyMatrix _m2m3;
-        public override void PrepareDraw() => SetUniformF(Uniforms[0], _m1Mm2m3);
+        public override void PrepareDraw() => SetUniform(Uniforms[0], _m1Mm2m3);
 
         private double _depthOffset = 0d;
         public double DepthOffset
@@ -43,7 +43,7 @@ namespace Zene.Graphics
             {
                 _depthOffset = value;
 
-                SetUniformF(Uniforms[1], value);
+                SetUniform(Uniforms[1], value);
             }
         }
 

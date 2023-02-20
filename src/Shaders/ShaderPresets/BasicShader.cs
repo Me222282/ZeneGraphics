@@ -20,7 +20,7 @@ namespace Zene.Graphics
             _m2m3 = Matrix.Identity * Matrix.Identity;
             _m1Mm2m3 = Matrix.Identity * _m2m3;
 
-            SetUniformF(Uniforms[3], Matrix.Identity);
+            SetUniform(Uniforms[3], Matrix.Identity);
         }
 
         private ColourSource _source = 0;
@@ -31,7 +31,7 @@ namespace Zene.Graphics
             {
                 _source = value;
 
-                SetUniformI(Uniforms[0], (int)value);
+                SetUniform(Uniforms[0], (int)value);
             }
         }
 
@@ -43,7 +43,7 @@ namespace Zene.Graphics
             {
                 _colour = value;
 
-                SetUniformF(Uniforms[1], (Vector4)value);
+                SetUniform(Uniforms[1], (Vector4)value);
             }
         }
 
@@ -55,7 +55,7 @@ namespace Zene.Graphics
             {
                 _texSlot = value;
 
-                SetUniformI(Uniforms[2], value);
+                SetUniform(Uniforms[2], value);
             }
         }
 
@@ -77,7 +77,7 @@ namespace Zene.Graphics
 
         private readonly MultiplyMatrix _m1Mm2m3;
         private readonly MultiplyMatrix _m2m3;
-        public override void PrepareDraw() => SetUniformF(Uniforms[3], _m1Mm2m3);
+        public override void PrepareDraw() => SetUniform(Uniforms[3], _m1Mm2m3);
 
         protected override void Dispose(bool dispose)
         {

@@ -21,35 +21,6 @@ namespace Zene.Graphics
 
     public interface IUniformStruct
     {
-        public enum UniformType
-        {
-            Bool,
-            Int,
-            Uint,
-            Float,
-            Double,
-
-            BVec2,
-            BVec3,
-            BVec4,
-
-            IVec2,
-            IVec3,
-            IVec4,
-
-            UiVec2,
-            UiVec3,
-            UiVec4,
-
-            FVec2,
-            FVec3,
-            FVec4,
-
-            DVec2,
-            DVec3,
-            DVec4
-        }
-
         public struct Member
         {
             public Member(UniformType type, bool fad)
