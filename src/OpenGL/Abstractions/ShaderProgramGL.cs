@@ -1177,20 +1177,20 @@ namespace Zene.Graphics.Base
                     float* data4 = stackalloc float[4 * 4]
                     {
                         (float)ms[0, 0],
-                        (float)ms[0, 1],
-                        (float)ms[0, 2],
-                        (float)ms[0, 3],
                         (float)ms[1, 0],
-                        (float)ms[1, 1],
-                        (float)ms[1, 2],
-                        (float)ms[1, 3],
                         (float)ms[2, 0],
-                        (float)ms[2, 1],
-                        (float)ms[2, 2],
-                        (float)ms[2, 3],
                         (float)ms[3, 0],
+                        (float)ms[0, 1],
+                        (float)ms[1, 1],
+                        (float)ms[2, 1],
                         (float)ms[3, 1],
+                        (float)ms[0, 2],
+                        (float)ms[1, 2],
+                        (float)ms[2, 2],
                         (float)ms[3, 2],
+                        (float)ms[0, 3],
+                        (float)ms[1, 3],
+                        (float)ms[2, 3],
                         (float)ms[3, 3]
                     };
 
