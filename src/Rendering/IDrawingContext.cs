@@ -33,7 +33,7 @@ namespace Zene.Graphics
             Shader?.Unbind();
         }
 
-        public Matrix4 GetMatrix()
+        public IMatrix GetMatrix()
         {
             if (this is not DrawManager dm)
             {

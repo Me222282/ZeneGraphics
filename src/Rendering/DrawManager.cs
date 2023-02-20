@@ -53,9 +53,9 @@ namespace Zene.Graphics
             }
         }
 
-        public Matrix4 Projection { get; set; }
-        public Matrix4 View { get; set; }
-        public Matrix4 Model { get; set; }
+        public IMatrix Projection { get; set; }
+        public IMatrix View { get; set; }
+        public IMatrix Model { get; set; }
 
         //public GLBox FrameBounds { get; set; }
         //IBox IDrawingContext.FrameBounds => FrameBounds;

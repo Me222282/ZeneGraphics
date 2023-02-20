@@ -42,9 +42,7 @@ namespace Zene.Graphics
 
             LightNumber = lightNumber;
 
-            Matrix1 = Matrix4.Identity;
-            Matrix2 = Matrix4.Identity;
-            Matrix3 = Matrix4.Identity;
+            _m2m3 = Matrix.Identity * Matrix.Identity;
         }
 
         public int LightNumber { get; }
@@ -310,32 +308,29 @@ namespace Zene.Graphics
             }
         }
 
-        public Matrix4 Matrix1 { get; set; } = Matrix4.Identity;
-        public Matrix4 Matrix2 { get; set; } = Matrix4.Identity;
-        public Matrix4 Matrix3 { get; set; } = Matrix4.Identity;
+        public IMatrix Matrix1 { get; set; } = Matrix.Identity;
+        public IMatrix Matrix2
+        {
+            get => _m2m3.Left;
+            set => _m2m3.Left = value;
+        }
+        public IMatrix Matrix3
+        {
+            get => _m2m3.Right;
+            set => _m2m3.Right = value;
+        }
+
+        private readonly MultiplyMatrix _m2m3;
 
         public override void PrepareDraw()
         {
             SetUniformF(Uniforms[9], Matrix1);
-            SetUniformF(Uniforms[10], Matrix2 * Matrix3);
+            SetUniformF(Uniforms[10], _m2m3);
+
+            SetUniformF(Uniforms[11], LightSpaceMatrix);
         }
 
-        private Matrix4 _lsm = Matrix4.Identity;
-        public Matrix4 LightSpaceMatrix
-        {
-            get => _lsm;
-            set
-            {
-                if (value == null)
-                {
-                    value = Matrix4.Identity;
-                }
-
-                _lsm = value;
-
-                SetUniformF(Uniforms[11], value);
-            }
-        }
+        public IMatrix LightSpaceMatrix { get; set; }
     }
 
     public enum Shine

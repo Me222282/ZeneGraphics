@@ -14,10 +14,10 @@ namespace Zene.Graphics
                     "matrix", "uColour", "uTextureSlot");
 
                 // Set matrices in shader to default
-                SetMatrix(Matrix4.Identity);
+                SetMatrix(Matrix.Identity);
             }
 
-            public void SetMatrix(Matrix4 m) => SetUniformF(Uniforms[0], m);
+            public void SetMatrix(IMatrix m) => SetUniformF(Uniforms[0], m);
 
             public ColourF Colour
             {
@@ -35,10 +35,10 @@ namespace Zene.Graphics
                     "matrix", "uColour", "uTextureSlot");
 
                 // Set matrices in shader to default
-                SetMatrix(Matrix4.Identity);
+                SetMatrix(Matrix.Identity);
             }
 
-            public void SetMatrix(Matrix4 m) => SetUniformF(Uniforms[0], m);
+            public void SetMatrix(IMatrix m) => SetUniformF(Uniforms[0], m);
 
             public ColourF Colour
             {
@@ -49,20 +49,20 @@ namespace Zene.Graphics
             }
         }
 
-        private Matrix4 _m1 = Matrix4.Identity;
-        public Matrix4 Model
+        private IMatrix _m1 = Matrix.Identity;
+        public IMatrix Model
         {
             get => _m1;
             set => _m1 = value;
         }
-        private Matrix4 _m2 = Matrix4.Identity;
-        public Matrix4 View
+        private IMatrix _m2 = Matrix.Identity;
+        public IMatrix View
         {
             get => _m2;
             set => _m2 = value;
         }
-        private Matrix4 _m3 = Matrix4.Identity;
-        public Matrix4 Projection
+        private IMatrix _m3 = Matrix.Identity;
+        public IMatrix Projection
         {
             get => _m3;
             set => _m3 = value;
@@ -314,7 +314,7 @@ namespace Zene.Graphics
             // Set texture slot - already 0
             //_m1Shader.SetUniformI(Uniforms[2], 0);
 
-            Matrix4 m = dc.GetMatrix();
+            IMatrix m = dc.GetMatrix();
             if (m == null)
             {
                 m = Matrix4.CreateScale(_frame.Size / (Vector2)font.LineHeight) * _m1 * _m2 * _m3;
@@ -499,7 +499,7 @@ namespace Zene.Graphics
             // Bind shader
             dc.Shader = _m2Shader;
 
-            Matrix4 m = dc.GetMatrix();
+            IMatrix m = dc.GetMatrix();
             if (m == null)
             {
                 m = _m1 * _m2 * _m3;

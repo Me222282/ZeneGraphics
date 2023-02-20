@@ -7,15 +7,15 @@ namespace Zene.Graphics
         /// <summary>
         /// The model matrix.
         /// </summary>
-        public Matrix4 Matrix1 { get; set; }
+        public IMatrix Matrix1 { get; set; }
         /// <summary>
         /// The view matrix.
         /// </summary>
-        public Matrix4 Matrix2 { get; set; }
+        public IMatrix Matrix2 { get; set; }
         /// <summary>
         /// The projection matrix.
         /// </summary>
-        public Matrix4 Matrix3 { get; set; }
+        public IMatrix Matrix3 { get; set; }
         /*
         /// <summary>
         /// Set all matrices at once.

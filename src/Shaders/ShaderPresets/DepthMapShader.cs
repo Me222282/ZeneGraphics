@@ -9,17 +9,31 @@ namespace Zene.Graphics
             Create(ShaderPresets.DepthMapVertex, ShaderPresets.DepthMapFragment,
                   "matrix", "depthOffset");
 
-            SetUniformF(Uniforms[0], Matrix4.Identity);
+            _m2m3 = Matrix.Identity * Matrix.Identity;
+            _m1Mm2m3 = Matrix.Identity * _m2m3;
+
+            SetUniformF(Uniforms[0], Matrix.Identity);
         }
 
-        public Matrix4 Matrix1 { get; set; } = Matrix4.Identity;
-        public Matrix4 Matrix2 { get; set; } = Matrix4.Identity;
-        public Matrix4 Matrix3 { get; set; } = Matrix4.Identity;
-
-        public override void PrepareDraw()
+        public IMatrix Matrix1
         {
-            SetUniformF(Uniforms[0], Matrix1 * Matrix2 * Matrix3);
+            get => _m1Mm2m3.Left;
+            set => _m1Mm2m3.Left = value;
         }
+        public IMatrix Matrix2
+        {
+            get => _m2m3.Left;
+            set => _m2m3.Left = value;
+        }
+        public IMatrix Matrix3
+        {
+            get => _m2m3.Right;
+            set => _m2m3.Right = value;
+        }
+
+        private readonly MultiplyMatrix _m1Mm2m3;
+        private readonly MultiplyMatrix _m2m3;
+        public override void PrepareDraw() => SetUniformF(Uniforms[0], _m1Mm2m3);
 
         private double _depthOffset = 0d;
         public double DepthOffset
