@@ -83,24 +83,24 @@ namespace Zene.Graphics.Base
 				Functions.DepthFunc((uint)ds.func);
 			}
 
-			if (old.near != ds.near ||
-				old.far != ds.far)
+			if (old.range.X != ds.range.X ||
+				old.range.Y != ds.range.Y)
 			{
-				Functions.DepthRange(ds.near, ds.far);
+				Functions.DepthRange(ds.range.X, ds.range.Y);
 			}
 		}
 
 		[OpenGLSupport(1.0)]
 		internal static void DepthRange(double n, double f)
 		{
-			if (context.depth.near == n &&
-				context.depth.far == f)
+			if (context.depth.range.X == n &&
+				context.depth.range.Y == f)
 			{
 				return;
 			}
 
-			context.depth.near = n;
-			context.depth.far = f;
+			context.depth.range.X = n;
+			context.depth.range.Y = f;
 
 			Functions.DepthRange(n, f);
 		}

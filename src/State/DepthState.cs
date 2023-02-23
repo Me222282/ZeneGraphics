@@ -1,4 +1,5 @@
 ﻿using Zene.Graphics.Base;
+using Zene.Structs;
 
 namespace Zene.Graphics
 {
@@ -17,7 +18,6 @@ namespace Zene.Graphics
                 if (Locked) { return; }
 
                 testing = value;
-
                 if (!Current) { return; }
 
                 if (value)
@@ -57,7 +57,6 @@ namespace Zene.Graphics
                 if (Locked) { return; }
 
                 testing = value;
-
                 if (!Current) { return; }
 
                 if (value)
@@ -88,39 +87,53 @@ namespace Zene.Graphics
             }
         }
 
-        internal double near = 0d;
-        public virtual double Near
+        internal Vector2 range;
+        public virtual Vector2 Range
         {
-            get => near;
+            get => range;
             set
             {
                 if (Locked) { return; }
 
                 if (!Current)
                 {
-                    near = value;
+                    range = value;
                     return;
                 }
 
-                GL.DepthRange(value, far);
+                GL.DepthRange(value.X, value.Y);
             }
         }
-
-        internal double far = 1d;
-        public virtual double Far
+        public virtual double Near
         {
-            get => far;
+            get => range.X;
             set
             {
                 if (Locked) { return; }
 
                 if (!Current)
                 {
-                    far = value;
+                    range.X = value;
                     return;
                 }
 
-                GL.DepthRange(near, value);
+                GL.DepthRange(value, range.Y);
+            }
+        }
+        public virtual double Far
+        {
+            get => range.Y;
+            set
+            {
+                if (Locked) { return; }
+
+                if (!Current)
+                {
+                    range.Y = value;
+                    return;
+                }
+
+                GL.DepthRange(range.X, value);
             }
         }
     }

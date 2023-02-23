@@ -38,11 +38,8 @@ namespace Zene.Graphics
             {
                 if (Locked) { return; }
 
-                if (!Current)
-                {
-                    enabled = value;
-                    return;
-                }
+                enabled = value;
+                if (!Current) { return; }
 
                 if (value)
                 {
