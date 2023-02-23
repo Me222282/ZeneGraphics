@@ -54,6 +54,18 @@ namespace Zene.Graphics
                 return (DepthFunction)(uint)*ptr;
             }
         }
+        public static Vector2 DepthRange
+        {
+            get
+            {
+                double* ptr = stackalloc double[2];
+
+                GL.GetDoublev(GLEnum.DepthRange, ptr);
+
+                return new Vector2(ptr[0], ptr[1]);
+            }
+        }
+
         public static PolygonMode PolygonMode
         {
             get

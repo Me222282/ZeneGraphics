@@ -45,6 +45,7 @@ namespace Zene.Graphics
     {
         Never = GLEnum.Never,
         Less = GLEnum.Less,
+        Greater = GLEnum.Greater,
         Equal = GLEnum.Equal,
         LessEqual = GLEnum.Lequal,
         GreaterEqual = GLEnum.Gequal,
