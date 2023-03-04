@@ -192,5 +192,38 @@ namespace Zene.Graphics
             dm.Model = Matrix4.CreateBox(bounds);
             dm.Draw(Shapes.Square);
         }
+        public static void DrawEllipse(this IDrawingContext dc, IBox bounds, ColourF colour)
+        {
+            if (dc is not DrawManager dm)
+            {
+                throw new ArgumentException($"Specific draw functions can only be drawn with ${typeof(DrawManager)}", nameof(dc));
+            }
+
+            dm.Shader = Shapes.CircleShader;
+            dm.Shader.Colour = colour;
+            dm.Shader.ColourSource = ColourSource.UniformColour;
+            Shapes.CircleShader.LineWidth = 0.5;
+            Shapes.CircleShader.Size = 1d;
+
+            dm.Model = Matrix4.CreateBox(bounds);
+            dm.Draw(Shapes.Square);
+        }
+        public static void DrawEllipse(this IDrawingContext dc, IBox bounds, ITexture texture)
+        {
+            if (dc is not DrawManager dm)
+            {
+                throw new ArgumentException($"Specific draw functions can only be drawn with ${typeof(DrawManager)}", nameof(dc));
+            }
+
+            dm.Shader = Shapes.BasicShader;
+            texture.Bind(0);
+            dm.Shader.TextureSlot = 0;
+            dm.Shader.ColourSource = ColourSource.Texture;
+            Shapes.CircleShader.LineWidth = 0.5;
+            Shapes.CircleShader.Size = 1d;
+
+            dm.Model = Matrix4.CreateBox(bounds);
+            dm.Draw(Shapes.Square);
+        }
     }
 }
