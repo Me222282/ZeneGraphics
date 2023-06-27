@@ -44,19 +44,26 @@ namespace Zene.Graphics.Base
         [OpenGLSupport(3.0)]
         public void Bind()
         {
+            if (!this.Bound())
+            {
+                Binding = FrameTarget.FrameBuffer;
+                GL.BindFramebuffer(GLEnum.Framebuffer, this);
+            }
+
             // Set states
             GL.SetViewState(_viewport);
             GL.SetDepthState(DepthState);
             GL.SetScissorState(Scissor);
-
-            if (this.Bound()) { return; }
-
-            Binding = FrameTarget.FrameBuffer;
-            GL.BindFramebuffer(GLEnum.Framebuffer, this);
         }
         [OpenGLSupport(3.0)]
         public void Bind(FrameTarget target)
         {
+            if (!this.Bound(target))
+            {
+                Binding = target;
+                GL.BindFramebuffer((uint)target, this);
+            }
+
             // Set states
             if (target == FrameTarget.Draw ||
                 target == FrameTarget.FrameBuffer)
@@ -65,11 +72,6 @@ namespace Zene.Graphics.Base
                 GL.SetDepthState(DepthState);
                 GL.SetScissorState(Scissor);
             }
-
-            if (this.Bound(target)) { return; }
-
-            Binding = target;
-            GL.BindFramebuffer((uint)target, this);
         }
 
         private bool _disposed = false;

@@ -38,7 +38,12 @@ namespace Zene.Graphics.Base
 
 		internal static void SetDepthState(DepthState ds)
         {
-			if (ds == null || context.depth == ds) { return; }
+			if (context.depth == ds) { return; }
+
+			if (ds == null)
+			{
+				ds = context.baseFrameBuffer.DepthState;
+			}
 
 			if (context.boundFrameBuffers.Draw.LockedState &&
 				context.boundFrameBuffers.Draw.DepthState != null)
@@ -156,7 +161,12 @@ namespace Zene.Graphics.Base
 
 		internal static void SetScissorState(Scissor s)
 		{
-			if (s == null || context.scissor == s) { return; }
+			if (context.scissor == s) { return; }
+
+			if (s == null)
+            {
+				s = context.baseFrameBuffer.Scissor;
+            }
 
 			if (context.boundFrameBuffers.Draw.LockedState &&
 				context.boundFrameBuffers.Draw.Scissor != null)
