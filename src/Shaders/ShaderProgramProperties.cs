@@ -40,7 +40,7 @@ namespace Zene.Graphics
                 string s = name.ToString();
                 if (sizeT > 1 && s.EndsWith("[0]"))
                 {
-                    s = s.Remove(0, s.Length - 3);
+                    s = s.Remove(s.Length - 3);
                 }
                 baseUniforms[i] = new UniformVariable(s, location, sizeT, type);
                 location += sizeT;
