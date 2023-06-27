@@ -60,7 +60,16 @@ namespace Zene.Graphics.Base
         {
             if (!this.Bound(target))
             {
-                Binding = target;
+                FrameTarget binding = target;
+                if ((binding == FrameTarget.Read &&
+                    State.CurrentContext.boundFrameBuffers.Draw == this) ||
+                    (binding == FrameTarget.Draw &&
+                    State.CurrentContext.boundFrameBuffers.Read == this))
+                {
+                    binding = FrameTarget.FrameBuffer;
+                }
+
+                Binding = binding;
                 GL.BindFramebuffer((uint)target, this);
             }
 
@@ -237,7 +246,7 @@ namespace Zene.Graphics.Base
 
         public virtual void Clear(BufferBit buffer)
         {
-            Bind();
+            Bind(FrameTarget.Draw);
 
             GL.Clear((uint)buffer);
         }

@@ -19,7 +19,7 @@ namespace Zene.Graphics
                 throw new ArgumentNullException(nameof(Framebuffer));
             }
 
-            Framebuffer.Bind();
+            Framebuffer.Bind(FrameTarget.Draw);
             Shader?.Bind();
         }
         void IBindable.Unbind()

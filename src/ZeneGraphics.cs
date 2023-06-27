@@ -460,7 +460,7 @@ namespace Zene.Graphics
             ColourF f = colour;
             GL.ClearColour(f.R, f.G, f.B, f.A);
 
-            framebuffer.Bind();
+            framebuffer.Bind(FrameTarget.Draw);
 
             GL.Clear((uint)BufferBit.Colour);
         }
@@ -468,7 +468,7 @@ namespace Zene.Graphics
         {
             GL.ClearColour(colour.R, colour.G, colour.B, colour.A);
 
-            framebuffer.Bind();
+            framebuffer.Bind(FrameTarget.Draw);
 
             GL.Clear((uint)BufferBit.Colour);
         }
@@ -478,7 +478,7 @@ namespace Zene.Graphics
             GL.ClearColour(f.R, f.G, f.B, f.A);
             GL.ClearDepth(depth);
 
-            framebuffer.Bind();
+            framebuffer.Bind(FrameTarget.Draw);
 
             GL.Clear((uint)(BufferBit.Colour | BufferBit.Depth));
         }
@@ -487,7 +487,7 @@ namespace Zene.Graphics
             GL.ClearColour(colour.R, colour.G, colour.B, colour.A);
             GL.ClearDepth(depth);
 
-            framebuffer.Bind();
+            framebuffer.Bind(FrameTarget.Draw);
 
             GL.Clear((uint)(BufferBit.Colour | BufferBit.Depth));
         }
@@ -498,7 +498,7 @@ namespace Zene.Graphics
             GL.ClearDepth(depth);
             GL.ClearStencil(stencil);
 
-            framebuffer.Bind();
+            framebuffer.Bind(FrameTarget.Draw);
 
             GL.Clear((uint)(BufferBit.Colour | BufferBit.Depth | BufferBit.Stencil));
         }
@@ -508,7 +508,7 @@ namespace Zene.Graphics
             GL.ClearDepth(depth);
             GL.ClearStencil(stencil);
 
-            framebuffer.Bind();
+            framebuffer.Bind(FrameTarget.Draw);
 
             GL.Clear((uint)(BufferBit.Colour | BufferBit.Depth | BufferBit.Stencil));
         }
@@ -518,7 +518,7 @@ namespace Zene.Graphics
             GL.ClearColour(f.R, f.G, f.B, f.A);
             GL.ClearStencil(stencil);
 
-            framebuffer.Bind();
+            framebuffer.Bind(FrameTarget.Draw);
 
             GL.Clear((uint)(BufferBit.Colour | BufferBit.Stencil));
         }
@@ -527,7 +527,7 @@ namespace Zene.Graphics
             GL.ClearColour(colour.R, colour.G, colour.B, colour.A);
             GL.ClearStencil(stencil);
 
-            framebuffer.Bind();
+            framebuffer.Bind(FrameTarget.Draw);
 
             GL.Clear((uint)(BufferBit.Colour | BufferBit.Stencil));
         }
@@ -535,7 +535,7 @@ namespace Zene.Graphics
         {
             GL.ClearDepth(depth);
 
-            framebuffer.Bind();
+            framebuffer.Bind(FrameTarget.Draw);
 
             GL.Clear((uint)BufferBit.Depth);
         }
@@ -544,7 +544,7 @@ namespace Zene.Graphics
             GL.ClearDepth(depth);
             GL.ClearStencil(stencil);
 
-            framebuffer.Bind();
+            framebuffer.Bind(FrameTarget.Draw);
 
             GL.Clear((uint)(BufferBit.Depth | BufferBit.Stencil));
         }
@@ -552,7 +552,7 @@ namespace Zene.Graphics
         {
             GL.ClearStencil(stencil);
 
-            framebuffer.Bind();
+            framebuffer.Bind(FrameTarget.Draw);
 
             GL.Clear((uint)BufferBit.Stencil);
         }
