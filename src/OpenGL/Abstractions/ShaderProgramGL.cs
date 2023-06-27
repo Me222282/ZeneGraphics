@@ -261,7 +261,17 @@ namespace Zene.Graphics.Base
 
             UniformVariable uv = Properties._uniforms[location];
 
-            if (uv.Type == UniformType.Int)
+            if (uv.Type == UniformType.Int || 
+                (uv.Type >= UniformType.Sampler1D &&
+                uv.Type <= UniformType.Sampler2DRectShadow) ||
+                (uv.Type >= UniformType.Sampler1DArray &&
+                uv.Type <= UniformType.SamplerCubeShadow) ||
+                (uv.Type >= UniformType.IntSampler1D &&
+                uv.Type <= UniformType.IntSamplerBuffer) ||
+                uv.Type == UniformType.Sampler2DMultisample ||
+                uv.Type == UniformType.Sampler2DMultisampleArray ||
+                uv.Type == UniformType.IntSampler2DMultisample ||
+                uv.Type == UniformType.IntSampler2DMultisampleArray)
             {
                 uv.su(location, 1, 0, value);
                 return;
@@ -295,7 +305,11 @@ namespace Zene.Graphics.Base
 
             UniformVariable uv = Properties._uniforms[location];
 
-            if (uv.Type == UniformType.Uint)
+            if (uv.Type == UniformType.Uint ||
+                (uv.Type >= UniformType.UintSampler1D &&
+                uv.Type <= UniformType.UintSamplerBuffer) ||
+                uv.Type == UniformType.UintSampler2DMultisample ||
+                uv.Type == UniformType.UintSampler2DMultisampleArray)
             {
                 uv.su(location, 1, 0, value);
                 return;
@@ -465,7 +479,17 @@ namespace Zene.Graphics.Base
 
             UniformVariable uv = Properties._uniforms[location];
 
-            if (uv.Type == UniformType.Int)
+            if (uv.Type == UniformType.Int ||
+                (uv.Type >= UniformType.Sampler1D &&
+                uv.Type <= UniformType.Sampler2DRectShadow) ||
+                (uv.Type >= UniformType.Sampler1DArray &&
+                uv.Type <= UniformType.SamplerCubeShadow) ||
+                (uv.Type >= UniformType.IntSampler1D &&
+                uv.Type <= UniformType.IntSamplerBuffer) ||
+                uv.Type == UniformType.Sampler2DMultisample ||
+                uv.Type == UniformType.Sampler2DMultisampleArray ||
+                uv.Type == UniformType.IntSampler2DMultisample ||
+                uv.Type == UniformType.IntSampler2DMultisampleArray)
             {
                 fixed (int* ptr = &values[0])
                 {
@@ -523,7 +547,11 @@ namespace Zene.Graphics.Base
 
             UniformVariable uv = Properties._uniforms[location];
 
-            if (uv.Type == UniformType.Uint)
+            if (uv.Type == UniformType.Uint ||
+                (uv.Type >= UniformType.UintSampler1D &&
+                uv.Type <= UniformType.UintSamplerBuffer) ||
+                uv.Type == UniformType.UintSampler2DMultisample ||
+                uv.Type == UniformType.UintSampler2DMultisampleArray)
             {
                 fixed (uint* ptr = &values[0])
                 {
