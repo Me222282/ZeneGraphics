@@ -24,19 +24,41 @@ namespace Zene.Graphics
         internal unsafe void SyncUniforms()
         {
             int uniformCount = GL.GetProgrami(Source.Id, GLEnum.ActiveUniforms);
-            _uniforms = new UniformVariable[uniformCount];
+            UniformVariable[] baseUniforms = new UniformVariable[uniformCount];
 
             StringBuilder name = new StringBuilder(GL.GetProgrami(Source.Id, GLEnum.ActiveUniformMaxLength));
 
-            int size = 0;
-            for (int i = 0; i < uniformCount; i += size)
+            int location = 0;
+            for (int i = 0; i < uniformCount; i++)
             {
                 uint type = 0;
 
                 name.Clear();
-                GL.GetActiveUniform(Source.Id, (uint)i, name.Capacity, null, &size, &type, name);
+                int sizeT = 0;
+                GL.GetActiveUniform(Source.Id, (uint)i, name.Capacity, null, &sizeT, &type, name);
 
-                _uniforms[i] = new UniformVariable(name.ToString(), i, size, type);
+                string s = name.ToString();
+                if (sizeT > 1 && s.EndsWith("[0]"))
+                {
+                    s = s.Remove(0, s.Length - 3);
+                }
+                baseUniforms[i] = new UniformVariable(s, location, sizeT, type);
+                location += sizeT;
+            }
+
+            _uniforms = new UniformVariable[location];
+            int buc = 0;
+            for (int i = 0; i < location; i++)
+            {
+                int next = buc + 1;
+                if (baseUniforms.Length > next &&
+                    baseUniforms[next].Location <= i)
+                {
+                    buc++;
+                }
+
+                UniformVariable uv = baseUniforms[buc];
+                _uniforms[i] = new UniformVariable(uv.Name, i, uv.Size, (uint)uv.Type);
             }
         }
 
