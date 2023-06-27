@@ -237,6 +237,7 @@ namespace Zene.Graphics
             dm.Shader.ColourSource = ColourSource.UniformColour;
             Shapes.CircleShader.LineWidth = lineWidth;
             Shapes.CircleShader.Size = Math.Min(bounds.Width, bounds.Height);
+            Shapes.CircleShader.InnerColour = ColourF.Zero;
 
             dm.Model = Matrix4.CreateBox(bounds);
             dm.Draw(Shapes.Square);

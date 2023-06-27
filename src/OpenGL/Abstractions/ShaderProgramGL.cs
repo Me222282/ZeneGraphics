@@ -358,7 +358,7 @@ namespace Zene.Graphics.Base
                     data[i] = (float)values[i];
                 }
 
-                uv.su(location, 1, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, new IntPtr(data));
                 return;
             }
             if (uv.Type == UniformType.Double)
@@ -378,7 +378,7 @@ namespace Zene.Graphics.Base
                     data[i] = (int)values[i];
                 }
 
-                uv.su(location, 1, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, new IntPtr(data));
                 return;
             }
             if (uv.Type == UniformType.Uint)
@@ -390,7 +390,7 @@ namespace Zene.Graphics.Base
                     data[i] = (uint)values[i];
                 }
 
-                uv.su(location, 1, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, new IntPtr(data));
                 return;
             }
 
@@ -424,7 +424,7 @@ namespace Zene.Graphics.Base
                     data[i] = values[i];
                 }
 
-                uv.su(location, 1, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, new IntPtr(data));
                 return;
             }
             if (uv.Type == UniformType.Int)
@@ -436,7 +436,7 @@ namespace Zene.Graphics.Base
                     data[i] = (int)values[i];
                 }
 
-                uv.su(location, 1, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, new IntPtr(data));
                 return;
             }
             if (uv.Type == UniformType.Uint)
@@ -448,7 +448,7 @@ namespace Zene.Graphics.Base
                     data[i] = (uint)values[i];
                 }
 
-                uv.su(location, 1, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, new IntPtr(data));
                 return;
             }
 
@@ -482,7 +482,7 @@ namespace Zene.Graphics.Base
                     data[i] = values[i];
                 }
 
-                uv.su(location, 1, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, new IntPtr(data));
                 return;
             }
             if (uv.Type == UniformType.Double)
@@ -494,7 +494,7 @@ namespace Zene.Graphics.Base
                     data[i] = values[i];
                 }
 
-                uv.su(location, 1, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, new IntPtr(data));
                 return;
             }
             if (uv.Type == UniformType.Uint)
@@ -506,7 +506,7 @@ namespace Zene.Graphics.Base
                     data[i] = (uint)values[i];
                 }
 
-                uv.su(location, 1, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, new IntPtr(data));
                 return;
             }
 
@@ -540,7 +540,7 @@ namespace Zene.Graphics.Base
                     data[i] = (int)values[i];
                 }
 
-                uv.su(location, 1, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, new IntPtr(data));
                 return;
             }
             if (uv.Type == UniformType.Float)
@@ -552,7 +552,7 @@ namespace Zene.Graphics.Base
                     data[i] = values[i];
                 }
 
-                uv.su(location, 1, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, new IntPtr(data));
                 return;
             }
             if (uv.Type == UniformType.Double)
@@ -564,7 +564,7 @@ namespace Zene.Graphics.Base
                     data[i] = values[i];
                 }
 
-                uv.su(location, 1, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, new IntPtr(data));
                 return;
             }
 
