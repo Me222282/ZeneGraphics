@@ -225,5 +225,21 @@ namespace Zene.Graphics
             dm.Model = Matrix4.CreateBox(bounds);
             dm.Draw(Shapes.Square);
         }
+        public static void DrawRing(this IDrawingContext dc, IBox bounds, double lineWidth, ColourF colour)
+        {
+            if (dc is not DrawManager dm)
+            {
+                throw new ArgumentException($"Specific draw functions can only be drawn with ${typeof(DrawManager)}", nameof(dc));
+            }
+
+            dm.Shader = Shapes.CircleShader;
+            dm.Shader.Colour = colour;
+            dm.Shader.ColourSource = ColourSource.UniformColour;
+            Shapes.CircleShader.LineWidth = lineWidth;
+            Shapes.CircleShader.Size = Math.Min(bounds.Width, bounds.Height);
+
+            dm.Model = Matrix4.CreateBox(bounds);
+            dm.Draw(Shapes.Square);
+        }
     }
 }

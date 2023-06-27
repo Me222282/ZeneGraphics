@@ -768,7 +768,7 @@ namespace Zene.Graphics
 
             return texture;
         }
-        public static CubeMap LoadSync(string[] paths, int size, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap)
+        public static CubeMap LoadAsync(string[] paths, int size, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap)
         {
             CubeMap texture = new CubeMap(TextureFormat.Rgba8, TextureData.Byte);
 

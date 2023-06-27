@@ -537,7 +537,7 @@ namespace Zene.Graphics
         public static Texture2D Create(string path, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap) =>
             Create(new FileStream(path, FileMode.Open), wrapStyle, textureQuality, mipmap, true);
 
-        public static Texture2D LoadSync(Stream stream, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap, bool close = false)
+        public static Texture2D LoadAsync(Stream stream, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap, bool close = false)
         {
             Texture2D texture = new Texture2D(TextureFormat.Rgba8, TextureData.Byte);
 
@@ -571,7 +571,7 @@ namespace Zene.Graphics
 
             return texture;
         }
-        public static Texture2D LoadSync(string path, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap) =>
-            LoadSync(new FileStream(path, FileMode.Open), wrapStyle, textureQuality, mipmap, true);
+        public static Texture2D LoadAsync(string path, WrapStyle wrapStyle, TextureSampling textureQuality, bool mipmap) =>
+            LoadAsync(new FileStream(path, FileMode.Open), wrapStyle, textureQuality, mipmap, true);
     }
 }
