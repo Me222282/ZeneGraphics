@@ -202,8 +202,8 @@ namespace Zene.Graphics
             dm.Shader = Shapes.CircleShader;
             dm.Shader.Colour = colour;
             dm.Shader.ColourSource = ColourSource.UniformColour;
-            Shapes.CircleShader.LineWidth = 0.5;
             Shapes.CircleShader.Size = 1d;
+            Shapes.CircleShader.LineWidth = 0.5;
 
             dm.Model = Matrix4.CreateBox(bounds);
             dm.Draw(Shapes.Square);
@@ -219,8 +219,8 @@ namespace Zene.Graphics
             texture.Bind(0);
             dm.Shader.TextureSlot = 0;
             dm.Shader.ColourSource = ColourSource.Texture;
-            Shapes.CircleShader.LineWidth = 0.5;
             Shapes.CircleShader.Size = 1d;
+            Shapes.CircleShader.LineWidth = 0.5;
 
             dm.Model = Matrix4.CreateBox(bounds);
             dm.Draw(Shapes.Square);
@@ -235,8 +235,8 @@ namespace Zene.Graphics
             dm.Shader = Shapes.CircleShader;
             dm.Shader.Colour = colour;
             dm.Shader.ColourSource = ColourSource.UniformColour;
-            Shapes.CircleShader.LineWidth = lineWidth;
             Shapes.CircleShader.Size = Math.Min(bounds.Width, bounds.Height);
+            Shapes.CircleShader.LineWidth = lineWidth;
             Shapes.CircleShader.InnerColour = ColourF.Zero;
 
             dm.Model = Matrix4.CreateBox(bounds);
