@@ -267,7 +267,7 @@ vec3 SpotLighting(SpotLight light)
 	// Is fragment outside of spot light
 	if (theta <= light.CosOuter) { return vec3(0, 0, 0); }
 
-	float intensity = 1f;
+	float intensity = 1;
 
 	if (theta < light.CosInner)
 	{

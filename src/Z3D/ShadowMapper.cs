@@ -1,21 +1,19 @@
 ﻿using System;
-using Zene.Graphics.Base;
 using Zene.Structs;
 
 namespace Zene.Graphics.Z3D
 {
-    public class ShadowMapper : IFramebuffer, IShaderProgram
+    public class ShadowMapper : IDrawingContext
     {
         public ShadowMapper(int width, int height)
         {
-            _shader = new DepthMapShader();
+            _shader = DepthMapShader.GetInstance();
 
             // Framebuffer initialization
             _framebuffer = new TextureRenderer(width, height);
             _framebuffer.SetDepthAttachment(TextureFormat.DepthComponent32f, true);
             _framebuffer.DrawBuffer = FrameDrawTarget.None;
             _framebuffer.ReadBuffer = FrameDrawTarget.None;
-            _framebuffer.Unbind();
 
             // Texture properties
             _texture = _framebuffer.GetTexture(FrameAttachment.Depth);
@@ -23,58 +21,12 @@ namespace Zene.Graphics.Z3D
             _texture.MagFilter = TextureSampling.Blend;
             _texture.WrapStyle = WrapStyle.BorderClamp;
             _texture.BorderColour = new ColourF(1f, 1f, 1f, 1f);
-            _texture.Unbind();
         }
-
-        public uint Id => _framebuffer.Id;
-        public FrameTarget Binding => _framebuffer.Binding;
-        public uint Program => _shader.Id;
-
-        FramebufferProperties IFramebuffer.Properties => _framebuffer.Properties;
 
         private readonly TextureRenderer _framebuffer;
         private readonly Texture2D _texture;
 
         private readonly DepthMapShader _shader;
-
-        bool IFramebuffer.LockedState => _framebuffer.LockedState;
-        Viewport IFramebuffer.Viewport => _framebuffer.Viewport;
-        DepthState IFramebuffer.DepthState => _framebuffer.DepthState;
-        Scissor IFramebuffer.Scissor => _framebuffer.Scissor;
-
-        public RectangleI View
-        {
-            get
-            {
-                return _framebuffer.View;
-            }
-            set
-            {
-                _framebuffer.View = value;
-            }
-        }
-        public Vector2I ViewLocation
-        {
-            get
-            {
-                return _framebuffer.ViewLocation;
-            }
-            set
-            {
-                _framebuffer.ViewLocation = value;
-            }
-        }
-        public Vector2I ViewSize
-        {
-            get
-            {
-                return _framebuffer.ViewSize;
-            }
-            set
-            {
-                _framebuffer.ViewSize = value;
-            }
-        }
 
         public Vector2I Size
         {
@@ -83,38 +35,15 @@ namespace Zene.Graphics.Z3D
             {
                 if (value.X <= 0 || value.Y <= 0)
                 {
-                    throw new FrameBufferException(this, "Framebuffers must have a width and heihgt greater that 0.");
+                    throw new FrameBufferException(_framebuffer, "Framebuffers must have a width and heihgt greater that 0.");
                 }
 
+                _framebuffer.ViewSize = value;
                 _framebuffer.Size = value;
             }
         }
+        public ITexture DepthMap => _texture;
 
-        public FrameDrawTarget ReadBuffer { get => FrameDrawTarget.None; set => throw new NotSupportedException(); }
-        private static readonly FrameDrawTarget[] _drawbuffers = new FrameDrawTarget[] { FrameDrawTarget.None };
-        public FrameDrawTarget[] DrawBuffers { get => _drawbuffers; set => throw new NotSupportedException(); }
-
-        /// <summary>
-        /// Bind the framebuffer for a specific task.
-        /// </summary>
-        /// <param name="target">The task to bind the framebuffer for.</param>
-        public void Bind(FrameTarget target)
-        {
-            _shader.Bind();
-
-            _framebuffer.Bind(target);
-        }
-        void IFramebuffer.Bind(FrameTarget target) => GL.BindFramebuffer((uint)target, this);
-        /// <summary>
-        /// Bind the framebuffer.
-        /// </summary>
-        public void Bind()
-        {
-            _shader.Bind();
-
-            _framebuffer.Bind();
-        }
-        void IBindable.Bind() => GL.BindFramebuffer(GLEnum.Framebuffer, this);
         private bool _disposed = false;
         public void Dispose()
         {
@@ -126,70 +55,35 @@ namespace Zene.Graphics.Z3D
             _disposed = true;
             GC.SuppressFinalize(this);
         }
-        /// <summary>
-        /// Unbind the framebuffer.
-        /// </summary>
-        public void UnBind()
-        {
-            _shader.Unbind();
-
-            _framebuffer.Unbind();
-        }
-        void IBindable.Unbind() => GL.BindFramebuffer(GLEnum.Framebuffer, null);
-        public bool Validate()
-        {
-            return _framebuffer.Validate();
-        }
 
         /// <summary>
         /// Clears the data inside the framebuffer.
         /// </summary>
         public void Clear() => _framebuffer.Clear(BufferBit.Depth);
-        void IFramebuffer.Clear(BufferBit buffer) => _framebuffer.Clear(buffer);
 
-        /// <summary>
-        /// Binds the texture apart of this texture.
-        /// </summary>
-        /// <param name="slot"></param>
-        public void BindTexture(uint slot)
+        public void PrepareDraw()
         {
-            _framebuffer.GetTexture(FrameAttachment.Depth).Bind(slot);
+            _shader.Matrix1 = ModelMatrix;
+            _shader.Matrix2 = ViewMatrix;
+            _shader.Matrix3 = ProjectionMatrix;
         }
 
         /// <summary>
         /// The projection matrix applied on render.
         /// </summary>
-        public Matrix4 ProjectionMatrix
-        {
-            set
-            {
-                _shader.Matrix3 = value;
-            }
-        }
+        public IMatrix ProjectionMatrix { get; set; }
         /// <summary>
         /// The view matrix applied on render.
         /// </summary>
-        public Matrix4 ViewMatrix
-        {
-            set
-            {
-                _shader.Matrix2 = value;
-            }
-        }
+        public IMatrix ViewMatrix { get; set; }
         /// <summary>
         /// The model matrix applied on render.
         /// </summary>
-        public Matrix4 ModelMatrix
-        {
-            set
-            {
-                _shader.Matrix1 = value;
-            }
-        }
+        public IMatrix ModelMatrix { get; set; }
 
-        void IShaderProgram.PrepareDraw() => _shader.PrepareDraw();
+        public IFramebuffer Framebuffer => _framebuffer;
+        public IShaderProgram Shader { get => _shader; set => throw new NotSupportedException(); }
 
-        public ShaderProgramProperties Properties => _shader.Properties;
-        IProperties IGLObject.Properties => _framebuffer.Properties;
+        public IBox FrameBounds => new GLBox(Vector2.Zero, _framebuffer.Size);
     }
 }

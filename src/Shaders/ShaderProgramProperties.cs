@@ -70,6 +70,19 @@ namespace Zene.Graphics
 
         public UniformVariable this[int index] => _uniforms[index];
         public UniformVariable this[Index index] => _uniforms[index];
+
+        /// <summary>
+        /// Returns the first uniform with a given <see cref="UniformVariable.Name"/>, otherwise returns default.
+        /// </summary>
+        /// <param name="name">The name to search with.</param>
+        /// <returns></returns>
+        public UniformVariable FindUniform(string name)
+        {
+            UniformVariable uv = Array.Find(_uniforms, u => u.Name == name);
+            if (uv.Name is not null) { return uv; }
+
+            return UniformVariable.Null;
+        }
     }
 
     public enum UniformType : uint
@@ -218,20 +231,20 @@ namespace Zene.Graphics
                 UniformType.DMat4x2 => UniformDMat4x2,
                 UniformType.DMat4x3 => UniformDMat4x3,
 
-                UniformType.Sampler1D | UniformType.Sampler1DArray | UniformType.Sampler1DArrayShadow |
-                UniformType.Sampler1DShadow | UniformType.Sampler2DArray |
-                UniformType.Sampler2DArrayShadow | UniformType.Sampler2DMultisample | UniformType.Sampler2DMultisampleArray |
-                UniformType.Sampler2DRect | UniformType.Sampler2DRectShadow | UniformType.Sampler2DShadow |
-                UniformType.Sampler3D | UniformType.SamplerBuffer | UniformType.SamplerCube | UniformType.SamplerCubeShadow |
-                UniformType.IntSampler1D | UniformType.IntSampler1DArray | UniformType.IntSampler2D |
-                UniformType.IntSampler2DArray | UniformType.IntSampler2DMultisample | UniformType.IntSampler2DMultisampleArray |
-                UniformType.IntSampler2DRect | UniformType.IntSampler3D | UniformType.IntSamplerBuffer |
+                UniformType.Sampler1D or UniformType.Sampler1DArray or UniformType.Sampler1DArrayShadow or
+                UniformType.Sampler1DShadow or UniformType.Sampler2DArray or
+                UniformType.Sampler2DArrayShadow or UniformType.Sampler2DMultisample or UniformType.Sampler2DMultisampleArray or
+                UniformType.Sampler2DRect or UniformType.Sampler2DRectShadow or UniformType.Sampler2DShadow or
+                UniformType.Sampler3D or UniformType.SamplerBuffer or UniformType.SamplerCube or UniformType.SamplerCubeShadow or
+                UniformType.IntSampler1D or UniformType.IntSampler1DArray or UniformType.IntSampler2D or
+                UniformType.IntSampler2DArray or UniformType.IntSampler2DMultisample or UniformType.IntSampler2DMultisampleArray or
+                UniformType.IntSampler2DRect or UniformType.IntSampler3D or UniformType.IntSamplerBuffer or
                 UniformType.IntSamplerCube => UniformInt,
                 UniformType.Sampler2D => UniformInt,
 
-                UniformType.UintSampler1D | UniformType.UintSampler1DArray | UniformType.UintSampler2D |
-                UniformType.UintSampler2DArray | UniformType.UintSampler2DMultisample | UniformType.UintSampler2DMultisampleArray |
-                UniformType.UintSampler2DRect | UniformType.UintSampler3D | UniformType.UintSamplerBuffer |
+                UniformType.UintSampler1D or UniformType.UintSampler1DArray or UniformType.UintSampler2D or
+                UniformType.UintSampler2DArray or UniformType.UintSampler2DMultisample or UniformType.UintSampler2DMultisampleArray or
+                UniformType.UintSampler2DRect or UniformType.UintSampler3D or UniformType.UintSamplerBuffer or
                 UniformType.UintSamplerCube => UniformUInt,
 
                 _ => throw new NotSupportedException("Type not supported")
@@ -239,10 +252,12 @@ namespace Zene.Graphics
         }
 
         public string Name { get; }
-        public int Location { get; }
+        public int Location { get; private init; }
         public int Size { get; }
         public UniformType Type { get; }
         internal SetUniform su;
+
+        public static UniformVariable Null { get; } = new UniformVariable() { Location = -1 };
 
         private static void UniformInt(int location, int size, int index, object value)
         {

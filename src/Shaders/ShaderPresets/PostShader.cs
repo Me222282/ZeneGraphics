@@ -20,8 +20,9 @@ namespace Zene.Graphics
             set
             {
                 _size = value;
-                SetUniform(Uniforms[0], value.X);
-                SetUniform(Uniforms[1], value.X);
+                // Currently unused
+                //SetUniform(Uniforms[0], value.X);
+                //SetUniform(Uniforms[1], value.X);
             }
         }
 
@@ -130,7 +131,6 @@ namespace Zene.Graphics
             2.0 / 16, 4.0 / 16, 2.0 / 16,
             1.0 / 16, 2.0 / 16, 1.0 / 16
         };
-
         public static double[] SharpenKernel { get; } = new double[]
         {
             -1, -1, -1,

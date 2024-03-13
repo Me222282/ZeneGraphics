@@ -1,10 +1,9 @@
 ﻿using System;
-using Zene.Graphics.Base;
 using Zene.Structs;
 
 namespace Zene.Graphics
 {
-    public class PostProcessing : PostShader, IFramebuffer
+    public class PostProcessing : PostShader, IDrawingContext, IRenderable
     {
         public PostProcessing(int width, int height)
         {
@@ -20,13 +19,9 @@ namespace Zene.Graphics
         private readonly TextureRendererMS _multiSFramebuffer;
         private readonly TextureRenderer _framebuffer;
 
-        FramebufferProperties IFramebuffer.Properties => _multiSFramebuffer.Properties;
-
-        public FrameTarget Binding => _multiSFramebuffer.Binding;
-
         public new Vector2I Size
         {
-            get => base.Size;
+            get => _multiSFramebuffer.Size;
             set
             {
                 if (value.X <= 0 || value.Y <= 0)
@@ -52,73 +47,15 @@ namespace Zene.Graphics
             }
         }
 
-        bool IFramebuffer.LockedState => _multiSFramebuffer.LockedState;
-        Viewport IFramebuffer.Viewport => _multiSFramebuffer.Viewport;
-        DepthState IFramebuffer.DepthState => _multiSFramebuffer.DepthState;
-        Scissor IFramebuffer.Scissor => _multiSFramebuffer.Scissor;
+        public IFramebuffer Framebuffer => _multiSFramebuffer;
+        public IShaderProgram Shader { get; set; }
 
-
-        public FrameDrawTarget ReadBuffer
-        {
-            get => _multiSFramebuffer.ReadBuffer;
-            set => _multiSFramebuffer.ReadBuffer = value;
-        }
-        public FrameDrawTarget[] DrawBuffers
-        {
-            get => _multiSFramebuffer.DrawBuffers;
-            set => _multiSFramebuffer.DrawBuffers = value;
-        }
-
-        /// <summary>
-        /// Gets or sets a colour buffer as a destination for draw calls.
-        /// </summary>
-        [OpenGLSupport(2.0)]
-        public FrameDrawTarget DrawBuffer
-        {
-            get => _multiSFramebuffer.DrawBuffers[0];
-            set
-            {
-                _multiSFramebuffer.DrawBuffers = new FrameDrawTarget[] { value };
-            }
-        }
-
-        /// <summary>
-        /// The clear colour that is used when <see cref="Clear(BufferBit)"/> is called.
-        /// </summary>
-        public ColourF ClearColour
-        {
-            get => _multiSFramebuffer.ClearColour;
-            set => _multiSFramebuffer.ClearColour = value;
-        }
-        /// <summary>
-        /// The depth value that is used when <see cref="Clear(BufferBit)"/> is called.
-        /// </summary>
-        public double ClearDepth
-        {
-            get => _multiSFramebuffer.ClearDepth;
-            set => _multiSFramebuffer.ClearDepth = value;
-        }
-        /// <summary>
-        /// The stencil value that is used when <see cref="Clear(BufferBit)"/> is called.
-        /// </summary>
-        public int CLearStencil
-        {
-            get => _multiSFramebuffer.ClearStencil;
-            set => _multiSFramebuffer.ClearStencil = value;
-        }
+        public IBox FrameBounds => new GLBox(Vector2I.Zero, Framebuffer.Properties.Size);
 
         public void Clear(BufferBit buffer) => _multiSFramebuffer.Clear(buffer);
 
-        bool IFramebuffer.Validate() => throw new NotSupportedException();
-
-        public new void Bind() => _multiSFramebuffer.Bind();
-        public void Bind(FrameTarget target) => _multiSFramebuffer.Bind(target);
-        public new void Unbind() => _multiSFramebuffer.Unbind();
-
         protected override void Dispose(bool dispose)
         {
-            base.Dispose(dispose);
-
             if (dispose)
             {
                 _multiSFramebuffer.Dispose();
@@ -126,13 +63,11 @@ namespace Zene.Graphics
             }
         }
 
-        public void Draw(IDrawingContext context)
+        public void OnRender(IDrawingContext context)
         {
             _multiSFramebuffer.CopyFrameBuffer(_framebuffer, BufferBit.Colour, TextureSampling.Nearest);
 
             context.Shader = this;
-
-            GL.Disable(GLEnum.DepthTest);
 
             _framebuffer.GetTexture(FrameAttachment.Colour0).Bind(0);
             TextureSlot = 0;
@@ -140,6 +75,6 @@ namespace Zene.Graphics
             context.Draw(Shapes.Square);
         }
 
-        IProperties IGLObject.Properties => Properties;
+        void IDrawingContext.PrepareDraw() { }
     }
 }

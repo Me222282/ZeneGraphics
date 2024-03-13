@@ -179,7 +179,8 @@ namespace Zene.Graphics.Base
         /// <returns></returns>
         protected int GetUniformLocation(string name)
         {
-            return GL.GetUniformLocation(Id, name);
+            return Properties.FindUniform(name).Location;
+            //return GL.GetUniformLocation(Id, name);
         }
 
         /// <summary>
@@ -345,7 +346,7 @@ namespace Zene.Graphics.Base
 
             if (uv.Type == UniformType.Bool)
             {
-                uv.su(location, 1, 0, value);
+                uv.su(location, 1, 0, value ? 1 : 0);
                 return;
             }
 

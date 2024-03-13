@@ -13,7 +13,7 @@ namespace Zene.Graphics
         /// </summary>
         public ColourF Colour { get; set; }
         /// <summary>
-        /// The slot of the texture used for the fragments colour. Only applies <see cref="ColourSource"/> is set to <see cref="ColourSource.Texture"/>.
+        /// The slot of the texture used for the fragments colour. Only applies if <see cref="ColourSource"/> is set to <see cref="ColourSource.Texture"/>.
         /// </summary>
         public int TextureSlot { get; set; }
     }

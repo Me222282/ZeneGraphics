@@ -43,6 +43,10 @@ namespace Zene.Graphics
             LightNumber = lightNumber;
 
             _m2m3 = Matrix.Identity * Matrix.Identity;
+
+            // temp
+            _uLight = GetUniformLocation("lights[0].AmbientLight");
+            _uSpotLight = GetUniformLocation("spotLights[0].Colour");
         }
 
         public int LightNumber { get; }
@@ -83,7 +87,7 @@ namespace Zene.Graphics
             }
         }
 
-        private readonly int _uLight = 12;
+        private int _uLight = 12;
         public void SetLight(int index, Light light)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
@@ -220,10 +224,7 @@ namespace Zene.Graphics
             {
                 _drawlight = value;
 
-                int set = 0;
-                if (value) { set = 1; }
-
-                SetUniform(Uniforms[4], set);
+                SetUniform(Uniforms[4], value);
             }
         }
 
@@ -235,10 +236,7 @@ namespace Zene.Graphics
             {
                 _ingorBlackLight = value;
 
-                int set = 0;
-                if (value) { set = 1; }
-
-                SetUniform(Uniforms[5], set);
+                SetUniform(Uniforms[5], value);
             }
         }
 
@@ -301,10 +299,7 @@ namespace Zene.Graphics
             {
                 _normalMapping = value;
 
-                int set = 0;
-                if (value) { set = 1; }
-
-                SetUniform(Uniforms[8], set);
+                SetUniform(Uniforms[8], value);
             }
         }
 

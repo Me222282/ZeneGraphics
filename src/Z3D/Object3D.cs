@@ -7,7 +7,7 @@ using Zene.Structs;
 
 namespace Zene.Graphics.Z3D
 {
-    public class Object3D : IDisposable
+    public class Object3D : IDrawObject, IDisposable
     {
         private DrawObject<Vector3, uint> _object;
 
@@ -25,6 +25,8 @@ namespace Zene.Graphics.Z3D
 
             GC.SuppressFinalize(this);
         }
+
+        public Drawable GetRenderable(IDrawingContext context) => _object.GetRenderable(context);
 
         //
         // Object3D Creators
