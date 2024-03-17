@@ -14,6 +14,7 @@ namespace Zene.Graphics.Z3D
             _framebuffer.SetDepthAttachment(TextureFormat.DepthComponent32f, true);
             _framebuffer.DrawBuffer = FrameDrawTarget.None;
             _framebuffer.ReadBuffer = FrameDrawTarget.None;
+            _framebuffer.DepthState = new DepthState() { Testing = true };
 
             // Texture properties
             _texture = _framebuffer.GetTexture(FrameAttachment.Depth);
