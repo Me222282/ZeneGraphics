@@ -1,8 +1,9 @@
 ﻿using Zene.Graphics.Base;
+using Zene.Structs;
 
 namespace Zene.Graphics
 {
-    public abstract class BaseShaderProgram : ShaderProgramGL
+    public abstract class BaseShaderProgram : ShaderProgramGL, IDrawingShader
     {
         private class Shader : ShaderGL
         {
@@ -14,6 +15,10 @@ namespace Zene.Graphics
         }
 
         protected int[] Uniforms { get; private set; }
+
+        public virtual IMatrix Matrix1 { get { return Matrix.Identity; } set { } }
+        public virtual IMatrix Matrix2 { get { return Matrix.Identity; } set { } }
+        public virtual IMatrix Matrix3 { get { return Matrix.Identity; } set { } }
 
         protected void Create(string vertex, string fragment, params string[] uniformNames)
         {
@@ -39,7 +44,7 @@ namespace Zene.Graphics
 
             for (int i = 0; i < uniformNames.Length; i++)
             {
-                Uniforms[i] = GetUniformLocation(uniformNames[i]);
+                Uniforms[i] = GetUniformIndex(uniformNames[i]);
             }
         }
 

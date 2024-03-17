@@ -177,22 +177,23 @@ namespace Zene.Graphics.Base
         /// </summary>
         /// <param name="name">A string containing the name of the uniform variable whose location is to be queried.</param>
         /// <returns></returns>
-        protected int GetUniformLocation(string name)
+        protected int GetUniformIndex(string name)
         {
-            return Properties.FindUniform(name).Location;
+            return Properties.FindUniformIndex(name);
             //return GL.GetUniformLocation(Id, name);
         }
 
         /// <summary>
         /// Specify the value of a uniform variable with a double.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, double value)
+        protected void SetUniform(int index, double value)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
 
             if (uv.Type == UniformType.Float)
             {
@@ -220,13 +221,14 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Specify the value of a uniform variable with a float.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, float value)
+        protected void SetUniform(int index, float value)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
 
             if (uv.Type == UniformType.Float)
             {
@@ -254,13 +256,14 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Specify the value of a uniform variable with an integer.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, int value)
+        protected void SetUniform(int index, int value)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
 
             if (uv.Type == UniformType.Int || 
                 (uv.Type >= UniformType.Sampler1D &&
@@ -272,7 +275,8 @@ namespace Zene.Graphics.Base
                 uv.Type == UniformType.Sampler2DMultisample ||
                 uv.Type == UniformType.Sampler2DMultisampleArray ||
                 uv.Type == UniformType.IntSampler2DMultisample ||
-                uv.Type == UniformType.IntSampler2DMultisampleArray)
+                uv.Type == UniformType.IntSampler2DMultisampleArray ||
+                uv.Type == UniformType.Bool)
             {
                 uv.su(location, 1, 0, value);
                 return;
@@ -298,13 +302,14 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Specify the value of a uniform variable with an unsigned integer.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, uint value)
+        protected void SetUniform(int index, uint value)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
 
             if (uv.Type == UniformType.Uint ||
                 (uv.Type >= UniformType.UintSampler1D &&
@@ -315,7 +320,7 @@ namespace Zene.Graphics.Base
                 uv.su(location, 1, 0, value);
                 return;
             }
-            if (uv.Type == UniformType.Int)
+            if (uv.Type == UniformType.Int || uv.Type == UniformType.Bool)
             {
                 uv.su(location, 1, 0, (int)value);
                 return;
@@ -336,13 +341,14 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Specify the value of a uniform variable with a boolean.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, bool value)
+        protected void SetUniform(int index, bool value)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
 
             if (uv.Type == UniformType.Bool)
             {
@@ -356,13 +362,14 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Specify the value of a uniform variable with a double array.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, double[] values)
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniform(int index, double[] values)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
 
             if (uv.Type == UniformType.Float)
             {
@@ -414,13 +421,14 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Specify the value of a uniform variable with a float array.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, float[] values)
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniform(int index, float[] values)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
 
             if (uv.Type == UniformType.Float)
             {
@@ -472,13 +480,14 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Specify the value of a uniform variable with an integer array.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, int[] values)
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniform(int index, int[] values)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
 
             if (uv.Type == UniformType.Int ||
                 (uv.Type >= UniformType.Sampler1D &&
@@ -490,7 +499,8 @@ namespace Zene.Graphics.Base
                 uv.Type == UniformType.Sampler2DMultisample ||
                 uv.Type == UniformType.Sampler2DMultisampleArray ||
                 uv.Type == UniformType.IntSampler2DMultisample ||
-                uv.Type == UniformType.IntSampler2DMultisampleArray)
+                uv.Type == UniformType.IntSampler2DMultisampleArray ||
+                uv.Type == UniformType.Bool)
             {
                 fixed (int* ptr = &values[0])
                 {
@@ -540,13 +550,14 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Specify the value of a uniform variable with an unsigned integer array.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
-        /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, uint[] values)
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniform(int index, uint[] values)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
 
             if (uv.Type == UniformType.Uint ||
                 (uv.Type >= UniformType.UintSampler1D &&
@@ -560,7 +571,7 @@ namespace Zene.Graphics.Base
                 }
                 return;
             }
-            if (uv.Type == UniformType.Int)
+            if (uv.Type == UniformType.Int || uv.Type == UniformType.Bool)
             {
                 int* data = stackalloc int[values.Length];
 
@@ -603,13 +614,14 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Specify the value of a uniform variable with a vector2 double.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, Vector2 value)
+        protected void SetUniform(int index, Vector2 value)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
 
             if (uv.Type == UniformType.FVec2)
             {
@@ -637,15 +649,16 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Specify the value of a uniform variable with a vector2 integer.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, Vector2I value)
+        protected void SetUniform(int index, Vector2I value)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
 
-            if (uv.Type == UniformType.IVec2)
+            if (uv.Type == UniformType.IVec2 || uv.Type == UniformType.BVec2)
             {
                 uv.su(location, 1, 0, (value.X, value.Y));
                 return;
@@ -671,13 +684,14 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Specify the value of a uniform variable with a vector3 double.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, Vector3 value)
+        protected void SetUniform(int index, Vector3 value)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
 
             if (uv.Type == UniformType.FVec3)
             {
@@ -705,15 +719,16 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Specify the value of a uniform variable with a vector3 integer.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, Vector3I value)
+        protected void SetUniform(int index, Vector3I value)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
 
-            if (uv.Type == UniformType.IVec3)
+            if (uv.Type == UniformType.IVec3 || uv.Type == UniformType.BVec3)
             {
                 uv.su(location, 1, 0, (value.X, value.Y, value.Z));
                 return;
@@ -739,13 +754,14 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Specify the value of a uniform variable with a vector4 double.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, Vector4 value)
+        protected void SetUniform(int index, Vector4 value)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
 
             if (uv.Type == UniformType.FVec4)
             {
@@ -773,15 +789,16 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Specify the value of a uniform variable with a vector4 integer.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, Vector4I value)
+        protected void SetUniform(int index, Vector4I value)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
 
-            if (uv.Type == UniformType.IVec4)
+            if (uv.Type == UniformType.IVec4 || uv.Type == UniformType.BVec4)
             {
                 uv.su(location, 1, 0, (value.X, value.Y, value.Z, value.W));
                 return;
@@ -808,21 +825,40 @@ namespace Zene.Graphics.Base
         /// <summary>
         /// Specify the value of a uniform variable with a matrix.
         /// </summary>
-        /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int location, IMatrix value)
+        protected void SetUniform(int index, IMatrix value)
         {
             Bind();
 
-            UniformVariable uv = Properties._uniforms[location];
-            uv.su(location, 1, 0, value);
+            UniformVariable uv = Properties._uniforms[index];
+            uv.su(uv.Location, 1, 0, value);
+        }
+        /// <summary>
+        /// Specify the value of a uniform variable with an array of matrices.
+        /// </summary>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniform(int index, IMatrix[] values)
+        {
+            Bind();
+
+            UniformVariable uv = Properties._uniforms[index];
+            uv.su(uv.Location, values.Length, 0, values);
         }
 
-        protected void SetUniform<T>(int location, T value) where T : unmanaged, IUniformStruct
+        /// <summary>
+        /// Specify the value of uniform variables with a struct <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The struct that matches the layout of the shader struct.</typeparam>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        /// <param name="value">The value to set the uniform to.</param>
+        protected void SetUniform<T>(int index, T value) where T : unmanaged, IUniformStruct
         {
             Bind();
 
             IUniformStruct.Member[] memebers = value.Members();
+            int location = Properties._uniforms[index].Location;
 
             int offset = 0;
             byte* ptr = (byte*)&value;
@@ -982,13 +1018,21 @@ namespace Zene.Graphics.Base
                 }
             }
         }
-        protected void SetUniform<T>(int location, int index, T value) where T : unmanaged, IUniformStruct
+        /// <summary>
+        /// Specify the value of uniform variables with an array of struct <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The struct that matches the layout of the shader struct.</typeparam>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        /// <param name="arrayIndex">Specifies the index into the array of uniform variables.</param>
+        /// <param name="value">The value to set the uniform to.</param>
+        protected void SetUniform<T>(int index, int arrayIndex, T value) where T : unmanaged, IUniformStruct
         {
             Bind();
 
             IUniformStruct.Member[] memebers = value.Members();
+            int location = Properties._uniforms[index].Location;
 
-            location += memebers.Length * index;
+            location += memebers.Length * arrayIndex;
 
             int offset = 0;
             byte* ptr = (byte*)&value;

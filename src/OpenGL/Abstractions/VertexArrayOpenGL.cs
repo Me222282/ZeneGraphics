@@ -15,7 +15,7 @@ namespace Zene.Graphics.Base
         {
             dc.Bind();
             vertexArray.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             GL.DrawArrays((uint)mode, first, size);
         }
@@ -33,7 +33,7 @@ namespace Zene.Graphics.Base
         {
             dc.Bind();
             vertexArray.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
             // Make sure there is no buffer bound for parameter reference
             State.NullBind(Target.BufferDrawIndirect);
 
@@ -63,7 +63,7 @@ namespace Zene.Graphics.Base
 
             dc.Bind();
             vertexArray.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             // Bind param buffer to param reference
             if (!paramSource.Bound(BufferTarget.DrawIndirect))
@@ -86,7 +86,7 @@ namespace Zene.Graphics.Base
         {
             dc.Bind();
             vertexArray.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             GL.DrawArraysInstanced((uint)mode, first, size, instances);
         }
@@ -104,7 +104,7 @@ namespace Zene.Graphics.Base
         {
             dc.Bind();
             vertexArray.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             GL.DrawArraysInstancedBaseInstance((uint)mode, first, size, instances, baseInstance);
         }
@@ -125,7 +125,7 @@ namespace Zene.Graphics.Base
 
             dc.Bind();
             arrayBuffer.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             GL.DrawArrays((uint)mode, first, size);
         }
@@ -148,7 +148,7 @@ namespace Zene.Graphics.Base
 
             dc.Bind();
             arrayBuffer.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
             // Make sure there is no buffer bound for parameter reference
             State.NullBind(Target.BufferDrawIndirect);
 
@@ -183,7 +183,7 @@ namespace Zene.Graphics.Base
 
             dc.Bind();
             arrayBuffer.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             // Bind param buffer to param reference
             if (!paramSource.Bound(BufferTarget.DrawIndirect))
@@ -211,7 +211,7 @@ namespace Zene.Graphics.Base
 
             dc.Bind();
             arrayBuffer.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             GL.DrawArraysInstanced((uint)mode, first, size, instances);
         }
@@ -234,7 +234,7 @@ namespace Zene.Graphics.Base
 
             dc.Bind();
             arrayBuffer.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             GL.DrawArraysInstancedBaseInstance((uint)mode, first, size, instances, baseInstance);
         }
@@ -252,7 +252,7 @@ namespace Zene.Graphics.Base
         {
             dc.Bind();
             vertexArray.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             GL.DrawElements((uint)mode, count, (uint)type, new IntPtr(offset));
         }
@@ -270,7 +270,7 @@ namespace Zene.Graphics.Base
         {
             dc.Bind();
             vertexArray.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             GL.DrawElementsBaseVertex((uint)mode, count, (uint)type, (void*)new IntPtr(offset), baseVertex);
         }
@@ -289,7 +289,7 @@ namespace Zene.Graphics.Base
         {
             dc.Bind();
             vertexArray.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
             // Make sure there is no buffer bound for parameter reference
             State.NullBind(Target.BufferDrawIndirect);
 
@@ -320,7 +320,7 @@ namespace Zene.Graphics.Base
 
             dc.Bind();
             vertexArray.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             // Bind param buffer to param reference
             if (!paramSource.Bound(BufferTarget.DrawIndirect))
@@ -344,7 +344,7 @@ namespace Zene.Graphics.Base
         {
             dc.Bind();
             vertexArray.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             GL.DrawElementsInstanced((uint)mode, count, (uint)type, (void*)new IntPtr(offset), instances);
         }
@@ -363,7 +363,7 @@ namespace Zene.Graphics.Base
         {
             dc.Bind();
             vertexArray.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             GL.DrawElementsInstancedBaseInstance((uint)mode, count, (uint)type, (void*)new IntPtr(offset), instances, baseInstance);
         }
@@ -382,7 +382,7 @@ namespace Zene.Graphics.Base
         {
             dc.Bind();
             vertexArray.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             GL.DrawElementsInstancedBaseVertex((uint)mode, count, (uint)type, (void*)new IntPtr(offset), instances, baseVertex);
         }
@@ -402,7 +402,7 @@ namespace Zene.Graphics.Base
         {
             dc.Bind();
             vertexArray.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             GL.DrawElementsInstancedBaseVertexBaseInstance((uint)mode, count, (uint)type, (void*)new IntPtr(offset), instances, baseVertex, baseInstance);
         }
@@ -421,7 +421,7 @@ namespace Zene.Graphics.Base
         {
             dc.Bind();
             vertexArray.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             GL.DrawRangeElements((uint)mode, start, end, count, (uint)type, (void*)new IntPtr(offset));
         }
@@ -441,7 +441,7 @@ namespace Zene.Graphics.Base
         {
             dc.Bind();
             vertexArray.Bind();
-            dc.PrepareDraw();
+            dc.SetMatrices();
 
             GL.DrawRangeElementsBaseVertex((uint)mode, start, end, count, (uint)type, (void*)new IntPtr(offset), baseVertex);
         }

@@ -178,5 +178,19 @@ namespace Zene.Graphics
 
             GL.Clear((uint)buffer);
         }
+
+        /// <summary>
+        /// Copies the contents of a framebuffer to this framebuffer.
+        /// </summary>
+        /// <param name="source">The source framebuffer.</param>
+        /// <param name="mask">The attachments to copy.</param>
+        /// <param name="filter">The quality of the copy.</param>
+        [OpenGLSupport(3.0)]
+        public void Write(IFramebuffer source, BufferBit mask, TextureSampling filter)
+        {
+            Base.Extensions.FramebufferOpenGL.BlitBuffer(this, source,
+                new GLBox(0, 0d, source.Properties.Width, source.Properties.Height),
+                new GLBox(0, 0d, Properties.Width, Properties.Height), mask, filter);
+        }
     }
 }

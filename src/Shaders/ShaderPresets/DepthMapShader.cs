@@ -2,7 +2,7 @@
 
 namespace Zene.Graphics
 {
-    public sealed unsafe class DepthMapShader : BaseShaderProgram, IMatrixShader
+    public sealed unsafe class DepthMapShader : BaseShaderProgram
     {
         public DepthMapShader()
         {
@@ -15,17 +15,17 @@ namespace Zene.Graphics
             SetUniform(Uniforms[0], Matrix.Identity);
         }
 
-        public IMatrix Matrix1
+        public override IMatrix Matrix1
         {
             get => _m1Mm2m3.Left;
             set => _m1Mm2m3.Left = value;
         }
-        public IMatrix Matrix2
+        public override IMatrix Matrix2
         {
             get => _m2m3.Left;
             set => _m2m3.Left = value;
         }
-        public IMatrix Matrix3
+        public override IMatrix Matrix3
         {
             get => _m2m3.Right;
             set => _m2m3.Right = value;

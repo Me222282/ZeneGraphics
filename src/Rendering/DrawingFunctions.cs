@@ -21,7 +21,6 @@ namespace Zene.Graphics
             }
 
             dc.DrawElements(va, info.DrawMode, info.VertexCount, info.IndexType, info.VertexOffset);
-            return;
         }
         public static void Draw(this IDrawingContext dc, IVertexArray va, RenderInfo info, int instances)
         {
@@ -37,7 +36,6 @@ namespace Zene.Graphics
             }
 
             dc.DrawElementsInstanced(va, info.DrawMode, info.VertexCount, info.IndexType, info.VertexOffset, instances);
-            return;
         }
 
         public static void Draw(this IDrawingContext dc, Drawable renderable)
@@ -89,158 +87,111 @@ namespace Zene.Graphics
 
         public static void DrawBox(this IDrawingContext dc, IBox bounds, ColourF colour)
         {
-            if (dc is not DrawManager dm)
-            {
-                throw new ArgumentException($"Specific draw functions can only be drawn with ${typeof(DrawManager)}", nameof(dc));
-            }
+            dc.Shader = Shapes.BasicShader;
+            Shapes.BasicShader.Colour = colour;
+            Shapes.BasicShader.ColourSource = ColourSource.UniformColour;
 
-            dm.Shader = Shapes.BasicShader;
-            dm.Shader.Colour = colour;
-            dm.Shader.ColourSource = ColourSource.UniformColour;
-
-            dm.Model = Matrix4.CreateBox(bounds);
-            dm.Draw(Shapes.Square);
+            dc.Model = Matrix4.CreateBox(bounds);
+            dc.Draw(Shapes.Square);
         }
         public static void DrawBox(this IDrawingContext dc, IBox bounds, ITexture texture)
         {
-            if (dc is not DrawManager dm)
-            {
-                throw new ArgumentException($"Specific draw functions can only be drawn with ${typeof(DrawManager)}", nameof(dc));
-            }
-
-            dm.Shader = Shapes.BasicShader;
+            dc.Shader = Shapes.BasicShader;
             texture.Bind(0);
-            dm.Shader.TextureSlot = 0;
-            dm.Shader.ColourSource = ColourSource.Texture;
+            Shapes.BasicShader.Texture = texture;
+            Shapes.BasicShader.ColourSource = ColourSource.Texture;
 
-            dm.Model = Matrix4.CreateBox(bounds);
-            dm.Draw(Shapes.Square);
+            dc.Model = Matrix4.CreateBox(bounds);
+            dc.Draw(Shapes.Square);
+            Shapes.BasicShader.Texture = null;
         }
         public static void DrawRoundedBox(this IDrawingContext dc, IBox bounds, ColourF colour, double cornerRadius)
         {
-            if (dc is not DrawManager dm)
-            {
-                throw new ArgumentException($"Specific draw functions can only be drawn with ${typeof(DrawManager)}", nameof(dc));
-            }
-
-            dm.Shader = Shapes.BorderShader;
-            dm.Shader.Colour = colour;
-            dm.Shader.ColourSource = ColourSource.UniformColour;
+            dc.Shader = Shapes.BorderShader;
+            Shapes.BorderShader.Colour = colour;
+            Shapes.BorderShader.ColourSource = ColourSource.UniformColour;
 
             Shapes.BorderShader.BorderWidth = 0;
             Shapes.BorderShader.Radius = cornerRadius;
             Shapes.BorderShader.Size = bounds.Size;
 
-            dm.Model = Matrix4.CreateBox(bounds);
-            dm.Draw(Shapes.Square);
+            dc.Model = Matrix4.CreateBox(bounds);
+            dc.Draw(Shapes.Square);
         }
         public static void DrawRoundedBox(this IDrawingContext dc, IBox bounds, ITexture texture, double cornerRadius)
         {
-            if (dc is not DrawManager dm)
-            {
-                throw new ArgumentException($"Specific draw functions can only be drawn with ${typeof(DrawManager)}", nameof(dc));
-            }
-
-            dm.Shader = Shapes.BorderShader;
-            texture.Bind(0);
-            dm.Shader.TextureSlot = 0;
-            dm.Shader.ColourSource = ColourSource.Texture;
+            dc.Shader = Shapes.BorderShader;
+            Shapes.BorderShader.Texture = texture;
+            Shapes.BorderShader.ColourSource = ColourSource.Texture;
 
             Shapes.BorderShader.BorderWidth = 0;
             Shapes.BorderShader.Radius = cornerRadius;
             Shapes.BorderShader.Size = bounds.Size;
 
-            dm.Model = Matrix4.CreateBox(bounds);
-            dm.Draw(Shapes.Square);
+            dc.Model = Matrix4.CreateBox(bounds);
+            dc.Draw(Shapes.Square);
         }
         public static void DrawBorderBox(this IDrawingContext dc, IBox bounds, ColourF colour, double borderWidth, ColourF borderColour, double cornerRadius = 0)
         {
-            if (dc is not DrawManager dm)
-            {
-                throw new ArgumentException($"Specific draw functions can only be drawn with ${typeof(DrawManager)}", nameof(dc));
-            }
-
-            dm.Shader = Shapes.BorderShader;
-            dm.Shader.Colour = colour;
-            dm.Shader.ColourSource = ColourSource.UniformColour;
+            dc.Shader = Shapes.BorderShader;
+            Shapes.BorderShader.Colour = colour;
+            Shapes.BorderShader.ColourSource = ColourSource.UniformColour;
 
             Shapes.BorderShader.BorderWidth = borderWidth;
             Shapes.BorderShader.BorderColour = borderColour;
             Shapes.BorderShader.Radius = cornerRadius;
             Shapes.BorderShader.Size = bounds.Size;
 
-            dm.Model = Matrix4.CreateBox(bounds);
-            dm.Draw(Shapes.Square);
+            dc.Model = Matrix4.CreateBox(bounds);
+            dc.Draw(Shapes.Square);
         }
         public static void DrawBorderBox(this IDrawingContext dc, IBox bounds, ITexture texture, double borderWidth, ColourF borderColour, double cornerRadius = 0)
         {
-            if (dc is not DrawManager dm)
-            {
-                throw new ArgumentException($"Specific draw functions can only be drawn with ${typeof(DrawManager)}", nameof(dc));
-            }
-
-            dm.Shader = Shapes.BorderShader;
-            texture.Bind(0);
-            dm.Shader.TextureSlot = 0;
-            dm.Shader.ColourSource = ColourSource.Texture;
+            dc.Shader = Shapes.BorderShader;
+            Shapes.BorderShader.Texture = texture;
+            Shapes.BorderShader.ColourSource = ColourSource.Texture;
 
             Shapes.BorderShader.BorderWidth = borderWidth;
             Shapes.BorderShader.BorderColour = borderColour;
             Shapes.BorderShader.Radius = cornerRadius;
             Shapes.BorderShader.Size = bounds.Size;
 
-            dm.Model = Matrix4.CreateBox(bounds);
-            dm.Draw(Shapes.Square);
+            dc.Model = Matrix4.CreateBox(bounds);
+            dc.Draw(Shapes.Square);
         }
         public static void DrawEllipse(this IDrawingContext dc, IBox bounds, ColourF colour)
         {
-            if (dc is not DrawManager dm)
-            {
-                throw new ArgumentException($"Specific draw functions can only be drawn with ${typeof(DrawManager)}", nameof(dc));
-            }
-
-            dm.Shader = Shapes.CircleShader;
-            dm.Shader.Colour = colour;
-            dm.Shader.ColourSource = ColourSource.UniformColour;
+            dc.Shader = Shapes.CircleShader;
+            Shapes.CircleShader.Colour = colour;
+            Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
             Shapes.CircleShader.Size = 1d;
             Shapes.CircleShader.LineWidth = 0.5;
 
-            dm.Model = Matrix4.CreateBox(bounds);
-            dm.Draw(Shapes.Square);
+            dc.Model = Matrix4.CreateBox(bounds);
+            dc.Draw(Shapes.Square);
         }
         public static void DrawEllipse(this IDrawingContext dc, IBox bounds, ITexture texture)
         {
-            if (dc is not DrawManager dm)
-            {
-                throw new ArgumentException($"Specific draw functions can only be drawn with ${typeof(DrawManager)}", nameof(dc));
-            }
-
-            dm.Shader = Shapes.BasicShader;
-            texture.Bind(0);
-            dm.Shader.TextureSlot = 0;
-            dm.Shader.ColourSource = ColourSource.Texture;
+            dc.Shader = Shapes.BasicShader;
+            Shapes.CircleShader.Texture = texture;
+            Shapes.CircleShader.ColourSource = ColourSource.Texture;
             Shapes.CircleShader.Size = 1d;
             Shapes.CircleShader.LineWidth = 0.5;
 
-            dm.Model = Matrix4.CreateBox(bounds);
-            dm.Draw(Shapes.Square);
+            dc.Model = Matrix4.CreateBox(bounds);
+            dc.Draw(Shapes.Square);
         }
         public static void DrawRing(this IDrawingContext dc, IBox bounds, double lineWidth, ColourF colour)
         {
-            if (dc is not DrawManager dm)
-            {
-                throw new ArgumentException($"Specific draw functions can only be drawn with ${typeof(DrawManager)}", nameof(dc));
-            }
-
-            dm.Shader = Shapes.CircleShader;
-            dm.Shader.Colour = colour;
-            dm.Shader.ColourSource = ColourSource.UniformColour;
+            dc.Shader = Shapes.CircleShader;
+            Shapes.CircleShader.Colour = colour;
+            Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
             Shapes.CircleShader.Size = Math.Min(bounds.Width, bounds.Height);
             Shapes.CircleShader.LineWidth = lineWidth;
             Shapes.CircleShader.InnerColour = ColourF.Zero;
 
-            dm.Model = Matrix4.CreateBox(bounds);
-            dm.Draw(Shapes.Square);
+            dc.Model = Matrix4.CreateBox(bounds);
+            dc.Draw(Shapes.Square);
         }
     }
 }

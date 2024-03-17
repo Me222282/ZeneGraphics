@@ -61,28 +61,21 @@ namespace Zene.Graphics.Z3D
         /// </summary>
         public void Clear() => _framebuffer.Clear(BufferBit.Depth);
 
-        public void PrepareDraw()
-        {
-            _shader.Matrix1 = ModelMatrix;
-            _shader.Matrix2 = ViewMatrix;
-            _shader.Matrix3 = ProjectionMatrix;
-        }
-
         /// <summary>
         /// The projection matrix applied on render.
         /// </summary>
-        public IMatrix ProjectionMatrix { get; set; }
+        public IMatrix Projection { get; set; }
         /// <summary>
         /// The view matrix applied on render.
         /// </summary>
-        public IMatrix ViewMatrix { get; set; }
+        public IMatrix View { get; set; }
         /// <summary>
         /// The model matrix applied on render.
         /// </summary>
-        public IMatrix ModelMatrix { get; set; }
+        public IMatrix Model { get; set; }
 
         public IFramebuffer Framebuffer => _framebuffer;
-        public IShaderProgram Shader { get => _shader; set => throw new NotSupportedException(); }
+        public IDrawingShader Shader { get => _shader; set => throw new NotSupportedException(); }
 
         public IBox FrameBounds => new GLBox(Vector2.Zero, _framebuffer.Size);
     }

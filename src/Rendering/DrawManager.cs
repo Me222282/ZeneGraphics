@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using Zene.Graphics.Base;
 using Zene.Structs;
 
@@ -71,3 +71,4 @@ namespace Zene.Graphics
         }
     }
 }
+*/

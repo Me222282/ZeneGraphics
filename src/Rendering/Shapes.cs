@@ -18,7 +18,7 @@ namespace Zene.Graphics
                 -0.5f, 0.5f, 0f, 1f
             }, stackalloc byte[] { 0, 1, 2, 2, 3, 0 }, 4, 0, AttributeSize.D2, BufferUsage.DrawFrequent);
             Square.AddAttribute(ShaderLocation.TextureCoords, 2, AttributeSize.D2);
-            Square = new DrawObject<float, byte>(stackalloc float[]
+            Cube = new DrawObject<float, byte>(stackalloc float[]
             {
                 -0.5f, 0.5f, 0.5f,
                 0.5f, 0.5f, 0.5f,

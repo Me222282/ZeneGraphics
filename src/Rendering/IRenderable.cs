@@ -11,7 +11,7 @@ namespace Zene.Graphics
     {
         public void OnRender(IDrawingContext context, T param);
     }
-
+    /*
     public interface IBasicRenderer : IRenderable
     {
         void IRenderable.OnRender(IDrawingContext context)
@@ -40,5 +40,5 @@ namespace Zene.Graphics
         }
 
         public void OnRender(DrawManager context, T param);
-    }
+    }*/
 }

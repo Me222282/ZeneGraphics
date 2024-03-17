@@ -14,22 +14,21 @@ namespace Zene.Graphics
         {
             Framebuffer = framebuffer;
         }
-        public DrawContext(IFramebuffer framebuffer, IShaderProgram shader)
+        public DrawContext(IFramebuffer framebuffer, IDrawingShader shader)
         {
             Framebuffer = framebuffer;
             Shader = shader;
         }
 
         public IFramebuffer Framebuffer { get; set; }
-        public IShaderProgram Shader { get; set; }
+        public IDrawingShader Shader { get; set; }
 
         //public GLBox FrameBounds { get; set; }
         //IBox IDrawingContext.FrameBounds => FrameBounds;
         IBox IDrawingContext.FrameBounds => new GLBox(Vector2I.Zero, Framebuffer.Properties.Size);
 
-        public void PrepareDraw()
-        {
-            
-        }
+        public IMatrix Projection { get; set; } = Matrix.Identity;
+        public IMatrix View { get; set; } = Matrix.Identity;
+        public IMatrix Model { get; set; } = Matrix.Identity;
     }
 }

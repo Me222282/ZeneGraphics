@@ -28,7 +28,6 @@ namespace Zene.Graphics
 
             StringBuilder name = new StringBuilder(GL.GetProgrami(Source.Id, GLEnum.ActiveUniformMaxLength));
 
-            int location = 0;
             for (int i = 0; i < uniformCount; i++)
             {
                 uint type = 0;
@@ -42,11 +41,11 @@ namespace Zene.Graphics
                 {
                     s = s.Remove(s.Length - 3);
                 }
+                int location = GL.GetUniformLocation(Source.Id, s);
                 baseUniforms[i] = new UniformVariable(s, location, sizeT, type);
-                location += sizeT;
             }
 
-            _uniforms = new UniformVariable[location];
+            _uniforms = baseUniforms;/*= new UniformVariable[location];
             int buc = 0;
             for (int i = 0; i < location; i++)
             {
@@ -59,7 +58,7 @@ namespace Zene.Graphics
 
                 UniformVariable uv = baseUniforms[buc];
                 _uniforms[i] = new UniformVariable(uv.Name, i, uv.Size, (uint)uv.Type);
-            }
+            }*/
         }
 
         internal UniformVariable[] _uniforms = Array.Empty<UniformVariable>();
@@ -72,7 +71,7 @@ namespace Zene.Graphics
         public UniformVariable this[Index index] => _uniforms[index];
 
         /// <summary>
-        /// Returns the first uniform with a given <see cref="UniformVariable.Name"/>, otherwise returns default.
+        /// Returns the first uniform with a given <see cref="UniformVariable.Name"/>, otherwise returns <see cref="UniformVariable.Null"/>.
         /// </summary>
         /// <param name="name">The name to search with.</param>
         /// <returns></returns>
@@ -82,6 +81,44 @@ namespace Zene.Graphics
             if (uv.Name is not null) { return uv; }
 
             return UniformVariable.Null;
+        }
+        /// <summary>
+        /// Returns the index of the first uniform with a given <see cref="UniformVariable.Name"/>, otherwise returns -1.
+        /// </summary>
+        /// <param name="name">The name to search with.</param>
+        /// <returns></returns>
+        public int FindUniformIndex(string name) => Array.FindIndex(_uniforms, u => u.Name == name);
+        /// <summary>
+        /// Returns the index of the the uniform with a given <see cref="UniformVariable.Location"/>, otherwise returns -1.
+        /// </summary>
+        /// <param name="location">The location of the uniform.</param>
+        /// <returns></returns>
+        public int IndexFromLocation(int location) => Array.FindIndex(_uniforms, u => u.Location == location);
+
+        /// <summary>
+        /// Finds the index offsets of the members of a shader struct.
+        /// </summary>
+        /// <param name="structIndex">The start index of the struct.</param>
+        /// <param name="memberNames">The array of member names of the struct.</param>
+        /// <returns></returns>
+        public int[] FindStructOffsets(int structIndex, params string[] memberNames)
+        {
+            int[] offsets = new int[memberNames.Length];
+            Array.Fill(offsets, -1);
+
+            for (int i = 0; i < memberNames.Length; i++)
+            {
+                string name = _uniforms[structIndex + i].Name;
+                for (int j = 0; j < memberNames.Length; j++)
+                {
+                    if (offsets[j] >= 0 || !name.EndsWith(memberNames[j])) { continue; }
+
+                    offsets[j] = i;
+                    break;
+                }
+            }
+
+            return offsets;
         }
     }
 

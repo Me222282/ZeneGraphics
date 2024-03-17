@@ -6,11 +6,20 @@ namespace Zene.Graphics
     public interface IDrawingContext : IBindable
     {
         public IFramebuffer Framebuffer { get; }
-        public IShaderProgram Shader { get; set; }
+        public IDrawingShader Shader { get; set; }
 
         public IBox FrameBounds { get; }
 
-        public void PrepareDraw();
+        public IMatrix Projection { get; set; }
+        public IMatrix View { get; set; }
+        public IMatrix Model { get; set; }
+
+        internal void SetMatrices()
+        {
+            Shader.Matrix1 = Model;
+            Shader.Matrix2 = View;
+            Shader.Matrix3 = Projection;
+        }
 
         void IBindable.Bind()
         {
@@ -31,16 +40,6 @@ namespace Zene.Graphics
 
             Framebuffer.Unbind();
             Shader?.Unbind();
-        }
-
-        public IMatrix GetMatrix()
-        {
-            if (this is not DrawManager dm)
-            {
-                return null;
-            }
-
-            return dm.Model * dm.View * dm.Projection;
         }
     }
 }

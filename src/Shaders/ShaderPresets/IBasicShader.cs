@@ -2,7 +2,7 @@
 
 namespace Zene.Graphics
 {
-    public interface IBasicShader : IMatrixShader, IShaderProgram
+    public interface IBasicShader : IShaderProgram
     {
         /// <summary>
         /// The source of the fragment's colour.
@@ -13,8 +13,8 @@ namespace Zene.Graphics
         /// </summary>
         public ColourF Colour { get; set; }
         /// <summary>
-        /// The slot of the texture used for the fragments colour. Only applies if <see cref="ColourSource"/> is set to <see cref="ColourSource.Texture"/>.
+        /// The texture used for the fragments colour. Only applies if <see cref="ColourSource"/> is set to <see cref="ColourSource.Texture"/>.
         /// </summary>
-        public int TextureSlot { get; set; }
+        public ITexture Texture { get; set; }
     }
 }

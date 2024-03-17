@@ -44,10 +44,42 @@ namespace Zene.Graphics
 
             _m2m3 = Matrix.Identity * Matrix.Identity;
 
-            // temp
-            _uLight = GetUniformLocation("lights[0].AmbientLight");
-            _uSpotLight = GetUniformLocation("spotLights[0].Colour");
+            _uLight = Properties.IndexFromLocation(12);
+            _uSpotLight = Properties.IndexFromLocation(_uSpotLight);
+
+            int[] lightOffsets = Properties.FindStructOffsets(_uLight, "LightColour", "AmbientLight", "LightVector", "Linear", "Quadratic");
+            _lightColourOffset = lightOffsets[0];
+            _lightAmbientOffset = lightOffsets[1];
+            _lightPositionOffset = lightOffsets[2];
+            _lightLinearOffset = lightOffsets[3];
+            _lightQuadraticOffset = lightOffsets[4];
+
+            lightOffsets = Properties.FindStructOffsets(_uSpotLight, "Colour", "Position", "Direction", "CosInner", "CosOuter", "Linear", "Quadratic");
+            _spotLightColourOffset = lightOffsets[0];
+            _spotLightPositionOffset = lightOffsets[1];
+            _spotLightDirectionOffset = lightOffsets[2];
+            _spotLightInnerOffset = lightOffsets[3];
+            _spotLightOuterOffset = lightOffsets[4];
+            _spotLightLinearOffset = lightOffsets[5];
+            _spotLightQuadraticOffset = lightOffsets[6];
+
+            SetUniform(Uniforms[6], 0);
+            SetUniform(Uniforms[7], 1);
+            SetUniform(Uniforms[12], 2);
         }
+
+        private readonly int _lightColourOffset;
+        private readonly int _lightAmbientOffset;
+        private readonly int _lightPositionOffset;
+        private readonly int _lightLinearOffset;
+        private readonly int _lightQuadraticOffset;
+        private readonly int _spotLightColourOffset;
+        private readonly int _spotLightPositionOffset;
+        private readonly int _spotLightDirectionOffset;
+        private readonly int _spotLightInnerOffset;
+        private readonly int _spotLightOuterOffset;
+        private readonly int _spotLightLinearOffset;
+        private readonly int _spotLightQuadraticOffset;
 
         public int LightNumber { get; }
 
@@ -87,7 +119,7 @@ namespace Zene.Graphics
             }
         }
 
-        private int _uLight = 12;
+        private readonly int _uLight;
         public void SetLight(int index, Light light)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
@@ -113,21 +145,21 @@ namespace Zene.Graphics
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            SetUniform(_uLight + (index * 5), (Vector3)(ColourF3)lightColour);
+            SetUniform(_uLight + (index * 5) + _lightColourOffset, (Vector3)(ColourF3)lightColour);
         }
 
         public void SetLightAmbient(int index, ColourF ambientColour)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            SetUniform(_uLight + (index * 5) + 1, (Vector3)(ColourF3)ambientColour);
+            SetUniform(_uLight + (index * 5) + _lightAmbientOffset, (Vector3)(ColourF3)ambientColour);
         }
 
         public void SetLightPosition(int index, Vector4 position)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            SetUniform(_uLight + (index * 5) + 2, position);
+            SetUniform(_uLight + (index * 5) + _lightPositionOffset, position);
         }
 
         public void SetLightDistance(int index, double linear, double quadratic)
@@ -136,8 +168,8 @@ namespace Zene.Graphics
 
             int uIndex = (index * 5) + _uLight;
 
-            SetUniform(uIndex + 3, linear);
-            SetUniform(uIndex + 4, quadratic);
+            SetUniform(uIndex + _lightLinearOffset, linear);
+            SetUniform(uIndex + _lightQuadraticOffset, quadratic);
         }
 
         private readonly int _uSpotLight;
@@ -149,23 +181,19 @@ namespace Zene.Graphics
             SetUniform(_uSpotLight, index, light);
         }
 
-        public void TEMP()
-        {
-            Console.WriteLine(GetUniformF3(_uSpotLight + 2));
-        }
-
         public void SetSpotLightColour(int index, ColourF lightColour)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            SetUniform(_uSpotLight + (index * 7), (Vector3)(ColourF3)lightColour);
+            SetUniform(_uSpotLight + (index * 7) + _spotLightColourOffset, (Vector3)(ColourF3)lightColour);
         }
 
         public unsafe ColourF GetSpotLightColour(int index)
         {
             ColourF c;
 
-            GL.GetnUniformfv(Id, (index * 7) + _uSpotLight, 3 * sizeof(float), (float*)&c);
+            int location = Properties[(index * 7) + _uSpotLight + _spotLightColourOffset].Location;
+            GL.GetnUniformfv(Id, location, 3 * sizeof(float), (float*)&c);
 
             return c;
         }
@@ -174,14 +202,14 @@ namespace Zene.Graphics
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            SetUniform(_uSpotLight + (index * 7) + 1, position);
+            SetUniform(_uSpotLight + (index * 7) + _spotLightPositionOffset, position);
         }
 
         public void SetSpotLightDirection(int index, Vector3 direction)
         {
             if (index >= LightNumber) { throw new IndexOutOfRangeException(); }
 
-            SetUniform(_uSpotLight + (index * 7) + 2, direction);
+            SetUniform(_uSpotLight + (index * 7) + _spotLightDirectionOffset, direction);
         }
 
         public void SetSpotLightAngle(int index, Radian innerAngle, Radian outerAngle)
@@ -190,8 +218,8 @@ namespace Zene.Graphics
 
             int uIndex = (index * 7) + _uSpotLight;
 
-            SetUniform(uIndex + 3, Math.Cos(innerAngle));
-            SetUniform(uIndex + 4, Math.Cos(outerAngle));
+            SetUniform(uIndex + _spotLightInnerOffset, Math.Cos(innerAngle));
+            SetUniform(uIndex + _spotLightOuterOffset, Math.Cos(outerAngle));
         }
 
         public void SetSpotLightDistance(int index, double linear, double quadratic)
@@ -200,8 +228,8 @@ namespace Zene.Graphics
 
             int uIndex = (index * 7) + _uSpotLight;
 
-            SetUniform(uIndex + 5, linear);
-            SetUniform(uIndex + 6, quadratic);
+            SetUniform(uIndex + _spotLightLinearOffset, linear);
+            SetUniform(uIndex + _spotLightQuadraticOffset, quadratic);
         }
 
         private Vector3 _camPos = Vector3.Zero;
@@ -255,41 +283,9 @@ namespace Zene.Graphics
             SetUniform(Uniforms[18], material.SpecTextureSlot);
         }
 
-        private int _texSlot = 0;
-        public int TextureSlot
-        {
-            get => _texSlot;
-            set
-            {
-                _texSlot = value;
-
-                SetUniform(Uniforms[6], value);
-            }
-        }
-
-        private int _normalMapSlot = 0;
-        public int NormalMapSlot
-        {
-            get => _normalMapSlot;
-            set
-            {
-                _normalMapSlot = value;
-
-                SetUniform(Uniforms[7], value);
-            }
-        }
-
-        private int _shadowMapSlot = 0;
-        public int ShadowMapSlot
-        {
-            get => _shadowMapSlot;
-            set
-            {
-                _shadowMapSlot = value;
-
-                SetUniform(Uniforms[12], value);
-            }
-        }
+        public ITexture Texture { get; set; }
+        public ITexture NormalMap { get; set; }
+        public ITexture ShadowMap { get; set; }
 
         private bool _normalMapping = false;
         public bool NormalMapping
@@ -303,13 +299,13 @@ namespace Zene.Graphics
             }
         }
 
-        public IMatrix Matrix1 { get; set; } = Matrix.Identity;
-        public IMatrix Matrix2
+        public override IMatrix Matrix1 { get; set; } = Matrix.Identity;
+        public override IMatrix Matrix2
         {
             get => _m2m3.Left;
             set => _m2m3.Left = value;
         }
-        public IMatrix Matrix3
+        public override IMatrix Matrix3
         {
             get => _m2m3.Right;
             set => _m2m3.Right = value;
@@ -322,6 +318,11 @@ namespace Zene.Graphics
             SetUniform(Uniforms[9], Matrix1);
             SetUniform(Uniforms[10], _m2m3);
 
+            Texture?.Bind(0);
+            NormalMap?.Bind(1);
+            ShadowMap?.Bind(2);
+
+            if (LightSpaceMatrix is null) { return; }
             SetUniform(Uniforms[11], LightSpaceMatrix);
         }
 

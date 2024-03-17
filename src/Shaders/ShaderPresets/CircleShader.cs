@@ -13,6 +13,7 @@ namespace Zene.Graphics
             _m1Mm2m3 = Matrix.Identity * _m2m3;
 
             SetUniform(Uniforms[3], Matrix.Identity);
+            SetUniform(Uniforms[2], 0);
             Size = 1d;
         }
 
@@ -79,29 +80,19 @@ namespace Zene.Graphics
             }
         }
 
-        private int _texSlot = 0;
-        public int TextureSlot
-        {
-            get => _texSlot;
-            set
-            {
-                _texSlot = value;
+        public ITexture Texture { get; set; }
 
-                SetUniform(Uniforms[2], value);
-            }
-        }
-
-        public IMatrix Matrix1
+        public override IMatrix Matrix1
         {
             get => _m1Mm2m3.Left;
             set => _m1Mm2m3.Left = value;
         }
-        public IMatrix Matrix2
+        public override IMatrix Matrix2
         {
             get => _m2m3.Left;
             set => _m2m3.Left = value;
         }
-        public IMatrix Matrix3
+        public override IMatrix Matrix3
         {
             get => _m2m3.Right;
             set => _m2m3.Right = value;
@@ -109,7 +100,11 @@ namespace Zene.Graphics
 
         private readonly MultiplyMatrix _m1Mm2m3;
         private readonly MultiplyMatrix _m2m3;
-        public override void PrepareDraw() => SetUniform(Uniforms[3], _m1Mm2m3);
+        public override void PrepareDraw()
+        {
+            SetUniform(Uniforms[3], _m1Mm2m3);
+            Texture?.Bind(0);
+        }
 
         protected override void Dispose(bool dispose)
         {

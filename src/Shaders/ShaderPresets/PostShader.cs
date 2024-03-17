@@ -11,6 +11,8 @@ namespace Zene.Graphics
                 "screenWidth", "screenHeight", "uTextureSlot",
                 "crushBit", "bitCrush", "greyScale", "invertedColour",
                 "useKernel", "kernel", "kernelOffset");
+
+            SetUniform(Uniforms[2], 0);
         }
 
         private Vector2I _size;
@@ -26,16 +28,7 @@ namespace Zene.Graphics
             }
         }
 
-        private int _ts;
-        public int TextureSlot
-        {
-            get => _ts;
-            set
-            {
-                _ts = value;
-                SetUniform(Uniforms[2], value);
-            }
-        }
+        public ITexture Texture { get; set; }
 
         private bool _pixelate;
         public bool Pixelated
@@ -137,5 +130,7 @@ namespace Zene.Graphics
             -1, 9, -1,
             -1, -1, -1
         };
+
+        public override void PrepareDraw() => Texture?.Bind();
     }
 }

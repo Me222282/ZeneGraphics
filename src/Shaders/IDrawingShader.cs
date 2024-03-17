@@ -2,7 +2,7 @@
 
 namespace Zene.Graphics
 {
-    public interface IMatrixShader : IShaderProgram
+    public interface IDrawingShader : IShaderProgram
     {
         /// <summary>
         /// The model matrix.
@@ -16,13 +16,5 @@ namespace Zene.Graphics
         /// The projection matrix.
         /// </summary>
         public IMatrix Matrix3 { get; set; }
-        /*
-        /// <summary>
-        /// Set all matrices at once.
-        /// </summary>
-        /// <param name="a">Matrix 1.</param>
-        /// <param name="b">Matrix 2.</param>
-        /// <param name="c">Matrix 3.</param>
-        public void SetMatrices(Matrix4 a, Matrix4 b, Matrix4 c);*/
     }
 }

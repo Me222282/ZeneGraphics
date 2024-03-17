@@ -1,4 +1,5 @@
 ﻿using System;
+using Zene.Structs;
 
 namespace Zene.Graphics
 {
