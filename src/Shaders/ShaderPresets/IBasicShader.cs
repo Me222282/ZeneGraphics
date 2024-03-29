@@ -2,7 +2,7 @@
 
 namespace Zene.Graphics
 {
-    public interface IBasicShader : IShaderProgram
+    public interface IBasicShader : IDrawingShader
     {
         /// <summary>
         /// The source of the fragment's colour.
