@@ -63,7 +63,7 @@ struct SpotLight
 
 layout(location = ##sl##) uniform SpotLight spotLights[##s##];
 
-uniform Material uMaterial;
+layout(location = 1) uniform Material uMaterial;
 
 uniform bool drawLight;
 
@@ -72,6 +72,8 @@ uniform vec3 ambientLight;
 uniform vec3 cameraPos;
 
 uniform sampler2D uShadowMapSlot;
+uniform bool uShadowDither;
+uniform float uShadowBias;
 
 vec3 Lighting(Light light);
 
@@ -223,8 +225,8 @@ vec3 Lighting(Light light)
 	if (light.LightVector.w != 0)
 	{
 		float distance = length(vec3(light.LightVector) - fragPos);
-		attenuation = 1.0 / (1 + light.Linear * distance +
-			light.Quadratic * (distance * distance));
+		attenuation = 1.0 / (1 + (light.Linear * distance) +
+			(light.Quadratic * distance * distance));
 	}
 
 	return (lightAmbient + ((diffuse + specular) * Shadow(norm, lightDir))) * attenuation;
@@ -329,18 +331,17 @@ float Shadow(vec3 normal, vec3 lightDir)
 	// No change if outside the range of the depth map
 	if (projCoords.z > 1.0) { return 1; }
 
-	float closestDepth = texture(uShadowMapSlot, projCoords.xy).r;
-
 	//float bias = min(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
-
-	float bias = 0.000005;
-
+	//float bias = 0.000005;
 	//float bias = 0.0005;
-
 	//float bias = 0;
 
-	//return projCoords.z > closestDepth ? 0.0 : 1.0;
-	//return (projCoords.z - bias) > closestDepth ? 0.0 : 1.0;
+	if (!uShadowDither)
+	{
+		float closestDepth = texture(uShadowMapSlot, projCoords.xy).r;
+		//return projCoords.z > closestDepth ? 0.0 : 1.0;
+		return (projCoords.z - uShadowBias) > closestDepth ? 0.0 : 1.0;
+	}
 
 	float shadow = 0.0;
 	vec2 texelSize = 1.0 / textureSize(uShadowMapSlot, 0);
@@ -349,7 +350,7 @@ float Shadow(vec3 normal, vec3 lightDir)
 		for (int y = -1; y <= 1; ++y)
 		{
 			float pcfDepth = texture(uShadowMapSlot, projCoords.xy + vec2(x, y) * texelSize).r;
-			shadow += projCoords.z - bias > pcfDepth ? 1.0 : 0.0;
+			shadow += (projCoords.z - uShadowBias) > pcfDepth ? 1.0 : 0.0;
 		}
 	}
 

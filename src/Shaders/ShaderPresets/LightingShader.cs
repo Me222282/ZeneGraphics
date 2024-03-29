@@ -33,12 +33,9 @@ namespace Zene.Graphics
                 "colourType", "uColour", "ambientLight", "cameraPos",
                 "drawLight", "ingorBlackLight", "uTextureSlot", "uNormalMap",
                 "normalMapping", "modelM", "vpM", "lightSpaceMatrix",
-                "uShadowMapSlot",
+                "uShadowMapSlot", "uShadowDither", "uShadowBias",
                 // uMaterial
-                "uMaterial.DiffuseLightSource", "uMaterial.DiffuseLight",
-                "uMaterial.DiffTextureSlot", "uMaterial.SpecularLightSource",
-                "uMaterial.SpecularLight", "uMaterial.SpecTextureSlot",
-                "uMaterial.Shine");
+                "uMaterial.DiffuseLightSource");
 
             LightNumber = lightNumber;
 
@@ -66,6 +63,9 @@ namespace Zene.Graphics
             SetUniform(Uniforms[6], 0);
             SetUniform(Uniforms[7], 1);
             SetUniform(Uniforms[12], 2);
+
+            ShadowDither = true;
+            ShadowBias = 0.000005;
         }
 
         private readonly int _lightColourOffset;
@@ -268,19 +268,37 @@ namespace Zene.Graphics
             }
         }
 
-        public void SetMaterial(Material material)
+        private Material _material;
+        public Material Material
         {
-            //SetUniform(Uniforms[13], material);
+            get => _material;
+            set
+            {
+                _material = value;
+                SetUniform(Uniforms[15], value);
+            }
+        }
 
-            SetUniform(Uniforms[19], (int)material.Shine);
-            SetUniform(Uniforms[13], material.DiffuseLightSource);
+        private bool _shadowDither;
+        public bool ShadowDither
+        {
+            get => _shadowDither;
+            set
+            {
+                _shadowDither = value;
+                SetUniform(Uniforms[13], value);
+            }
+        }
 
-            SetUniform(Uniforms[14], (Vector3)material.DiffuseLight);
-            SetUniform(Uniforms[15], material.DiffTextureSlot);
-            SetUniform(Uniforms[16], material.SpecularLightSource);
-
-            SetUniform(Uniforms[17], (Vector3)material.SpecularLight);
-            SetUniform(Uniforms[18], material.SpecTextureSlot);
+        private double _shadowBias;
+        public double ShadowBias
+        {
+            get => _shadowBias;
+            set
+            {
+                _shadowBias = value;
+                SetUniform(Uniforms[14], value);
+            }
         }
 
         public ITexture Texture { get; set; }
@@ -329,7 +347,7 @@ namespace Zene.Graphics
         public IMatrix LightSpaceMatrix { get; set; }
     }
 
-    public enum Shine
+    public enum Shine : int
     {
         None = 2,
         XS = 4,

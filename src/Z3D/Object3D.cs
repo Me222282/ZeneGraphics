@@ -529,7 +529,7 @@ namespace Zene.Graphics.Z3D
         /// <param name="indexData">The original index data</param>
         /// <param name="newVerts">The list of new vertices with noramls at the end of each vertex</param>
         /// <param name="newIndices">The list of new indices</param>
-        public static void AddNormals(double[] vertices, byte vertexSize, uint[] indexData, out List<double> newVerts, out List<uint> newIndices)
+        public static void AddNormals(ReadOnlySpan<double> vertices, byte vertexSize, ReadOnlySpan<uint> indexData, out List<double> newVerts, out List<uint> newIndices)
         {
             // The new list of data
             newVerts = new List<double>();
@@ -539,19 +539,19 @@ namespace Zene.Graphics.Z3D
             {
                 // Vertex 1 on plane
                 Vector3 a = new Vector3(
-                    vertices[indexData[i] * vertexSize],
-                    vertices[(indexData[i] * vertexSize) + 1],
-                    vertices[(indexData[i] * vertexSize) + 2]);
+                    vertices[(int)(indexData[i] * vertexSize)],
+                    vertices[(int)(indexData[i] * vertexSize) + 1],
+                    vertices[(int)(indexData[i] * vertexSize) + 2]);
                 // Vertex 2 on plane
                 Vector3 b = new Vector3(
-                    vertices[indexData[i + 1] * vertexSize],
-                    vertices[(indexData[i + 1] * vertexSize) + 1],
-                    vertices[(indexData[i + 1] * vertexSize) + 2]);
+                    vertices[(int)(indexData[i + 1] * vertexSize)],
+                    vertices[(int)(indexData[i + 1] * vertexSize) + 1],
+                    vertices[(int)(indexData[i + 1] * vertexSize) + 2]);
                 // Vertex 3 on plane
                 Vector3 c = new Vector3(
-                    vertices[indexData[i + 2] * vertexSize],
-                    vertices[(indexData[i + 2] * vertexSize) + 1],
-                    vertices[(indexData[i + 2] * vertexSize) + 2]);
+                    vertices[(int)(indexData[i + 2] * vertexSize)],
+                    vertices[(int)(indexData[i + 2] * vertexSize) + 1],
+                    vertices[(int)(indexData[i + 2] * vertexSize) + 2]);
 
                 // Calculate normal based on points on the plane
                 Vector3 n = Vector3.PlaneNormal(a, b, c);
@@ -564,7 +564,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 3; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i] * vertexSize) + ia]);
                 }
                 // Add normal attribute
                 newVerts.AddRange(new double[] { n.X, n.Y, n.Z });
@@ -579,7 +579,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 3; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i + 1] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i + 1] * vertexSize) + ia]);
                 }
                 // Add normal attribute
                 newVerts.AddRange(new double[] { n.X, n.Y, n.Z });
@@ -594,7 +594,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 3; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i + 2] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i + 2] * vertexSize) + ia]);
                 }
                 // Add normal attribute
                 newVerts.AddRange(new double[] { n.X, n.Y, n.Z });
@@ -612,7 +612,7 @@ namespace Zene.Graphics.Z3D
         /// <param name="indexData">The original index data</param>
         /// <param name="newVerts">The list of new vertices with noramls then tangents at the end of each vertex</param>
         /// <param name="newIndices">The list of new indices</param>
-        public static void AddNormalTangents(double[] vertices, byte vertexSize, uint normalMapCoordI, uint[] indexData, out List<double> newVerts, out List<uint> newIndices)
+        public static void AddNormalTangents(ReadOnlySpan<double> vertices, byte vertexSize, uint normalMapCoordI, ReadOnlySpan<uint> indexData, out List<double> newVerts, out List<uint> newIndices)
         {
             // The new list of data
             newVerts = new List<double>();
@@ -625,38 +625,38 @@ namespace Zene.Graphics.Z3D
                 //
                 // Vertex 1 on plane
                 Vector3 a = new Vector3(
-                    vertices[indexData[i] * vertexSize],
-                    vertices[(indexData[i] * vertexSize) + 1],
-                    vertices[(indexData[i] * vertexSize) + 2]);
+                    vertices[(int)(indexData[i] * vertexSize)],
+                    vertices[(int)(indexData[i] * vertexSize) + 1],
+                    vertices[(int)(indexData[i] * vertexSize) + 2]);
                 // Vertex 2 on plane
                 Vector3 b = new Vector3(
-                    vertices[indexData[i + 1] * vertexSize],
-                    vertices[(indexData[i + 1] * vertexSize) + 1],
-                    vertices[(indexData[i + 1] * vertexSize) + 2]);
+                    vertices[(int)(indexData[i + 1] * vertexSize)],
+                    vertices[(int)(indexData[i + 1] * vertexSize) + 1],
+                    vertices[(int)(indexData[i + 1] * vertexSize) + 2]);
                 // Vertex 3 on plane
                 Vector3 c = new Vector3(
-                    vertices[indexData[i + 2] * vertexSize],
-                    vertices[(indexData[i + 2] * vertexSize) + 1],
-                    vertices[(indexData[i + 2] * vertexSize) + 2]);
+                    vertices[(int)(indexData[i + 2] * vertexSize)],
+                    vertices[(int)(indexData[i + 2] * vertexSize) + 1],
+                    vertices[(int)(indexData[i + 2] * vertexSize) + 2]);
 
                 //
                 // Normal Map Coords
                 //
                 // Vertex 1 on plane
                 Vector3 uvA = new Vector3(
-                    vertices[(indexData[i] * vertexSize) + normalMapCoordI],
-                    vertices[(indexData[i] * vertexSize) + normalMapCoordI + 1],
-                    vertices[(indexData[i] * vertexSize) + normalMapCoordI + 2]);
+                    vertices[(int)((indexData[i] * vertexSize) + normalMapCoordI)],
+                    vertices[(int)((indexData[i] * vertexSize) + normalMapCoordI + 1)],
+                    vertices[(int)((indexData[i] * vertexSize) + normalMapCoordI + 2)]);
                 // Vertex 2 on plane
                 Vector3 uvB = new Vector3(
-                    vertices[(indexData[i + 1] * vertexSize) + normalMapCoordI],
-                    vertices[(indexData[i + 1] * vertexSize) + normalMapCoordI + 1],
-                    vertices[(indexData[i + 1] * vertexSize) + normalMapCoordI + 2]);
+                    vertices[(int)((indexData[i + 1] * vertexSize) + normalMapCoordI)],
+                    vertices[(int)((indexData[i + 1] * vertexSize) + normalMapCoordI + 1)],
+                    vertices[(int)((indexData[i + 1] * vertexSize) + normalMapCoordI + 2)]);
                 // Vertex 3 on plane
                 Vector3 uvC = new Vector3(
-                    vertices[(indexData[i + 2] * vertexSize) + normalMapCoordI],
-                    vertices[(indexData[i + 2] * vertexSize) + normalMapCoordI + 1],
-                    vertices[(indexData[i + 2] * vertexSize) + normalMapCoordI + 2]);
+                    vertices[(int)((indexData[i + 2] * vertexSize) + normalMapCoordI)],
+                    vertices[(int)((indexData[i + 2] * vertexSize) + normalMapCoordI + 1)],
+                    vertices[(int)((indexData[i + 2] * vertexSize) + normalMapCoordI + 2)]);
 
                 // Calculate normal based on points on the plane
                 Vector3 n = Vector3.PlaneNormal(a, b, c);
@@ -686,7 +686,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 3; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i] * vertexSize) + ia]);
                 }
                 // Add normal attribute
                 newVerts.AddRange(new double[] { n.X, n.Y, n.Z });
@@ -703,7 +703,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 3; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i + 1] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i + 1] * vertexSize) + ia]);
                 }
                 // Add normal attribute
                 newVerts.AddRange(new double[] { n.X, n.Y, n.Z });
@@ -720,7 +720,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 3; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i + 2] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i + 2] * vertexSize) + ia]);
                 }
                 // Add normal attribute
                 newVerts.AddRange(new double[] { n.X, n.Y, n.Z });
@@ -740,7 +740,7 @@ namespace Zene.Graphics.Z3D
         /// <param name="indexData">The original index data</param>
         /// <param name="newVerts">The list of new vertices with tangents at the end of each vertex</param>
         /// <param name="newIndices">The list of new indices</param>
-        public static void AddTangents(double[] vertices, byte vertexSize, uint normalMapCoordI, uint[] indexData, out List<double> newVerts, out List<uint> newIndices)
+        public static void AddTangents(ReadOnlySpan<double> vertices, byte vertexSize, uint normalMapCoordI, ReadOnlySpan<uint> indexData, out List<double> newVerts, out List<uint> newIndices)
         {
             // The new list of data
             newVerts = new List<double>();
@@ -753,38 +753,38 @@ namespace Zene.Graphics.Z3D
                 //
                 // Vertex 1 on plane
                 Vector3 a = new Vector3(
-                    vertices[indexData[i] * vertexSize],
-                    vertices[(indexData[i] * vertexSize) + 1],
-                    vertices[(indexData[i] * vertexSize) + 2]);
+                    vertices[(int)(indexData[i] * vertexSize)],
+                    vertices[(int)(indexData[i] * vertexSize) + 1],
+                    vertices[(int)(indexData[i] * vertexSize) + 2]);
                 // Vertex 2 on plane
                 Vector3 b = new Vector3(
-                    vertices[indexData[i + 1] * vertexSize],
-                    vertices[(indexData[i + 1] * vertexSize) + 1],
-                    vertices[(indexData[i + 1] * vertexSize) + 2]);
+                    vertices[(int)(indexData[i + 1] * vertexSize)],
+                    vertices[(int)(indexData[i + 1] * vertexSize) + 1],
+                    vertices[(int)(indexData[i + 1] * vertexSize) + 2]);
                 // Vertex 3 on plane
                 Vector3 c = new Vector3(
-                    vertices[indexData[i + 2] * vertexSize],
-                    vertices[(indexData[i + 2] * vertexSize) + 1],
-                    vertices[(indexData[i + 2] * vertexSize) + 2]);
+                    vertices[(int)(indexData[i + 2] * vertexSize)],
+                    vertices[(int)(indexData[i + 2] * vertexSize) + 1],
+                    vertices[(int)(indexData[i + 2] * vertexSize) + 2]);
 
                 //
                 // Normal Map Coords
                 //
                 // Vertex 1 on plane
                 Vector3 uvA = new Vector3(
-                    vertices[(indexData[i] * vertexSize) + normalMapCoordI],
-                    vertices[(indexData[i] * vertexSize) + normalMapCoordI + 1],
-                    vertices[(indexData[i] * vertexSize) + normalMapCoordI + 2]);
+                    vertices[(int)((indexData[i] * vertexSize) + normalMapCoordI)],
+                    vertices[(int)((indexData[i] * vertexSize) + normalMapCoordI + 1)],
+                    vertices[(int)((indexData[i] * vertexSize) + normalMapCoordI + 2)]);
                 // Vertex 2 on plane
                 Vector3 uvB = new Vector3(
-                    vertices[(indexData[i + 1] * vertexSize) + normalMapCoordI],
-                    vertices[(indexData[i + 1] * vertexSize) + normalMapCoordI + 1],
-                    vertices[(indexData[i + 1] * vertexSize) + normalMapCoordI + 2]);
+                    vertices[(int)((indexData[i + 1] * vertexSize) + normalMapCoordI)],
+                    vertices[(int)((indexData[i + 1] * vertexSize) + normalMapCoordI + 1)],
+                    vertices[(int)((indexData[i + 1] * vertexSize) + normalMapCoordI + 2)]);
                 // Vertex 3 on plane
                 Vector3 uvC = new Vector3(
-                    vertices[(indexData[i + 2] * vertexSize) + normalMapCoordI],
-                    vertices[(indexData[i + 2] * vertexSize) + normalMapCoordI + 1],
-                    vertices[(indexData[i + 2] * vertexSize) + normalMapCoordI + 2]);
+                    vertices[(int)((indexData[i + 2] * vertexSize) + normalMapCoordI)],
+                    vertices[(int)((indexData[i + 2] * vertexSize) + normalMapCoordI + 1)],
+                    vertices[(int)((indexData[i + 2] * vertexSize) + normalMapCoordI + 2)]);
 
                 //
                 // Tangent calculation
@@ -811,7 +811,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 3; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i] * vertexSize) + ia]);
                 }
                 // Add tangent attribute
                 newVerts.AddRange(new double[] { t.X, t.Y, t.Z });
@@ -826,7 +826,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 3; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i + 1] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i + 1] * vertexSize) + ia]);
                 }
                 // Add tangent attribute
                 newVerts.AddRange(new double[] { t.X, t.Y, t.Z });
@@ -841,7 +841,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 3; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i + 2] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i + 2] * vertexSize) + ia]);
                 }
                 // Add tangent attribute
                 newVerts.AddRange(new double[] { t.X, t.Y, t.Z });
@@ -859,7 +859,7 @@ namespace Zene.Graphics.Z3D
         /// <param name="indexData">The original index data</param>
         /// <param name="newVerts">The list of new vertices with noramls at the end of each vertex</param>
         /// <param name="newIndices">The list of new indices</param>
-        public static void AddNormals(Vector3[] vertices, byte vertexSize, uint[] indexData, out List<Vector3> newVerts, out List<uint> newIndices)
+        public static void AddNormals(ReadOnlySpan<Vector3> vertices, byte vertexSize, ReadOnlySpan<uint> indexData, out List<Vector3> newVerts, out List<uint> newIndices)
         {
             // The new list of data
             newVerts = new List<Vector3>();
@@ -868,11 +868,11 @@ namespace Zene.Graphics.Z3D
             for (int i = 0; i < indexData.Length; i += 3)
             {
                 // Point 1 on plane
-                Vector3 a = vertices[indexData[i] * vertexSize];
+                Vector3 a = vertices[(int)(indexData[i] * vertexSize)];
                 // Point 2 on plane
-                Vector3 b = vertices[indexData[i + 1] * vertexSize];
+                Vector3 b = vertices[(int)(indexData[i + 1] * vertexSize)];
                 // Point 3 on plane
-                Vector3 c = vertices[indexData[i + 2] * vertexSize];
+                Vector3 c = vertices[(int)(indexData[i + 2] * vertexSize)];
 
                 // Calculate normal based on points on the plane
                 Vector3 n = Vector3.PlaneNormal(a, b, c);
@@ -885,7 +885,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 1; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i] * vertexSize) + ia]);
                 }
                 // Add normal attribute
                 newVerts.Add(n);
@@ -900,7 +900,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 1; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i + 1] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i + 1] * vertexSize) + ia]);
                 }
                 // Add normal attribute
                 newVerts.Add(n);
@@ -915,7 +915,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 1; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i + 2] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i + 2] * vertexSize) + ia]);
                 }
                 // Add normal attribute
                 newVerts.Add(n);
@@ -933,7 +933,7 @@ namespace Zene.Graphics.Z3D
         /// <param name="indexData">The original index data</param>
         /// <param name="newVerts">The list of new vertices with noramls then tangents at the end of each vertex</param>
         /// <param name="newIndices">The list of new indices</param>
-        public static void AddNormalTangents(Vector3[] vertices, byte vertexSize, uint nomalMapCoordI, uint[] indexData, out List<Vector3> newVerts, out List<uint> newIndices)
+        public static void AddNormalTangents(ReadOnlySpan<Vector3> vertices, byte vertexSize, uint nomalMapCoordI, ReadOnlySpan<uint> indexData, out List<Vector3> newVerts, out List<uint> newIndices)
         {
             // The new list of data
             newVerts = new List<Vector3>();
@@ -945,21 +945,21 @@ namespace Zene.Graphics.Z3D
                 // Positions
                 //
                 // Vertex 1 on plane
-                Vector3 a = vertices[indexData[i] * vertexSize];
+                Vector3 a = vertices[(int)(indexData[i] * vertexSize)];
                 // Vertex 2 on plane
-                Vector3 b = vertices[indexData[i + 1] * vertexSize];
+                Vector3 b = vertices[(int)(indexData[i + 1] * vertexSize)];
                 // Vertex 3 on plane
-                Vector3 c = vertices[indexData[i + 2] * vertexSize];
+                Vector3 c = vertices[(int)(indexData[i + 2] * vertexSize)];
 
                 //
                 // Normal Map Coords
                 //
                 // Vertex 1 on plane
-                Vector3 uvA = vertices[(indexData[i] * vertexSize) + nomalMapCoordI];
+                Vector3 uvA = vertices[(int)((indexData[i] * vertexSize) + nomalMapCoordI)];
                 // Vertex 2 on plane
-                Vector3 uvB = vertices[(indexData[i + 1] * vertexSize) + nomalMapCoordI];
+                Vector3 uvB = vertices[(int)((indexData[i + 1] * vertexSize) + nomalMapCoordI)];
                 // Vertex 3 on plane
-                Vector3 uvC = vertices[(indexData[i + 2] * vertexSize) + nomalMapCoordI];
+                Vector3 uvC = vertices[(int)((indexData[i + 2] * vertexSize) + nomalMapCoordI)];
 
                 // Calculate normal based on points on the plane
                 Vector3 n = Vector3.PlaneNormal(a, b, c);
@@ -989,7 +989,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 1; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i] * vertexSize) + ia]);
                 }
                 // Add normal attribute
                 newVerts.Add(n);
@@ -1006,7 +1006,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 1; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i + 1] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i + 1] * vertexSize) + ia]);
                 }
                 // Add normal attribute
                 newVerts.Add(n);
@@ -1023,7 +1023,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 1; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i + 2] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i + 2] * vertexSize) + ia]);
                 }
                 // Add normal attribute
                 newVerts.Add(n);
@@ -1043,7 +1043,7 @@ namespace Zene.Graphics.Z3D
         /// <param name="indexData">The original index data</param>
         /// <param name="newVerts">The list of new vertices with tangents at the end of each vertex</param>
         /// <param name="newIndices">The list of new indices</param>
-        public static void AddTangents(Vector3[] vertices, byte vertexSize, uint nomalMapCoordI, uint[] indexData, out List<Vector3> newVerts, out List<uint> newIndices)
+        public static void AddTangents(ReadOnlySpan<Vector3> vertices, byte vertexSize, uint nomalMapCoordI, ReadOnlySpan<uint> indexData, out List<Vector3> newVerts, out List<uint> newIndices)
         {
             // The new list of data
             newVerts = new List<Vector3>();
@@ -1055,21 +1055,21 @@ namespace Zene.Graphics.Z3D
                 // Positions
                 //
                 // Vertex 1 on plane
-                Vector3 a = vertices[indexData[i] * vertexSize];
+                Vector3 a = vertices[(int)(indexData[i] * vertexSize)];
                 // Vertex 2 on plane
-                Vector3 b = vertices[indexData[i + 1] * vertexSize];
+                Vector3 b = vertices[(int)(indexData[i + 1] * vertexSize)];
                 // Vertex 3 on plane
-                Vector3 c = vertices[indexData[i + 2] * vertexSize];
+                Vector3 c = vertices[(int)(indexData[i + 2] * vertexSize)];
 
                 //
                 // Normal Map Coords
                 //
                 // Vertex 1 on plane
-                Vector3 uvA = vertices[(indexData[i] * vertexSize) + nomalMapCoordI];
+                Vector3 uvA = vertices[(int)((indexData[i] * vertexSize) + nomalMapCoordI)];
                 // Vertex 2 on plane
-                Vector3 uvB = vertices[(indexData[i + 1] * vertexSize) + nomalMapCoordI];
+                Vector3 uvB = vertices[(int)((indexData[i + 1] * vertexSize) + nomalMapCoordI)];
                 // Vertex 3 on plane
-                Vector3 uvC = vertices[(indexData[i + 2] * vertexSize) + nomalMapCoordI];
+                Vector3 uvC = vertices[(int)((indexData[i + 2] * vertexSize) + nomalMapCoordI)];
 
                 //
                 // Tangent calculation
@@ -1096,7 +1096,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 1; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i] * vertexSize) + ia]);
                 }
                 // Add tangent attribute
                 newVerts.Add(t);
@@ -1111,7 +1111,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 1; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i + 1] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i + 1] * vertexSize) + ia]);
                 }
                 // Add tangent attribute
                 newVerts.Add(t);
@@ -1126,7 +1126,7 @@ namespace Zene.Graphics.Z3D
                 // Add any other data that was part of the origianl
                 for (int ia = 1; ia < vertexSize; ia++)
                 {
-                    newVerts.Add(vertices[(indexData[i + 2] * vertexSize) + ia]);
+                    newVerts.Add(vertices[(int)(indexData[i + 2] * vertexSize) + ia]);
                 }
                 // Add tangent attribute
                 newVerts.Add(t);
