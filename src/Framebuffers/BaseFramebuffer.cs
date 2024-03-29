@@ -42,7 +42,6 @@ namespace Zene.Graphics
 
 
         bool IFramebuffer.LockedState => GL.context.baseFrameBuffer.LockedState;
-        DepthState IFramebuffer.DepthState => GL.context.baseFrameBuffer.DepthState;
 
         [OpenGLSupport(1.0)]
         Viewport IFramebuffer.Viewport => GL.context.baseFrameBuffer.Viewport;

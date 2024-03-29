@@ -61,7 +61,6 @@ namespace Zene.Graphics.Base
 				if (target != GLEnum.ReadFramebuffer)
                 {
 					SetViewState(framebuffer.Viewport);
-					SetDepthState(framebuffer.DepthState);
 					SetScissorState(framebuffer.Scissor);
 				}
             }

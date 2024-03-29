@@ -36,19 +36,88 @@ namespace Zene.Graphics.Base
 			Functions.Disable(cap);
 		}
 
+		internal static void SetRenderState(RenderState rs)
+		{
+			if (context.renderState == rs) { return; }
+
+			if (rs == null)
+			{
+				rs = RenderState.Default;
+				if (context.renderState == rs) { return; }
+			}
+
+			RenderState old = context.renderState;
+			context.renderState = rs;
+
+			if (old.blending != rs.blending)
+			{
+				if (rs.blending)
+				{
+					Functions.Enable(GLEnum.Blend);
+				}
+				else
+				{
+					Functions.Disable(GLEnum.Blend);
+				}
+			}
+
+			if (old.faceCulling != rs.faceCulling)
+			{
+				if (rs.faceCulling)
+				{
+					Functions.Disable(GLEnum.DepthClamp);
+				}
+				else
+				{
+					Functions.Enable(GLEnum.DepthClamp);
+				}
+			}
+
+			if (old.polygonMode != rs.polygonMode)
+			{
+				Functions.PolygonMode(GLEnum.FrontAndBack, (uint)rs.polygonMode);
+			}
+
+			if (old.ssb != rs.ssb ||
+				old.dsb != rs.dsb)
+			{
+				Functions.BlendFunc((uint)rs.ssb, (uint)rs.dsb);
+			}
+		}
+
+		[OpenGLSupport(1.0)]
+		internal static void PolygonMode(uint face, PolygonMode mode)
+		{
+			if (context.renderState.polygonMode == mode) { return; }
+
+			context.renderState.polygonMode = mode;
+
+			Functions.PolygonMode(face, (uint)mode);
+		}
+
+		[OpenGLSupport(1.0)]
+		internal static void BlendFunc(BlendFunction sfactor, BlendFunction dfactor)
+		{
+			if (sfactor == context.renderState.ssb &&
+				dfactor == context.renderState.dsb)
+			{
+				return;
+			}
+
+			context.renderState.ssb = sfactor;
+			context.renderState.dsb = dfactor;
+
+			Functions.BlendFunc((uint)sfactor, (uint)dfactor);
+		}
+
 		internal static void SetDepthState(DepthState ds)
         {
 			if (context.depth == ds) { return; }
 
 			if (ds == null)
 			{
-				ds = context.baseFrameBuffer.DepthState;
-			}
-
-			if (context.boundFrameBuffers.Draw.LockedState &&
-				context.boundFrameBuffers.Draw.DepthState != null)
-            {
-				return;
+				ds = DepthState.Default;
+				if (context.depth == ds) { return; }
 			}
 
 			DepthState old = context.depth;
@@ -68,7 +137,7 @@ namespace Zene.Graphics.Base
 
 			if (old.clamp != ds.clamp)
 			{
-				if (ds.testing)
+				if (ds.clamp)
 				{
 					Functions.Disable(GLEnum.DepthClamp);
 				}
@@ -166,7 +235,8 @@ namespace Zene.Graphics.Base
 			if (s == null)
             {
 				s = context.baseFrameBuffer.Scissor;
-            }
+				if (context.scissor == s) { return; }
+			}
 
 			if (context.boundFrameBuffers.Draw.LockedState &&
 				context.boundFrameBuffers.Draw.Scissor != null)

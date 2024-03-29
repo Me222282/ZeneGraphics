@@ -27,7 +27,6 @@ namespace Zene.Graphics.Base
             {
                 enabled = false
             };
-            _depthState = new DepthState();
 
             Properties = new FramebufferProperties(this, width, height)
             {
@@ -52,7 +51,6 @@ namespace Zene.Graphics.Base
 
             // Set states
             GL.SetViewState(_viewport);
-            GL.SetDepthState(DepthState);
             GL.SetScissorState(Scissor);
         }
         [OpenGLSupport(3.0)]
@@ -78,7 +76,6 @@ namespace Zene.Graphics.Base
                 target == FrameTarget.FrameBuffer)
             {
                 GL.SetViewState(_viewport);
-                GL.SetDepthState(DepthState);
                 GL.SetScissorState(Scissor);
             }
         }
@@ -141,30 +138,6 @@ namespace Zene.Graphics.Base
                 if (this.Bound())
                 {
                     GL.SetViewState(_viewport);
-                }
-            }
-        }
-        protected bool LockDepthState
-        {
-            get => DepthState != null && DepthState.Locked;
-            set
-            {
-                if (DepthState == null) { return; }
-
-                DepthState.Locked = value;
-            }
-        }
-        private DepthState _depthState = null;
-        public DepthState DepthState
-        {
-            get => _depthState;
-            set
-            {
-                _depthState = value;
-
-                if (this.Bound())
-                {
-                    GL.SetDepthState(_depthState);
                 }
             }
         }

@@ -14,6 +14,9 @@ namespace Zene.Graphics
         public IMatrix View { get; set; }
         public IMatrix Model { get; set; }
 
+        public DepthState DepthState { get; }
+        public RenderState RenderState { get; }
+
         internal void SetMatrices()
         {
             Shader.Matrix1 = Model;
@@ -30,6 +33,9 @@ namespace Zene.Graphics
 
             Framebuffer.Bind(FrameTarget.Draw);
             Shader?.Bind();
+
+            Base.GL.SetDepthState(DepthState);
+            Base.GL.SetRenderState(RenderState);
         }
         void IBindable.Unbind()
         {

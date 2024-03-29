@@ -327,21 +327,6 @@ namespace Zene.Graphics.Base
 			Functions.BlendEquationSeparatei(buf, modeRGB, modeAlpha);
 		}
 
-		[OpenGLSupport(1.0)]
-		public static void BlendFunc(BlendFunction sfactor, BlendFunction dfactor)
-		{
-			if (sfactor == context.sfactorBlendFunc &&
-				dfactor == context.dfactorBlendFunc)
-            {
-				return;
-            }
-
-			context.sfactorBlendFunc = sfactor;
-			context.dfactorBlendFunc = dfactor;
-
-			Functions.BlendFunc((uint)sfactor, (uint)dfactor);
-		}
-
 		[OpenGLSupport(4.0)]
 		public static void BlendFunci(uint buf, uint src, uint dst)
 		{
@@ -1823,16 +1808,6 @@ namespace Zene.Graphics.Base
 		public static void PointSize(float size)
 		{
 			Functions.PointSize(size);
-		}
-
-		[OpenGLSupport(1.0)]
-		public static void PolygonMode(uint face, PolygonMode mode)
-		{
-			if (context.polygonMode == mode) { return; }
-
-			context.polygonMode = mode;
-
-			Functions.PolygonMode(face, (uint)mode);
 		}
 
 		[OpenGLSupport(1.1)]

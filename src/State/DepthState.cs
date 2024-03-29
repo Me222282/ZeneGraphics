@@ -136,5 +136,7 @@ namespace Zene.Graphics
                 GL.DepthRange(range.X, value);
             }
         }
+
+        public static DepthState Default { get; } = new DepthState();
     }
 }

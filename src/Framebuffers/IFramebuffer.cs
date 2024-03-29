@@ -191,8 +191,8 @@ namespace Zene.Graphics
         public FrameTarget Binding { get; }
 
         /// <summary>
-        /// Determines whether the framebuffer can be used with different <see cref="Viewport"/>,
-        /// <see cref="DepthState"/> and <see cref="Scissor"/> than the ones currently set.
+        /// Determines whether the framebuffer can be used with different <see cref="Viewport"/>
+        /// and <see cref="Scissor"/> than the ones currently set.
         /// </summary>
         public bool LockedState { get; }
 
@@ -201,12 +201,6 @@ namespace Zene.Graphics
         /// </summary>
         [OpenGLSupport(1.0)]
         public Viewport Viewport { get; }
-
-        /// <summary>
-        /// How the depth buffer is managed and drawn to.
-        /// </summary>
-        [OpenGLSupport(1.0)]
-        public DepthState DepthState { get; }
 
         /// <summary>
         /// The clipping bounds for rendering to the framebuffer.

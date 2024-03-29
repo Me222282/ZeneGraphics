@@ -55,11 +55,6 @@ namespace Zene.Graphics
             get => base.LockedState;
             set => base.LockedState = value;
         }
-        public new DepthState DepthState
-        {
-            get => base.DepthState;
-            set => base.DepthState = value;
-        }
         public new Scissor Scissor
         {
             get => base.Scissor;

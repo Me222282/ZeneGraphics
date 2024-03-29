@@ -53,11 +53,6 @@ namespace Zene.Graphics
             get => base.Viewport;
             set => base.Viewport = value;
         }
-        public new DepthState DepthState
-        {
-            get => base.DepthState;
-            set => base.DepthState = value;
-        }
         public new Scissor Scissor
         {
             get => base.Scissor;

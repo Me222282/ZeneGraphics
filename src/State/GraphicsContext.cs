@@ -18,7 +18,8 @@ namespace Zene.Graphics
             this.version = version;
             viewport = baseFrameBuffer.Viewport;
             scissor = baseFrameBuffer.Scissor;
-            depth = baseFrameBuffer.DepthState;
+            depth = DepthState.Default;
+            renderState = RenderState.Default;
 
             // Setup texture binding referance
             int size = 0;
@@ -86,9 +87,7 @@ namespace Zene.Graphics
         internal Viewport viewport;
         internal Scissor scissor;
         internal DepthState depth;
-        internal PolygonMode polygonMode = PolygonMode.Fill;
-        internal BlendFunction sfactorBlendFunc = BlendFunction.One;
-        internal BlendFunction dfactorBlendFunc = BlendFunction.Zero;
+        internal RenderState renderState;
 
         internal double version;
 

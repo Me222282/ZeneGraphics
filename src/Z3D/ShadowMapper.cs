@@ -14,7 +14,6 @@ namespace Zene.Graphics.Z3D
             _framebuffer.SetDepthAttachment(TextureFormat.DepthComponent32f, true);
             _framebuffer.DrawBuffer = FrameDrawTarget.None;
             _framebuffer.ReadBuffer = FrameDrawTarget.None;
-            _framebuffer.DepthState = new DepthState() { Testing = true };
 
             // Texture properties
             _texture = _framebuffer.GetTexture(FrameAttachment.Depth);
@@ -79,5 +78,8 @@ namespace Zene.Graphics.Z3D
         public IDrawingShader Shader { get => _shader; set => throw new NotSupportedException(); }
 
         public IBox FrameBounds => new GLBox(Vector2.Zero, _framebuffer.Size);
+
+        public DepthState DepthState { get; } = new DepthState() { Testing = true };
+        public RenderState RenderState { get; set; }
     }
 }

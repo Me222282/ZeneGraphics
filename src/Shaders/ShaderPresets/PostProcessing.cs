@@ -12,7 +12,6 @@ namespace Zene.Graphics
             _multiSFramebuffer.SetDepthAttachment(TextureFormat.DepthComponent24, false);
             _framebuffer = new TextureRenderer(width, height);
             _framebuffer.SetColourAttachment(0, TextureFormat.Rgb8);
-            _multiSFramebuffer.DepthState = new DepthState() { Testing = true };
 
             _ps = new PostShader
             {
@@ -88,6 +87,14 @@ namespace Zene.Graphics
             get => _ps.KernelOffset;
             set => _ps.KernelOffset = value;
         }
+
+        public DepthState DepthState { get; } = new DepthState() { Testing = true };
+        public RenderState RenderState { get; set; } = new RenderState()
+        {
+            Blending = true,
+            SourceScaleBlending = BlendFunction.SourceAlpha,
+            DestinationScaleBlending = BlendFunction.OneMinusSourceAlpha
+        };
 
         public void OnRender(IDrawingContext context)
         {

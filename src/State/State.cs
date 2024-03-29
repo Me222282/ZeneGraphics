@@ -109,6 +109,11 @@ namespace Zene.Graphics
             get => GL.context.depth;
             set => GL.SetDepthState(value);
         }
+        public static RenderState RenderState
+        {
+            get => GL.context.renderState;
+            set => GL.SetRenderState(value);
+        }
         public static Viewport Viewport
         {
             get => GL.context.viewport;
@@ -158,8 +163,8 @@ namespace Zene.Graphics
         /// </summary>
         public static PolygonMode PolygonMode
         {
-            get => GL.context.polygonMode;
-            set => GL.PolygonMode(GLEnum.FrontAndBack, value);
+            get => GL.context.renderState.polygonMode;
+            set => GL.context.renderState.PolygonMode = value;
         }
 
         /// <summary>
@@ -167,16 +172,16 @@ namespace Zene.Graphics
         /// </summary>
         public static BlendFunction SourceScaleBlending
         {
-            get => GL.context.sfactorBlendFunc;
-            set => GL.BlendFunc(value, GL.context.dfactorBlendFunc);
+            get => GL.context.renderState.ssb;
+            set => GL.context.renderState.SourceScaleBlending = value;
         }
         /// <summary>
         /// Get or set blend function applied to the destination colour.
         /// </summary>
         public static BlendFunction DestinationScaleBlending
         {
-            get => GL.context.dfactorBlendFunc;
-            set => GL.BlendFunc(GL.context.sfactorBlendFunc, value);
+            get => GL.context.renderState.dsb;
+            set => GL.context.renderState.DestinationScaleBlending = value;
         }
 
         /// <summary>
@@ -184,21 +189,10 @@ namespace Zene.Graphics
         /// </summary>
         public static bool Blending
         {
-            get
-            {
-                return GL.IsEnabled(GLEnum.Blend);
-            }
-            set
-            {
-                if (value)
-                {
-                    GL.Enable(GLEnum.Blend);
-                    return;
-                }
-
-                GL.Disable(GLEnum.Blend);
-            }
+            get => GL.context.renderState.blending;
+            set => GL.context.renderState.Blending = value;
         }
+
         /// <summary>
         /// Determines whether to apply the currently selected logical operation to the computed fragment colour and colour buffer values.
         /// </summary>
@@ -224,20 +218,8 @@ namespace Zene.Graphics
         /// </summary>
         public static bool FaceCulling
         {
-            get
-            {
-                return GL.IsEnabled(GLEnum.CullFace);
-            }
-            set
-            {
-                if (value)
-                {
-                    GL.Enable(GLEnum.CullFace);
-                    return;
-                }
-
-                GL.Disable(GLEnum.CullFace);
-            }
+            get => GL.context.renderState.faceCulling;
+            set => GL.context.renderState.FaceCulling = value;
         }
         /// <summary>
         /// Determines whether debug messages are produced by a debug context.

@@ -30,5 +30,8 @@ namespace Zene.Graphics
         public IMatrix Projection { get; set; } = Matrix.Identity;
         public IMatrix View { get; set; } = Matrix.Identity;
         public IMatrix Model { get; set; } = Matrix.Identity;
+
+        public DepthState DepthState { get; set; }
+        public RenderState RenderState { get; set; }
     }
 }
