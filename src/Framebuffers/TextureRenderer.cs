@@ -8,7 +8,7 @@ namespace Zene.Graphics
     /// An object that manages all components of a normal framebuffer.
     /// </summary>
     [OpenGLSupport(3.0)]
-    public class TextureRenderer : FramebufferGL
+    public class TextureRenderer : FramebufferGL, ISizeable
     {
         /// <summary>
         /// Creats a framebuffer from set parameters.

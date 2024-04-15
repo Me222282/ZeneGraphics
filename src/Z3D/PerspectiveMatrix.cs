@@ -3,7 +3,7 @@ using Zene.Structs;
 
 namespace Zene.Graphics
 {
-    public class PerspectiveMatrix : IMatrix
+    public class PerspectiveMatrix : IMatrix, ISizeable
     {
         public PerspectiveMatrix() { }
         public PerspectiveMatrix(Radian fovy, double aspect, double depthNear, double depthFar)
@@ -88,6 +88,8 @@ namespace Zene.Graphics
         private double _v2;
         private double _v3;
         private double _v4;
+
+        Vector2I ISizeable.Size { set => Aspect = (double)value.X / value.Y;  }
 
         public MatrixSpan MatrixData()
         {

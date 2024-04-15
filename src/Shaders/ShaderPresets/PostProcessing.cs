@@ -3,7 +3,7 @@ using Zene.Structs;
 
 namespace Zene.Graphics
 {
-    public class PostProcessing : IDrawingContext, IRenderable
+    public class PostProcessing : IDrawingContext, IRenderable, ISizeable
     {
         public PostProcessing(int width, int height)
         {

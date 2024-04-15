@@ -3,7 +3,7 @@ using Zene.Structs;
 
 namespace Zene.Graphics.Z3D
 {
-    public class ShadowMapper : IDrawingContext
+    public class ShadowMapper : IDrawingContext, ISizeable
     {
         public ShadowMapper(int width, int height)
         {

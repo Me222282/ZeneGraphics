@@ -9,7 +9,7 @@ namespace Zene.Graphics
     /// A basic framebuffer object that allows you to add textures.
     /// </summary>
     [OpenGLSupport(3.0)]
-    public class Framebuffer : FramebufferGL
+    public class Framebuffer : FramebufferGL, ISizeable
     {
         public Framebuffer()
         {
@@ -420,6 +420,8 @@ namespace Zene.Graphics
         /// <param name="height"></param>
         [OpenGLSupport(3.0)]
         public void SetSize(int width, int height) => SetSize(width, height, 0);
+
+        Vector2I ISizeable.Size { set => SetSize(value.X, value.Y, 0); }
 
         /// <summary>
         /// Copies the data from this framebuffer to <paramref name="destination"/>.

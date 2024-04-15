@@ -8,7 +8,7 @@ namespace Zene.Graphics
     /// An object that manages all components of a multisample framebuffer.
     /// </summary>
     [OpenGLSupport(3.2)]
-    public class TextureRendererMS : FramebufferGL
+    public class TextureRendererMS : FramebufferGL, ISizeable
     {
         /// <summary>
         /// Creats a multismaple framebuffer from set parameters.

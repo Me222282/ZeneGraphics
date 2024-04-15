@@ -41,9 +41,11 @@ namespace Zene.Graphics
 
             lock (_threadRef)
             {
-                for (int i = 0; i < _actions.Count; i++)
+                // Faster method of iteration
+                ReadOnlySpan<Action> span = System.Runtime.InteropServices.CollectionsMarshal.AsSpan(_actions);
+                for (int i = 0; i < span.Length; i++)
                 {
-                    _actions[i].Invoke();
+                    span[i].Invoke();
                 }
 
                 _actions.Clear();
