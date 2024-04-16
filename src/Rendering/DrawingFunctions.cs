@@ -85,14 +85,29 @@ namespace Zene.Graphics
         public static void Copy(this IDrawingContext dc, IDrawingContext source, IBox bounds)
             => WriteFramebuffer(dc, source.Framebuffer, bounds, BufferBit.All, TextureSampling.Nearest);
 
+        [ThreadStatic]
+        private static readonly MultiplyMatrix _multiply = new MultiplyMatrix(Matrix.Identity, Matrix.Identity);
+
         public static void DrawBox(this IDrawingContext dc, IBox bounds, ColourF colour)
         {
             dc.Shader = Shapes.BasicShader;
             Shapes.BasicShader.Colour = colour;
             Shapes.BasicShader.ColourSource = ColourSource.UniformColour;
 
-            dc.Model = Matrix4.CreateBox(bounds);
+            IMatrix model = dc.Model;
+            if (dc.RenderState.postMatrixMods)
+            {
+                _multiply.Left = model;
+                _multiply.Right = Matrix4.CreateBox(bounds);
+            }
+            else
+            {
+                _multiply.Right = model;
+                _multiply.Left = Matrix4.CreateBox(bounds);
+            }
+            dc.Model = _multiply;
             dc.Draw(Shapes.Square);
+            dc.Model = model;
         }
         public static void DrawBox(this IDrawingContext dc, IBox bounds, ITexture texture)
         {
@@ -101,9 +116,21 @@ namespace Zene.Graphics
             Shapes.BasicShader.Texture = texture;
             Shapes.BasicShader.ColourSource = ColourSource.Texture;
 
-            dc.Model = Matrix4.CreateBox(bounds);
+            IMatrix model = dc.Model;
+            if (dc.RenderState.postMatrixMods)
+            {
+                _multiply.Left = model;
+                _multiply.Right = Matrix4.CreateBox(bounds);
+            }
+            else
+            {
+                _multiply.Right = model;
+                _multiply.Left = Matrix4.CreateBox(bounds);
+            }
+            dc.Model = _multiply;
             dc.Draw(Shapes.Square);
             Shapes.BasicShader.Texture = null;
+            dc.Model = model;
         }
         public static void DrawRoundedBox(this IDrawingContext dc, IBox bounds, ColourF colour, double cornerRadius)
         {
@@ -115,8 +142,20 @@ namespace Zene.Graphics
             Shapes.BorderShader.Radius = cornerRadius;
             Shapes.BorderShader.Size = bounds.Size;
 
-            dc.Model = Matrix4.CreateBox(bounds);
+            IMatrix model = dc.Model;
+            if (dc.RenderState.postMatrixMods)
+            {
+                _multiply.Left = model;
+                _multiply.Right = Matrix4.CreateBox(bounds);
+            }
+            else
+            {
+                _multiply.Right = model;
+                _multiply.Left = Matrix4.CreateBox(bounds);
+            }
+            dc.Model = _multiply;
             dc.Draw(Shapes.Square);
+            dc.Model = model;
         }
         public static void DrawRoundedBox(this IDrawingContext dc, IBox bounds, ITexture texture, double cornerRadius)
         {
@@ -128,8 +167,20 @@ namespace Zene.Graphics
             Shapes.BorderShader.Radius = cornerRadius;
             Shapes.BorderShader.Size = bounds.Size;
 
-            dc.Model = Matrix4.CreateBox(bounds);
+            IMatrix model = dc.Model;
+            if (dc.RenderState.postMatrixMods)
+            {
+                _multiply.Left = model;
+                _multiply.Right = Matrix4.CreateBox(bounds);
+            }
+            else
+            {
+                _multiply.Right = model;
+                _multiply.Left = Matrix4.CreateBox(bounds);
+            }
+            dc.Model = _multiply;
             dc.Draw(Shapes.Square);
+            dc.Model = model;
         }
         public static void DrawBorderBox(this IDrawingContext dc, IBox bounds, ColourF colour, double borderWidth, ColourF borderColour, double cornerRadius = 0)
         {
@@ -142,8 +193,20 @@ namespace Zene.Graphics
             Shapes.BorderShader.Radius = cornerRadius;
             Shapes.BorderShader.Size = bounds.Size;
 
-            dc.Model = Matrix4.CreateBox(bounds);
+            IMatrix model = dc.Model;
+            if (dc.RenderState.postMatrixMods)
+            {
+                _multiply.Left = model;
+                _multiply.Right = Matrix4.CreateBox(bounds);
+            }
+            else
+            {
+                _multiply.Right = model;
+                _multiply.Left = Matrix4.CreateBox(bounds);
+            }
+            dc.Model = _multiply;
             dc.Draw(Shapes.Square);
+            dc.Model = model;
         }
         public static void DrawBorderBox(this IDrawingContext dc, IBox bounds, ITexture texture, double borderWidth, ColourF borderColour, double cornerRadius = 0)
         {
@@ -156,8 +219,20 @@ namespace Zene.Graphics
             Shapes.BorderShader.Radius = cornerRadius;
             Shapes.BorderShader.Size = bounds.Size;
 
-            dc.Model = Matrix4.CreateBox(bounds);
+            IMatrix model = dc.Model;
+            if (dc.RenderState.postMatrixMods)
+            {
+                _multiply.Left = model;
+                _multiply.Right = Matrix4.CreateBox(bounds);
+            }
+            else
+            {
+                _multiply.Right = model;
+                _multiply.Left = Matrix4.CreateBox(bounds);
+            }
+            dc.Model = _multiply;
             dc.Draw(Shapes.Square);
+            dc.Model = model;
         }
         public static void DrawEllipse(this IDrawingContext dc, IBox bounds, ColourF colour)
         {
@@ -167,8 +242,20 @@ namespace Zene.Graphics
             Shapes.CircleShader.Size = 1d;
             Shapes.CircleShader.LineWidth = 0.5;
 
-            dc.Model = Matrix4.CreateBox(bounds);
+            IMatrix model = dc.Model;
+            if (dc.RenderState.postMatrixMods)
+            {
+                _multiply.Left = model;
+                _multiply.Right = Matrix4.CreateBox(bounds);
+            }
+            else
+            {
+                _multiply.Right = model;
+                _multiply.Left = Matrix4.CreateBox(bounds);
+            }
+            dc.Model = _multiply;
             dc.Draw(Shapes.Square);
+            dc.Model = model;
         }
         public static void DrawEllipse(this IDrawingContext dc, IBox bounds, ITexture texture)
         {
@@ -178,9 +265,25 @@ namespace Zene.Graphics
             Shapes.CircleShader.Size = 1d;
             Shapes.CircleShader.LineWidth = 0.5;
 
-            dc.Model = Matrix4.CreateBox(bounds);
+            IMatrix model = dc.Model;
+            if (dc.RenderState.postMatrixMods)
+            {
+                _multiply.Left = model;
+                _multiply.Right = Matrix4.CreateBox(bounds);
+            }
+            else
+            {
+                _multiply.Right = model;
+                _multiply.Left = Matrix4.CreateBox(bounds);
+            }
+            dc.Model = _multiply;
             dc.Draw(Shapes.Square);
+            dc.Model = model;
         }
+        public static void DrawCircle(this IDrawingContext dc, Vector2 location, double radius, ColourF colour)
+            => DrawEllipse(dc, new Box(location, radius), colour);
+        public static void DrawCircle(this IDrawingContext dc, Vector2 location, double radius, ITexture texture)
+        => DrawEllipse(dc, new Box(location, radius), texture);
         public static void DrawRing(this IDrawingContext dc, IBox bounds, double lineWidth, ColourF colour)
         {
             dc.Shader = Shapes.CircleShader;
@@ -190,8 +293,20 @@ namespace Zene.Graphics
             Shapes.CircleShader.LineWidth = lineWidth;
             Shapes.CircleShader.InnerColour = ColourF.Zero;
 
-            dc.Model = Matrix4.CreateBox(bounds);
+            IMatrix model = dc.Model;
+            if (dc.RenderState.postMatrixMods)
+            {
+                _multiply.Left = model;
+                _multiply.Right = Matrix4.CreateBox(bounds);
+            }
+            else
+            {
+                _multiply.Right = model;
+                _multiply.Left = Matrix4.CreateBox(bounds);
+            }
+            dc.Model = _multiply;
             dc.Draw(Shapes.Square);
+            dc.Model = model;
         }
     }
 }

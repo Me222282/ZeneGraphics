@@ -126,5 +126,23 @@ namespace Zene.Graphics
                 GL.Disable(GLEnum.CullFace);
             }
         }
+
+        internal bool postMatrixMods = true;
+        /// <summary>
+        /// Determines whether changes to matrices made by draw functions should be applied before or after the already set value.
+        /// </summary>
+        /// <remarks>
+        /// True for multiplications to be applied after, False for before.
+        /// </remarks>
+        public bool PostMatrixMods
+        {
+            get => postMatrixMods;
+            set
+            {
+                if (Locked) { return; }
+
+                postMatrixMods = value;
+            }
+        }
     }
 }
