@@ -86,7 +86,7 @@ namespace Zene.Graphics
             => WriteFramebuffer(dc, source.Framebuffer, bounds, BufferBit.All, TextureSampling.Nearest);
 
         [ThreadStatic]
-        private static readonly MultiplyMatrix _multiply = new MultiplyMatrix(Matrix.Identity, Matrix.Identity);
+        private static readonly MultiplyMatrix4 _multiply = new MultiplyMatrix4(Matrix.Identity, Matrix.Identity);
 
         public static void DrawBox(this IDrawingContext dc, IBox bounds, ColourF colour)
         {

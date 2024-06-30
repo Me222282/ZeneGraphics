@@ -39,7 +39,7 @@ namespace Zene.Graphics
 
             LightNumber = lightNumber;
 
-            _m2m3 = Matrix.Identity * Matrix.Identity;
+            _m2m3 = new MultiplyMatrix4(null, null);
 
             _uLight = Properties.IndexFromLocation(12);
             _uSpotLight = Properties.IndexFromLocation(_uSpotLight);
@@ -329,7 +329,7 @@ namespace Zene.Graphics
             set => _m2m3.Right = value;
         }
 
-        private readonly MultiplyMatrix _m2m3;
+        private readonly MultiplyMatrix4 _m2m3;
 
         public override void PrepareDraw()
         {

@@ -9,8 +9,8 @@ namespace Zene.Graphics
             Create(ShaderPresets.DepthMapVertex, ShaderPresets.DepthMapFragment,
                   "matrix", "depthOffset");
 
-            _m2m3 = Matrix.Identity * Matrix.Identity;
-            _m1Mm2m3 = Matrix.Identity * _m2m3;
+            _m2m3 = new MultiplyMatrix4(null, null);
+            _m1Mm2m3 = new MultiplyMatrix4(null, _m2m3);
 
             SetUniform(Uniforms[0], Matrix.Identity);
         }
@@ -31,8 +31,8 @@ namespace Zene.Graphics
             set => _m2m3.Right = value;
         }
 
-        private readonly MultiplyMatrix _m1Mm2m3;
-        private readonly MultiplyMatrix _m2m3;
+        private readonly MultiplyMatrix4 _m1Mm2m3;
+        private readonly MultiplyMatrix4 _m2m3;
         public override void PrepareDraw() => SetUniform(Uniforms[0], _m1Mm2m3);
 
         private double _depthOffset = 0d;
