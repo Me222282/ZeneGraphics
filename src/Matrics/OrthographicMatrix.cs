@@ -11,7 +11,7 @@ namespace Zene.Graphics
             Height = height;
             _depthN = depthNear;
             DepthFar = depthFar;
-            _data[11] = 1d;
+            _data[15] = 1d;
         }
 
         public int Rows => 4;
@@ -54,6 +54,7 @@ namespace Zene.Graphics
             get => _depthN;
             set
             {
+                _depthN = value;
                 double invFN = 1d / (value - _depthF);
                 _v3 = 2d * invFN;
                 _v4 = (value + _depthF) * invFN;
@@ -65,6 +66,7 @@ namespace Zene.Graphics
             get => _depthF;
             set
             {
+                _depthF = value;
                 double invFN = 1d / (_depthN - value);
                 _v3 = 2d * invFN;
                 _v4 = (value + _depthN) * invFN;
