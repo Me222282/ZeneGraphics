@@ -13,11 +13,13 @@ namespace Zene.Graphics
         {
             Scale = scale;
             Translate = translate;
+            _data[15] = 1d;
         }
         public STMatrix(Vector2 scale, Vector2 translate)
         {
             Scale = new Vector3(scale, 1d);
             TXY = translate;
+            _data[15] = 1d;
         }
 
         public int Rows => 4;
