@@ -21,10 +21,10 @@ namespace Zene.Graphics
             get => _left;
             set
             {
-                if (_left != value)
-                {
-                    _dataCache = null;
-                }
+                // if (_left != value)
+                // {
+                //     _dataCache = null;
+                // }
                 _left = value;
             }
         }
@@ -34,24 +34,24 @@ namespace Zene.Graphics
             get => _right;
             set
             {
-                if (_right != value)
-                {
-                    _dataCache = null;
-                }
+                // if (_right != value)
+                // {
+                //     _dataCache = null;
+                // }
                 _right = value;
             }
         }
-        
-        private double[] _dataCache = null;
-        
+
+        // private double[] _dataCache = null;
+
         public MatrixSpan MatrixData()
         {
-            if (!Constant) { _dataCache = null; }
-            else if (_dataCache != null)
-            {
-                return new MatrixSpan(4, 4, _dataCache);
-            }
-            
+            // if (!Constant) { _dataCache = null; }
+            // else if (_dataCache != null)
+            // {
+            //     return new MatrixSpan(4, 4, _dataCache);
+            // }
+
             if (_left == null)
             {
                 if (_right == null)
@@ -88,9 +88,9 @@ namespace Zene.Graphics
                 (a[0, 3] * b[2, 0]) + (a[1, 3] * b[2, 1]) + (a[2, 3] * b[2, 2]) + (a[3, 3] * b[2, 3]),
                 (a[0, 3] * b[3, 0]) + (a[1, 3] * b[3, 1]) + (a[2, 3] * b[3, 2]) + (a[3, 3] * b[3, 3])
             };
-            
-            if (Constant) { _dataCache = data; }
-            
+
+            // if (Constant) { _dataCache = data; }
+
             return new MatrixSpan(4, 4, data);
         }
     }

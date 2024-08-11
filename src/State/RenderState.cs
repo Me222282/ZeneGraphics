@@ -15,6 +15,12 @@ namespace Zene.Graphics
         public bool Current => GL.context.renderState == this;
 
         public static RenderState Default { get; } = new RenderState();
+        public static RenderState BlendReady => new RenderState()
+        {
+            Blending = true,
+            SourceScaleBlending = BlendFunction.SourceAlpha,
+            DestinationScaleBlending = BlendFunction.OneMinusSourceAlpha
+        };
 
         internal PolygonMode polygonMode = PolygonMode.Fill;
         /// <summary>
