@@ -10,7 +10,11 @@ namespace Zene.Graphics
         public unsafe GraphicsContext(bool stereo, bool doubleBuffered, int width, int height, double version)
         {
             ThreadChange();
-
+            
+            // Helper constants
+            // Only works with 1 context in use at a time
+            Shapes.Init();
+            
             baseFrameBuffer = new FramebufferGL(0, stereo, doubleBuffered, width, height);
             boundFrameBuffers.Draw = baseFrameBuffer;
             boundFrameBuffers.Read = baseFrameBuffer;

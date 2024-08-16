@@ -8,7 +8,7 @@ namespace Zene.Graphics
 {
     public static class Shapes
     {
-        static Shapes()
+        internal static void Init()
         {
             Square = new DrawObject<float, byte>(stackalloc float[]
             {
@@ -55,15 +55,20 @@ namespace Zene.Graphics
                 2, 3, 7,
                 7, 6, 2
             }, 3, 0, AttributeSize.D3, BufferUsage.DrawFrequent);
+            
+            BasicShader = BasicShader.GetInstance();
+            BorderShader = BorderShader.GetInstance();
+            CircleShader = CircleShader.GetInstance();
+            SampleFont = SampleFont.GetInstance();
         }
 
-        public static DrawObject<float, byte> Square { get; }
-        public static DrawObject<float, byte> Cube { get; }
+        public static DrawObject<float, byte> Square { get; private set; }
+        public static DrawObject<float, byte> Cube { get; private set; }
 
-        public static BasicShader BasicShader { get; } = BasicShader.GetInstance();
-        public static BorderShader BorderShader { get; } = BorderShader.GetInstance();
-        public static CircleShader CircleShader { get; } = CircleShader.GetInstance();
+        public static BasicShader BasicShader { get; private set; }
+        public static BorderShader BorderShader { get; private set; }
+        public static CircleShader CircleShader { get; private set; }
 
-        public static SampleFont SampleFont { get; } = SampleFont.GetInstance();
+        public static SampleFont SampleFont { get; private set; }
     }
 }
