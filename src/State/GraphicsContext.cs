@@ -13,7 +13,7 @@ namespace Zene.Graphics
             
             // Helper constants
             // Only works with 1 context in use at a time
-            Shapes.Init();
+            // Shapes.Init();
             
             baseFrameBuffer = new FramebufferGL(0, stereo, doubleBuffered, width, height);
             boundFrameBuffers.Draw = baseFrameBuffer;

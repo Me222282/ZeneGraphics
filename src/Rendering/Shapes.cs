@@ -8,7 +8,7 @@ namespace Zene.Graphics
 {
     public static class Shapes
     {
-        internal static void Init()
+        public static void Init()
         {
             Square = new DrawObject<float, byte>(stackalloc float[]
             {
