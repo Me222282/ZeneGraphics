@@ -308,5 +308,44 @@ namespace Zene.Graphics
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
+
+        public static void DrawTriangle(this IDrawingContext dc, Vector2 a, Vector2 b, Vector2 c, ColourF colour)
+        {
+            dc.Shader = Shapes.BasicShader;
+            Shapes.BasicShader.Colour = colour;
+            Shapes.BasicShader.ColourSource = ColourSource.UniformColour;
+
+            IMatrix model = dc.Model;
+            if (dc.RenderState.postMatrixMods)
+            {
+                _multiply.Left = model;
+                _multiply.Right = CreateTriangle(a, b, c);
+            }
+            else
+            {
+                _multiply.Right = model;
+                _multiply.Left = CreateTriangle(a, b, c);
+            }
+            dc.Model = _multiply;
+            dc.Draw(Shapes.Triangle);
+            dc.Model = model;
+        }
+        private static IMatrix CreateTriangle(Vector2 p1, Vector2 p2, Vector2 p3)
+        {
+            double e = p1.X;
+            double f = p1.Y;
+            double a = p2.X - e;
+            double b = p2.Y - f;
+            double c = p3.X - e;
+            double d = p3.Y - f;
+
+            return new Matrix4(new double[]
+            {
+                a, b, 0, 0,
+                c, d, 0, 0,
+                0, 0, 1, 0,
+                e, f, 0, 1
+            });
+        }
     }
 }

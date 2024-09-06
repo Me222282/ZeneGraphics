@@ -56,6 +56,14 @@ namespace Zene.Graphics
                 7, 6, 2
             }, 3, 0, AttributeSize.D3, BufferUsage.DrawFrequent);
             
+            Triangle = new DrawObject<float, byte>(stackalloc float[]
+            {
+                0f, 0f, 0f, 0f,
+                1f, 0f, 0.5f, 0f,
+                0f, 1f, 1f, 1f
+            }, stackalloc byte[] { 0, 1, 2 }, 4, 0, AttributeSize.D2, BufferUsage.DrawFrequent);
+            Triangle.AddAttribute(ShaderLocation.TextureCoords, 2, AttributeSize.D2);
+
             BasicShader = BasicShader.GetInstance();
             BorderShader = BorderShader.GetInstance();
             CircleShader = CircleShader.GetInstance();
@@ -63,6 +71,7 @@ namespace Zene.Graphics
         }
 
         public static DrawObject<float, byte> Square { get; private set; }
+        public static DrawObject<float, byte> Triangle { get; private set; }
         public static DrawObject<float, byte> Cube { get; private set; }
 
         public static BasicShader BasicShader { get; private set; }
