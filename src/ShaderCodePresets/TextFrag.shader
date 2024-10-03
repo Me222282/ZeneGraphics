@@ -22,7 +22,6 @@ layout(location = 0) out vec4 outColour;
 
 //in vec3 inColour;
 in vec2 tex_Coords;
-in vec4 charColour;
 uniform vec4 uColour;
 
 uniform sampler2D fontSampler;
@@ -51,6 +50,5 @@ void main()
     // Insignificant
     if (opacity < 0.05) { discard; }
 
-    //outColour = vec4(charColour.rgb, charColour.a * opacity);
     outColour = vec4(uColour.rgb, uColour.a * opacity);
 }
