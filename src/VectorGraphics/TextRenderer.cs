@@ -263,7 +263,7 @@ namespace Zene.Graphics
 
             dc.Draw(_drawable, count);
         }
-        public void DrawLeftBound(IDrawingContext dc, ReadOnlySpan<char> text, Font font, int charSpace, int lineSpace, int caretIndex, bool drawCaret)
+        public void DrawLeftBound(IDrawingContext dc, ReadOnlySpan<char> text, Font font, int charSpace, int lineSpace, int caretIndex, bool drawCaret, bool centred = true)
         {
             if (font == null)
             {
@@ -298,7 +298,7 @@ namespace Zene.Graphics
                 caretIndex = text.Length;
             }
 
-            Vector2 starting = frameSize / (-2d, 2d);
+            Vector2 starting = centred ? frameSize / (-2d, 2d) : 0d;
             // The current character offset
             Vector2 offsetCurrent = starting;
             // The instance data containing offsets for each character
@@ -436,7 +436,7 @@ namespace Zene.Graphics
 
             dc.Draw(_drawable, count);
         }
-        public void DrawLeftBound(IDrawingContext dc, ReadOnlySpan<char> text, Font font, int charSpace, int lineSpace)
-            => DrawLeftBound(dc, text, font, charSpace, lineSpace, -1, false);
+        public void DrawLeftBound(IDrawingContext dc, ReadOnlySpan<char> text, Font font, int charSpace, int lineSpace, bool centred = true)
+            => DrawLeftBound(dc, text, font, charSpace, lineSpace, -1, false, centred);
     }
 }
