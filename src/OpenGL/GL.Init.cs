@@ -2671,7 +2671,17 @@ namespace Zene.Graphics.Base
 
 			if (getProcAddress == null) throw new ArgumentNullException(nameof(getProcAddress));
 
-			T getProc<T>(string name) => Marshal.GetDelegateForFunctionPointer<T>(getProcAddress("gl" + name));
+			T getProc<T>(string name) where T : Delegate
+            {
+				IntPtr ptr = getProcAddress("gl" + name);
+				if (ptr != IntPtr.Zero)
+                {
+					return Marshal.GetDelegateForFunctionPointer<T>(ptr);
+				}
+
+				// Somehow return UnsupportedMethod
+				return null;
+			}
 
 			if (version >= 1.0)
 			{
