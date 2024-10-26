@@ -284,14 +284,14 @@ namespace Zene.Graphics
             => DrawEllipse(dc, new Box(location, radius), colour);
         public static void DrawCircle(this IDrawingContext dc, Vector2 location, double radius, ITexture texture)
         => DrawEllipse(dc, new Box(location, radius), texture);
-        public static void DrawRing(this IDrawingContext dc, IBox bounds, double lineWidth, ColourF colour)
+        public static void DrawRing(this IDrawingContext dc, IBox bounds, double lineWidth, ColourF colour, ColourF innerColour)
         {
             dc.Shader = Shapes.CircleShader;
             Shapes.CircleShader.Colour = colour;
+            Shapes.CircleShader.InnerColour = innerColour;
             Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
             Shapes.CircleShader.Size = Math.Min(bounds.Width, bounds.Height);
             Shapes.CircleShader.LineWidth = lineWidth;
-            Shapes.CircleShader.InnerColour = ColourF.Zero;
 
             IMatrix model = dc.Model;
             if (dc.RenderState.postMatrixMods)
@@ -308,6 +308,8 @@ namespace Zene.Graphics
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
+        public static void DrawRing(this IDrawingContext dc, IBox bounds, double lineWidth, ColourF colour)
+            => DrawRing(dc, bounds, lineWidth, colour, ColourF.Zero);
 
         public static void DrawTriangle(this IDrawingContext dc, Vector2 a, Vector2 b, Vector2 c, ColourF colour)
         {
