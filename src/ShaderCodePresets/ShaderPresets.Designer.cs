@@ -103,9 +103,9 @@ namespace Zene.Graphics {
         /// <summary>
         ///   Looks up a localized string similar to #version 330 core
         ///
-        ///layout(location = 0) in vec3 vPosition;
-        ///layout(location = 1) in vec4 colour;
-        ///layout(location = 2) in vec2 texCoord;
+        ///layout(location = locations.vertex) in vec3 vPosition;
+        ///layout(location = locations.colour) in vec4 colour;
+        ///layout(location = locations.texture) in vec2 texCoord;
         ///
         ///out vec4 pos_Colour;
         ///out vec2 tex_Coords;
@@ -140,22 +140,22 @@ namespace Zene.Graphics {
         ///uniform vec4 uBorderColour;
         ///uniform sampler2D uTextureSlot;
         ///
-        ///uniform vec2 outerDimensions;
-        ///uniform vec2 innerDimensions;
+        ///uniform float outerRadius;
+        ///uniform float halfBW;
+        ///uniform vec2 borderCrossOver;
+        ///uniform vec2 aspect;
+        ///uniform vec2 innerDMinusR;
         ///uniform float radius;
+        ///uniform float rValue;
         ///
         ///float squaredLength(vec2 v)
         ///{
         ///	return (v.x * v.x) + (v.y * v.y);
         ///}
         ///
-        ///void main()
+        ///void insideBorders()
         ///{
-        ///	vec2 coords = tex_Coords * innerDimensions;
-        ///
-        ///	// On border or outside box
-        ///	if (squaredLength(coords) &lt; radius ||
-        /// [rest of string was truncated]&quot;;.
+        ///	switch (colourT [rest of string was truncated]&quot;;.
         /// </summary>
         public static string BorderFrag {
             get {
@@ -166,22 +166,21 @@ namespace Zene.Graphics {
         /// <summary>
         ///   Looks up a localized string similar to #version 330 core
         ///
-        ///layout(location = 0) in vec3 vPosition;
-        ///layout(location = 1) in vec4 colour;
-        ///layout(location = 2) in vec2 texCoord;
+        ///layout(location = locations.vertex) in vec3 vPosition;
+        ///layout(location = locations.colour) in vec4 colour;
+        ///layout(location = locations.texture) in vec2 texCoord;
         ///
         ///out vec4 pos_Colour;
         ///out vec2 tex_Coords;
         ///
         ///uniform mat4 matrix;
         ///uniform vec2 size;
-        ///uniform vec2 hSize;
         ///
         ///void main()
         ///{
         ///    pos_Colour = colour;
         ///
-        ///    tex_Coords = ((texCoord - 0.5) * size) + hSize;
+        ///    tex_Coords = ((texCoord - 0.5) * size) + 0.5;
         ///    
         ///	gl_Position = matrix * vec4(vPosition, 1);
         ///}.
@@ -203,6 +202,7 @@ namespace Zene.Graphics {
         ///
         ///uniform int colourType;
         ///uniform vec4 uColour;
+        ///uniform vec4 uBorderColour;
         ///uniform sampler2D uTextureSlot;
         ///
         ///uniform float minRadius;
@@ -215,15 +215,13 @@ namespace Zene.Graphics {
         ///	// Outside main circle
         ///	if (len &gt; radius) { discard; }
         ///	// Inside mini circle
-        ///	if (len &lt; minRadius) { discard; }
-        ///
-        ///	switch (colourType)
+        ///	if (len &gt; minRadius)
         ///	{
-        ///		case 1:
-        ///			colour = uColour;
-        ///			break;
+        ///		colour = uBorderColour;
+        ///		return;
+        ///	}
         ///
-        /// [rest of string was truncated]&quot;;.
+        ///	switch ( [rest of string was truncated]&quot;;.
         /// </summary>
         public static string CircleFrag {
             get {
@@ -234,23 +232,24 @@ namespace Zene.Graphics {
         /// <summary>
         ///   Looks up a localized string similar to #version 330 core
         ///
-        ///layout(location = 0) in vec3 vPosition;
-        ///layout(location = 1) in vec4 colour;
-        ///layout(location = 2) in vec2 texCoord;
+        ///layout(location = locations.vertex) in vec3 vPosition;
+        ///layout(location = locations.colour) in vec4 colour;
+        ///layout(location = locations.texture) in vec2 texCoord;
         ///
         ///out vec4 pos_Colour;
         ///out vec2 tex_Coords;
         ///out vec2 pos;
         ///
         ///uniform mat4 matrix;
-        ///uniform float size;
+        ///uniform vec2 size;
+        ///uniform vec2 c_off;
         ///
         ///void main()
         ///{
         ///    pos_Colour = colour;
         ///    tex_Coords = texCoord;
         ///
-        ///    pos = (texCoord - 0.5) * size;
+        ///    pos = (texCoord - c_off) * size;
         ///    
         ///	gl_Position = matrix * vec4(vPosition, 1);
         ///}.
@@ -278,7 +277,7 @@ namespace Zene.Graphics {
         /// <summary>
         ///   Looks up a localized string similar to #version 330 core
         ///
-        ///layout(location = 0) in vec3 vPosition;
+        ///layout(location = locations.vertex) in vec3 vPosition;
         ///
         ///uniform mat4 matrix;
         ///
@@ -338,23 +337,18 @@ namespace Zene.Graphics {
         /// <summary>
         ///   Looks up a localized string similar to #version 330 core
         ///
-        ///layout(location = 0) in vec3 vPosition;
-        ///layout(location = 1) in vec4 colour;
-        ///layout(location = 2) in vec2 texCoord;
-        ///layout(location = 3) in vec3 vNormal;
+        ///layout(location = locations.vertex) in vec3 vPosition;
+        ///layout(location = locations.colour) in vec4 colour;
+        ///layout(location = locations.texture) in vec2 texCoord;
+        ///layout(location = locations.normal) in vec3 vNormal;
         ///
-        ///layout(location = 4) in vec3 ambientLight;
-        ///layout(location = 5) in vec2 ambientTexture;
-        ///layout(location = 6) in vec3 specularLight;
-        ///layout(location = 7) in vec2 specularTexture;
+        ///layout(location = 6) in vec3 ambientLight;
+        ///layout(location = 7) in vec2 ambientTexture;
+        ///layout(location = 8) in vec3 specularLight;
+        ///layout(location = 9) in vec2 specularTexture;
         ///
-        ///layout(location = 8) in vec2 normalTexCoord;
-        ///layout(location = 9) in vec3 vTangent;
-        ///
-        ///out vec4 pos_Colour;
-        ///out vec2 tex_Coords;
-        ///
-        ///out vec2 tex_ [rest of string was truncated]&quot;;.
+        ///layout(location = locations.norm_tex) in vec2 normalTexCoord;
+        ///layout(location = locat [rest of string was truncated]&quot;;.
         /// </summary>
         public static string LightingVertex {
             get {
@@ -403,8 +397,8 @@ namespace Zene.Graphics {
         /// <summary>
         ///   Looks up a localized string similar to #version 330 core
         ///
-        ///layout(location = 0) in vec2 vPosition;
-        ///layout(location = 1) in vec2 texCoord;
+        ///layout(location = locations.vertex) in vec2 vPosition;
+        ///layout(location = locations.texture) in vec2 texCoord;
         ///
         ///out vec2 tex_Coords;
         ///
@@ -412,7 +406,7 @@ namespace Zene.Graphics {
         ///{
         ///	tex_Coords = texCoord;
         ///
-        ///	gl_Position = vec4(vPosition, 0, 1);
+        ///	gl_Position = vec4(vPosition * vec2(2.0), 0, 1);
         ///}.
         /// </summary>
         public static string PostVertex {
@@ -459,14 +453,14 @@ namespace Zene.Graphics {
         /// <summary>
         ///   Looks up a localized string similar to #version 330 core
         ///
-        ///layout(location = 0) in vec3 vPosition;
-        ///layout(location = 1) in vec2 texCoord;
+        ///layout(location = locations.vertex) in vec3 vPosition;
+        ///layout(location = locations.texture) in vec2 texCoord;
         ///// Instance data
-        ///layout(location = 2) in vec2 offset;
-        ///layout(location = 5) in vec2 size;
-        ///layout(location = 3) in vec2 texOffset;
-        ///layout(location = 4) in vec2 texSize;
-        ///layout(location = 6) in vec2 selected;
+        ///layout(location = 3) in vec2 offset;
+        ///layout(location = 6) in vec2 size;
+        ///layout(location = 4) in vec2 texOffset;
+        ///layout(location = 5) in vec2 texSize;
+        ///layout(location = 7) in vec2 selected;
         ///
         ///out vec2 tex_Coords;
         ///out float charSelect;
@@ -478,10 +472,7 @@ namespace Zene.Graphics {
         ///	tex_Coords = (texCoord * texSize) + texOffset;
         ///	
         ///	if (selected == vec2(0))
-        ///	{
-        ///		charSelect = 0;
-        ///	}
-        ///	el [rest of string was truncated]&quot;;.
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         public static string TextEditVert {
             get {
@@ -516,13 +507,12 @@ namespace Zene.Graphics {
         ///   Looks up a localized string similar to #version 330 core
         ///
         ///layout(location = 1) in vec3 vPosition;
-        ///layout(location = 2) in vec2 texCoord;
+        ///layout(location = locations.texture) in vec2 texCoord;
         ///// Instance data
         ///layout(location = 3) in vec2 offset;
         ///layout(location = 6) in vec2 size;
         ///layout(location = 4) in vec2 texOffset;
         ///layout(location = 5) in vec2 texSize;
-        ///layout(location = 7) in vec4 colour;
         ///
         ///out vec2 tex_Coords;
         ///out vec4 charColour;
@@ -531,10 +521,10 @@ namespace Zene.Graphics {
         ///
         ///void main()
         ///{
-        ///	charColour = colour;
         ///	tex_Coords = (texCoord * texSize) + texOffset;
         ///
-        ///	gl_Position = matrix * vec4((vPositio [rest of string was truncated]&quot;;.
+        ///	gl_Position = matrix * vec4((vPosition.xy * size) + offset, vPosition.z, 1);
+        ///}.
         /// </summary>
         public static string TextVert {
             get {

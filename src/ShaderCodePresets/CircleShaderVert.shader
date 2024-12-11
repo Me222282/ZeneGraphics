@@ -9,7 +9,7 @@ out vec2 tex_Coords;
 out vec2 pos;
 
 uniform mat4 matrix;
-uniform float size;
+uniform vec2 size;
 uniform vec2 c_off;
 
 void main()

@@ -240,7 +240,7 @@ namespace Zene.Graphics
             Shapes.CircleShader.Colour = colour;
             Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
             Shapes.CircleShader.Size = 1d;
-            Shapes.CircleShader.LineWidth = 0.5;
+            Shapes.CircleShader.LineWidth = 0d;
             Shapes.CircleShader.Offset = 0.5;
 
             IMatrix model = dc.Model;
@@ -264,7 +264,7 @@ namespace Zene.Graphics
             Shapes.CircleShader.Texture = texture;
             Shapes.CircleShader.ColourSource = ColourSource.Texture;
             Shapes.CircleShader.Size = 1d;
-            Shapes.CircleShader.LineWidth = 0.5;
+            Shapes.CircleShader.LineWidth = 0d;
             Shapes.CircleShader.Offset = 0.5;
 
             IMatrix model = dc.Model;
@@ -345,17 +345,18 @@ namespace Zene.Graphics
             dc.Shader = Shapes.CircleShader;
             Shapes.CircleShader.BorderColour = colour;
             Shapes.CircleShader.ColourSource = ColourSource.Discard;
-            Shapes.CircleShader.LineWidth = lineWidth;
             
             Vector2 mid = (a + b) / 2d;
             Vector2 t = (a - b);
-            // slowest part!!
-            Vector2 dir = t.Rotated90().Normalised();
+            Vector2 dir = t.Rotated270();
             Vector2 cp = mid + (dir * curve);
-            double nCos = 1d - (t.SquaredLength / (2d * cp.SquaredDistance(a)));
-            double r = curve / (1d + nCos);
+            double r = curve / (2d - (t.SquaredLength / (2d * cp.SquaredDistance(a))));
             
-            Vector2 circle = mid + (r * nCos * dir);
+            Vector2 circle = cp - (r * dir);
+            
+            // slowest part!!
+            r *= dir.Length;
+            r += lineWidth / 2d;
             
             Box bounds = new Box(circle, 2d * r);
             
@@ -363,7 +364,7 @@ namespace Zene.Graphics
             {
                 bounds.Bottom = Math.Min(a.Y, b.Y);
             }
-            else
+            else if (b.X < a.X)
             {
                 bounds.Top = Math.Max(a.Y, b.Y);
             }
@@ -371,14 +372,16 @@ namespace Zene.Graphics
             {
                 bounds.Right = Math.Max(a.X, b.X);
             }
-            else
+            else if (b.Y < a.Y)
             {
                 bounds.Left = Math.Min(a.X, b.X);
             }
             
             // Shapes.CircleShader.Size = r * 2d;
-            Shapes.CircleShader.Offset = (circle - (bounds.Left, bounds.Bottom)) / (bounds.Width, bounds.Height);
-            Shapes.CircleShader.SetSR(Math.Min(bounds.Width, bounds.Height), r);
+            Vector2 size = (bounds.Width, bounds.Height);
+            Shapes.CircleShader.Offset = (circle - (bounds.Left, bounds.Bottom)) / size;
+            Shapes.CircleShader.SetSR(size, r);
+            Shapes.CircleShader.LineWidth = lineWidth;
             
             IMatrix model = dc.Model;
             if (dc.RenderState.postMatrixMods)

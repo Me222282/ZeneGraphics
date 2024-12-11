@@ -31,16 +31,19 @@ namespace Zene.Graphics
             }
         }
 
-        private double _size;
+        private Vector2 _size;
+        private double _radius;
         public double Size
         {
-            get => _size;
+            get => _size.X;
             set
             {
                 _size = value;
-
-                SetUniform(Uniforms[4], value);
-                SetUniform(Uniforms[5], value * value * 0.25);
+                double r = value * 0.5;
+                _radius = r;
+                
+                SetUniform(Uniforms[4], _size);
+                SetUniform(Uniforms[5], r * r);
             }
         }
         
@@ -63,7 +66,7 @@ namespace Zene.Graphics
             {
                 _lWidth = value;
 
-                double len = (_size * 0.5) - value;
+                double len = _radius - value;
 
                 SetUniform(Uniforms[6], len * len);
             }
@@ -111,8 +114,10 @@ namespace Zene.Graphics
             set => _m2m3.Right = value;
         }
         
-        public void SetSR(double size, double radius)
+        public void SetSR(Vector2 size, double radius)
         {
+            _size = size;
+            _radius = radius;
             SetUniform(Uniforms[4], size);
             SetUniform(Uniforms[5], radius * radius);
         }
