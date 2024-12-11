@@ -10,13 +10,14 @@ out vec2 pos;
 
 uniform mat4 matrix;
 uniform float size;
+uniform vec2 c_off;
 
 void main()
 {
     pos_Colour = colour;
     tex_Coords = texCoord;
 
-    pos = (texCoord - 0.5) * size;
+    pos = (texCoord - c_off) * size;
     
 	gl_Position = matrix * vec4(vPosition, 1);
 }

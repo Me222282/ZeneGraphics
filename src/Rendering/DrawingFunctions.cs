@@ -241,6 +241,7 @@ namespace Zene.Graphics
             Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
             Shapes.CircleShader.Size = 1d;
             Shapes.CircleShader.LineWidth = 0.5;
+            Shapes.CircleShader.Offset = 0.5;
 
             IMatrix model = dc.Model;
             if (dc.RenderState.postMatrixMods)
@@ -264,6 +265,7 @@ namespace Zene.Graphics
             Shapes.CircleShader.ColourSource = ColourSource.Texture;
             Shapes.CircleShader.Size = 1d;
             Shapes.CircleShader.LineWidth = 0.5;
+            Shapes.CircleShader.Offset = 0.5;
 
             IMatrix model = dc.Model;
             if (dc.RenderState.postMatrixMods)
@@ -284,14 +286,15 @@ namespace Zene.Graphics
             => DrawEllipse(dc, new Box(location, radius), colour);
         public static void DrawCircle(this IDrawingContext dc, Vector2 location, double radius, ITexture texture)
         => DrawEllipse(dc, new Box(location, radius), texture);
-        public static void DrawRing(this IDrawingContext dc, IBox bounds, double lineWidth, ColourF colour, ColourF innerColour)
+        private static void DrawRingP(this IDrawingContext dc, IBox bounds, double lineWidth, ColourF borderColour)
         {
             dc.Shader = Shapes.CircleShader;
-            Shapes.CircleShader.Colour = colour;
-            Shapes.CircleShader.InnerColour = innerColour;
-            Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
+            // Shapes.CircleShader.Colour = colour;
+            Shapes.CircleShader.BorderColour = borderColour;
+            // Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
             Shapes.CircleShader.Size = Math.Min(bounds.Width, bounds.Height);
             Shapes.CircleShader.LineWidth = lineWidth;
+            Shapes.CircleShader.Offset = 0.5;
 
             IMatrix model = dc.Model;
             if (dc.RenderState.postMatrixMods)
@@ -309,7 +312,89 @@ namespace Zene.Graphics
             dc.Model = model;
         }
         public static void DrawRing(this IDrawingContext dc, IBox bounds, double lineWidth, ColourF colour)
-            => DrawRing(dc, bounds, lineWidth, colour, ColourF.Zero);
+        {
+            Shapes.CircleShader.ColourSource = ColourSource.Discard;
+            DrawRingP(dc, bounds, lineWidth, colour);
+        }
+        public static void DrawBorderEllipse(this IDrawingContext dc, IBox bounds, double lineWidth, ColourF colour, ColourF borderColour)
+        {
+            Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
+            Shapes.CircleShader.Colour = colour;
+            DrawRingP(dc, bounds, lineWidth, borderColour);
+        }
+        public static void DrawBorderEllipse(this IDrawingContext dc, IBox bounds, double lineWidth, ITexture texture, ColourF borderColour)
+        {
+            Shapes.CircleShader.ColourSource = ColourSource.Texture;
+            Shapes.CircleShader.Texture = texture;
+            DrawRingP(dc, bounds, lineWidth, borderColour);
+        }
+        public static void DrawArc(this IDrawingContext dc, Vector2 a, Vector2 b, double curve, double lineWidth, ColourF colour)
+        {
+            if (curve == 0d)
+            {
+                // draw line
+            }
+            if (curve < 0d)
+            {
+                curve = -curve;
+                Vector2 tmp = a;
+                a = b;
+                b = tmp;
+            }
+            
+            dc.Shader = Shapes.CircleShader;
+            Shapes.CircleShader.BorderColour = colour;
+            Shapes.CircleShader.ColourSource = ColourSource.Discard;
+            Shapes.CircleShader.LineWidth = lineWidth;
+            
+            Vector2 mid = (a + b) / 2d;
+            Vector2 t = (a - b);
+            // slowest part!!
+            Vector2 dir = t.Rotated90().Normalised();
+            Vector2 cp = mid + (dir * curve);
+            double nCos = 1d - (t.SquaredLength / (2d * cp.SquaredDistance(a)));
+            double r = curve / (1d + nCos);
+            
+            Vector2 circle = mid + (r * nCos * dir);
+            
+            Box bounds = new Box(circle, 2d * r);
+            
+            if (b.X > a.X)
+            {
+                bounds.Bottom = Math.Min(a.Y, b.Y);
+            }
+            else
+            {
+                bounds.Top = Math.Max(a.Y, b.Y);
+            }
+            if (b.Y > a.Y)
+            {
+                bounds.Right = Math.Max(a.X, b.X);
+            }
+            else
+            {
+                bounds.Left = Math.Min(a.X, b.X);
+            }
+            
+            // Shapes.CircleShader.Size = r * 2d;
+            Shapes.CircleShader.Offset = (circle - (bounds.Left, bounds.Bottom)) / (bounds.Width, bounds.Height);
+            Shapes.CircleShader.SetSR(Math.Min(bounds.Width, bounds.Height), r);
+            
+            IMatrix model = dc.Model;
+            if (dc.RenderState.postMatrixMods)
+            {
+                _multiply.Left = model;
+                _multiply.Right = Matrix4.CreateBox(bounds);
+            }
+            else
+            {
+                _multiply.Right = model;
+                _multiply.Left = Matrix4.CreateBox(bounds);
+            }
+            dc.Model = _multiply;
+            dc.Draw(Shapes.Square);
+            dc.Model = model;
+        }
 
         public static void DrawTriangle(this IDrawingContext dc, Vector2 a, Vector2 b, Vector2 c, ColourF colour)
         {

@@ -7,7 +7,9 @@ namespace Zene.Graphics
         None = 0,
         UniformColour = 1,
         AttributeColour = 2,
-        Texture = 3
+        Texture = 3,
+        // Not always supported
+        Discard = 4
     }
 
     public sealed class BasicShader : BaseShaderProgram, IBasicShader

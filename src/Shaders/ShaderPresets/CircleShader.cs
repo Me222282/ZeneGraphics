@@ -7,7 +7,8 @@ namespace Zene.Graphics
         public CircleShader()
         {
             Create(ShaderPresets.CircleVert, ShaderPresets.CircleFrag,
-                  "colourType", "uInnerColour", "uTextureSlot", "matrix", "size", "radius", "minRadius", "uColour");
+                  "colourType", "uBorderColour", "uTextureSlot", "matrix",
+                  "size", "radius", "minRadius", "uColour", "c_off");
 
             _m2m3 = new MultiplyMatrix4(null, null);
             _m1Mm2m3 = new MultiplyMatrix4(null, _m2m3);
@@ -15,6 +16,7 @@ namespace Zene.Graphics
             SetUniform(Uniforms[3], Matrix.Identity);
             SetUniform(Uniforms[2], 0);
             Size = 1d;
+            Offset = 0.5;
         }
 
         private ColourSource _source = 0;
@@ -41,7 +43,18 @@ namespace Zene.Graphics
                 SetUniform(Uniforms[5], value * value * 0.25);
             }
         }
-
+        
+        private Vector2 _offset;
+        public Vector2 Offset
+        {
+            get => _offset;
+            set
+            {
+                _offset = value;
+                SetUniform(Uniforms[8], value);
+            }
+        }
+        
         private double _lWidth;
         public double LineWidth
         {
@@ -56,13 +69,13 @@ namespace Zene.Graphics
             }
         }
 
-        private ColourF _innerColour = ColourF.Zero;
-        public ColourF InnerColour
+        private ColourF _borderColour = ColourF.Zero;
+        public ColourF BorderColour
         {
-            get => _innerColour;
+            get => _borderColour;
             set
             {
-                _innerColour = value;
+                _borderColour = value;
 
                 SetUniform(Uniforms[1], (Vector4)value);
             }
@@ -97,7 +110,13 @@ namespace Zene.Graphics
             get => _m2m3.Right;
             set => _m2m3.Right = value;
         }
-
+        
+        public void SetSR(double size, double radius)
+        {
+            SetUniform(Uniforms[4], size);
+            SetUniform(Uniforms[5], radius * radius);
+        }
+        
         private readonly MultiplyMatrix4 _m1Mm2m3;
         private readonly MultiplyMatrix4 _m2m3;
         public override void PrepareDraw()
