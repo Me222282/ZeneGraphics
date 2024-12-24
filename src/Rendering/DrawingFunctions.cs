@@ -328,7 +328,7 @@ namespace Zene.Graphics
             Shapes.CircleShader.Texture = texture;
             DrawRingP(dc, bounds, lineWidth, borderColour);
         }
-        public static void DrawArc(this IDrawingContext dc, Vector2 a, Vector2 b, double curve, double lineWidth, ColourF colour)
+        private static void DrawArcP(this IDrawingContext dc, Vector2 a, Vector2 b, double curve, double lineWidth, ColourF colour)
         {
             if (curve == 0d)
             {
@@ -344,59 +344,78 @@ namespace Zene.Graphics
             
             dc.Shader = Shapes.CircleShader;
             Shapes.CircleShader.BorderColour = colour;
-            Shapes.CircleShader.ColourSource = ColourSource.Discard;
             
             Vector2 mid = (a + b) / 2d;
-            Vector2 t = (a - b);
-            Vector2 dir = t.Rotated270();
+            Vector2 t = (b - a);
+            Vector2 dir = t.Rotated90();
             Vector2 cp = mid + (dir * curve);
             double r = curve / (2d - (t.SquaredLength / (2d * cp.SquaredDistance(a))));
             
-            Vector2 circle = cp - (r * dir);
-            
             // slowest part!!
-            r *= dir.Length;
-            r += lineWidth / 2d;
+            double length = dir.Length;
             
-            Box bounds = new Box(circle, 2d * r);
+            Vector2 size = (length, length * curve);
+            if (curve > 0.5)
+            {
+                size.X = r * 2d;
+            }
             
-            if (b.X > a.X)
-            {
-                bounds.Bottom = Math.Min(a.Y, b.Y);
-            }
-            else if (b.X < a.X)
-            {
-                bounds.Top = Math.Max(a.Y, b.Y);
-            }
-            if (b.Y > a.Y)
-            {
-                bounds.Right = Math.Max(a.X, b.X);
-            }
-            else if (b.Y < a.Y)
-            {
-                bounds.Left = Math.Min(a.X, b.X);
-            }
+            double hsx = size.X * 0.5;
+            Box bounds = new Box(-hsx, hsx, size.Y, 0d);
             
             // Shapes.CircleShader.Size = r * 2d;
-            Vector2 size = (bounds.Width, bounds.Height);
-            Shapes.CircleShader.Offset = (circle - (bounds.Left, bounds.Bottom)) / size;
+            Shapes.CircleShader.Offset = ((hsx, size.Y - r) / size);
             Shapes.CircleShader.SetSR(size, r);
             Shapes.CircleShader.LineWidth = lineWidth;
+            
+            double cos = t.X / length;
+            double sin = t.Y / length;
+            
+            Matrix4 rotat = new Matrix4(
+                new Vector4(cos, sin, 0, 0),
+                new Vector4(-sin, cos, 0, 0),
+                new Vector4(0, 0, 1, 0),
+                new Vector4(0, 0, 0, 1));
+            
+            Matrix4 mod = Matrix4.CreateBox(bounds) * rotat * Matrix4.CreateTranslation(mid);
             
             IMatrix model = dc.Model;
             if (dc.RenderState.postMatrixMods)
             {
                 _multiply.Left = model;
-                _multiply.Right = Matrix4.CreateBox(bounds);
+                _multiply.Right = mod;
             }
             else
             {
                 _multiply.Right = model;
-                _multiply.Left = Matrix4.CreateBox(bounds);
+                _multiply.Left = mod;
             }
             dc.Model = _multiply;
             dc.Draw(Shapes.Square);
             dc.Model = model;
+        }
+        public static void DrawArc(this IDrawingContext dc, Vector2 a, Vector2 b, double curve, double lineWidth, ColourF colour)
+        {
+            Shapes.CircleShader.ColourSource = ColourSource.Discard;
+            DrawArcP(dc, a, b, curve, lineWidth, colour);
+        }
+        public static void DrawFilledArc(this IDrawingContext dc, Vector2 a, Vector2 b, double curve, double lineWidth, ColourF borderColour, Colour colour)
+        {
+            Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
+            Shapes.CircleShader.Colour = colour;
+            DrawArcP(dc, a, b, curve, lineWidth, borderColour);
+        }
+        public static void DrawFilledArc(this IDrawingContext dc, Vector2 a, Vector2 b, double curve, Colour colour)
+        {
+            Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
+            Shapes.CircleShader.Colour = colour;
+            DrawArcP(dc, a, b, curve, 0d, ColourF.Zero);
+        }
+        public static void DrawFilledArc(this IDrawingContext dc, Vector2 a, Vector2 b, double curve, ITexture texture)
+        {
+            Shapes.CircleShader.ColourSource = ColourSource.Texture;
+            Shapes.CircleShader.Texture = texture;
+            DrawArcP(dc, a, b, curve, 0d, ColourF.Zero);
         }
 
         public static void DrawTriangle(this IDrawingContext dc, Vector2 a, Vector2 b, Vector2 c, ColourF colour)
