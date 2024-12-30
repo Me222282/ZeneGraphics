@@ -361,7 +361,7 @@ namespace Zene.Graphics
             }
             
             double hsx = size.X * 0.5;
-            Box bounds = new Box(-hsx, hsx, size.Y, 0d);
+            // Box bounds = new Box(-hsx, hsx, size.Y, 0d);
             
             // Shapes.CircleShader.Size = r * 2d;
             Shapes.CircleShader.Offset = ((hsx, size.Y - r) / size);
@@ -370,15 +370,23 @@ namespace Zene.Graphics
             
             double cos = t.X / length;
             double sin = t.Y / length;
-            
-            Matrix4 rotat = new Matrix4(
-                new Vector4(cos, sin, 0, 0),
-                new Vector4(-sin, cos, 0, 0),
+
+            // Matrix4 rotat = new Matrix4(
+            //     new Vector4(cos, sin, 0, 0),
+            //     new Vector4(-sin, cos, 0, 0),
+            //     new Vector4(0, 0, 1, 0),
+            //     new Vector4(0, 0, 0, 1));
+
+            // Matrix4 mod = Matrix4.CreateBox(bounds) * rotat * Matrix4.CreateTranslation(mid);
+            double w = size.X;
+            double h = size.Y;
+            double y = size.Y * 0.5;
+            Matrix4 mod = new Matrix4(
+                new Vector4(cos * w, sin * w, 0, 0),
+                new Vector4(-sin * h, cos * h, 0, 0),
                 new Vector4(0, 0, 1, 0),
-                new Vector4(0, 0, 0, 1));
-            
-            Matrix4 mod = Matrix4.CreateBox(bounds) * rotat * Matrix4.CreateTranslation(mid);
-            
+                new Vector4(mid.X - y * sin, y * cos + mid.Y, 0, 1));
+
             IMatrix model = dc.Model;
             if (dc.RenderState.postMatrixMods)
             {
@@ -434,6 +442,27 @@ namespace Zene.Graphics
             {
                 _multiply.Right = model;
                 _multiply.Left = CreateTriangle(a, b, c);
+            }
+            dc.Model = _multiply;
+            dc.Draw(Shapes.Triangle);
+            dc.Model = model;
+        }
+        public static void DrawTriangle(this IDrawingContext dc, Triangle2 tri, ColourF colour)
+        {
+            dc.Shader = Shapes.BasicShader;
+            Shapes.BasicShader.Colour = colour;
+            Shapes.BasicShader.ColourSource = ColourSource.UniformColour;
+
+            IMatrix model = dc.Model;
+            if (dc.RenderState.postMatrixMods)
+            {
+                _multiply.Left = model;
+                _multiply.Right = CreateTriangle(tri.A, tri.B, tri.C);
+            }
+            else
+            {
+                _multiply.Right = model;
+                _multiply.Left = CreateTriangle(tri.A, tri.B, tri.C);
             }
             dc.Model = _multiply;
             dc.Draw(Shapes.Triangle);
