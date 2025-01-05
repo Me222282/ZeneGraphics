@@ -6,14 +6,11 @@ namespace Zene.Graphics
     {
         public CircleShader()
         {
-            Create(ShaderPresets.CircleVert, ShaderPresets.CircleFrag,
+            Create(ShaderPresets.CircleVert, ShaderPresets.CircleFrag, 3,
                   "colourType", "uBorderColour", "uTextureSlot", "matrix",
                   "size", "radius", "minRadius", "uColour", "c_off");
 
-            _m2m3 = new MultiplyMatrix4(null, null);
-            _m1Mm2m3 = new MultiplyMatrix4(null, _m2m3);
-
-            SetUniform(Uniforms[3], Matrix.Identity);
+            SetUniform(Uniforms[3], Matrix4.Identity);
             SetUniform(Uniforms[2], 0);
             Size = 1d;
             Offset = 0.5;
@@ -98,22 +95,6 @@ namespace Zene.Graphics
 
         public ITexture Texture { get; set; }
 
-        public override IMatrix Matrix1
-        {
-            get => _m1Mm2m3.Left;
-            set => _m1Mm2m3.Left = value;
-        }
-        public override IMatrix Matrix2
-        {
-            get => _m2m3.Left;
-            set => _m2m3.Left = value;
-        }
-        public override IMatrix Matrix3
-        {
-            get => _m2m3.Right;
-            set => _m2m3.Right = value;
-        }
-        
         public void SetSR(Vector2 size, double radius)
         {
             _size = size;
@@ -122,11 +103,9 @@ namespace Zene.Graphics
             SetUniform(Uniforms[5], radius * radius);
         }
         
-        private readonly MultiplyMatrix4 _m1Mm2m3;
-        private readonly MultiplyMatrix4 _m2m3;
         public override void PrepareDraw()
         {
-            SetUniform(Uniforms[3], _m1Mm2m3);
+            base.PrepareDraw();
             Texture?.Bind(0);
         }
 

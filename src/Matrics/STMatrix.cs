@@ -13,13 +13,11 @@ namespace Zene.Graphics
         {
             Scale = scale;
             Translate = translate;
-            _data[15] = 1d;
         }
         public STMatrix(Vector2 scale, Vector2 translate)
         {
             Scale = new Vector3(scale, 1d);
             TXY = translate;
-            _data[15] = 1d;
         }
 
         public int Rows => 4;
@@ -34,9 +32,6 @@ namespace Zene.Graphics
             set
             {
                 _scale = value;
-                _data[0] = value.X;
-                _data[5] = value.Y;
-                _data[10] = value.Z;
             }
         }
         private Vector3 _translate;
@@ -46,9 +41,6 @@ namespace Zene.Graphics
             set
             {
                 _translate = value;
-                _data[12] = value.X;
-                _data[13] = value.Y;
-                _data[14] = value.Z;
             }
         }
         public Vector2 SXY
@@ -58,8 +50,6 @@ namespace Zene.Graphics
             {
                 _scale.X = value.X;
                 _scale.Y = value.Y;
-                _data[0] = value.X;
-                _data[5] = value.Y;
             }
         }
         public Vector2 TXY
@@ -69,8 +59,6 @@ namespace Zene.Graphics
             {
                 _translate.X = value.X;
                 _translate.Y = value.Y;
-                _data[12] = value.X;
-                _data[13] = value.Y;
             }
         }
         public double SX
@@ -79,7 +67,6 @@ namespace Zene.Graphics
             set
             {
                 _scale.X = value;
-                _data[0] = value;
             }
         }
         public double SY
@@ -88,7 +75,6 @@ namespace Zene.Graphics
             set
             {
                 _scale.Y = value;
-                _data[5] = value;
             }
         }
         public double SZ
@@ -97,7 +83,6 @@ namespace Zene.Graphics
             set
             {
                 _scale.Z = value;
-                _data[10] = value;
             }
         }
         public double TX
@@ -106,7 +91,6 @@ namespace Zene.Graphics
             set
             {
                 _translate.X = value;
-                _data[12] = value;
             }
         }
         public double TY
@@ -115,7 +99,6 @@ namespace Zene.Graphics
             set
             {
                 _translate.Y = value;
-                _data[13] = value;
             }
         }
         public double TZ
@@ -124,12 +107,25 @@ namespace Zene.Graphics
             set
             {
                 _translate.Z = value;
-                _data[14] = value;
             }
         }
-        
-        private double[] _data = new double[16];
 
-        public MatrixSpan MatrixData() => new MatrixSpan(4, 4, _data);
+        public void MatrixData(MatrixSpan ms)
+        {
+            // 4x4 only
+            if (ms.Rows != 4 || ms.Columns != 4)
+            {
+                ms.Padding(0, 0);
+                return;
+            }
+            
+            ms.Data[0] = _scale.X;
+            ms.Data[5] = _scale.Y;
+            ms.Data[10] = _scale.Z;
+            ms.Data[12] = _translate.X;
+            ms.Data[13] = _translate.Y;
+            ms.Data[14] = _translate.Z;
+            ms.Data[15] = 1d;
+        }
     }
 }

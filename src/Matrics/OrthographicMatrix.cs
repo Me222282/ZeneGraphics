@@ -11,7 +11,6 @@ namespace Zene.Graphics
             Height = height;
             _depthN = depthNear;
             DepthFar = depthFar;
-            _data[15] = 1d;
         }
 
         public int Rows => 4;
@@ -73,27 +72,27 @@ namespace Zene.Graphics
             }
         }
         
-        private double[] _data = new double[16];
-        
-        private double _v1
-        {
-            set => _data[0] = value;
-        }
-        private double _v2
-        {
-            set => _data[5] = value;
-        }
-        private double _v3
-        {
-            set => _data[10] = value;
-        }
-        private double _v4
-        {
-            set => _data[14] = value;
-        }
+        private double _v1;
+        private double _v2;
+        private double _v3;
+        private double _v4;
 
         Vector2I ISizeable.Size { set { Width = value.X; Height = value.Y; }  }
 
-        public MatrixSpan MatrixData() => new MatrixSpan(4, 4, _data);
+        public void MatrixData(MatrixSpan ms)
+        {
+            // 4x4 only
+            if (ms.Rows != 4 || ms.Columns != 4)
+            {
+                ms.Padding(0, 0);
+                return;
+            }
+            
+            ms.Data[0] = _v1;
+            ms.Data[5] = _v2;
+            ms.Data[10] = _v3;
+            ms.Data[14] = _v4;
+            ms.Data[15] = 1d;
+        }
     }
 }

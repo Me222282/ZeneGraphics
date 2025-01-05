@@ -7,16 +7,12 @@ namespace Zene.Graphics
     {
         public BorderShader()
         {
-            Create(ShaderPresets.BorderVert, ShaderPresets.BorderFrag,
+            Create(ShaderPresets.BorderVert, ShaderPresets.BorderFrag, -1,
                   "colourType", "uColour", "uTextureSlot", "matrix", "size", "radius",
                   "aspect", "outerRadius", "uBorderColour", "innerDMinusR", "rValue",
                   "halfBW", "borderCrossOver");
 
-            _m2m3 = new MultiplyMatrix4(null, null);
-            _m1Mm2m3 = new MultiplyMatrix4(null, _m2m3);
-            _bsmMm1Mm2m3 = new MultiplyMatrix4(null, _m1Mm2m3);
-
-            SetUniform(Uniforms[3], Matrix.Identity);
+            SetUniform(Uniforms[3], Matrix4.Identity);
             SetUniform(Uniforms[2], 0);
         }
 
@@ -93,14 +89,15 @@ namespace Zene.Graphics
                 SetIDMR();
             }
         }
-
+        
+        private Matrix4 _bs = Matrix4.Identity;
         private void SetScale()
         {
             Vector2 scale = (_size + (2 * _bWidth)) / _size;
             scale = 1d + ((scale - 1d) * 0.5);
 
             SetUniform(Uniforms[4], scale);
-            _bsmMm1Mm2m3.Left = Matrix4.CreateScale(scale);
+            _bs = Matrix4.CreateScale(scale);
         }
         private void SetRadius()
         {
@@ -145,28 +142,22 @@ namespace Zene.Graphics
 
         public ITexture Texture { get; set; }
 
-        public override IMatrix Matrix1
-        {
-            get => _m1Mm2m3.Left;
-            set => _m1Mm2m3.Left = value;
-        }
-        public override IMatrix Matrix2
-        {
-            get => _m2m3.Left;
-            set => _m2m3.Left = value;
-        }
-        public override IMatrix Matrix3
-        {
-            get => _m2m3.Right;
-            set => _m2m3.Right = value;
-        }
-
-        private readonly MultiplyMatrix4 _bsmMm1Mm2m3;
-        private readonly MultiplyMatrix4 _m1Mm2m3;
-        private readonly MultiplyMatrix4 _m2m3;
         public override void PrepareDraw()
         {
-            SetUniform(Uniforms[3], _bsmMm1Mm2m3);
+            Matrix4 m1;
+            Matrix4 m2;
+            Matrix4 m3;
+            
+            if (Matrix1 is Matrix4 m) { m1 = m; }
+            else { m1 = new Matrix4(Matrix1); }
+            
+            if (Matrix2 is Matrix4 v) { m2 = v; }
+            else { m2 = new Matrix4(Matrix2); }
+            
+            if (Matrix3 is Matrix4 p) { m3 = p; }
+            else { m3 = new Matrix4(Matrix3); }
+            
+            SetUniform(Uniforms[3], _bs * m1 * m2 * m3);
             Texture?.Bind(0);
         }
 

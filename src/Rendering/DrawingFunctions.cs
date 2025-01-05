@@ -85,9 +85,6 @@ namespace Zene.Graphics
         public static void Copy(this IDrawingContext dc, IDrawingContext source, IBox bounds)
             => WriteFramebuffer(dc, source.Framebuffer, bounds, BufferBit.All, TextureSampling.Nearest);
 
-        [ThreadStatic]
-        private static readonly MultiplyMatrix4 _multiply = new MultiplyMatrix4(Matrix.Identity, Matrix.Identity);
-
         public static void DrawBox(this IDrawingContext dc, IBox bounds, ColourF colour)
         {
             dc.Shader = Shapes.BasicShader;
@@ -95,17 +92,18 @@ namespace Zene.Graphics
             Shapes.BasicShader.ColourSource = ColourSource.UniformColour;
 
             IMatrix model = dc.Model;
+            Matrix4 m;
+            if (model is Matrix4 mod) { m = mod; }
+            else { m = new Matrix4(model); }
             if (dc.RenderState.postMatrixMods)
             {
-                _multiply.Left = model;
-                _multiply.Right = Matrix4.CreateBox(bounds);
+                dc.Model = m * Matrix4.CreateBox(bounds);
             }
             else
             {
-                _multiply.Right = model;
-                _multiply.Left = Matrix4.CreateBox(bounds);
+                dc.Model = Matrix4.CreateBox(bounds) * m;
             }
-            dc.Model = _multiply;
+            
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -117,17 +115,18 @@ namespace Zene.Graphics
             Shapes.BasicShader.ColourSource = ColourSource.Texture;
 
             IMatrix model = dc.Model;
+            Matrix4 m;
+            if (model is Matrix4 mod) { m = mod; }
+            else { m = new Matrix4(model); }
             if (dc.RenderState.postMatrixMods)
             {
-                _multiply.Left = model;
-                _multiply.Right = Matrix4.CreateBox(bounds);
+                dc.Model = m * Matrix4.CreateBox(bounds);
             }
             else
             {
-                _multiply.Right = model;
-                _multiply.Left = Matrix4.CreateBox(bounds);
+                dc.Model = Matrix4.CreateBox(bounds) * m;
             }
-            dc.Model = _multiply;
+            
             dc.Draw(Shapes.Square);
             Shapes.BasicShader.Texture = null;
             dc.Model = model;
@@ -143,17 +142,18 @@ namespace Zene.Graphics
             Shapes.BorderShader.Size = bounds.Size;
 
             IMatrix model = dc.Model;
+            Matrix4 m;
+            if (model is Matrix4 mod) { m = mod; }
+            else { m = new Matrix4(model); }
             if (dc.RenderState.postMatrixMods)
             {
-                _multiply.Left = model;
-                _multiply.Right = Matrix4.CreateBox(bounds);
+                dc.Model = m * Matrix4.CreateBox(bounds);
             }
             else
             {
-                _multiply.Right = model;
-                _multiply.Left = Matrix4.CreateBox(bounds);
+                dc.Model = Matrix4.CreateBox(bounds) * m;
             }
-            dc.Model = _multiply;
+            
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -168,17 +168,18 @@ namespace Zene.Graphics
             Shapes.BorderShader.Size = bounds.Size;
 
             IMatrix model = dc.Model;
+            Matrix4 m;
+            if (model is Matrix4 mod) { m = mod; }
+            else { m = new Matrix4(model); }
             if (dc.RenderState.postMatrixMods)
             {
-                _multiply.Left = model;
-                _multiply.Right = Matrix4.CreateBox(bounds);
+                dc.Model = m * Matrix4.CreateBox(bounds);
             }
             else
             {
-                _multiply.Right = model;
-                _multiply.Left = Matrix4.CreateBox(bounds);
+                dc.Model = Matrix4.CreateBox(bounds) * m;
             }
-            dc.Model = _multiply;
+            
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -194,17 +195,18 @@ namespace Zene.Graphics
             Shapes.BorderShader.Size = bounds.Size;
 
             IMatrix model = dc.Model;
+            Matrix4 m;
+            if (model is Matrix4 mod) { m = mod; }
+            else { m = new Matrix4(model); }
             if (dc.RenderState.postMatrixMods)
             {
-                _multiply.Left = model;
-                _multiply.Right = Matrix4.CreateBox(bounds);
+                dc.Model = m * Matrix4.CreateBox(bounds);
             }
             else
             {
-                _multiply.Right = model;
-                _multiply.Left = Matrix4.CreateBox(bounds);
+                dc.Model = Matrix4.CreateBox(bounds) * m;
             }
-            dc.Model = _multiply;
+            
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -220,17 +222,18 @@ namespace Zene.Graphics
             Shapes.BorderShader.Size = bounds.Size;
 
             IMatrix model = dc.Model;
+            Matrix4 m;
+            if (model is Matrix4 mod) { m = mod; }
+            else { m = new Matrix4(model); }
             if (dc.RenderState.postMatrixMods)
             {
-                _multiply.Left = model;
-                _multiply.Right = Matrix4.CreateBox(bounds);
+                dc.Model = m * Matrix4.CreateBox(bounds);
             }
             else
             {
-                _multiply.Right = model;
-                _multiply.Left = Matrix4.CreateBox(bounds);
+                dc.Model = Matrix4.CreateBox(bounds) * m;
             }
-            dc.Model = _multiply;
+            
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -244,17 +247,18 @@ namespace Zene.Graphics
             Shapes.CircleShader.Offset = 0.5;
 
             IMatrix model = dc.Model;
+            Matrix4 m;
+            if (model is Matrix4 mod) { m = mod; }
+            else { m = new Matrix4(model); }
             if (dc.RenderState.postMatrixMods)
             {
-                _multiply.Left = model;
-                _multiply.Right = Matrix4.CreateBox(bounds);
+                dc.Model = m * Matrix4.CreateBox(bounds);
             }
             else
             {
-                _multiply.Right = model;
-                _multiply.Left = Matrix4.CreateBox(bounds);
+                dc.Model = Matrix4.CreateBox(bounds) * m;
             }
-            dc.Model = _multiply;
+            
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -268,17 +272,18 @@ namespace Zene.Graphics
             Shapes.CircleShader.Offset = 0.5;
 
             IMatrix model = dc.Model;
+            Matrix4 m;
+            if (model is Matrix4 mod) { m = mod; }
+            else { m = new Matrix4(model); }
             if (dc.RenderState.postMatrixMods)
             {
-                _multiply.Left = model;
-                _multiply.Right = Matrix4.CreateBox(bounds);
+                dc.Model = m * Matrix4.CreateBox(bounds);
             }
             else
             {
-                _multiply.Right = model;
-                _multiply.Left = Matrix4.CreateBox(bounds);
+                dc.Model = Matrix4.CreateBox(bounds) * m;
             }
-            dc.Model = _multiply;
+            
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -297,17 +302,18 @@ namespace Zene.Graphics
             Shapes.CircleShader.Offset = 0.5;
 
             IMatrix model = dc.Model;
+            Matrix4 m;
+            if (model is Matrix4 mod) { m = mod; }
+            else { m = new Matrix4(model); }
             if (dc.RenderState.postMatrixMods)
             {
-                _multiply.Left = model;
-                _multiply.Right = Matrix4.CreateBox(bounds);
+                dc.Model = m * Matrix4.CreateBox(bounds);
             }
             else
             {
-                _multiply.Right = model;
-                _multiply.Left = Matrix4.CreateBox(bounds);
+                dc.Model = Matrix4.CreateBox(bounds) * m;
             }
-            dc.Model = _multiply;
+            
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -388,17 +394,18 @@ namespace Zene.Graphics
                 new Vector4(mid.X - y * sin, y * cos + mid.Y, 0, 1));
 
             IMatrix model = dc.Model;
+            Matrix4 m;
+            if (model is Matrix4 mm) { m = mm; }
+            else { m = new Matrix4(model); }
             if (dc.RenderState.postMatrixMods)
             {
-                _multiply.Left = model;
-                _multiply.Right = mod;
+                dc.Model = m * mod;
             }
             else
             {
-                _multiply.Right = model;
-                _multiply.Left = mod;
+                dc.Model = mod * m;
             }
-            dc.Model = _multiply;
+            
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -431,19 +438,20 @@ namespace Zene.Graphics
             dc.Shader = Shapes.BasicShader;
             Shapes.BasicShader.Colour = colour;
             Shapes.BasicShader.ColourSource = ColourSource.UniformColour;
-
+            
             IMatrix model = dc.Model;
+            Matrix4 m;
+            if (model is Matrix4 mod) { m = mod; }
+            else { m = new Matrix4(model); }
             if (dc.RenderState.postMatrixMods)
             {
-                _multiply.Left = model;
-                _multiply.Right = CreateTriangle(a, b, c);
+                dc.Model = m * CreateTriangle(a, b, c);
             }
             else
             {
-                _multiply.Right = model;
-                _multiply.Left = CreateTriangle(a, b, c);
+                dc.Model = CreateTriangle(a, b, c) * m;
             }
-            dc.Model = _multiply;
+            
             dc.Draw(Shapes.Triangle);
             dc.Model = model;
         }
@@ -454,21 +462,22 @@ namespace Zene.Graphics
             Shapes.BasicShader.ColourSource = ColourSource.UniformColour;
 
             IMatrix model = dc.Model;
+            Matrix4 m;
+            if (model is Matrix4 mod) { m = mod; }
+            else { m = new Matrix4(model); }
             if (dc.RenderState.postMatrixMods)
             {
-                _multiply.Left = model;
-                _multiply.Right = CreateTriangle(tri.A, tri.B, tri.C);
+                dc.Model = m * CreateTriangle(tri.A, tri.B, tri.C);
             }
             else
             {
-                _multiply.Right = model;
-                _multiply.Left = CreateTriangle(tri.A, tri.B, tri.C);
+                dc.Model = CreateTriangle(tri.A, tri.B, tri.C) * m;
             }
-            dc.Model = _multiply;
+            
             dc.Draw(Shapes.Triangle);
             dc.Model = model;
         }
-        private static IMatrix CreateTriangle(Vector2 p1, Vector2 p2, Vector2 p3)
+        private static Matrix4 CreateTriangle(Vector2 p1, Vector2 p2, Vector2 p3)
         {
             double e = p1.X;
             double f = p1.Y;

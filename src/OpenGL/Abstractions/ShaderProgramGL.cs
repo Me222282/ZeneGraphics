@@ -822,31 +822,56 @@ namespace Zene.Graphics.Base
             throw new Exception("Invalid data type.");
         }
 
+        // /// <summary>
+        // /// Specify the value of a uniform variable with a matrix.
+        // /// </summary>
+        // /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        // /// <param name="value">The value to set the uniform to.</param>
+        // protected void SetUniform(int index, IMatrix value)
+        // {
+        //     Bind();
+
+        //     UniformVariable uv = Properties._uniforms[index];
+        //     uv.su(uv.Location, 1, 0, value);
+        // }
+        // /// <summary>
+        // /// Specify the value of a uniform variable with an array of matrices.
+        // /// </summary>
+        // /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        // /// <param name="values">The values to set the uniform to.</param>
+        // protected void SetUniform(int index, IMatrix[] values)
+        // {
+        //     Bind();
+
+        //     UniformVariable uv = Properties._uniforms[index];
+        //     uv.su(uv.Location, values.Length, 0, values);
+        // }
+        
         /// <summary>
-        /// Specify the value of a uniform variable with a matrix.
+        /// Specify the value of a uniform variable with a 4x4 matrix.
         /// </summary>
         /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
         /// <param name="value">The value to set the uniform to.</param>
-        protected void SetUniform(int index, IMatrix value)
+        protected void SetUniform(int index, Matrix4 value)
         {
             Bind();
 
             UniformVariable uv = Properties._uniforms[index];
             uv.su(uv.Location, 1, 0, value);
         }
-        /// <summary>
-        /// Specify the value of a uniform variable with an array of matrices.
-        /// </summary>
-        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
-        /// <param name="values">The values to set the uniform to.</param>
-        protected void SetUniform(int index, IMatrix[] values)
-        {
-            Bind();
+        // /// <summary>
+        // /// Specify the value of a uniform variable with a matrix span.
+        // /// </summary>
+        // /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        // /// <param name="value">The value to set the uniform to.</param>
+        // protected void SetUniform(int index, MatrixSpan value)
+        // {
+        //     Bind();
 
-            UniformVariable uv = Properties._uniforms[index];
-            uv.su(uv.Location, values.Length, 0, values);
-        }
-
+        //     UniformVariable uv = Properties._uniforms[index];
+        //     uv.su(uv.Location, 1, 0, value);
+        // }
+        
         /// <summary>
         /// Specify the value of uniform variables with a struct <typeparamref name="T"/>.
         /// </summary>

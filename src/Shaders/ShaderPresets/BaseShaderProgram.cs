@@ -15,13 +15,16 @@ namespace Zene.Graphics
         }
 
         protected int[] Uniforms { get; private set; }
+        private int _mi;
+        
+        public IMatrix Matrix1 { get; set; }
+        public IMatrix Matrix2 { get; set; }
+        public IMatrix Matrix3 { get; set; }
 
-        public virtual IMatrix Matrix1 { get { return Matrix.Identity; } set { } }
-        public virtual IMatrix Matrix2 { get { return Matrix.Identity; } set { } }
-        public virtual IMatrix Matrix3 { get { return Matrix.Identity; } set { } }
-
-        protected void Create(string vertex, string fragment, params string[] uniformNames)
+        protected void Create(string vertex, string fragment, int mi, params string[] uniformNames)
         {
+            _mi = mi;
+            
             Shader vertexShader = new Shader(ShaderType.Vertex, vertex);
             vertexShader.Compile();
             Shader fragmentShader = new Shader(ShaderType.Fragment, fragment);
@@ -46,6 +49,26 @@ namespace Zene.Graphics
             {
                 Uniforms[i] = GetUniformIndex(uniformNames[i]);
             }
+        }
+
+        public override void PrepareDraw()
+        {
+            if (_mi < 0) { return; }
+            
+            Matrix4 m1;
+            Matrix4 m2;
+            Matrix4 m3;
+            
+            if (Matrix1 is Matrix4 m) { m1 = m; }
+            else { m1 = new Matrix4(Matrix1); }
+            
+            if (Matrix2 is Matrix4 v) { m2 = v; }
+            else { m2 = new Matrix4(Matrix2); }
+            
+            if (Matrix3 is Matrix4 p) { m3 = p; }
+            else { m3 = new Matrix4(Matrix3); }
+            
+            SetUniform(Uniforms[_mi], m1 * m2 * m3);
         }
 
         protected static T GetInstance<T>()

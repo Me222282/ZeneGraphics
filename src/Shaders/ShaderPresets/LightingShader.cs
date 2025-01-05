@@ -29,7 +29,7 @@ namespace Zene.Graphics
             fSource = fSource.Replace("##sl##", $"{_uSpotLight}");
             fSource = fSource.Replace("##s##", $"{spotLightNumber}");
 
-            Create(ShaderPresets.LightingVertex, fSource,
+            Create(ShaderPresets.LightingVertex, fSource, -1,
                 "colourType", "uColour", "ambientLight", "cameraPos",
                 "drawLight", "ingorBlackLight", "uTextureSlot", "uNormalMap",
                 "normalMapping", "modelM", "vpM", "lightSpaceMatrix",
@@ -38,8 +38,6 @@ namespace Zene.Graphics
                 "uMaterial.DiffuseLightSource");
 
             LightNumber = lightNumber;
-
-            _m2m3 = new MultiplyMatrix4(null, null);
 
             _uLight = Properties.IndexFromLocation(12);
             _uSpotLight = Properties.IndexFromLocation(_uSpotLight);
@@ -317,31 +315,33 @@ namespace Zene.Graphics
             }
         }
 
-        public override IMatrix Matrix1 { get; set; } = Matrix.Identity;
-        public override IMatrix Matrix2
-        {
-            get => _m2m3.Left;
-            set => _m2m3.Left = value;
-        }
-        public override IMatrix Matrix3
-        {
-            get => _m2m3.Right;
-            set => _m2m3.Right = value;
-        }
-
-        private readonly MultiplyMatrix4 _m2m3;
-
         public override void PrepareDraw()
         {
-            SetUniform(Uniforms[9], Matrix1);
-            SetUniform(Uniforms[10], _m2m3);
+            Matrix4 m1;
+            Matrix4 m2;
+            Matrix4 m3;
+            
+            if (Matrix1 is Matrix4 m) { m1 = m; }
+            else { m1 = new Matrix4(Matrix1); }
+            
+            if (Matrix2 is Matrix4 v) { m2 = v; }
+            else { m2 = new Matrix4(Matrix2); }
+            
+            if (Matrix3 is Matrix4 p) { m3 = p; }
+            else { m3 = new Matrix4(Matrix3); }
+            
+            SetUniform(Uniforms[9], m1);
+            SetUniform(Uniforms[10], m2 * m3);
 
             Texture?.Bind(0);
             NormalMap?.Bind(1);
             ShadowMap?.Bind(2);
-
-            if (LightSpaceMatrix is null) { return; }
-            SetUniform(Uniforms[11], LightSpaceMatrix);
+            
+            if (LightSpaceMatrix == null) { return; }
+            Matrix4 mls;
+            if (LightSpaceMatrix is Matrix4 ls) { mls = ls; }
+            else { mls = new Matrix4(LightSpaceMatrix); }
+            SetUniform(Uniforms[11], mls);
         }
 
         public IMatrix LightSpaceMatrix { get; set; }

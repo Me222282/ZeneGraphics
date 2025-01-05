@@ -10,14 +10,30 @@ namespace Zene.Graphics
         {
             public MShader()
             {
-                Create(ShaderPresets.TextVert, ShaderPresets.TextFrag,
+                Create(ShaderPresets.TextVert, ShaderPresets.TextFrag, 0,
                     "matrix", "uColour", "uTextureSlot");
 
                 // Set matrices in shader to default
-                SetMatrix(Matrix.Identity);
+                SetUniform(Uniforms[0], Matrix4.Identity);
             }
 
-            public void SetMatrix(IMatrix m) => SetUniform(Uniforms[0], m);
+            public void SetMatrix(IMatrix m, IMatrix v, IMatrix p)
+            {
+                Matrix4 m1;
+                Matrix4 m2;
+                Matrix4 m3;
+                
+                if (m is Matrix4 mm) { m1 = mm; }
+                else { m1 = new Matrix4(m); }
+                
+                if (v is Matrix4 vv) { m2 = vv; }
+                else { m2 = new Matrix4(v); }
+                
+                if (p is Matrix4 pp) { m3 = pp; }
+                else { m3 = new Matrix4(p); }
+                
+                SetUniform(Uniforms[0], m1 * m2 * m3);
+            }
 
             public ColourF Colour
             {
@@ -255,7 +271,7 @@ namespace Zene.Graphics
 
             // Bind shader
             dc.Shader = _mShader;
-            _mShader.SetMatrix(dc.Model * dc.View * dc.Projection);
+            _mShader.SetMatrix(dc.Model, dc.View, dc.Projection);
 
             // Set texture slot - already 0
             //SetUniformI(Uniforms[2], 0);
@@ -428,7 +444,7 @@ namespace Zene.Graphics
 
             // Bind shader
             dc.Shader = _mShader;
-            _mShader.SetMatrix(dc.Model * dc.View * dc.Projection);
+            _mShader.SetMatrix(dc.Model, dc.View, dc.Projection);
 
             // Set texture slot - already 0
             //SetUniformI(Uniforms[2], 0);

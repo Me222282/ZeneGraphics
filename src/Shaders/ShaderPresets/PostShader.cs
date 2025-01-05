@@ -7,7 +7,7 @@ namespace Zene.Graphics
     {
         public PostShader()
         {
-            Create(ShaderPresets.PostVertex, ShaderPresets.PostFragment,
+            Create(ShaderPresets.PostVertex, ShaderPresets.PostFragment, -1,
                 "screenWidth", "screenHeight", "uTextureSlot",
                 "crushBit", "bitCrush", "greyScale", "invertedColour",
                 "useKernel", "kernel", "kernelOffset");
