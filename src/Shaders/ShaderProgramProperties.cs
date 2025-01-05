@@ -210,7 +210,7 @@ namespace Zene.Graphics
         UintSampler2DRect = GLEnum.UIntSampler2dRect,
     }
 
-    internal delegate void SetUniform(int location, int size, int index, object value);
+    internal unsafe delegate void SetUniform(int location, int size, int index, void* value);
 
     public unsafe struct UniformVariable
     {
@@ -296,224 +296,221 @@ namespace Zene.Graphics
 
         public static UniformVariable Null { get; } = new UniformVariable() { Location = -1 };
 
-        private static void UniformInt(int location, int size, int index, object value)
+        private static void UniformInt(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform1iv(location, size, (int*)(IntPtr)value);
+                GL.Uniform1iv(location, size, (int*)value);
                 return;
             }
 
-            GL.Uniform1i(location + index, (int)value);
+            GL.Uniform1i(location + index, *(int*)value);
         }
-        private static void UniformInt2(int location, int size, int index, object value)
+        private static void UniformInt2(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform2iv(location, size, (int*)(IntPtr)value);
+                GL.Uniform2iv(location, size, (int*)value);
                 return;
             }
 
-            (int x, int y) = ((int, int))value;
+            (int x, int y) = *((int, int)*)value;
 
             GL.Uniform2i(location + index, x, y);
         }
-        private static void UniformInt3(int location, int size, int index, object value)
+        private static void UniformInt3(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform3iv(location, size, (int*)(IntPtr)value);
+                GL.Uniform3iv(location, size, (int*)value);
                 return;
             }
 
-            (int x, int y, int z) = ((int, int, int))value;
+            (int x, int y, int z) = *((int, int, int)*)value;
 
             GL.Uniform3i(location + index, x, y, z);
         }
-        private static void UniformInt4(int location, int size, int index, object value)
+        private static void UniformInt4(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform4iv(location, size, (int*)(IntPtr)value);
+                GL.Uniform4iv(location, size, (int*)value);
                 return;
             }
 
-            (int x, int y, int z, int w) = ((int, int, int, int))value;
+            (int x, int y, int z, int w) = *((int, int, int, int)*)value;
 
             GL.Uniform4i(location + index, x, y, z, w);
         }
 
-        private static void UniformUInt(int location, int size, int index, object value)
+        private static void UniformUInt(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform1uiv(location, size, (uint*)(IntPtr)value);
+                GL.Uniform1uiv(location, size, (uint*)value);
                 return;
             }
 
-            GL.Uniform1ui(location + index, (uint)value);
+            GL.Uniform1ui(location + index, *(uint*)value);
         }
-        private static void UniformUInt2(int location, int size, int index, object value)
+        private static void UniformUInt2(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform2uiv(location, size, (uint*)(IntPtr)value);
+                GL.Uniform2uiv(location, size, (uint*)value);
                 return;
             }
 
-            (uint x, uint y) = ((uint, uint))value;
+            (uint x, uint y) = *((uint, uint)*)value;
 
             GL.Uniform2ui(location + index, x, y);
         }
-        private static void UniformUInt3(int location, int size, int index, object value)
+        private static void UniformUInt3(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform3uiv(location, size, (uint*)(IntPtr)value);
+                GL.Uniform3uiv(location, size, (uint*)value);
                 return;
             }
 
-            (uint x, uint y, uint z) = ((uint, uint, uint))value;
+            (uint x, uint y, uint z) = *((uint, uint, uint)*)value;
 
             GL.Uniform3ui(location + index, x, y, z);
         }
-        private static void UniformUInt4(int location, int size, int index, object value)
+        private static void UniformUInt4(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform4uiv(location, size, (uint*)(IntPtr)value);
+                GL.Uniform4uiv(location, size, (uint*)value);
                 return;
             }
 
-            (uint x, uint y, uint z, uint w) = ((uint, uint, uint, uint))value;
+            (uint x, uint y, uint z, uint w) = *((uint, uint, uint, uint)*)value;
 
             GL.Uniform4ui(location + index, x, y, z, w);
         }
 
-        private static void UniformFloat(int location, int size, int index, object value)
+        private static void UniformFloat(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform1fv(location, size, (float*)(IntPtr)value);
+                GL.Uniform1fv(location, size, (float*)value);
                 return;
             }
 
-            GL.Uniform1f(location + index, (float)value);
+            GL.Uniform1f(location + index, *(float*)value);
         }
-        private static void UniformFloat2(int location, int size, int index, object value)
+        private static void UniformFloat2(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform2fv(location, size, (float*)(IntPtr)value);
+                GL.Uniform2fv(location, size, (float*)value);
                 return;
             }
 
-            (float x, float y) = ((float, float))value;
+            (float x, float y) = *((float, float)*)value;
 
             GL.Uniform2f(location + index, x, y);
         }
-        private static void UniformFloat3(int location, int size, int index, object value)
+        private static void UniformFloat3(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform3fv(location, size, (float*)(IntPtr)value);
+                GL.Uniform3fv(location, size, (float*)value);
                 return;
             }
 
-            (float x, float y, float z) = ((float, float, float))value;
+            (float x, float y, float z) = *((float, float, float)*)value;
 
             GL.Uniform3f(location + index, x, y, z);
         }
-        private static void UniformFloat4(int location, int size, int index, object value)
+        private static void UniformFloat4(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform4fv(location, size, (float*)(IntPtr)value);
+                GL.Uniform4fv(location, size, (float*)value);
                 return;
             }
 
-            (float x, float y, float z, float w) = ((float, float, float, float))value;
+            (float x, float y, float z, float w) = *((float, float, float, float)*)value;
 
             GL.Uniform4f(location + index, x, y, z, w);
         }
 
-        private static void UniformDouble(int location, int size, int index, object value)
+        private static void UniformDouble(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform1dv(location, size, (double*)(IntPtr)value);
+                GL.Uniform1dv(location, size, (double*)value);
                 return;
             }
 
-            GL.Uniform1d(location + index, (double)value);
+            GL.Uniform1d(location + index, *(double*)value);
         }
-        private static void UniformDouble2(int location, int size, int index, object value)
+        private static void UniformDouble2(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform2dv(location, size, (double*)(IntPtr)value);
+                GL.Uniform2dv(location, size, (double*)value);
                 return;
             }
 
-            (double x, double y) = ((double, double))value;
+            (double x, double y) = *((double, double)*)value;
 
             GL.Uniform2d(location + index, x, y);
         }
-        private static void UniformDouble3(int location, int size, int index, object value)
+        private static void UniformDouble3(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform3dv(location, size, (double*)(IntPtr)value);
+                GL.Uniform3dv(location, size, (double*)value);
                 return;
             }
 
-            (double x, double y, double z) = ((double, double, double))value;
+            (double x, double y, double z) = *((double, double, double)*)value;
 
             GL.Uniform3d(location + index, x, y, z);
         }
-        private static void UniformDouble4(int location, int size, int index, object value)
+        private static void UniformDouble4(int location, int size, int index, void* value)
         {
             if (size > 1 && index < 1)
             {
-                GL.Uniform4dv(location, size, (double*)(IntPtr)value);
+                GL.Uniform4dv(location, size, (double*)value);
                 return;
             }
 
-            (double x, double y, double z, double w) = ((double, double, double, double))value;
+            (double x, double y, double z, double w) = *((double, double, double, double)*)value;
 
             GL.Uniform4d(location + index, x, y, z, w);
         }
 
-        private static void UniformFMat2(int location, int size, int index, object value)
+        private static void UniformFMat2(int location, int size, int index, void* value)
         {
-            Span<double> temp = stackalloc double[4];
-            
             if (size > 1 && index < 1)
             {
-                IMatrix[] matrices = (IMatrix[])value;
+                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
                 float* matData = stackalloc float[4 * size];
+                Span<double> temp2 = stackalloc double[4];
                 
                 for (int i = 0; i < size; i++)
                 {
-                    matrices[i].MatrixData(new MatrixSpan(2, 2, temp));
+                    matrices[i].MatrixData(new MatrixSpan(2, 2, temp2));
 
                     int mI = i * 4;
-                    matData[mI] = (float)temp[0];
-                    matData[mI + 1] = (float)temp[1];
+                    matData[mI] = (float)temp2[0];
+                    matData[mI + 1] = (float)temp2[1];
 
-                    matData[mI + 2] = (float)temp[2];
-                    matData[mI + 3] = (float)temp[3];
+                    matData[mI + 2] = (float)temp2[2];
+                    matData[mI + 3] = (float)temp2[3];
                 }
 
                 GL.UniformMatrix2fv(location, size, false, matData);
                 return;
             }
 
-            IMatrix matrix = (IMatrix)value;
-
             float* data = stackalloc float[4];
-            matrix.MatrixData(new MatrixSpan(2, 2, temp));
+            Span<double> temp = new Span<double>(value, 4);
 
             data[0] = (float)temp[0];
             data[1] = (float)temp[1];
@@ -523,38 +520,35 @@ namespace Zene.Graphics
 
             GL.UniformMatrix2fv(location, size, false, data);
         }
-        private static void UniformFMat2x3(int location, int size, int index, object value)
+        private static void UniformFMat2x3(int location, int size, int index, void* value)
         {
-            Span<double> temp = stackalloc double[6];
-            
             if (size > 1 && index < 1)
             {
-                IMatrix[] matrices = (IMatrix[])value;
+                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
                 float* matData = stackalloc float[6 * size];
+                Span<double> temp2 = stackalloc double[6];
 
                 for (int i = 0; i < size; i++)
                 {
-                    matrices[i].MatrixData(new MatrixSpan(2, 3, temp));
+                    matrices[i].MatrixData(new MatrixSpan(2, 3, temp2));
 
                     int mI = i * 6;
-                    matData[mI] = (float)temp[0];
-                    matData[mI + 1] = (float)temp[1];
-                    matData[mI + 2] = (float)temp[2];
+                    matData[mI] = (float)temp2[0];
+                    matData[mI + 1] = (float)temp2[1];
+                    matData[mI + 2] = (float)temp2[2];
                     
-                    matData[mI + 3] = (float)temp[3];
-                    matData[mI + 4] = (float)temp[4];
-                    matData[mI + 5] = (float)temp[5];
+                    matData[mI + 3] = (float)temp2[3];
+                    matData[mI + 4] = (float)temp2[4];
+                    matData[mI + 5] = (float)temp2[5];
                 }
 
                 GL.UniformMatrix2x3fv(location, size, false, matData);
                 return;
             }
 
-            IMatrix matrix = (IMatrix)value;
-
             float* data = stackalloc float[6];
-            matrix.MatrixData(new MatrixSpan(2, 3, temp));
+            Span<double> temp = new Span<double>(value, 6);
 
             data[0] = (float)temp[0];
             data[1] = (float)temp[1];
@@ -566,40 +560,37 @@ namespace Zene.Graphics
 
             GL.UniformMatrix2x3fv(location, size, false, data);
         }
-        private static void UniformFMat2x4(int location, int size, int index, object value)
+        private static void UniformFMat2x4(int location, int size, int index, void* value)
         {
-            Span<double> temp = stackalloc double[8];
-            
             if (size > 1 && index < 1)
             {
-                IMatrix[] matrices = (IMatrix[])value;
+                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
                 float* matData = stackalloc float[8 * size];
+                Span<double> temp2 = stackalloc double[8];
 
                 for (int i = 0; i < size; i++)
                 {
-                    matrices[i].MatrixData(new MatrixSpan(2, 4, temp));
+                    matrices[i].MatrixData(new MatrixSpan(2, 4, temp2));
 
                     int mI = i * 8;
-                    matData[mI] = (float)temp[0];
-                    matData[mI + 1] = (float)temp[1];
-                    matData[mI + 2] = (float)temp[2];
-                    matData[mI + 3] = (float)temp[3];
+                    matData[mI] = (float)temp2[0];
+                    matData[mI + 1] = (float)temp2[1];
+                    matData[mI + 2] = (float)temp2[2];
+                    matData[mI + 3] = (float)temp2[3];
                     
-                    matData[mI + 4] = (float)temp[4];
-                    matData[mI + 5] = (float)temp[5];
-                    matData[mI + 6] = (float)temp[6];
-                    matData[mI + 7] = (float)temp[7];
+                    matData[mI + 4] = (float)temp2[4];
+                    matData[mI + 5] = (float)temp2[5];
+                    matData[mI + 6] = (float)temp2[6];
+                    matData[mI + 7] = (float)temp2[7];
                 }
 
                 GL.UniformMatrix2x4fv(location, size, false, matData);
                 return;
             }
 
-            IMatrix matrix = (IMatrix)value;
-
             float* data = stackalloc float[8];
-            matrix.MatrixData(new MatrixSpan(2, 4, temp));
+            Span<double> temp = new Span<double>(value, 8);
 
             data[0] = (float)temp[0];
             data[1] = (float)temp[1];
@@ -613,42 +604,39 @@ namespace Zene.Graphics
 
             GL.UniformMatrix2x4fv(location, size, false, data);
         }
-        private static void UniformFMat3(int location, int size, int index, object value)
+        private static void UniformFMat3(int location, int size, int index, void* value)
         {
-            Span<double> temp = stackalloc double[9];
-            
             if (size > 1 && index < 1)
             {
-                IMatrix[] matrices = (IMatrix[])value;
+                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
                 float* matData = stackalloc float[9 * size];
+                Span<double> temp2 = stackalloc double[9];
 
                 for (int i = 0; i < size; i++)
                 {
-                    matrices[i].MatrixData(new MatrixSpan(3, 3, temp));
+                    matrices[i].MatrixData(new MatrixSpan(3, 3, temp2));
 
                     int mI = i * 9;
-                    matData[mI] = (float)temp[0];
-                    matData[mI + 1] = (float)temp[1];
-                    matData[mI + 2] = (float)temp[2];
+                    matData[mI] = (float)temp2[0];
+                    matData[mI + 1] = (float)temp2[1];
+                    matData[mI + 2] = (float)temp2[2];
                     
-                    matData[mI + 3] = (float)temp[3];
-                    matData[mI + 4] = (float)temp[4];
-                    matData[mI + 5] = (float)temp[5];
+                    matData[mI + 3] = (float)temp2[3];
+                    matData[mI + 4] = (float)temp2[4];
+                    matData[mI + 5] = (float)temp2[5];
                     
-                    matData[mI + 6] = (float)temp[6];
-                    matData[mI + 7] = (float)temp[7];
-                    matData[mI + 8] = (float)temp[8];
+                    matData[mI + 6] = (float)temp2[6];
+                    matData[mI + 7] = (float)temp2[7];
+                    matData[mI + 8] = (float)temp2[8];
                 }
 
                 GL.UniformMatrix3fv(location, size, false, matData);
                 return;
             }
 
-            IMatrix matrix = (IMatrix)value;
-
             float* data = stackalloc float[9];
-            matrix.MatrixData(new MatrixSpan(3, 3, temp));
+            Span<double> temp = new Span<double>(value, 9);
 
             data[0] = (float)temp[0];
             data[1] = (float)temp[1];
@@ -664,39 +652,36 @@ namespace Zene.Graphics
 
             GL.UniformMatrix3fv(location, size, false, data);
         }
-        private static void UniformFMat3x2(int location, int size, int index, object value)
+        private static void UniformFMat3x2(int location, int size, int index, void* value)
         {
-            Span<double> temp = stackalloc double[6];
-            
             if (size > 1 && index < 1)
             {
-                IMatrix[] matrices = (IMatrix[])value;
+                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
                 float* matData = stackalloc float[6 * size];
+                Span<double> temp2 = stackalloc double[6];
 
                 for (int i = 0; i < size; i++)
                 {
-                    matrices[i].MatrixData(new MatrixSpan(3, 2, temp));
+                    matrices[i].MatrixData(new MatrixSpan(3, 2, temp2));
 
                     int mI = i * 6;
-                    matData[mI] = (float)temp[0];
-                    matData[mI + 1] = (float)temp[1];
+                    matData[mI] = (float)temp2[0];
+                    matData[mI + 1] = (float)temp2[1];
                     
-                    matData[mI + 2] = (float)temp[2];
-                    matData[mI + 3] = (float)temp[3];
+                    matData[mI + 2] = (float)temp2[2];
+                    matData[mI + 3] = (float)temp2[3];
                     
-                    matData[mI + 4] = (float)temp[4];
-                    matData[mI + 5] = (float)temp[5];
+                    matData[mI + 4] = (float)temp2[4];
+                    matData[mI + 5] = (float)temp2[5];
                 }
 
                 GL.UniformMatrix3x2fv(location, size, false, matData);
                 return;
             }
 
-            IMatrix matrix = (IMatrix)value;
-
             float* data = stackalloc float[6];
-            matrix.MatrixData(new MatrixSpan(3, 2, temp));
+            Span<double> temp = new Span<double>(value, 6);
 
             data[0] = (float)temp[0];
             data[1] = (float)temp[1];
@@ -709,45 +694,42 @@ namespace Zene.Graphics
 
             GL.UniformMatrix3x2fv(location, size, false, data);
         }
-        private static void UniformFMat3x4(int location, int size, int index, object value)
+        private static void UniformFMat3x4(int location, int size, int index, void* value)
         {
-            Span<double> temp = stackalloc double[12];
-            
             if (size > 1 && index < 1)
             {
-                IMatrix[] matrices = (IMatrix[])value;
+                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
                 float* matData = stackalloc float[12 * size];
+                Span<double> temp2 = stackalloc double[12];
 
                 for (int i = 0; i < size; i++)
                 {
-                    matrices[i].MatrixData(new MatrixSpan(3, 4, temp));
+                    matrices[i].MatrixData(new MatrixSpan(3, 4, temp2));
 
                     int mI = i * 12;
-                    matData[mI] = (float)temp[0];
-                    matData[mI + 1] = (float)temp[1];
-                    matData[mI + 2] = (float)temp[2];
-                    matData[mI + 3] = (float)temp[3];
+                    matData[mI] = (float)temp2[0];
+                    matData[mI + 1] = (float)temp2[1];
+                    matData[mI + 2] = (float)temp2[2];
+                    matData[mI + 3] = (float)temp2[3];
                     
-                    matData[mI + 4] = (float)temp[4];
-                    matData[mI + 5] = (float)temp[5];
-                    matData[mI + 6] = (float)temp[6];
-                    matData[mI + 7] = (float)temp[7];
+                    matData[mI + 4] = (float)temp2[4];
+                    matData[mI + 5] = (float)temp2[5];
+                    matData[mI + 6] = (float)temp2[6];
+                    matData[mI + 7] = (float)temp2[7];
                     
-                    matData[mI + 8] = (float)temp[8];
-                    matData[mI + 9] = (float)temp[9];
-                    matData[mI + 10] = (float)temp[10];
-                    matData[mI + 11] = (float)temp[11];
+                    matData[mI + 8] = (float)temp2[8];
+                    matData[mI + 9] = (float)temp2[9];
+                    matData[mI + 10] = (float)temp2[10];
+                    matData[mI + 11] = (float)temp2[11];
                 }
 
                 GL.UniformMatrix3x4fv(location, size, false, matData);
                 return;
             }
 
-            IMatrix matrix = (IMatrix)value;
-
             float* data = stackalloc float[12];
-            matrix.MatrixData(new MatrixSpan(3, 4, temp));
+            Span<double> temp = new Span<double>(value, 12);
 
             data[0] = (float)temp[0];
             data[1] = (float)temp[1];
@@ -766,50 +748,47 @@ namespace Zene.Graphics
 
             GL.UniformMatrix3x4fv(location, size, false, data);
         }
-        private static void UniformFMat4(int location, int size, int index, object value)
+        private static void UniformFMat4(int location, int size, int index, void* value)
         {
-            Span<double> temp = stackalloc double[16];
-            
             if (size > 1 && index < 1)
             {
-                IMatrix[] matrices = (IMatrix[])value;
+                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
                 float* matData = stackalloc float[16 * size];
+                Span<double> temp2 = stackalloc double[16];
 
                 for (int i = 0; i < size; i++)
                 {
-                    matrices[i].MatrixData(new MatrixSpan(4, 4, temp));
+                    matrices[i].MatrixData(new MatrixSpan(4, 4, temp2));
 
                     int mI = i * 16;
-                    matData[mI] = (float)temp[0];
-                    matData[mI + 1] = (float)temp[1];
-                    matData[mI + 2] = (float)temp[2];
-                    matData[mI + 3] = (float)temp[3];
+                    matData[mI] = (float)temp2[0];
+                    matData[mI + 1] = (float)temp2[1];
+                    matData[mI + 2] = (float)temp2[2];
+                    matData[mI + 3] = (float)temp2[3];
                     
-                    matData[mI + 4] = (float)temp[4];
-                    matData[mI + 5] = (float)temp[5];
-                    matData[mI + 6] = (float)temp[6];
-                    matData[mI + 7] = (float)temp[7];
+                    matData[mI + 4] = (float)temp2[4];
+                    matData[mI + 5] = (float)temp2[5];
+                    matData[mI + 6] = (float)temp2[6];
+                    matData[mI + 7] = (float)temp2[7];
                     
-                    matData[mI + 8] = (float)temp[8];
-                    matData[mI + 9] = (float)temp[9];
-                    matData[mI + 10] = (float)temp[10];
-                    matData[mI + 11] = (float)temp[11];
+                    matData[mI + 8] = (float)temp2[8];
+                    matData[mI + 9] = (float)temp2[9];
+                    matData[mI + 10] = (float)temp2[10];
+                    matData[mI + 11] = (float)temp2[11];
                     
-                    matData[mI + 12] = (float)temp[12];
-                    matData[mI + 13] = (float)temp[13];
-                    matData[mI + 14] = (float)temp[14];
-                    matData[mI + 15] = (float)temp[15];
+                    matData[mI + 12] = (float)temp2[12];
+                    matData[mI + 13] = (float)temp2[13];
+                    matData[mI + 14] = (float)temp2[14];
+                    matData[mI + 15] = (float)temp2[15];
                 }
 
                 GL.UniformMatrix4fv(location, size, false, matData);
                 return;
             }
 
-            IMatrix matrix = (IMatrix)value;
-
             float* data = stackalloc float[16];
-            matrix.MatrixData(new MatrixSpan(4, 4, temp));
+            Span<double> temp = new Span<double>(value, 16);
 
             data[0] = (float)temp[0];
             data[1] = (float)temp[1];
@@ -833,42 +812,39 @@ namespace Zene.Graphics
 
             GL.UniformMatrix4fv(location, size, false, data);
         }
-        private static void UniformFMat4x2(int location, int size, int index, object value)
+        private static void UniformFMat4x2(int location, int size, int index, void* value)
         {
-            Span<double> temp = stackalloc double[8];
-            
             if (size > 1 && index < 1)
             {
-                IMatrix[] matrices = (IMatrix[])value;
+                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
                 float* matData = stackalloc float[8 * size];
+                Span<double> temp2 = stackalloc double[8];
 
                 for (int i = 0; i < size; i++)
                 {
-                    matrices[i].MatrixData(new MatrixSpan(4, 2, temp));
+                    matrices[i].MatrixData(new MatrixSpan(4, 2, temp2));
 
                     int mI = i * 8;
-                    matData[mI] = (float)temp[0];
-                    matData[mI + 1] = (float)temp[1];
+                    matData[mI] = (float)temp2[0];
+                    matData[mI + 1] = (float)temp2[1];
                     
-                    matData[mI + 2] = (float)temp[2];
-                    matData[mI + 3] = (float)temp[3];
+                    matData[mI + 2] = (float)temp2[2];
+                    matData[mI + 3] = (float)temp2[3];
                     
-                    matData[mI + 4] = (float)temp[4];
-                    matData[mI + 5] = (float)temp[5];
+                    matData[mI + 4] = (float)temp2[4];
+                    matData[mI + 5] = (float)temp2[5];
                     
-                    matData[mI + 6] = (float)temp[6];
-                    matData[mI + 7] = (float)temp[7];
+                    matData[mI + 6] = (float)temp2[6];
+                    matData[mI + 7] = (float)temp2[7];
                 }
 
                 GL.UniformMatrix4x2fv(location, size, false, matData);
                 return;
             }
 
-            IMatrix matrix = (IMatrix)value;
-
             float* data = stackalloc float[8];
-            matrix.MatrixData(new MatrixSpan(4, 2, temp));
+            Span<double> temp = new Span<double>(value, 8);
 
             data[0] = (float)temp[0];
             data[1] = (float)temp[1];
@@ -884,46 +860,43 @@ namespace Zene.Graphics
 
             GL.UniformMatrix4x2fv(location, size, false, data);
         }
-        private static void UniformFMat4x3(int location, int size, int index, object value)
+        private static void UniformFMat4x3(int location, int size, int index, void* value)
         {
-            Span<double> temp = stackalloc double[12];
-            
             if (size > 1 && index < 1)
             {
-                IMatrix[] matrices = (IMatrix[])value;
+                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
                 float* matData = stackalloc float[12 * size];
+                Span<double> temp2 = stackalloc double[12];
 
                 for (int i = 0; i < size; i++)
                 {
-                    matrices[i].MatrixData(new MatrixSpan(4, 3, temp));
+                    matrices[i].MatrixData(new MatrixSpan(4, 3, temp2));
 
                     int mI = i * 12;
-                    matData[mI] = (float)temp[0];
-                    matData[mI + 1] = (float)temp[1];
-                    matData[mI + 2] = (float)temp[2];
+                    matData[mI] = (float)temp2[0];
+                    matData[mI + 1] = (float)temp2[1];
+                    matData[mI + 2] = (float)temp2[2];
                     
-                    matData[mI + 3] = (float)temp[3];
-                    matData[mI + 4] = (float)temp[4];
-                    matData[mI + 5] = (float)temp[5];
+                    matData[mI + 3] = (float)temp2[3];
+                    matData[mI + 4] = (float)temp2[4];
+                    matData[mI + 5] = (float)temp2[5];
                     
-                    matData[mI + 6] = (float)temp[6];
-                    matData[mI + 7] = (float)temp[7];
-                    matData[mI + 8] = (float)temp[8];
+                    matData[mI + 6] = (float)temp2[6];
+                    matData[mI + 7] = (float)temp2[7];
+                    matData[mI + 8] = (float)temp2[8];
                     
-                    matData[mI + 9] = (float)temp[9];
-                    matData[mI + 10] = (float)temp[10];
-                    matData[mI + 11] = (float)temp[11];
+                    matData[mI + 9] = (float)temp2[9];
+                    matData[mI + 10] = (float)temp2[10];
+                    matData[mI + 11] = (float)temp2[11];
                 }
 
                 GL.UniformMatrix4x3fv(location, size, false, matData);
                 return;
             }
 
-            IMatrix matrix = (IMatrix)value;
-
             float* data = stackalloc float[12];
-            matrix.MatrixData(new MatrixSpan(4, 3, temp));
+            Span<double> temp = new Span<double>(value, 12);
 
             data[0] = (float)temp[0];
             data[1] = (float)temp[1];
@@ -944,149 +917,41 @@ namespace Zene.Graphics
             GL.UniformMatrix4x3fv(location, size, false, data);
         }
 
-        private static void UniformDMat2(int location, int size, int index, object value)
+        private static void UniformDMat2(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Matrix2[] matrices = (Matrix2[])value;
-                
-                fixed (void* ptr = &matrices[0])
-                {
-                    GL.UniformMatrix2dv(location, size, false, (double*)ptr);
-                }
-                return;
-            }
-
-            Matrix2 matrix = (Matrix2)value;
-            GL.UniformMatrix2dv(location, size, false, (double*)&matrix);
+            GL.UniformMatrix2dv(location, size, false, (double*)value);
         }
-        private static void UniformDMat2x3(int location, int size, int index, object value)
+        private static void UniformDMat2x3(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Matrix2x3[] matrices = (Matrix2x3[])value;
-                
-                fixed (void* ptr = &matrices[0])
-                {
-                    GL.UniformMatrix2x3dv(location, size, false, (double*)ptr);
-                }
-                return;
-            }
-
-            Matrix2x3 matrix = (Matrix2x3)value;
-            GL.UniformMatrix2x3dv(location, size, false, (double*)&matrix);
+            GL.UniformMatrix2x3dv(location, size, false, (double*)&value);
         }
-        private static void UniformDMat2x4(int location, int size, int index, object value)
+        private static void UniformDMat2x4(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Matrix2x4[] matrices = (Matrix2x4[])value;
-                
-                fixed (void* ptr = &matrices[0])
-                {
-                    GL.UniformMatrix2x4dv(location, size, false, (double*)ptr);
-                }
-                return;
-            }
-
-            Matrix2x4 matrix = (Matrix2x4)value;
-            GL.UniformMatrix2x4dv(location, size, false, (double*)&matrix);
+            GL.UniformMatrix2x4dv(location, size, false, (double*)&value);
         }
-        private static void UniformDMat3(int location, int size, int index, object value)
+        private static void UniformDMat3(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Matrix3[] matrices = (Matrix3[])value;
-                
-                fixed (void* ptr = &matrices[0])
-                {
-                    GL.UniformMatrix3dv(location, size, false, (double*)ptr);
-                }
-                return;
-            }
-
-            Matrix3 matrix = (Matrix3)value;
-            GL.UniformMatrix3dv(location, size, false, (double*)&matrix);
+            GL.UniformMatrix3dv(location, size, false, (double*)&value);
         }
-        private static void UniformDMat3x2(int location, int size, int index, object value)
+        private static void UniformDMat3x2(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Matrix3x2[] matrices = (Matrix3x2[])value;
-                
-                fixed (void* ptr = &matrices[0])
-                {
-                    GL.UniformMatrix3x2dv(location, size, false, (double*)ptr);
-                }
-                return;
-            }
-
-            Matrix3x2 matrix = (Matrix3x2)value;
-            GL.UniformMatrix3x2dv(location, size, false, (double*)&matrix);
+            GL.UniformMatrix3x2dv(location, size, false, (double*)&value);
         }
-        private static void UniformDMat3x4(int location, int size, int index, object value)
+        private static void UniformDMat3x4(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Matrix3x4[] matrices = (Matrix3x4[])value;
-                
-                fixed (void* ptr = &matrices[0])
-                {
-                    GL.UniformMatrix3x4dv(location, size, false, (double*)ptr);
-                }
-                return;
-            }
-
-            Matrix3x4 matrix = (Matrix3x4)value;
-            GL.UniformMatrix3x4dv(location, size, false, (double*)&matrix);
+            GL.UniformMatrix3x4dv(location, size, false, (double*)&value);
         }
-        private static void UniformDMat4(int location, int size, int index, object value)
+        private static void UniformDMat4(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Matrix4[] matrices = (Matrix4[])value;
-                
-                fixed (void* ptr = &matrices[0])
-                {
-                    GL.UniformMatrix4dv(location, size, false, (double*)ptr);
-                }
-                return;
-            }
-
-            Matrix4 matrix = (Matrix4)value;
-            GL.UniformMatrix4dv(location, size, false, (double*)&matrix);
+            GL.UniformMatrix4dv(location, size, false, (double*)&value);
         }
-        private static void UniformDMat4x2(int location, int size, int index, object value)
+        private static void UniformDMat4x2(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Matrix4x2[] matrices = (Matrix4x2[])value;
-                
-                fixed (void* ptr = &matrices[0])
-                {
-                    GL.UniformMatrix4x2dv(location, size, false, (double*)ptr);
-                }
-                return;
-            }
-
-            Matrix4x2 matrix = (Matrix4x2)value;
-            GL.UniformMatrix4x2dv(location, size, false, (double*)&matrix);
+            GL.UniformMatrix4x2dv(location, size, false, (double*)&value);
         }
-        private static void UniformDMat4x3(int location, int size, int index, object value)
+        private static void UniformDMat4x3(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Matrix4x3[] matrices = (Matrix4x3[])value;
-                
-                fixed (void* ptr = &matrices[0])
-                {
-                    GL.UniformMatrix4x3dv(location, size, false, (double*)ptr);
-                }
-                return;
-            }
-
-            Matrix4x3 matrix = (Matrix4x3)value;
-            GL.UniformMatrix4x3dv(location, size, false, (double*)&matrix);
+            GL.UniformMatrix4x3dv(location, size, false, (double*)&value);
         }
     }
 }

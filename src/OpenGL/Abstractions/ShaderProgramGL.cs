@@ -197,22 +197,13 @@ namespace Zene.Graphics.Base
 
             if (uv.Type == UniformType.Float)
             {
-                uv.su(location, 1, 0, (float)value);
+                float v = (float)value;
+                uv.su(location, 1, 0, &v);
                 return;
             }
             if (uv.Type == UniformType.Double)
             {
-                uv.su(location, 1, 0, value);
-                return;
-            }
-            if (uv.Type == UniformType.Int)
-            {
-                uv.su(location, 1, 0, (int)value);
-                return;
-            }
-            if (uv.Type == UniformType.Uint)
-            {
-                uv.su(location, 1, 0, (uint)value);
+                uv.su(location, 1, 0, &value);
                 return;
             }
 
@@ -232,22 +223,13 @@ namespace Zene.Graphics.Base
 
             if (uv.Type == UniformType.Float)
             {
-                uv.su(location, 1, 0, value);
+                uv.su(location, 1, 0, &value);
                 return;
             }
             if (uv.Type == UniformType.Double)
             {
-                uv.su(location, 1, 0, (double)value);
-                return;
-            }
-            if (uv.Type == UniformType.Int)
-            {
-                uv.su(location, 1, 0, (int)value);
-                return;
-            }
-            if (uv.Type == UniformType.Uint)
-            {
-                uv.su(location, 1, 0, (uint)value);
+                double v = value;
+                uv.su(location, 1, 0, &v);
                 return;
             }
 
@@ -278,22 +260,13 @@ namespace Zene.Graphics.Base
                 uv.Type == UniformType.IntSampler2DMultisampleArray ||
                 uv.Type == UniformType.Bool)
             {
-                uv.su(location, 1, 0, value);
-                return;
-            }
-            if (uv.Type == UniformType.Float)
-            {
-                uv.su(location, 1, 0, (float)value);
-                return;
-            }
-            if (uv.Type == UniformType.Double)
-            {
-                uv.su(location, 1, 0, (double)value);
+                uv.su(location, 1, 0, &value);
                 return;
             }
             if (uv.Type == UniformType.Uint)
             {
-                uv.su(location, 1, 0, (uint)value);
+                uint v = (uint)value;
+                uv.su(location, 1, 0, &v);
                 return;
             }
 
@@ -317,22 +290,13 @@ namespace Zene.Graphics.Base
                 uv.Type == UniformType.UintSampler2DMultisample ||
                 uv.Type == UniformType.UintSampler2DMultisampleArray)
             {
-                uv.su(location, 1, 0, value);
+                uv.su(location, 1, 0, &value);
                 return;
             }
             if (uv.Type == UniformType.Int || uv.Type == UniformType.Bool)
             {
-                uv.su(location, 1, 0, (int)value);
-                return;
-            }
-            if (uv.Type == UniformType.Float)
-            {
-                uv.su(location, 1, 0, (float)value);
-                return;
-            }
-            if (uv.Type == UniformType.Double)
-            {
-                uv.su(location, 1, 0, (double)value);
+                int v = (int)value;
+                uv.su(location, 1, 0, &v);
                 return;
             }
 
@@ -352,7 +316,8 @@ namespace Zene.Graphics.Base
 
             if (uv.Type == UniformType.Bool)
             {
-                uv.su(location, 1, 0, value ? 1 : 0);
+                int v = value ? 1 : 0;
+                uv.su(location, 1, 0, &v);
                 return;
             }
 
@@ -380,39 +345,15 @@ namespace Zene.Graphics.Base
                     data[i] = (float)values[i];
                 }
 
-                uv.su(location, values.Length, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, data);
                 return;
             }
             if (uv.Type == UniformType.Double)
             {
                 fixed (double* ptr = &values[0])
                 {
-                    uv.su(location, values.Length, 0, new IntPtr(ptr));
+                    uv.su(location, values.Length, 0, ptr);
                 }
-                return;
-            }
-            if (uv.Type == UniformType.Int)
-            {
-                int* data = stackalloc int[values.Length];
-
-                for (int i = 0; i < values.Length; i++)
-                {
-                    data[i] = (int)values[i];
-                }
-
-                uv.su(location, values.Length, 0, new IntPtr(data));
-                return;
-            }
-            if (uv.Type == UniformType.Uint)
-            {
-                uint* data = stackalloc uint[values.Length];
-
-                for (int i = 0; i < values.Length; i++)
-                {
-                    data[i] = (uint)values[i];
-                }
-
-                uv.su(location, values.Length, 0, new IntPtr(data));
                 return;
             }
 
@@ -434,7 +375,7 @@ namespace Zene.Graphics.Base
             {
                 fixed (float* ptr = &values[0])
                 {
-                    uv.su(location, values.Length, 0, new IntPtr(ptr));
+                    uv.su(location, values.Length, 0, ptr);
                 }
                 return;
             }
@@ -447,31 +388,7 @@ namespace Zene.Graphics.Base
                     data[i] = values[i];
                 }
 
-                uv.su(location, values.Length, 0, new IntPtr(data));
-                return;
-            }
-            if (uv.Type == UniformType.Int)
-            {
-                int* data = stackalloc int[values.Length];
-
-                for (int i = 0; i < values.Length; i++)
-                {
-                    data[i] = (int)values[i];
-                }
-
-                uv.su(location, values.Length, 0, new IntPtr(data));
-                return;
-            }
-            if (uv.Type == UniformType.Uint)
-            {
-                uint* data = stackalloc uint[values.Length];
-
-                for (int i = 0; i < values.Length; i++)
-                {
-                    data[i] = (uint)values[i];
-                }
-
-                uv.su(location, values.Length, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, data);
                 return;
             }
 
@@ -504,32 +421,8 @@ namespace Zene.Graphics.Base
             {
                 fixed (int* ptr = &values[0])
                 {
-                    uv.su(location, values.Length, 0, new IntPtr(ptr));
+                    uv.su(location, values.Length, 0, ptr);
                 }
-                return;
-            }
-            if (uv.Type == UniformType.Float)
-            {
-                float* data = stackalloc float[values.Length];
-
-                for (int i = 0; i < values.Length; i++)
-                {
-                    data[i] = values[i];
-                }
-
-                uv.su(location, values.Length, 0, new IntPtr(data));
-                return;
-            }
-            if (uv.Type == UniformType.Double)
-            {
-                double* data = stackalloc double[values.Length];
-
-                for (int i = 0; i < values.Length; i++)
-                {
-                    data[i] = values[i];
-                }
-
-                uv.su(location, values.Length, 0, new IntPtr(data));
                 return;
             }
             if (uv.Type == UniformType.Uint)
@@ -541,7 +434,7 @@ namespace Zene.Graphics.Base
                     data[i] = (uint)values[i];
                 }
 
-                uv.su(location, values.Length, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, data);
                 return;
             }
 
@@ -567,7 +460,7 @@ namespace Zene.Graphics.Base
             {
                 fixed (uint* ptr = &values[0])
                 {
-                    uv.su(location, values.Length, 0, new IntPtr(ptr));
+                    uv.su(location, values.Length, 0, ptr);
                 }
                 return;
             }
@@ -580,31 +473,7 @@ namespace Zene.Graphics.Base
                     data[i] = (int)values[i];
                 }
 
-                uv.su(location, values.Length, 0, new IntPtr(data));
-                return;
-            }
-            if (uv.Type == UniformType.Float)
-            {
-                float* data = stackalloc float[values.Length];
-
-                for (int i = 0; i < values.Length; i++)
-                {
-                    data[i] = values[i];
-                }
-
-                uv.su(location, values.Length, 0, new IntPtr(data));
-                return;
-            }
-            if (uv.Type == UniformType.Double)
-            {
-                double* data = stackalloc double[values.Length];
-
-                for (int i = 0; i < values.Length; i++)
-                {
-                    data[i] = values[i];
-                }
-
-                uv.su(location, values.Length, 0, new IntPtr(data));
+                uv.su(location, values.Length, 0, data);
                 return;
             }
 
@@ -625,22 +494,13 @@ namespace Zene.Graphics.Base
 
             if (uv.Type == UniformType.FVec2)
             {
-                uv.su(location, 1, 0, ((float)value.X, (float)value.Y));
+                Vector2<float> v = new Vector2<float>((float)value.X, (float)value.Y);
+                uv.su(location, 1, 0, &v);
                 return;
             }
             if (uv.Type == UniformType.DVec2)
             {
-                uv.su(location, 1, 0, (value.X, value.Y));
-                return;
-            }
-            if (uv.Type == UniformType.IVec2)
-            {
-                uv.su(location, 1, 0, ((int)value.X, (int)value.Y));
-                return;
-            }
-            if (uv.Type == UniformType.UiVec2)
-            {
-                uv.su(location, 1, 0, ((uint)value.X, (uint)value.Y));
+                uv.su(location, 1, 0, &value);
                 return;
             }
 
@@ -660,22 +520,13 @@ namespace Zene.Graphics.Base
 
             if (uv.Type == UniformType.IVec2 || uv.Type == UniformType.BVec2)
             {
-                uv.su(location, 1, 0, (value.X, value.Y));
-                return;
-            }
-            if (uv.Type == UniformType.FVec2)
-            {
-                uv.su(location, 1, 0, ((float)value.X, (float)value.Y));
-                return;
-            }
-            if (uv.Type == UniformType.DVec2)
-            {
-                uv.su(location, 1, 0, new ValueTuple<double, double>(value.X, value.Y));
+                uv.su(location, 1, 0, &value);
                 return;
             }
             if (uv.Type == UniformType.UiVec2)
             {
-                uv.su(location, 1, 0, ((uint)value.X, (uint)value.Y));
+                Vector2<uint> v = new Vector2<uint>((uint)value.X, (uint)value.Y);
+                uv.su(location, 1, 0, &v);
                 return;
             }
 
@@ -695,22 +546,13 @@ namespace Zene.Graphics.Base
 
             if (uv.Type == UniformType.FVec3)
             {
-                uv.su(location, 1, 0, ((float)value.X, (float)value.Y, (float)value.Z));
+                Vector3<float> v = new Vector3<float>((float)value.X, (float)value.Y, (float)value.Z);
+                uv.su(location, 1, 0, &v);
                 return;
             }
             if (uv.Type == UniformType.DVec3)
             {
-                uv.su(location, 1, 0, (value.X, value.Y, value.Z));
-                return;
-            }
-            if (uv.Type == UniformType.IVec3)
-            {
-                uv.su(location, 1, 0, ((int)value.X, (int)value.Y, (int)value.Z));
-                return;
-            }
-            if (uv.Type == UniformType.UiVec3)
-            {
-                uv.su(location, 1, 0, ((uint)value.X, (uint)value.Y, (uint)value.Z));
+                uv.su(location, 1, 0, &value);
                 return;
             }
 
@@ -730,22 +572,13 @@ namespace Zene.Graphics.Base
 
             if (uv.Type == UniformType.IVec3 || uv.Type == UniformType.BVec3)
             {
-                uv.su(location, 1, 0, (value.X, value.Y, value.Z));
-                return;
-            }
-            if (uv.Type == UniformType.FVec3)
-            {
-                uv.su(location, 1, 0, ((float)value.X, (float)value.Y, (float)value.Z));
-                return;
-            }
-            if (uv.Type == UniformType.DVec3)
-            {
-                uv.su(location, 1, 0, new ValueTuple<double, double, double>(value.X, value.Y, value.Z));
+                uv.su(location, 1, 0, &value);
                 return;
             }
             if (uv.Type == UniformType.UiVec3)
             {
-                uv.su(location, 1, 0, ((uint)value.X, (uint)value.Y, (uint)value.Z));
+                Vector3<uint> v = new Vector3<uint>((uint)value.X, (uint)value.Y, (uint)value.Z);
+                uv.su(location, 1, 0, &v);
                 return;
             }
 
@@ -765,22 +598,13 @@ namespace Zene.Graphics.Base
 
             if (uv.Type == UniformType.FVec4)
             {
-                uv.su(location, 1, 0, ((float)value.X, (float)value.Y, (float)value.Z, (float)value.W));
+                Vector4<float> v = new Vector4<float>((float)value.X, (float)value.Y, (float)value.Z, (float)value.W);
+                uv.su(location, 1, 0, &v);
                 return;
             }
             if (uv.Type == UniformType.DVec4)
             {
-                uv.su(location, 1, 0, (value.X, value.Y, value.Z, value.W));
-                return;
-            }
-            if (uv.Type == UniformType.IVec4)
-            {
-                uv.su(location, 1, 0, ((int)value.X, (int)value.Y, (int)value.Z, (int)value.W));
-                return;
-            }
-            if (uv.Type == UniformType.UiVec4)
-            {
-                uv.su(location, 1, 0, ((uint)value.X, (uint)value.Y, (uint)value.Z, (uint)value.W));
+                uv.su(location, 1, 0, &value);
                 return;
             }
 
@@ -800,40 +624,34 @@ namespace Zene.Graphics.Base
 
             if (uv.Type == UniformType.IVec4 || uv.Type == UniformType.BVec4)
             {
-                uv.su(location, 1, 0, (value.X, value.Y, value.Z, value.W));
-                return;
-            }
-            if (uv.Type == UniformType.FVec4)
-            {
-                uv.su(location, 1, 0, ((float)value.X, (float)value.Y, (float)value.Z, (float)value.W));
-                return;
-            }
-            if (uv.Type == UniformType.DVec4)
-            {
-                uv.su(location, 1, 0, new ValueTuple<double, double, double, double>(value.X, value.Y, value.Z, value.W));
+                uv.su(location, 1, 0, &value);
                 return;
             }
             if (uv.Type == UniformType.UiVec4)
             {
-                uv.su(location, 1, 0, ((uint)value.X, (uint)value.Y, (uint)value.Z, (uint)value.W));
+                Vector4<uint> v = new Vector4<uint>((uint)value.X, (uint)value.Y, (uint)value.Z, (uint)value.W);
+                uv.su(location, 1, 0, &v);
                 return;
             }
 
             throw new Exception("Invalid data type.");
         }
 
-        // /// <summary>
-        // /// Specify the value of a uniform variable with a matrix.
-        // /// </summary>
-        // /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
-        // /// <param name="value">The value to set the uniform to.</param>
-        // protected void SetUniform(int index, IMatrix value)
-        // {
-        //     Bind();
+        /// <summary>
+        /// Specify the value of a uniform variable with a matrix.
+        /// </summary>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        /// <param name="value">The value to set the uniform to.</param>
+        protected void SetUniform(int index, IMatrix value)
+        {
+            Bind();
 
-        //     UniformVariable uv = Properties._uniforms[index];
-        //     uv.su(uv.Location, 1, 0, value);
-        // }
+            UniformVariable uv = Properties._uniforms[index];
+            MatrixSpan ms = new MatrixSpan(value.Rows, value.Columns, stackalloc double[value.Rows * value.Columns]);
+            value.MatrixData(ms);
+            
+            uv.su(uv.Location, 1, 0, ms.Pointer);
+        }
         // /// <summary>
         // /// Specify the value of a uniform variable with an array of matrices.
         // /// </summary>
@@ -842,7 +660,7 @@ namespace Zene.Graphics.Base
         // protected void SetUniform(int index, IMatrix[] values)
         // {
         //     Bind();
-
+            
         //     UniformVariable uv = Properties._uniforms[index];
         //     uv.su(uv.Location, values.Length, 0, values);
         // }
@@ -857,20 +675,35 @@ namespace Zene.Graphics.Base
             Bind();
 
             UniformVariable uv = Properties._uniforms[index];
-            uv.su(uv.Location, 1, 0, value);
+            uv.su(uv.Location, 1, 0, &value);
         }
         // /// <summary>
-        // /// Specify the value of a uniform variable with a matrix span.
+        // /// Specify the value of a uniform variable with an array of 4x4 matrices.
         // /// </summary>
         // /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
-        // /// <param name="value">The value to set the uniform to.</param>
-        // protected void SetUniform(int index, MatrixSpan value)
-        // {
-        //     Bind();
+        // /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniform(int index, Matrix4[] value)
+        {
+            Bind();
 
-        //     UniformVariable uv = Properties._uniforms[index];
-        //     uv.su(uv.Location, 1, 0, value);
-        // }
+            UniformVariable uv = Properties._uniforms[index];
+            fixed (void* ptr = &value[0])
+            {
+                uv.su(uv.Location, 1, 0, ptr);
+            }
+        }
+        /// <summary>
+        /// Specify the value of a uniform variable with a matrix span.
+        /// </summary>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        /// <param name="value">The value to set the uniform to.</param>
+        protected void SetUniform(int index, MatrixSpan value)
+        {
+            Bind();
+
+            UniformVariable uv = Properties._uniforms[index];
+            uv.su(uv.Location, 1, 0, value.Pointer);
+        }
         
         /// <summary>
         /// Specify the value of uniform variables with a struct <typeparamref name="T"/>.
