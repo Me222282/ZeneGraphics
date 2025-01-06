@@ -153,7 +153,7 @@ namespace Zene.Graphics
             Vector2 textureMultiplier = 1 /
                 // Texture Size
                 (Vector2)(font.SourceTexture.Properties.Width, font.SourceTexture.Properties.Height);
-            floatv sizeMultiplier = 1 / font.LineHeight;
+            floatv sizeMultiplier = (floatv)1 / font.LineHeight;
 
             floatv lineSpaceD = lineSpace * sizeMultiplier;
             floatv cs = charSpace * sizeMultiplier;
@@ -164,12 +164,12 @@ namespace Zene.Graphics
 
             // The current character offset
             Vector2 offsetCurrent = new Vector2(
-                lineWidths[0] * -0.5,
+                lineWidths[0] * -0.5f,
                 // The offset for Y
                 (
                     lineWidths.Count +
                     ((lineWidths.Count - 1) * lineSpaceD)
-                ) * 0.5);
+                ) * 0.5f);
             // The instance data containing offsets for each character
             Vector2[] data = new Vector2[text.Length * _blockSize];
 
@@ -299,7 +299,7 @@ namespace Zene.Graphics
             Vector2 textureMultiplier = 1 /
                 // Texture Size
                 (Vector2)(font.SourceTexture.Properties.Width, font.SourceTexture.Properties.Height);
-            floatv sizeMultiplier = 1 / font.LineHeight;
+            floatv sizeMultiplier = (floatv)1 / font.LineHeight;
 
             floatv lineSpaceD = lineSpace * sizeMultiplier;
             floatv cs = charSpace * sizeMultiplier;
