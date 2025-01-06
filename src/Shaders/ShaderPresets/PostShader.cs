@@ -89,8 +89,8 @@ namespace Zene.Graphics
             }
         }
 
-        private double[] _kernel;
-        public double[] Kernel
+        private floatv[] _kernel;
+        public floatv[] Kernel
         {
             get => _kernel;
             set
@@ -106,8 +106,8 @@ namespace Zene.Graphics
             }
         }
 
-        private double _kernelOffset;
-        public double KernelOffset
+        private floatv _kernelOffset;
+        public floatv KernelOffset
         {
             get => _kernelOffset;
             set
@@ -118,13 +118,13 @@ namespace Zene.Graphics
             }
         }
 
-        public static double[] BlurKernel { get; } = new double[]
+        public static floatv[] BlurKernel { get; } = new floatv[]
         {
-            1.0 / 16, 2.0 / 16, 1.0 / 16,
-            2.0 / 16, 4.0 / 16, 2.0 / 16,
-            1.0 / 16, 2.0 / 16, 1.0 / 16
+            (floatv)1 / 16, (floatv)2 / 16, (floatv)1 / 16,
+            (floatv)2 / 16, (floatv)4 / 16, (floatv)2 / 16,
+            (floatv)1 / 16, (floatv)2 / 16, (floatv)1 / 16
         };
-        public static double[] SharpenKernel { get; } = new double[]
+        public static floatv[] SharpenKernel { get; } = new floatv[]
         {
             -1, -1, -1,
             -1, 9, -1,

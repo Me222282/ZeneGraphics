@@ -77,12 +77,12 @@ namespace Zene.Graphics
             get => _ps.UseKernel;
             set => _ps.UseKernel = value;
         }
-        public double[] Kernel
+        public floatv[] Kernel
         {
             get => _ps.Kernel;
             set => _ps.Kernel = value;
         }
-        public double KernelOffset
+        public floatv KernelOffset
         {
             get => _ps.KernelOffset;
             set => _ps.KernelOffset = value;

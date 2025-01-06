@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using Zene.Structs;
+using static Zene.Graphics.LightingShader;
 
 namespace Zene.Graphics.Base
 {
@@ -500,6 +502,7 @@ namespace Zene.Graphics.Base
             }
             if (uv.Type == UniformType.DVec2)
             {
+                Vector2<double> v = new Vector2<double>((double)value.X, (double)value.Y);
                 uv.su(location, 1, 0, &value);
                 return;
             }
@@ -552,6 +555,7 @@ namespace Zene.Graphics.Base
             }
             if (uv.Type == UniformType.DVec3)
             {
+                Vector3<double> v = new Vector3<double>((double)value.X, (double)value.Y, (double)value.Z);
                 uv.su(location, 1, 0, &value);
                 return;
             }
@@ -604,6 +608,7 @@ namespace Zene.Graphics.Base
             }
             if (uv.Type == UniformType.DVec4)
             {
+                Vector4<double> v = new Vector4<double>((double)value.X, (double)value.Y, (double)value.Z, (double)value.W);
                 uv.su(location, 1, 0, &value);
                 return;
             }
@@ -637,6 +642,7 @@ namespace Zene.Graphics.Base
             throw new Exception("Invalid data type.");
         }
 
+#if DOUBLE
         /// <summary>
         /// Specify the value of a uniform variable with a matrix.
         /// </summary>
@@ -647,24 +653,35 @@ namespace Zene.Graphics.Base
             Bind();
 
             UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
+
             MatrixSpan ms = new MatrixSpan(value.Rows, value.Columns, stackalloc double[value.Rows * value.Columns]);
             value.MatrixData(ms);
-            
-            uv.su(uv.Location, 1, 0, ms.Pointer);
+
+            if (uv.Type.IsFloatMat())
+            {
+                Span<float> ds = stackalloc float[ms.Length];
+
+                for (int i = 0; i < ds.Length; i++)
+                {
+                    ds[i] = (float)ms.Data[i];
+                }
+
+                fixed (void* ptr = &ds[0])
+                {
+                    uv.su(location, 1, 0, ptr);
+                }
+                return;
+            }
+            if (uv.Type.IsDoubleMat())
+            {
+                uv.su(location, 1, 0, ms.Pointer);
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
-        // /// <summary>
-        // /// Specify the value of a uniform variable with an array of matrices.
-        // /// </summary>
-        // /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
-        // /// <param name="values">The values to set the uniform to.</param>
-        // protected void SetUniform(int index, IMatrix[] values)
-        // {
-        //     Bind();
-            
-        //     UniformVariable uv = Properties._uniforms[index];
-        //     uv.su(uv.Location, values.Length, 0, values);
-        // }
-        
+
         /// <summary>
         /// Specify the value of a uniform variable with a 4x4 matrix.
         /// </summary>
@@ -675,7 +692,31 @@ namespace Zene.Graphics.Base
             Bind();
 
             UniformVariable uv = Properties._uniforms[index];
-            uv.su(uv.Location, 1, 0, &value);
+            int location = uv.Location;
+
+            if (uv.Type == UniformType.FMat4)
+            {
+                Span<double> fs = value.AsSpan();
+                Span<float> ds = stackalloc float[16];
+
+                for (int i = 0; i < ds.Length; i++)
+                {
+                    ds[i] = (float)fs[i];
+                }
+
+                fixed (float* ptr = &ds[0])
+                {
+                    uv.su(location, 1, 0, ptr);
+                }
+                return;
+            }
+            if (uv.Type == UniformType.DMat4)
+            {
+                uv.su(location, 1, 0, &value);
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
         // /// <summary>
         // /// Specify the value of a uniform variable with an array of 4x4 matrices.
@@ -687,10 +728,34 @@ namespace Zene.Graphics.Base
             Bind();
 
             UniformVariable uv = Properties._uniforms[index];
-            fixed (void* ptr = &value[0])
+            int location = uv.Location;
+
+            if (uv.Type == UniformType.FMat4)
             {
-                uv.su(uv.Location, 1, 0, ptr);
+                Span<double> fs = MemoryMarshal.Cast<Matrix4, double>(value);
+                Span<float> ds = stackalloc float[16 * value.Length];
+
+                for (int i = 0; i < ds.Length; i++)
+                {
+                    ds[i] = (float)fs[i];
+                }
+
+                fixed (float* ptr = &ds[0])
+                {
+                    uv.su(location, 1, 0, ptr);
+                }
+                return;
             }
+            if (uv.Type == UniformType.DMat4)
+            {
+                fixed (void* ptr = &value[0])
+                {
+                    uv.su(location, 1, 0, ptr);
+                }
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
         /// <summary>
         /// Specify the value of a uniform variable with a matrix span.
@@ -702,9 +767,183 @@ namespace Zene.Graphics.Base
             Bind();
 
             UniformVariable uv = Properties._uniforms[index];
-            uv.su(uv.Location, 1, 0, value.Pointer);
+            int location = uv.Location;
+
+            if (uv.Type.IsFloatMat())
+            {
+                Span<float> ds = stackalloc float[value.Length];
+
+                for (int i = 0; i < ds.Length; i++)
+                {
+                    ds[i] = (float)value.Data[i];
+                }
+
+                fixed (void* ptr = &ds[0])
+                {
+                    uv.su(location, 1, 0, ptr);
+                }
+                return;
+            }
+            if (uv.Type.IsDoubleMat())
+            {
+                uv.su(location, 1, 0, value.Pointer);
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
         }
-        
+#else // FLOAT
+        /// <summary>
+        /// Specify the value of a uniform variable with a matrix.
+        /// </summary>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        /// <param name="value">The value to set the uniform to.</param>
+        protected void SetUniform(int index, IMatrix value)
+        {
+            Bind();
+
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
+
+            MatrixSpan ms = new MatrixSpan(value.Rows, value.Columns, stackalloc float[value.Rows * value.Columns]);
+            value.MatrixData(ms);
+
+            if (uv.Type.IsFloatMat())
+            {
+                uv.su(location, 1, 0, ms.Pointer);
+                return;
+            }
+            if (uv.Type.IsDoubleMat())
+            {
+                Span<double> ds = stackalloc double[ms.Length];
+
+                for (int i = 0; i < ds.Length; i++)
+                {
+                    ds[i] = ms.Data[i];
+                }
+
+                fixed (void* ptr = &ds[0])
+                {
+                    uv.su(location, 1, 0, ptr);
+                }
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
+        }
+
+        /// <summary>
+        /// Specify the value of a uniform variable with a 4x4 matrix.
+        /// </summary>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        /// <param name="value">The value to set the uniform to.</param>
+        protected void SetUniform(int index, Matrix4 value)
+        {
+            Bind();
+
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
+
+            if (uv.Type == UniformType.FMat4)
+            {
+                uv.su(location, 1, 0, &value);
+                return;
+            }
+            if (uv.Type == UniformType.DMat4)
+            {
+                Span<float> fs = value.AsSpan();
+                Span<double> ds = stackalloc double[16];
+
+                for (int i = 0; i < ds.Length; i++)
+                {
+                    ds[i] = fs[i];
+                }
+
+                fixed (double* ptr = &ds[0])
+                {
+                    uv.su(location, 1, 0, ptr);
+                }
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
+        }
+        // /// <summary>
+        // /// Specify the value of a uniform variable with an array of 4x4 matrices.
+        // /// </summary>
+        // /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        // /// <param name="values">The values to set the uniform to.</param>
+        protected void SetUniform(int index, Matrix4[] value)
+        {
+            Bind();
+
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
+
+            if (uv.Type == UniformType.FMat4)
+            {
+                fixed (void* ptr = &value[0])
+                {
+                    uv.su(location, 1, 0, ptr);
+                }
+                return;
+            }
+            if (uv.Type == UniformType.DMat4)
+            {
+                Span<float> fs = MemoryMarshal.Cast<Matrix4, float>(value);
+                Span<double> ds = stackalloc double[16 * value.Length];
+
+                for (int i = 0; i < ds.Length; i++)
+                {
+                    ds[i] = fs[i];
+                }
+
+                fixed (double* ptr = &ds[0])
+                {
+                    uv.su(location, 1, 0, ptr);
+                }
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
+        }
+        /// <summary>
+        /// Specify the value of a uniform variable with a matrix span.
+        /// </summary>
+        /// <param name="index">Specifies the index of the uniform variable to be modified.</param>
+        /// <param name="value">The value to set the uniform to.</param>
+        protected void SetUniform(int index, MatrixSpan value)
+        {
+            Bind();
+
+            UniformVariable uv = Properties._uniforms[index];
+            int location = uv.Location;
+
+            if (uv.Type.IsFloatMat())
+            {
+                uv.su(location, 1, 0, value.Pointer);
+                return;
+            }
+            if (uv.Type.IsDoubleMat())
+            {
+                Span<double> ds = stackalloc double[value.Length];
+
+                for (int i = 0; i < ds.Length; i++)
+                {
+                    ds[i] = value.Data[i];
+                }
+
+                fixed (void* ptr = &ds[0])
+                {
+                    uv.su(location, 1, 0, ptr);
+                }
+                return;
+            }
+
+            throw new Exception("Invalid data type.");
+        }
+#endif
+
         /// <summary>
         /// Specify the value of uniform variables with a struct <typeparamref name="T"/>.
         /// </summary>
@@ -741,12 +980,19 @@ namespace Zene.Graphics.Base
                         break;
 
                     case UniformType.Float:
+                        if (memebers[i].CastFloat)
+                        {
+                            GL.Uniform1d(location + i, (double)*(float*)(ptr + offset));
+                            offset += 4;
+                            break;
+                        }
+
                         GL.Uniform1f(location + i, *(float*)(ptr + offset));
                         offset += 4;
                         break;
 
                     case UniformType.Double:
-                        if (memebers[i].DoubleAsFloat)
+                        if (memebers[i].CastFloat)
                         {
                             GL.Uniform1f(location + i, (float)*(double*)(ptr + offset));
                             offset += 8;
@@ -778,16 +1024,22 @@ namespace Zene.Graphics.Base
 
                     case UniformType.FVec2:
                         float* currentf2 = (float*)(ptr + offset);
+                        offset += 8;
+
+                        if (memebers[i].CastFloat)
+                        {
+                            GL.Uniform2d(location + i, (double)*currentf2, (double)*(currentf2 + 1));
+                            break;
+                        }
 
                         GL.Uniform2f(location + i, *currentf2, *(currentf2 + 1));
-                        offset += 8;
                         break;
 
                     case UniformType.DVec2:
                         double* currentd2 = (double*)(ptr + offset);
                         offset += 16;
 
-                        if (memebers[i].DoubleAsFloat)
+                        if (memebers[i].CastFloat)
                         {
                             GL.Uniform2f(location + i, (float)*currentd2, (float)*(currentd2 + 1));
                             break;
@@ -817,16 +1069,22 @@ namespace Zene.Graphics.Base
 
                     case UniformType.FVec3:
                         float* currentf3 = (float*)(ptr + offset);
+                        offset += 12;
+
+                        if (memebers[i].CastFloat)
+                        {
+                            GL.Uniform3d(location + i, (double)*currentf3, (double)*(currentf3 + 1), (double)*(currentf3 + 2));
+                            break;
+                        }
 
                         GL.Uniform3f(location + i, *currentf3, *(currentf3 + 1), *(currentf3 + 2));
-                        offset += 12;
                         break;
 
                     case UniformType.DVec3:
                         double* currentd3 = (double*)(ptr + offset);
                         offset += 24;
 
-                        if (memebers[i].DoubleAsFloat)
+                        if (memebers[i].CastFloat)
                         {
                             GL.Uniform3f(location + i, (float)*currentd3, (float)*(currentd3 + 1), (float)*(currentd3 + 2));
                             break;
@@ -856,16 +1114,22 @@ namespace Zene.Graphics.Base
 
                     case UniformType.FVec4:
                         float* currentf4 = (float*)(ptr + offset);
+                        offset += 16;
+
+                        if (memebers[i].CastFloat)
+                        {
+                            GL.Uniform4d(location + i, (double)*currentf4, (double)*(currentf4 + 1), (double)*(currentf4 + 2), (double)*(currentf4 + 3));
+                            break;
+                        }
 
                         GL.Uniform4f(location + i, *currentf4, *(currentf4 + 1), *(currentf4 + 2), *(currentf4 + 3));
-                        offset += 16;
                         break;
 
                     case UniformType.DVec4:
                         double* currentd4 = (double*)(ptr + offset);
                         offset += 32;
 
-                        if (memebers[i].DoubleAsFloat)
+                        if (memebers[i].CastFloat)
                         {
                             GL.Uniform4f(location + i, (float)*currentd4, (float)*(currentd4 + 1), (float)*(currentd4 + 2), (float)*(currentd4 + 3));
                             break;
@@ -922,7 +1186,7 @@ namespace Zene.Graphics.Base
                     case UniformType.Double:
                         offset += 8;
 
-                        if (memebers[i].DoubleAsFloat)
+                        if (memebers[i].CastFloat)
                         {
                             GL.Uniform1f(location + i, (float)*(double*)(ptr + offset));
                             break;
@@ -961,7 +1225,7 @@ namespace Zene.Graphics.Base
                         double* currentd2 = (double*)(ptr + offset);
                         offset += 16;
 
-                        if (memebers[i].DoubleAsFloat)
+                        if (memebers[i].CastFloat)
                         {
                             GL.Uniform2f(location + i, (float)*currentd2, (float)*(currentd2 + 1));
                             break;
@@ -1000,7 +1264,7 @@ namespace Zene.Graphics.Base
                         double* currentd3 = (double*)(ptr + offset);
                         offset += 24;
 
-                        if (memebers[i].DoubleAsFloat)
+                        if (memebers[i].CastFloat)
                         {
                             GL.Uniform3f(location + i, (float)*currentd3, (float)*(currentd3 + 1), (float)*(currentd3 + 2));
                             break;
@@ -1039,7 +1303,7 @@ namespace Zene.Graphics.Base
                         double* currentd4 = (double*)(ptr + offset);
                         offset += 32;
                         
-                        if (memebers[i].DoubleAsFloat)
+                        if (memebers[i].CastFloat)
                         {
                             GL.Uniform4f(location + i, (float)*currentd4, (float)*(currentd4 + 1), (float)*(currentd4 + 2), (float)*(currentd4 + 3));
                             break;

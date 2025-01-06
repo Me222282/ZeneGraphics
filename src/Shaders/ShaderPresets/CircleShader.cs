@@ -12,8 +12,8 @@ namespace Zene.Graphics
 
             SetUniform(Uniforms[3], Matrix4.Identity);
             SetUniform(Uniforms[2], 0);
-            Size = 1d;
-            Offset = 0.5;
+            Size = 1;
+            Offset = 0.5f;
         }
 
         private ColourSource _source = 0;
@@ -29,14 +29,14 @@ namespace Zene.Graphics
         }
 
         private Vector2 _size;
-        private double _radius;
-        public double Size
+        private floatv _radius;
+        public floatv Size
         {
             get => _size.X;
             set
             {
                 _size = value;
-                double r = value * 0.5;
+                floatv r = value * 0.5f;
                 _radius = r;
                 
                 SetUniform(Uniforms[4], _size);
@@ -55,15 +55,15 @@ namespace Zene.Graphics
             }
         }
         
-        private double _lWidth;
-        public double LineWidth
+        private floatv _lWidth;
+        public floatv LineWidth
         {
             get => _lWidth;
             set
             {
                 _lWidth = value;
 
-                double len = _radius - value;
+                floatv len = _radius - value;
 
                 SetUniform(Uniforms[6], len * len);
             }
@@ -95,7 +95,7 @@ namespace Zene.Graphics
 
         public ITexture Texture { get; set; }
 
-        public void SetSR(Vector2 size, double radius)
+        public void SetSR(Vector2 size, floatv radius)
         {
             _size = size;
             _radius = radius;

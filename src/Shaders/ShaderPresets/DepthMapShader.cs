@@ -12,8 +12,8 @@ namespace Zene.Graphics
             SetUniform(Uniforms[0], Matrix4.Identity);
         }
         
-        private double _depthOffset = 0d;
-        public double DepthOffset
+        private floatv _depthOffset = 0;
+        public floatv DepthOffset
         {
             get => _depthOffset;
             set

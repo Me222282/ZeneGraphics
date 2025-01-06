@@ -85,7 +85,7 @@ namespace Zene.Graphics
 
     public static unsafe class State
     {
-        public static void Init(Func<string, IntPtr> func, double version)
+        public static void Init(Func<string, IntPtr> func, floatv version)
         {
             if (Initialised && version <= GL.Version) { return; }
 

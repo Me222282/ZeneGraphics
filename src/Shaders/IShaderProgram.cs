@@ -27,11 +27,11 @@ namespace Zene.Graphics
             public Member(UniformType type, bool fad)
             {
                 Type = type;
-                DoubleAsFloat = fad;
+                CastFloat = fad;
             }
 
             public UniformType Type { get; }
-            public bool DoubleAsFloat { get; }
+            public bool CastFloat { get; }
 
             public static implicit operator Member(UniformType type) => new Member(type, false);
         }

@@ -139,7 +139,7 @@ namespace Zene.Graphics
         /// <summary>
         /// The depth value that is used when <see cref="Clear(BufferBit)"/> is called.
         /// </summary>
-        public static double ClearDepth
+        public static floatv ClearDepth
         {
             get => GL.context.frameClearDepth;
             set => GL.context.frameClearDepth = value;
@@ -188,8 +188,8 @@ namespace Zene.Graphics
         public void Write(IFramebuffer source, BufferBit mask, TextureSampling filter)
         {
             Base.Extensions.FramebufferOpenGL.BlitBuffer(this, source,
-                new GLBox(0, 0d, source.Properties.Width, source.Properties.Height),
-                new GLBox(0, 0d, Properties.Width, Properties.Height), mask, filter);
+                new GLBox(0, 0, source.Properties.Width, source.Properties.Height),
+                new GLBox(0, 0, Properties.Width, Properties.Height), mask, filter);
         }
     }
 }

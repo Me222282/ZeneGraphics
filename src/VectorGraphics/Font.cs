@@ -107,15 +107,15 @@ namespace Zene.Graphics
             return (maxWidth, maxHeight + extraHeight + BaseLineSpace);
         }
 
-        internal List<double> GetLineWidths(ReadOnlySpan<char> text, double charSpace, int tabSize, double multiplier)
+        internal List<floatv> GetLineWidths(ReadOnlySpan<char> text, floatv charSpace, int tabSize, floatv multiplier)
         {
             // No text
-            if (text.Length == 0) { return new List<double>(); }
+            if (text.Length == 0) { return new List<floatv>(); }
 
-            double sw = SpaceWidth * multiplier;
+            floatv sw = SpaceWidth * multiplier;
 
             // Width of line - starts with all the line spaces between each charater
-            List<double> result = new List<double>()
+            List<floatv> result = new List<floatv>()
             {
                 -charSpace
             };

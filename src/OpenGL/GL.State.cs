@@ -165,7 +165,7 @@ namespace Zene.Graphics.Base
 		}
 
 		[OpenGLSupport(1.0)]
-		internal static void DepthRange(double n, double f)
+		internal static void DepthRange(floatv n, floatv f)
 		{
 			if (context.depth.range.X == n &&
 				context.depth.range.Y == f)

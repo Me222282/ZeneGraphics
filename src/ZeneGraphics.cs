@@ -1,4 +1,20 @@
-﻿using System;
+﻿#pragma warning disable CS8981
+global using floatv =
+#if DOUBLE
+    System.Double;
+#else
+    System.Single;
+#endif
+
+global using Maths =
+#if DOUBLE
+    System.Math;
+#else
+    System.MathF;
+#endif
+#pragma warning restore CS8981
+
+using System;
 using System.IO;
 using Zene.Graphics.Base;
 using Zene.Structs;
@@ -472,7 +488,7 @@ namespace Zene.Graphics
 
             GL.Clear((uint)BufferBit.Colour);
         }
-        public static void Clear(this IFramebuffer framebuffer, Colour colour, double depth)
+        public static void Clear(this IFramebuffer framebuffer, Colour colour, floatv depth)
         {
             ColourF f = colour;
             GL.ClearColour(f.R, f.G, f.B, f.A);
@@ -482,7 +498,7 @@ namespace Zene.Graphics
 
             GL.Clear((uint)(BufferBit.Colour | BufferBit.Depth));
         }
-        public static void Clear(this IFramebuffer framebuffer, ColourF colour, double depth)
+        public static void Clear(this IFramebuffer framebuffer, ColourF colour, floatv depth)
         {
             GL.ClearColour(colour.R, colour.G, colour.B, colour.A);
             GL.ClearDepth(depth);
@@ -491,7 +507,7 @@ namespace Zene.Graphics
 
             GL.Clear((uint)(BufferBit.Colour | BufferBit.Depth));
         }
-        public static void Clear(this IFramebuffer framebuffer, Colour colour, double depth, int stencil)
+        public static void Clear(this IFramebuffer framebuffer, Colour colour, floatv depth, int stencil)
         {
             ColourF f = colour;
             GL.ClearColour(f.R, f.G, f.B, f.A);
@@ -502,7 +518,7 @@ namespace Zene.Graphics
 
             GL.Clear((uint)(BufferBit.Colour | BufferBit.Depth | BufferBit.Stencil));
         }
-        public static void Clear(this IFramebuffer framebuffer, ColourF colour, double depth, int stencil)
+        public static void Clear(this IFramebuffer framebuffer, ColourF colour, floatv depth, int stencil)
         {
             GL.ClearColour(colour.R, colour.G, colour.B, colour.A);
             GL.ClearDepth(depth);
@@ -531,7 +547,7 @@ namespace Zene.Graphics
 
             GL.Clear((uint)(BufferBit.Colour | BufferBit.Stencil));
         }
-        public static void Clear(this IFramebuffer framebuffer, double depth)
+        public static void Clear(this IFramebuffer framebuffer, floatv depth)
         {
             GL.ClearDepth(depth);
 
@@ -539,7 +555,7 @@ namespace Zene.Graphics
 
             GL.Clear((uint)BufferBit.Depth);
         }
-        public static void Clear(this IFramebuffer framebuffer, double depth, int stencil)
+        public static void Clear(this IFramebuffer framebuffer, floatv depth, int stencil)
         {
             GL.ClearDepth(depth);
             GL.ClearStencil(stencil);
@@ -576,6 +592,16 @@ namespace Zene.Graphics
             }
 
             return data;
+        }
+
+        public static bool IsFloatMat(this UniformType ut)
+        {
+            return (UniformType.FMat2 <= ut && ut <= UniformType.FMat4) ||
+                (UniformType.FMat2x3 <= ut && ut <= UniformType.FMat4x3);
+        }
+        public static bool IsDoubleMat(this UniformType ut)
+        {
+            return UniformType.DMat2 <= ut && ut <= UniformType.DMat4x3;
         }
     }
 }

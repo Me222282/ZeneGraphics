@@ -22,6 +22,15 @@ namespace Zene.Graphics
         HalfFloat = 0x140b,
         Float = 0x1406,
         Double = 0x140a,
+        /// <summary>
+        /// Used internally, value is set by compile time constant DOUBLE.
+        /// </summary>
+        FloatV =
+#if DOUBLE
+            Double,
+#else
+            Float,
+#endif
         Fixed = 0x140c,
         IntRev = 0x8d9f,
         UIntRev = 0x8368,

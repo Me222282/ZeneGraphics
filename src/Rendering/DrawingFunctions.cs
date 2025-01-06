@@ -131,7 +131,7 @@ namespace Zene.Graphics
             Shapes.BasicShader.Texture = null;
             dc.Model = model;
         }
-        public static void DrawRoundedBox(this IDrawingContext dc, IBox bounds, ColourF colour, double cornerRadius)
+        public static void DrawRoundedBox(this IDrawingContext dc, IBox bounds, ColourF colour, floatv cornerRadius)
         {
             dc.Shader = Shapes.BorderShader;
             Shapes.BorderShader.Colour = colour;
@@ -157,7 +157,7 @@ namespace Zene.Graphics
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
-        public static void DrawRoundedBox(this IDrawingContext dc, IBox bounds, ITexture texture, double cornerRadius)
+        public static void DrawRoundedBox(this IDrawingContext dc, IBox bounds, ITexture texture, floatv cornerRadius)
         {
             dc.Shader = Shapes.BorderShader;
             Shapes.BorderShader.Texture = texture;
@@ -183,7 +183,7 @@ namespace Zene.Graphics
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
-        public static void DrawBorderBox(this IDrawingContext dc, IBox bounds, ColourF colour, double borderWidth, ColourF borderColour, double cornerRadius = 0)
+        public static void DrawBorderBox(this IDrawingContext dc, IBox bounds, ColourF colour, floatv borderWidth, ColourF borderColour, floatv cornerRadius = 0)
         {
             dc.Shader = Shapes.BorderShader;
             Shapes.BorderShader.Colour = colour;
@@ -210,7 +210,7 @@ namespace Zene.Graphics
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
-        public static void DrawBorderBox(this IDrawingContext dc, IBox bounds, ITexture texture, double borderWidth, ColourF borderColour, double cornerRadius = 0)
+        public static void DrawBorderBox(this IDrawingContext dc, IBox bounds, ITexture texture, floatv borderWidth, ColourF borderColour, floatv cornerRadius = 0)
         {
             dc.Shader = Shapes.BorderShader;
             Shapes.BorderShader.Texture = texture;
@@ -242,9 +242,9 @@ namespace Zene.Graphics
             dc.Shader = Shapes.CircleShader;
             Shapes.CircleShader.Colour = colour;
             Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
-            Shapes.CircleShader.Size = 1d;
-            Shapes.CircleShader.LineWidth = 0d;
-            Shapes.CircleShader.Offset = 0.5;
+            Shapes.CircleShader.Size = 1;
+            Shapes.CircleShader.LineWidth = 0;
+            Shapes.CircleShader.Offset = 0.5f;
 
             IMatrix model = dc.Model;
             Matrix4 m;
@@ -267,9 +267,9 @@ namespace Zene.Graphics
             dc.Shader = Shapes.BasicShader;
             Shapes.CircleShader.Texture = texture;
             Shapes.CircleShader.ColourSource = ColourSource.Texture;
-            Shapes.CircleShader.Size = 1d;
-            Shapes.CircleShader.LineWidth = 0d;
-            Shapes.CircleShader.Offset = 0.5;
+            Shapes.CircleShader.Size = 1;
+            Shapes.CircleShader.LineWidth = 0;
+            Shapes.CircleShader.Offset = 0.5f;
 
             IMatrix model = dc.Model;
             Matrix4 m;
@@ -287,11 +287,11 @@ namespace Zene.Graphics
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
-        public static void DrawCircle(this IDrawingContext dc, Vector2 location, double radius, ColourF colour)
+        public static void DrawCircle(this IDrawingContext dc, Vector2 location, floatv radius, ColourF colour)
             => DrawEllipse(dc, new Box(location, radius), colour);
-        public static void DrawCircle(this IDrawingContext dc, Vector2 location, double radius, ITexture texture)
+        public static void DrawCircle(this IDrawingContext dc, Vector2 location, floatv radius, ITexture texture)
         => DrawEllipse(dc, new Box(location, radius), texture);
-        private static void DrawRingP(this IDrawingContext dc, IBox bounds, double lineWidth, ColourF borderColour)
+        private static void DrawRingP(this IDrawingContext dc, IBox bounds, floatv lineWidth, ColourF borderColour)
         {
             dc.Shader = Shapes.CircleShader;
             // Shapes.CircleShader.Colour = colour;
@@ -299,7 +299,7 @@ namespace Zene.Graphics
             // Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
             Shapes.CircleShader.Size = Math.Min(bounds.Width, bounds.Height);
             Shapes.CircleShader.LineWidth = lineWidth;
-            Shapes.CircleShader.Offset = 0.5;
+            Shapes.CircleShader.Offset = 0.5f;
 
             IMatrix model = dc.Model;
             Matrix4 m;
@@ -317,24 +317,24 @@ namespace Zene.Graphics
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
-        public static void DrawRing(this IDrawingContext dc, IBox bounds, double lineWidth, ColourF colour)
+        public static void DrawRing(this IDrawingContext dc, IBox bounds, floatv lineWidth, ColourF colour)
         {
             Shapes.CircleShader.ColourSource = ColourSource.Discard;
             DrawRingP(dc, bounds, lineWidth, colour);
         }
-        public static void DrawBorderEllipse(this IDrawingContext dc, IBox bounds, double lineWidth, ColourF colour, ColourF borderColour)
+        public static void DrawBorderEllipse(this IDrawingContext dc, IBox bounds, floatv lineWidth, ColourF colour, ColourF borderColour)
         {
             Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
             Shapes.CircleShader.Colour = colour;
             DrawRingP(dc, bounds, lineWidth, borderColour);
         }
-        public static void DrawBorderEllipse(this IDrawingContext dc, IBox bounds, double lineWidth, ITexture texture, ColourF borderColour)
+        public static void DrawBorderEllipse(this IDrawingContext dc, IBox bounds, floatv lineWidth, ITexture texture, ColourF borderColour)
         {
             Shapes.CircleShader.ColourSource = ColourSource.Texture;
             Shapes.CircleShader.Texture = texture;
             DrawRingP(dc, bounds, lineWidth, borderColour);
         }
-        private static void DrawArcP(this IDrawingContext dc, Vector2 a, Vector2 b, double curve, double lineWidth, ColourF colour)
+        private static void DrawArcP(this IDrawingContext dc, Vector2 a, Vector2 b, floatv curve, floatv lineWidth, ColourF colour)
         {
             if (curve == 0d)
             {
@@ -355,27 +355,27 @@ namespace Zene.Graphics
             Vector2 t = (b - a);
             Vector2 dir = t.Rotated90();
             Vector2 cp = mid + (dir * curve);
-            double r = curve / (2d - (t.SquaredLength / (2d * cp.SquaredDistance(a))));
-            
+            floatv r = curve / (2 - (t.SquaredLength / (2 * cp.SquaredDistance(a))));
+
             // slowest part!!
-            double length = dir.Length;
+            floatv length = dir.Length;
             
             Vector2 size = (length, length * curve);
             if (curve > 0.5)
             {
-                size.X = r * 2d;
+                size.X = r * 2;
             }
-            
-            double hsx = size.X * 0.5;
+
+            floatv hsx = size.X * 0.5f;
             // Box bounds = new Box(-hsx, hsx, size.Y, 0d);
             
             // Shapes.CircleShader.Size = r * 2d;
             Shapes.CircleShader.Offset = ((hsx, size.Y - r) / size);
             Shapes.CircleShader.SetSR(size, r);
             Shapes.CircleShader.LineWidth = lineWidth;
-            
-            double cos = t.X / length;
-            double sin = t.Y / length;
+
+            floatv cos = t.X / length;
+            floatv sin = t.Y / length;
 
             // Matrix4 rotat = new Matrix4(
             //     new Vector4(cos, sin, 0, 0),
@@ -384,9 +384,9 @@ namespace Zene.Graphics
             //     new Vector4(0, 0, 0, 1));
 
             // Matrix4 mod = Matrix4.CreateBox(bounds) * rotat * Matrix4.CreateTranslation(mid);
-            double w = size.X;
-            double h = size.Y;
-            double y = size.Y * 0.5;
+            floatv w = size.X;
+            floatv h = size.Y;
+            floatv y = size.Y * 0.5f;
             Matrix4 mod = new Matrix4(
                 new Vector4(cos * w, sin * w, 0, 0),
                 new Vector4(-sin * h, cos * h, 0, 0),
@@ -409,28 +409,28 @@ namespace Zene.Graphics
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
-        public static void DrawArc(this IDrawingContext dc, Vector2 a, Vector2 b, double curve, double lineWidth, ColourF colour)
+        public static void DrawArc(this IDrawingContext dc, Vector2 a, Vector2 b, floatv curve, floatv lineWidth, ColourF colour)
         {
             Shapes.CircleShader.ColourSource = ColourSource.Discard;
             DrawArcP(dc, a, b, curve, lineWidth, colour);
         }
-        public static void DrawFilledArc(this IDrawingContext dc, Vector2 a, Vector2 b, double curve, double lineWidth, ColourF borderColour, Colour colour)
+        public static void DrawFilledArc(this IDrawingContext dc, Vector2 a, Vector2 b, floatv curve, floatv lineWidth, ColourF borderColour, Colour colour)
         {
             Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
             Shapes.CircleShader.Colour = colour;
             DrawArcP(dc, a, b, curve, lineWidth, borderColour);
         }
-        public static void DrawFilledArc(this IDrawingContext dc, Vector2 a, Vector2 b, double curve, Colour colour)
+        public static void DrawFilledArc(this IDrawingContext dc, Vector2 a, Vector2 b, floatv curve, Colour colour)
         {
             Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
             Shapes.CircleShader.Colour = colour;
-            DrawArcP(dc, a, b, curve, 0d, ColourF.Zero);
+            DrawArcP(dc, a, b, curve, 0, ColourF.Zero);
         }
-        public static void DrawFilledArc(this IDrawingContext dc, Vector2 a, Vector2 b, double curve, ITexture texture)
+        public static void DrawFilledArc(this IDrawingContext dc, Vector2 a, Vector2 b, floatv curve, ITexture texture)
         {
             Shapes.CircleShader.ColourSource = ColourSource.Texture;
             Shapes.CircleShader.Texture = texture;
-            DrawArcP(dc, a, b, curve, 0d, ColourF.Zero);
+            DrawArcP(dc, a, b, curve, 0, ColourF.Zero);
         }
 
         public static void DrawTriangle(this IDrawingContext dc, Vector2 a, Vector2 b, Vector2 c, ColourF colour)
@@ -479,20 +479,18 @@ namespace Zene.Graphics
         }
         private static Matrix4 CreateTriangle(Vector2 p1, Vector2 p2, Vector2 p3)
         {
-            double e = p1.X;
-            double f = p1.Y;
-            double a = p2.X - e;
-            double b = p2.Y - f;
-            double c = p3.X - e;
-            double d = p3.Y - f;
+            floatv e = p1.X;
+            floatv f = p1.Y;
+            floatv a = p2.X - e;
+            floatv b = p2.Y - f;
+            floatv c = p3.X - e;
+            floatv d = p3.Y - f;
 
-            return new Matrix4(new double[]
-            {
-                a, b, 0, 0,
-                c, d, 0, 0,
-                0, 0, 1, 0,
-                e, f, 0, 1
-            });
+            return new Matrix4(
+                new Vector4(a, b, 0, 0),
+                new Vector4(c, d, 0, 0),
+                new Vector4(0, 0, 1, 0),
+                new Vector4(e, f, 0, 1));
         }
     }
 }

@@ -10,13 +10,13 @@ namespace Zene.Graphics.Base
 		[ThreadStatic]
 		internal static GraphicsContext context;
 
-		public static double Version
+		public static floatv Version
         {
 			get
             {
 				if (context == null)
                 {
-					return 0d;
+					return 0f;
                 }
 
 				return context.version;
@@ -2663,7 +2663,7 @@ namespace Zene.Graphics.Base
 			throw new OpenGLSupportException("GL Object not supported");
 		}
 
-		internal static void Init(Func<string, IntPtr> getProcAddress, double version)
+		internal static void Init(Func<string, IntPtr> getProcAddress, floatv version)
 		{
 			// Setup version acessor
 			if (Version < version && context != null) { context.version = version; }

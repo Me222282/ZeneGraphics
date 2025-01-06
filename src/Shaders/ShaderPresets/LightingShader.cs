@@ -63,7 +63,7 @@ namespace Zene.Graphics
             SetUniform(Uniforms[12], 2);
 
             ShadowDither = true;
-            ShadowBias = 0.000005;
+            ShadowBias = 0.000005f;
         }
 
         private readonly int _lightColourOffset;
@@ -288,8 +288,8 @@ namespace Zene.Graphics
             }
         }
 
-        private double _shadowBias;
-        public double ShadowBias
+        private floatv _shadowBias;
+        public floatv ShadowBias
         {
             get => _shadowBias;
             set
@@ -512,7 +512,7 @@ namespace Zene.Graphics
 
     public struct Light : IUniformStruct
     {
-        public Light(ColourF3 colour, ColourF3 ambientColour, double linear, double quadratic, Vector3 point, bool direction = false)
+        public Light(ColourF3 colour, ColourF3 ambientColour, floatv linear, floatv quadratic, Vector3 point, bool direction = false)
         {
             LightColour = colour;
             AmbientLight = ambientColour;
@@ -525,31 +525,36 @@ namespace Zene.Graphics
         public ColourF3 AmbientLight { get; set; }
         public Vector4 LightVector { get; set; }
 
-        public double Linear { get; set; }
-        public double Quadratic { get; set; }
+        public floatv Linear { get; set; }
+        public floatv Quadratic { get; set; }
 
         private static readonly IUniformStruct.Member[] _members = new IUniformStruct.Member[]
         {
             UniformType.FVec3,
             UniformType.FVec3,
+#if DOUBLE
             new IUniformStruct.Member(UniformType.DVec4, true),
-
             new IUniformStruct.Member(UniformType.Double, true),
             new IUniformStruct.Member(UniformType.Double, true)
+#else
+            UniformType.FVec4,
+            UniformType.Float,
+            UniformType.Float
+#endif
         };
         public IUniformStruct.Member[] Members() => _members;
     }
 
     public struct SpotLight : IUniformStruct
     {
-        public SpotLight(ColourF3 colour, Radian angle, Radian outerAngle, double linear, double quadratic, Vector3 point, Vector3 direction)
+        public SpotLight(ColourF3 colour, Radian angle, Radian outerAngle, floatv linear, floatv quadratic, Vector3 point, Vector3 direction)
         {
             LightColour = colour;
             LightVector = point;
             Direction = direction;
 
-            CosAngle = Math.Cos(angle);
-            CosOuterAngle = Math.Cos(outerAngle);
+            CosAngle = Maths.Cos(angle);
+            CosOuterAngle = Maths.Cos(outerAngle);
             Linear = linear;
             Quadratic = quadratic;
         }
@@ -558,14 +563,15 @@ namespace Zene.Graphics
         public Vector3 LightVector { get; set; }
         public Vector3 Direction { get; set; }
 
-        public double CosAngle { get; set; }
-        public double CosOuterAngle { get; set; }
-        public double Linear { get; set; }
-        public double Quadratic { get; set; }
+        public floatv CosAngle { get; set; }
+        public floatv CosOuterAngle { get; set; }
+        public floatv Linear { get; set; }
+        public floatv Quadratic { get; set; }
 
         private static readonly IUniformStruct.Member[] _members = new IUniformStruct.Member[]
         {
             UniformType.FVec3,
+#if DOUBLE
             new IUniformStruct.Member(UniformType.DVec3, true),
             new IUniformStruct.Member(UniformType.DVec3, true),
 
@@ -573,6 +579,14 @@ namespace Zene.Graphics
             new IUniformStruct.Member(UniformType.Double, true),
             new IUniformStruct.Member(UniformType.Double, true),
             new IUniformStruct.Member(UniformType.Double, true)
+#else
+            UniformType.FVec3,
+            UniformType.FVec3,
+            UniformType.Float,
+            UniformType.Float,
+            UniformType.Float,
+            UniformType.Float,
+#endif
         };
         public IUniformStruct.Member[] Members() => _members;
     }

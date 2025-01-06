@@ -35,13 +35,13 @@ namespace Zene.Graphics
             Height = size.Y;
         }
         /// <summary>
-        /// Creates a rectangle box from a <see cref="double"/> based location and size.
+        /// Creates a rectangle box from a <see cref="floatv"/> based location and size.
         /// </summary>
         /// <param name="x">The x value of the location.</param>
         /// <param name="y">The y value of the location.</param>
         /// <param name="w">The width value of the size.</param>
         /// <param name="h">The height value of the size.</param>
-        public GLBox(double x, double y, double w, double h)
+        public GLBox(floatv x, floatv y, floatv w, floatv h)
         {
             X = (int)x;
             Y = (int)y;
@@ -49,7 +49,7 @@ namespace Zene.Graphics
             Height = (int)h;
         }
         /// <summary>
-        /// Creates a rectangle box from a <see cref="double"/> based location and size.
+        /// Creates a rectangle box from a <see cref="floatv"/> based location and size.
         /// </summary>
         /// <param name="location">The location of the rectangle.</param>
         /// <param name="size">The size of the rectangle.</param>
@@ -76,36 +76,36 @@ namespace Zene.Graphics
         /// The left x location of the box.
         /// </summary>
         public int X { get; set; }
-        double IBox.X => X;
+        floatv IBox.X => X;
         /// <summary>
         /// The bottom y location of the box.
         /// </summary>
         public int Y { get; set; }
-        double IBox.Y => Y;
+        floatv IBox.Y => Y;
         /// <summary>
         /// The width of the box.
         /// </summary>
         public int Width { get; set; }
-        double IBox.Width => Width;
+        floatv IBox.Width => Width;
         /// <summary>
         /// The height of the box.
         /// </summary>
         public int Height { get; set; }
-        double IBox.Height => Height;
+        floatv IBox.Height => Height;
 
         /// <summary>
         /// The center location of the box.
         /// </summary>
         public Vector2I Centre
         {
-            get => new Vector2I(X + (Width * 0.5), Y - (Height * 0.5));
+            get => new Vector2I(X + (Width * 0.5f), Y - (Height * 0.5f));
             set
             {
                 X = value.X - (Width / 2);
                 Y = value.Y - (Height / 2);
             }
         }
-        Vector2 IBox.Centre => new Vector2(X + (Width * 0.5), Y - (Height * 0.5));
+        Vector2 IBox.Centre => new Vector2(X + (Width * 0.5f), Y - (Height * 0.5f));
         Vector2 IBox.Size => Size;
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace Zene.Graphics
                 X = value;
             }
         }
-        double IBox.Left
+        floatv IBox.Left
         {
             get => X;
             set => Left = (int)value;
@@ -169,7 +169,7 @@ namespace Zene.Graphics
                 }
             }
         }
-        double IBox.Right
+        floatv IBox.Right
         {
             get => X + Width;
             set => Right = (int)value;
@@ -190,7 +190,7 @@ namespace Zene.Graphics
                 Y = value;
             }
         }
-        double IBox.Bottom
+        floatv IBox.Bottom
         {
             get => Y;
             set => Bottom = (int)value;
@@ -210,7 +210,7 @@ namespace Zene.Graphics
                 }
             }
         }
-        double IBox.Top
+        floatv IBox.Top
         {
             get => Y + Height;
             set => Top = (int)value;

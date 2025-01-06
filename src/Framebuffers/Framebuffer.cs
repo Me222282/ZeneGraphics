@@ -433,7 +433,7 @@ namespace Zene.Graphics
         [OpenGLSupport(3.0)]
         public void CopyFrameBuffer(IFramebuffer destination, IBox dstBox, BufferBit mask, TextureSampling filter)
         {
-            BlitBuffer(destination, new GLBox(0d, 0d, Width, Height), dstBox, mask, filter);
+            BlitBuffer(destination, new GLBox(0, 0, Width, Height), dstBox, mask, filter);
         }
         /// <summary>
         /// Copies the data from this framebuffer to <paramref name="destination"/>.
@@ -458,8 +458,8 @@ namespace Zene.Graphics
         public void CopyFrameBuffer(IFramebuffer destination, BufferBit mask, TextureSampling filter)
         {
             BlitBuffer(destination,
-                new GLBox(0, 0d, Width, Height),
-                new GLBox(0, 0d, destination.Properties.Width, destination.Properties.Height), mask, filter);
+                new GLBox(0, 0, Width, Height),
+                new GLBox(0, 0, destination.Properties.Width, destination.Properties.Height), mask, filter);
         }
 
         /// <summary>

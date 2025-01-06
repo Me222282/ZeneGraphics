@@ -486,435 +486,435 @@ namespace Zene.Graphics
 
         private static void UniformFMat2(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
+            //if (size > 1 && index < 1)
+            //{
+            //    Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
-                float* matData = stackalloc float[4 * size];
-                Span<double> temp2 = stackalloc double[4];
+            //    float* matData = stackalloc float[4 * size];
+            //    Span<double> temp2 = stackalloc double[4];
                 
-                for (int i = 0; i < size; i++)
-                {
-                    matrices[i].MatrixData(new MatrixSpan(2, 2, temp2));
+            //    for (int i = 0; i < size; i++)
+            //    {
+            //        matrices[i].MatrixData(new MatrixSpan(2, 2, temp2));
 
-                    int mI = i * 4;
-                    matData[mI] = (float)temp2[0];
-                    matData[mI + 1] = (float)temp2[1];
+            //        int mI = i * 4;
+            //        matData[mI] = (float)temp2[0];
+            //        matData[mI + 1] = (float)temp2[1];
 
-                    matData[mI + 2] = (float)temp2[2];
-                    matData[mI + 3] = (float)temp2[3];
-                }
+            //        matData[mI + 2] = (float)temp2[2];
+            //        matData[mI + 3] = (float)temp2[3];
+            //    }
 
-                GL.UniformMatrix2fv(location, size, false, matData);
-                return;
-            }
+            //    GL.UniformMatrix2fv(location, size, false, matData);
+            //    return;
+            //}
 
-            float* data = stackalloc float[4];
-            Span<double> temp = new Span<double>(value, 4);
+            //float* data = stackalloc float[4];
+            //Span<double> temp = new Span<double>(value, 4);
 
-            data[0] = (float)temp[0];
-            data[1] = (float)temp[1];
+            //data[0] = (float)temp[0];
+            //data[1] = (float)temp[1];
 
-            data[2] = (float)temp[2];
-            data[3] = (float)temp[3];
+            //data[2] = (float)temp[2];
+            //data[3] = (float)temp[3];
 
-            GL.UniformMatrix2fv(location, size, false, data);
+            GL.UniformMatrix2fv(location, size, false, (float*)value);
         }
         private static void UniformFMat2x3(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
+            //if (size > 1 && index < 1)
+            //{
+            //    Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
-                float* matData = stackalloc float[6 * size];
-                Span<double> temp2 = stackalloc double[6];
+            //    float* matData = stackalloc float[6 * size];
+            //    Span<double> temp2 = stackalloc double[6];
 
-                for (int i = 0; i < size; i++)
-                {
-                    matrices[i].MatrixData(new MatrixSpan(2, 3, temp2));
+            //    for (int i = 0; i < size; i++)
+            //    {
+            //        matrices[i].MatrixData(new MatrixSpan(2, 3, temp2));
 
-                    int mI = i * 6;
-                    matData[mI] = (float)temp2[0];
-                    matData[mI + 1] = (float)temp2[1];
-                    matData[mI + 2] = (float)temp2[2];
+            //        int mI = i * 6;
+            //        matData[mI] = (float)temp2[0];
+            //        matData[mI + 1] = (float)temp2[1];
+            //        matData[mI + 2] = (float)temp2[2];
                     
-                    matData[mI + 3] = (float)temp2[3];
-                    matData[mI + 4] = (float)temp2[4];
-                    matData[mI + 5] = (float)temp2[5];
-                }
+            //        matData[mI + 3] = (float)temp2[3];
+            //        matData[mI + 4] = (float)temp2[4];
+            //        matData[mI + 5] = (float)temp2[5];
+            //    }
 
-                GL.UniformMatrix2x3fv(location, size, false, matData);
-                return;
-            }
+            //    GL.UniformMatrix2x3fv(location, size, false, matData);
+            //    return;
+            //}
 
-            float* data = stackalloc float[6];
-            Span<double> temp = new Span<double>(value, 6);
+            //float* data = stackalloc float[6];
+            //Span<double> temp = new Span<double>(value, 6);
 
-            data[0] = (float)temp[0];
-            data[1] = (float)temp[1];
-            data[2] = (float)temp[2];
+            //data[0] = (float)temp[0];
+            //data[1] = (float)temp[1];
+            //data[2] = (float)temp[2];
             
-            data[3] = (float)temp[3];
-            data[4] = (float)temp[4];
-            data[5] = (float)temp[5];
+            //data[3] = (float)temp[3];
+            //data[4] = (float)temp[4];
+            //data[5] = (float)temp[5];
 
-            GL.UniformMatrix2x3fv(location, size, false, data);
+            GL.UniformMatrix2x3fv(location, size, false, (float*)value);
         }
         private static void UniformFMat2x4(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
+            //if (size > 1 && index < 1)
+            //{
+            //    Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
-                float* matData = stackalloc float[8 * size];
-                Span<double> temp2 = stackalloc double[8];
+            //    float* matData = stackalloc float[8 * size];
+            //    Span<double> temp2 = stackalloc double[8];
 
-                for (int i = 0; i < size; i++)
-                {
-                    matrices[i].MatrixData(new MatrixSpan(2, 4, temp2));
+            //    for (int i = 0; i < size; i++)
+            //    {
+            //        matrices[i].MatrixData(new MatrixSpan(2, 4, temp2));
 
-                    int mI = i * 8;
-                    matData[mI] = (float)temp2[0];
-                    matData[mI + 1] = (float)temp2[1];
-                    matData[mI + 2] = (float)temp2[2];
-                    matData[mI + 3] = (float)temp2[3];
+            //        int mI = i * 8;
+            //        matData[mI] = (float)temp2[0];
+            //        matData[mI + 1] = (float)temp2[1];
+            //        matData[mI + 2] = (float)temp2[2];
+            //        matData[mI + 3] = (float)temp2[3];
                     
-                    matData[mI + 4] = (float)temp2[4];
-                    matData[mI + 5] = (float)temp2[5];
-                    matData[mI + 6] = (float)temp2[6];
-                    matData[mI + 7] = (float)temp2[7];
-                }
+            //        matData[mI + 4] = (float)temp2[4];
+            //        matData[mI + 5] = (float)temp2[5];
+            //        matData[mI + 6] = (float)temp2[6];
+            //        matData[mI + 7] = (float)temp2[7];
+            //    }
 
-                GL.UniformMatrix2x4fv(location, size, false, matData);
-                return;
-            }
+            //    GL.UniformMatrix2x4fv(location, size, false, matData);
+            //    return;
+            //}
 
-            float* data = stackalloc float[8];
-            Span<double> temp = new Span<double>(value, 8);
+            //float* data = stackalloc float[8];
+            //Span<double> temp = new Span<double>(value, 8);
 
-            data[0] = (float)temp[0];
-            data[1] = (float)temp[1];
-            data[2] = (float)temp[2];
-            data[3] = (float)temp[3];
+            //data[0] = (float)temp[0];
+            //data[1] = (float)temp[1];
+            //data[2] = (float)temp[2];
+            //data[3] = (float)temp[3];
             
-            data[4] = (float)temp[4];
-            data[5] = (float)temp[5];
-            data[6] = (float)temp[6];
-            data[7] = (float)temp[7];
+            //data[4] = (float)temp[4];
+            //data[5] = (float)temp[5];
+            //data[6] = (float)temp[6];
+            //data[7] = (float)temp[7];
 
-            GL.UniformMatrix2x4fv(location, size, false, data);
+            GL.UniformMatrix2x4fv(location, size, false, (float*)value);
         }
         private static void UniformFMat3(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
+            //if (size > 1 && index < 1)
+            //{
+            //    Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
-                float* matData = stackalloc float[9 * size];
-                Span<double> temp2 = stackalloc double[9];
+            //    float* matData = stackalloc float[9 * size];
+            //    Span<double> temp2 = stackalloc double[9];
 
-                for (int i = 0; i < size; i++)
-                {
-                    matrices[i].MatrixData(new MatrixSpan(3, 3, temp2));
+            //    for (int i = 0; i < size; i++)
+            //    {
+            //        matrices[i].MatrixData(new MatrixSpan(3, 3, temp2));
 
-                    int mI = i * 9;
-                    matData[mI] = (float)temp2[0];
-                    matData[mI + 1] = (float)temp2[1];
-                    matData[mI + 2] = (float)temp2[2];
+            //        int mI = i * 9;
+            //        matData[mI] = (float)temp2[0];
+            //        matData[mI + 1] = (float)temp2[1];
+            //        matData[mI + 2] = (float)temp2[2];
                     
-                    matData[mI + 3] = (float)temp2[3];
-                    matData[mI + 4] = (float)temp2[4];
-                    matData[mI + 5] = (float)temp2[5];
+            //        matData[mI + 3] = (float)temp2[3];
+            //        matData[mI + 4] = (float)temp2[4];
+            //        matData[mI + 5] = (float)temp2[5];
                     
-                    matData[mI + 6] = (float)temp2[6];
-                    matData[mI + 7] = (float)temp2[7];
-                    matData[mI + 8] = (float)temp2[8];
-                }
+            //        matData[mI + 6] = (float)temp2[6];
+            //        matData[mI + 7] = (float)temp2[7];
+            //        matData[mI + 8] = (float)temp2[8];
+            //    }
 
-                GL.UniformMatrix3fv(location, size, false, matData);
-                return;
-            }
+            //    GL.UniformMatrix3fv(location, size, false, matData);
+            //    return;
+            //}
 
-            float* data = stackalloc float[9];
-            Span<double> temp = new Span<double>(value, 9);
+            //float* data = stackalloc float[9];
+            //Span<double> temp = new Span<double>(value, 9);
 
-            data[0] = (float)temp[0];
-            data[1] = (float)temp[1];
-            data[2] = (float)temp[2];
+            //data[0] = (float)temp[0];
+            //data[1] = (float)temp[1];
+            //data[2] = (float)temp[2];
             
-            data[3] = (float)temp[3];
-            data[4] = (float)temp[4];
-            data[5] = (float)temp[5];
+            //data[3] = (float)temp[3];
+            //data[4] = (float)temp[4];
+            //data[5] = (float)temp[5];
             
-            data[6] = (float)temp[6];
-            data[7] = (float)temp[7];
-            data[8] = (float)temp[8];
+            //data[6] = (float)temp[6];
+            //data[7] = (float)temp[7];
+            //data[8] = (float)temp[8];
 
-            GL.UniformMatrix3fv(location, size, false, data);
+            GL.UniformMatrix3fv(location, size, false, (float*)value);
         }
         private static void UniformFMat3x2(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
+            //if (size > 1 && index < 1)
+            //{
+            //    Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
-                float* matData = stackalloc float[6 * size];
-                Span<double> temp2 = stackalloc double[6];
+            //    float* matData = stackalloc float[6 * size];
+            //    Span<double> temp2 = stackalloc double[6];
 
-                for (int i = 0; i < size; i++)
-                {
-                    matrices[i].MatrixData(new MatrixSpan(3, 2, temp2));
+            //    for (int i = 0; i < size; i++)
+            //    {
+            //        matrices[i].MatrixData(new MatrixSpan(3, 2, temp2));
 
-                    int mI = i * 6;
-                    matData[mI] = (float)temp2[0];
-                    matData[mI + 1] = (float)temp2[1];
+            //        int mI = i * 6;
+            //        matData[mI] = (float)temp2[0];
+            //        matData[mI + 1] = (float)temp2[1];
                     
-                    matData[mI + 2] = (float)temp2[2];
-                    matData[mI + 3] = (float)temp2[3];
+            //        matData[mI + 2] = (float)temp2[2];
+            //        matData[mI + 3] = (float)temp2[3];
                     
-                    matData[mI + 4] = (float)temp2[4];
-                    matData[mI + 5] = (float)temp2[5];
-                }
+            //        matData[mI + 4] = (float)temp2[4];
+            //        matData[mI + 5] = (float)temp2[5];
+            //    }
 
-                GL.UniformMatrix3x2fv(location, size, false, matData);
-                return;
-            }
+            //    GL.UniformMatrix3x2fv(location, size, false, matData);
+            //    return;
+            //}
 
-            float* data = stackalloc float[6];
-            Span<double> temp = new Span<double>(value, 6);
+            //float* data = stackalloc float[6];
+            //Span<double> temp = new Span<double>(value, 6);
 
-            data[0] = (float)temp[0];
-            data[1] = (float)temp[1];
+            //data[0] = (float)temp[0];
+            //data[1] = (float)temp[1];
             
-            data[2] = (float)temp[2];
-            data[3] = (float)temp[3];
+            //data[2] = (float)temp[2];
+            //data[3] = (float)temp[3];
             
-            data[4] = (float)temp[4];
-            data[5] = (float)temp[5];
+            //data[4] = (float)temp[4];
+            //data[5] = (float)temp[5];
 
-            GL.UniformMatrix3x2fv(location, size, false, data);
+            GL.UniformMatrix3x2fv(location, size, false, (float*)value);
         }
         private static void UniformFMat3x4(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
+            //if (size > 1 && index < 1)
+            //{
+            //    Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
-                float* matData = stackalloc float[12 * size];
-                Span<double> temp2 = stackalloc double[12];
+            //    float* matData = stackalloc float[12 * size];
+            //    Span<double> temp2 = stackalloc double[12];
 
-                for (int i = 0; i < size; i++)
-                {
-                    matrices[i].MatrixData(new MatrixSpan(3, 4, temp2));
+            //    for (int i = 0; i < size; i++)
+            //    {
+            //        matrices[i].MatrixData(new MatrixSpan(3, 4, temp2));
 
-                    int mI = i * 12;
-                    matData[mI] = (float)temp2[0];
-                    matData[mI + 1] = (float)temp2[1];
-                    matData[mI + 2] = (float)temp2[2];
-                    matData[mI + 3] = (float)temp2[3];
+            //        int mI = i * 12;
+            //        matData[mI] = (float)temp2[0];
+            //        matData[mI + 1] = (float)temp2[1];
+            //        matData[mI + 2] = (float)temp2[2];
+            //        matData[mI + 3] = (float)temp2[3];
                     
-                    matData[mI + 4] = (float)temp2[4];
-                    matData[mI + 5] = (float)temp2[5];
-                    matData[mI + 6] = (float)temp2[6];
-                    matData[mI + 7] = (float)temp2[7];
+            //        matData[mI + 4] = (float)temp2[4];
+            //        matData[mI + 5] = (float)temp2[5];
+            //        matData[mI + 6] = (float)temp2[6];
+            //        matData[mI + 7] = (float)temp2[7];
                     
-                    matData[mI + 8] = (float)temp2[8];
-                    matData[mI + 9] = (float)temp2[9];
-                    matData[mI + 10] = (float)temp2[10];
-                    matData[mI + 11] = (float)temp2[11];
-                }
+            //        matData[mI + 8] = (float)temp2[8];
+            //        matData[mI + 9] = (float)temp2[9];
+            //        matData[mI + 10] = (float)temp2[10];
+            //        matData[mI + 11] = (float)temp2[11];
+            //    }
 
-                GL.UniformMatrix3x4fv(location, size, false, matData);
-                return;
-            }
+            //    GL.UniformMatrix3x4fv(location, size, false, matData);
+            //    return;
+            //}
 
-            float* data = stackalloc float[12];
-            Span<double> temp = new Span<double>(value, 12);
+            //float* data = stackalloc float[12];
+            //Span<double> temp = new Span<double>(value, 12);
 
-            data[0] = (float)temp[0];
-            data[1] = (float)temp[1];
-            data[2] = (float)temp[2];
-            data[3] = (float)temp[3];
+            //data[0] = (float)temp[0];
+            //data[1] = (float)temp[1];
+            //data[2] = (float)temp[2];
+            //data[3] = (float)temp[3];
             
-            data[4] = (float)temp[4];
-            data[5] = (float)temp[5];
-            data[6] = (float)temp[6];
-            data[7] = (float)temp[7];
+            //data[4] = (float)temp[4];
+            //data[5] = (float)temp[5];
+            //data[6] = (float)temp[6];
+            //data[7] = (float)temp[7];
             
-            data[8] = (float)temp[8];
-            data[9] = (float)temp[9];
-            data[10] = (float)temp[10];
-            data[11] = (float)temp[11];
+            //data[8] = (float)temp[8];
+            //data[9] = (float)temp[9];
+            //data[10] = (float)temp[10];
+            //data[11] = (float)temp[11];
 
-            GL.UniformMatrix3x4fv(location, size, false, data);
+            GL.UniformMatrix3x4fv(location, size, false, (float*)value);
         }
         private static void UniformFMat4(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
+            //if (size > 1 && index < 1)
+            //{
+            //    Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
-                float* matData = stackalloc float[16 * size];
-                Span<double> temp2 = stackalloc double[16];
+            //    float* matData = stackalloc float[16 * size];
+            //    Span<double> temp2 = stackalloc double[16];
 
-                for (int i = 0; i < size; i++)
-                {
-                    matrices[i].MatrixData(new MatrixSpan(4, 4, temp2));
+            //    for (int i = 0; i < size; i++)
+            //    {
+            //        matrices[i].MatrixData(new MatrixSpan(4, 4, temp2));
 
-                    int mI = i * 16;
-                    matData[mI] = (float)temp2[0];
-                    matData[mI + 1] = (float)temp2[1];
-                    matData[mI + 2] = (float)temp2[2];
-                    matData[mI + 3] = (float)temp2[3];
+            //        int mI = i * 16;
+            //        matData[mI] = (float)temp2[0];
+            //        matData[mI + 1] = (float)temp2[1];
+            //        matData[mI + 2] = (float)temp2[2];
+            //        matData[mI + 3] = (float)temp2[3];
                     
-                    matData[mI + 4] = (float)temp2[4];
-                    matData[mI + 5] = (float)temp2[5];
-                    matData[mI + 6] = (float)temp2[6];
-                    matData[mI + 7] = (float)temp2[7];
+            //        matData[mI + 4] = (float)temp2[4];
+            //        matData[mI + 5] = (float)temp2[5];
+            //        matData[mI + 6] = (float)temp2[6];
+            //        matData[mI + 7] = (float)temp2[7];
                     
-                    matData[mI + 8] = (float)temp2[8];
-                    matData[mI + 9] = (float)temp2[9];
-                    matData[mI + 10] = (float)temp2[10];
-                    matData[mI + 11] = (float)temp2[11];
+            //        matData[mI + 8] = (float)temp2[8];
+            //        matData[mI + 9] = (float)temp2[9];
+            //        matData[mI + 10] = (float)temp2[10];
+            //        matData[mI + 11] = (float)temp2[11];
                     
-                    matData[mI + 12] = (float)temp2[12];
-                    matData[mI + 13] = (float)temp2[13];
-                    matData[mI + 14] = (float)temp2[14];
-                    matData[mI + 15] = (float)temp2[15];
-                }
+            //        matData[mI + 12] = (float)temp2[12];
+            //        matData[mI + 13] = (float)temp2[13];
+            //        matData[mI + 14] = (float)temp2[14];
+            //        matData[mI + 15] = (float)temp2[15];
+            //    }
 
-                GL.UniformMatrix4fv(location, size, false, matData);
-                return;
-            }
+            //    GL.UniformMatrix4fv(location, size, false, matData);
+            //    return;
+            //}
 
-            float* data = stackalloc float[16];
-            Span<double> temp = new Span<double>(value, 16);
+            //float* data = stackalloc float[16];
+            //Span<double> temp = new Span<double>(value, 16);
 
-            data[0] = (float)temp[0];
-            data[1] = (float)temp[1];
-            data[2] = (float)temp[2];
-            data[3] = (float)temp[3];
+            //data[0] = (float)temp[0];
+            //data[1] = (float)temp[1];
+            //data[2] = (float)temp[2];
+            //data[3] = (float)temp[3];
             
-            data[4] = (float)temp[4];
-            data[5] = (float)temp[5];
-            data[6] = (float)temp[6];
-            data[7] = (float)temp[7];
+            //data[4] = (float)temp[4];
+            //data[5] = (float)temp[5];
+            //data[6] = (float)temp[6];
+            //data[7] = (float)temp[7];
             
-            data[8] = (float)temp[8];
-            data[9] = (float)temp[9];
-            data[10] = (float)temp[10];
-            data[11] = (float)temp[11];
+            //data[8] = (float)temp[8];
+            //data[9] = (float)temp[9];
+            //data[10] = (float)temp[10];
+            //data[11] = (float)temp[11];
             
-            data[12] = (float)temp[12];
-            data[13] = (float)temp[13];
-            data[14] = (float)temp[14];
-            data[15] = (float)temp[15];
+            //data[12] = (float)temp[12];
+            //data[13] = (float)temp[13];
+            //data[14] = (float)temp[14];
+            //data[15] = (float)temp[15];
 
-            GL.UniformMatrix4fv(location, size, false, data);
+            GL.UniformMatrix4fv(location, size, false, (float*)value);
         }
         private static void UniformFMat4x2(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
+            //if (size > 1 && index < 1)
+            //{
+            //    Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
-                float* matData = stackalloc float[8 * size];
-                Span<double> temp2 = stackalloc double[8];
+            //    float* matData = stackalloc float[8 * size];
+            //    Span<double> temp2 = stackalloc double[8];
 
-                for (int i = 0; i < size; i++)
-                {
-                    matrices[i].MatrixData(new MatrixSpan(4, 2, temp2));
+            //    for (int i = 0; i < size; i++)
+            //    {
+            //        matrices[i].MatrixData(new MatrixSpan(4, 2, temp2));
 
-                    int mI = i * 8;
-                    matData[mI] = (float)temp2[0];
-                    matData[mI + 1] = (float)temp2[1];
+            //        int mI = i * 8;
+            //        matData[mI] = (float)temp2[0];
+            //        matData[mI + 1] = (float)temp2[1];
                     
-                    matData[mI + 2] = (float)temp2[2];
-                    matData[mI + 3] = (float)temp2[3];
+            //        matData[mI + 2] = (float)temp2[2];
+            //        matData[mI + 3] = (float)temp2[3];
                     
-                    matData[mI + 4] = (float)temp2[4];
-                    matData[mI + 5] = (float)temp2[5];
+            //        matData[mI + 4] = (float)temp2[4];
+            //        matData[mI + 5] = (float)temp2[5];
                     
-                    matData[mI + 6] = (float)temp2[6];
-                    matData[mI + 7] = (float)temp2[7];
-                }
+            //        matData[mI + 6] = (float)temp2[6];
+            //        matData[mI + 7] = (float)temp2[7];
+            //    }
 
-                GL.UniformMatrix4x2fv(location, size, false, matData);
-                return;
-            }
+            //    GL.UniformMatrix4x2fv(location, size, false, matData);
+            //    return;
+            //}
 
-            float* data = stackalloc float[8];
-            Span<double> temp = new Span<double>(value, 8);
+            //float* data = stackalloc float[8];
+            //Span<double> temp = new Span<double>(value, 8);
 
-            data[0] = (float)temp[0];
-            data[1] = (float)temp[1];
+            //data[0] = (float)temp[0];
+            //data[1] = (float)temp[1];
             
-            data[2] = (float)temp[2];
-            data[3] = (float)temp[3];
+            //data[2] = (float)temp[2];
+            //data[3] = (float)temp[3];
             
-            data[4] = (float)temp[4];
-            data[5] = (float)temp[5];
+            //data[4] = (float)temp[4];
+            //data[5] = (float)temp[5];
             
-            data[6] = (float)temp[6];
-            data[7] = (float)temp[7];
+            //data[6] = (float)temp[6];
+            //data[7] = (float)temp[7];
 
-            GL.UniformMatrix4x2fv(location, size, false, data);
+            GL.UniformMatrix4x2fv(location, size, false, (float*)value);
         }
         private static void UniformFMat4x3(int location, int size, int index, void* value)
         {
-            if (size > 1 && index < 1)
-            {
-                Span<Matrix2> matrices = new Span<Matrix2>(value, size);
+            //if (size > 1 && index < 1)
+            //{
+            //    Span<Matrix2> matrices = new Span<Matrix2>(value, size);
 
-                float* matData = stackalloc float[12 * size];
-                Span<double> temp2 = stackalloc double[12];
+            //    float* matData = stackalloc float[12 * size];
+            //    Span<double> temp2 = stackalloc double[12];
 
-                for (int i = 0; i < size; i++)
-                {
-                    matrices[i].MatrixData(new MatrixSpan(4, 3, temp2));
+            //    for (int i = 0; i < size; i++)
+            //    {
+            //        matrices[i].MatrixData(new MatrixSpan(4, 3, temp2));
 
-                    int mI = i * 12;
-                    matData[mI] = (float)temp2[0];
-                    matData[mI + 1] = (float)temp2[1];
-                    matData[mI + 2] = (float)temp2[2];
+            //        int mI = i * 12;
+            //        matData[mI] = (float)temp2[0];
+            //        matData[mI + 1] = (float)temp2[1];
+            //        matData[mI + 2] = (float)temp2[2];
                     
-                    matData[mI + 3] = (float)temp2[3];
-                    matData[mI + 4] = (float)temp2[4];
-                    matData[mI + 5] = (float)temp2[5];
+            //        matData[mI + 3] = (float)temp2[3];
+            //        matData[mI + 4] = (float)temp2[4];
+            //        matData[mI + 5] = (float)temp2[5];
                     
-                    matData[mI + 6] = (float)temp2[6];
-                    matData[mI + 7] = (float)temp2[7];
-                    matData[mI + 8] = (float)temp2[8];
+            //        matData[mI + 6] = (float)temp2[6];
+            //        matData[mI + 7] = (float)temp2[7];
+            //        matData[mI + 8] = (float)temp2[8];
                     
-                    matData[mI + 9] = (float)temp2[9];
-                    matData[mI + 10] = (float)temp2[10];
-                    matData[mI + 11] = (float)temp2[11];
-                }
+            //        matData[mI + 9] = (float)temp2[9];
+            //        matData[mI + 10] = (float)temp2[10];
+            //        matData[mI + 11] = (float)temp2[11];
+            //    }
 
-                GL.UniformMatrix4x3fv(location, size, false, matData);
-                return;
-            }
+            //    GL.UniformMatrix4x3fv(location, size, false, matData);
+            //    return;
+            //}
 
-            float* data = stackalloc float[12];
-            Span<double> temp = new Span<double>(value, 12);
+            //float* data = stackalloc float[12];
+            //Span<double> temp = new Span<double>(value, 12);
 
-            data[0] = (float)temp[0];
-            data[1] = (float)temp[1];
-            data[2] = (float)temp[2];
+            //data[0] = (float)temp[0];
+            //data[1] = (float)temp[1];
+            //data[2] = (float)temp[2];
             
-            data[3] = (float)temp[3];
-            data[4] = (float)temp[4];
-            data[5] = (float)temp[5];
+            //data[3] = (float)temp[3];
+            //data[4] = (float)temp[4];
+            //data[5] = (float)temp[5];
             
-            data[6] = (float)temp[6];
-            data[7] = (float)temp[7];
-            data[8] = (float)temp[8];
+            //data[6] = (float)temp[6];
+            //data[7] = (float)temp[7];
+            //data[8] = (float)temp[8];
             
-            data[9] = (float)temp[9];
-            data[10] = (float)temp[10];
-            data[11] = (float)temp[11];
+            //data[9] = (float)temp[9];
+            //data[10] = (float)temp[10];
+            //data[11] = (float)temp[11];
 
-            GL.UniformMatrix4x3fv(location, size, false, data);
+            GL.UniformMatrix4x3fv(location, size, false, (float*)value);
         }
 
         private static void UniformDMat2(int location, int size, int index, void* value)

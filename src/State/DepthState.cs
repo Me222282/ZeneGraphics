@@ -104,7 +104,7 @@ namespace Zene.Graphics
                 GL.DepthRange(value.X, value.Y);
             }
         }
-        public virtual double Near
+        public virtual floatv Near
         {
             get => range.X;
             set
@@ -120,7 +120,7 @@ namespace Zene.Graphics
                 GL.DepthRange(value, range.Y);
             }
         }
-        public virtual double Far
+        public virtual floatv Far
         {
             get => range.Y;
             set

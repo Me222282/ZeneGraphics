@@ -28,16 +28,16 @@ namespace Zene.Graphics
             }
         }
 
-        private double _radiusPercent;
+        private floatv _radiusPercent;
         /// <summary>
         /// The percentage of the border that is curved; values between 0.0 - 0.5.
         /// </summary>
-        public double Radius
+        public floatv Radius
         {
             get => _radiusPercent;
             set
             {
-                _radiusPercent = Math.Clamp(value, 0d, 0.5);
+                _radiusPercent = Math.Clamp(value, 0, 0.5f);
 
                 SetRadius();
                 SetIDMR();
@@ -63,13 +63,13 @@ namespace Zene.Graphics
             }
         }
 
-        private double _bWidth;
-        private double _widthPercent;
-        private double _halfWidth;
+        private floatv _bWidth;
+        private floatv _widthPercent;
+        private floatv _halfWidth;
         /// <summary>
         /// The width, in pixels, of the border.
         /// </summary>
-        public double BorderWidth
+        public floatv BorderWidth
         {
             get => _bWidth;
             set
@@ -79,7 +79,7 @@ namespace Zene.Graphics
                 if (_size.X <= 0 || _size.Y <= 0) { return; }
 
                 _widthPercent = value / Math.Min(_size.X, _size.Y);
-                _halfWidth = _widthPercent * 0.5;
+                _halfWidth = _widthPercent * 0.5f;
 
                 SetUniform(Uniforms[11], _halfWidth);
                 SetUniform(Uniforms[12], _aspect - _halfWidth);
@@ -101,14 +101,14 @@ namespace Zene.Graphics
         }
         private void SetRadius()
         {
-            double radius = _radiusPercent - _halfWidth;
-            double outerRadius = Math.Max(_radiusPercent + _halfWidth, _widthPercent);
+            floatv radius = _radiusPercent - _halfWidth;
+            floatv outerRadius = Math.Max(_radiusPercent + _halfWidth, _widthPercent);
             SetUniform(Uniforms[5], radius * radius);
             SetUniform(Uniforms[7], outerRadius * outerRadius);
         }
         private void SetIDMR()
         {
-            double innerOffset = Math.Max(_radiusPercent, _halfWidth);
+            floatv innerOffset = Math.Max(_radiusPercent, _halfWidth);
             SetUniform(Uniforms[10], innerOffset);
             SetUniform(Uniforms[9], _aspect - innerOffset);
         }

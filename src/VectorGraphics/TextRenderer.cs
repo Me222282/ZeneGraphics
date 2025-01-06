@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Zene.Structs;
 
@@ -11,10 +11,12 @@ namespace Zene.Graphics
             public MShader()
             {
                 Create(ShaderPresets.TextVert, ShaderPresets.TextFrag, 0,
-                    "matrix", "uColour", "uTextureSlot");
+                    "matrix", "uColour", "fontSampler");
 
                 // Set matrices in shader to default
                 SetUniform(Uniforms[0], Matrix4.Identity);
+
+                SetUniform(Uniforms[2], 0);
             }
 
             public void SetMatrix(IMatrix m, IMatrix v, IMatrix p)
@@ -62,10 +64,10 @@ namespace Zene.Graphics
             // Create drawable object
             _drawable = new DrawObject<Vector2, byte>(new Vector2[]
             {
-                new Vector2(-0.5, 0.5), new Vector2(0d, 0d), new Vector2(0d, 1d),
-                new Vector2(-0.5, -0.5), new Vector2(0d, -1d), new Vector2(0d, 0d),
-                new Vector2(0.5, -0.5), new Vector2(1d, -1d), new Vector2(1d, 0d),
-                new Vector2(0.5, 0.5), new Vector2(1d, 0d), new Vector2(1d, 1d)
+                new Vector2(-0.5f, 0.5f), new Vector2(0, 0), new Vector2(0, 1),
+                new Vector2(-0.5f, -0.5f), new Vector2(0, -1), new Vector2(0, 0),
+                new Vector2(0.5f, -0.5f), new Vector2(1, -1), new Vector2(1, 0),
+                new Vector2(0.5f, 0.5f), new Vector2(1, 0), new Vector2(1, 1)
             }, new byte[] { 0, 1, 2, 2, 3, 0 }, 3, 0, AttributeSize.D2, BufferUsage.DrawFrequent);
             _drawable.AddAttribute(1, 1, AttributeSize.D2); // M2 position
             _drawable.AddAttribute(ShaderLocation.TextureCoords, 2, AttributeSize.D2); // Texture Coordinates
@@ -81,10 +83,10 @@ namespace Zene.Graphics
             _instanceData.InitData(_mCapacity * _blockSize);
 
             // Add instance reference
-            _drawable.AddInstanceBuffer(_instanceData, 3, 0, DataType.Double, AttributeSize.D2, 1);
-            _drawable.AddInstanceBuffer(_instanceData, 4, 1, DataType.Double, AttributeSize.D2, 1);
-            _drawable.AddInstanceBuffer(_instanceData, 5, 2, DataType.Double, AttributeSize.D2, 1);
-            _drawable.AddInstanceBuffer(_instanceData, 6, 3, DataType.Double, AttributeSize.D2, 1);
+            _drawable.AddInstanceBuffer(_instanceData, 3, 0, DataType.FloatV, AttributeSize.D2, 1);
+            _drawable.AddInstanceBuffer(_instanceData, 4, 1, DataType.FloatV, AttributeSize.D2, 1);
+            _drawable.AddInstanceBuffer(_instanceData, 5, 2, DataType.FloatV, AttributeSize.D2, 1);
+            _drawable.AddInstanceBuffer(_instanceData, 6, 3, DataType.FloatV, AttributeSize.D2, 1);
             // Set indexes as instance referances
 
             _mShader = new MShader();
@@ -148,17 +150,17 @@ namespace Zene.Graphics
             }
 
             // Pixel space to normalised space
-            Vector2 textureMultiplier = 1d /
+            Vector2 textureMultiplier = 1 /
                 // Texture Size
                 (Vector2)(font.SourceTexture.Properties.Width, font.SourceTexture.Properties.Height);
-            double sizeMultiplier = 1d / font.LineHeight;
+            floatv sizeMultiplier = 1 / font.LineHeight;
 
-            double lineSpaceD = lineSpace * sizeMultiplier;
-            double cs = charSpace * sizeMultiplier;
-            double sw = font.SpaceWidth * sizeMultiplier;
+            floatv lineSpaceD = lineSpace * sizeMultiplier;
+            floatv cs = charSpace * sizeMultiplier;
+            floatv sw = font.SpaceWidth * sizeMultiplier;
 
             // The widths of each line in text
-            List<double> lineWidths = font.GetLineWidths(text, cs, TabSize, sizeMultiplier);
+            List<floatv> lineWidths = font.GetLineWidths(text, cs, TabSize, sizeMultiplier);
 
             // The current character offset
             Vector2 offsetCurrent = new Vector2(
@@ -215,9 +217,9 @@ namespace Zene.Graphics
                         continue;
                     }
 
-                    offsetCurrent.Y -= 1d + lineSpaceD;
+                    offsetCurrent.Y -= 1 + lineSpaceD;
                     lineCurrent++;
-                    offsetCurrent.X = lineWidths[lineCurrent] * -0.5;
+                    offsetCurrent.X = lineWidths[lineCurrent] * -0.5f;
                     i++;
                     // Index in compressed text shouldn't be changed - it has no white space
                     continue;
@@ -228,9 +230,9 @@ namespace Zene.Graphics
                     // Sometimes there is both
                     if (previous != '\n')
                     {
-                        offsetCurrent.Y -= 1d + lineSpaceD;
+                        offsetCurrent.Y -= 1 + lineSpaceD;
                         lineCurrent++;
-                        offsetCurrent.X = lineWidths[lineCurrent] * -0.5;
+                        offsetCurrent.X = lineWidths[lineCurrent] * -0.5f;
                     }
 
                     i++;
@@ -248,7 +250,7 @@ namespace Zene.Graphics
 
                 // Set drawing offset data
                 data[count * _blockSize] = offsetCurrent + (charData.ExtraOffset * sizeMultiplier);
-                data[count * _blockSize].Y -= 1d - size.Y;
+                data[count * _blockSize].Y -= 1 - size.Y;
                 data[(count * _blockSize) + 1] = charData.TexturePosision * textureMultiplier;
                 data[(count * _blockSize) + 2] = charData.Size * textureMultiplier;
                 data[(count * _blockSize) + 3] = size;
@@ -294,14 +296,14 @@ namespace Zene.Graphics
             }
 
             // Pixel space to normalised space
-            Vector2 textureMultiplier = 1d /
+            Vector2 textureMultiplier = 1 /
                 // Texture Size
                 (Vector2)(font.SourceTexture.Properties.Width, font.SourceTexture.Properties.Height);
-            double sizeMultiplier = 1d / font.LineHeight;
+            floatv sizeMultiplier = 1 / font.LineHeight;
 
-            double lineSpaceD = lineSpace * sizeMultiplier;
-            double cs = charSpace * sizeMultiplier;
-            double sw = font.SpaceWidth * sizeMultiplier;
+            floatv lineSpaceD = lineSpace * sizeMultiplier;
+            floatv cs = charSpace * sizeMultiplier;
+            floatv sw = font.SpaceWidth * sizeMultiplier;
 
             // Get bounding box of text
             Vector2 frameSize = font.GetFrameSize(text, charSpace, lineSpace, TabSize) * sizeMultiplier;
@@ -314,7 +316,7 @@ namespace Zene.Graphics
                 caretIndex = text.Length;
             }
 
-            Vector2 starting = centred ? frameSize / (-2d, 2d) : 0d;
+            Vector2 starting = centred ? frameSize / (-2, 2) : 0;
             // The current character offset
             Vector2 offsetCurrent = starting;
             // The instance data containing offsets for each character
@@ -342,8 +344,8 @@ namespace Zene.Graphics
 
                     // Set drawing offset data
                     Vector2 cPos = offsetCurrent + (caret.ExtraOffset * sizeMultiplier);
-                    cPos.Y -= 1d - sizeC.Y;
-                    cPos.X -= (sizeC.X + cs) / 2d;
+                    cPos.Y -= 1 - sizeC.Y;
+                    cPos.X -= (sizeC.X + cs) / 2;
                     data[count * _blockSize] = cPos;
                     data[(count * _blockSize) + 1] = caret.TexturePosision * textureMultiplier;
                     data[(count * _blockSize) + 2] = caret.Size * textureMultiplier;
@@ -389,7 +391,7 @@ namespace Zene.Graphics
                         continue;
                     }
 
-                    offsetCurrent.Y -= 1d + lineSpaceD;
+                    offsetCurrent.Y -= 1 + lineSpaceD;
                     offsetCurrent.X = starting.X;
                     i++;
                     // Index in compressed text shouldn't be changed - it has no white space
@@ -401,7 +403,7 @@ namespace Zene.Graphics
                     // Sometimes there is both
                     if (previous != '\n')
                     {
-                        offsetCurrent.Y -= 1d + lineSpaceD;
+                        offsetCurrent.Y -= 1 + lineSpaceD;
                         offsetCurrent.X = starting.X;
                     }
 
@@ -420,7 +422,7 @@ namespace Zene.Graphics
 
                 // Set drawing offset data
                 Vector2 pos = offsetCurrent + (charData.ExtraOffset * sizeMultiplier);
-                pos.Y -= 1d - size.Y;
+                pos.Y -= 1 - size.Y;
                 data[count * _blockSize] = pos;
                 data[(count * _blockSize) + 1] = charData.TexturePosision * textureMultiplier;
                 data[(count * _blockSize) + 2] = charData.Size * textureMultiplier;

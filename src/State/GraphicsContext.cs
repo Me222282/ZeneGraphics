@@ -7,7 +7,7 @@ namespace Zene.Graphics
 {
     public class GraphicsContext
     {
-        public unsafe GraphicsContext(bool stereo, bool doubleBuffered, int width, int height, double version)
+        public unsafe GraphicsContext(bool stereo, bool doubleBuffered, int width, int height, floatv version)
         {
             ThreadChange();
             
@@ -33,7 +33,7 @@ namespace Zene.Graphics
             // Setup indexed buffer
             boundBuffers = new GL.BufferBinding();
 
-            if (version >= 3.0)
+            if (version >= 3.0f)
             {
                 int tfSize = 0;
                 GL.GetIntegerv(GLEnum.MaxTransformFeedbackBuffers, &tfSize);
@@ -43,7 +43,7 @@ namespace Zene.Graphics
             {
                 boundBuffers.TransformFeedback = new IBuffer[1];
             }
-            if (version >= 3.1)
+            if (version >= 3.1f)
             {
                 int uSize = 0;
                 GL.GetIntegerv(GLEnum.MaxUniformBufferBindings, &uSize);
@@ -53,7 +53,7 @@ namespace Zene.Graphics
             {
                 boundBuffers.Uniform = new IBuffer[1];
             }
-            if (version >= 4.2)
+            if (version >= 4.2f)
             {
                 int acSize = 0;
                 GL.GetIntegerv(GLEnum.MaxAtomicCounterBufferBindings, &acSize);
@@ -63,7 +63,7 @@ namespace Zene.Graphics
             {
                 boundBuffers.AtomicCounter = new IBuffer[1];
             }
-            if (version >= 4.3)
+            if (version >= 4.3f)
             {
                 int ssSize = 0;
                 GL.GetIntegerv(GLEnum.MaxShaderStorageBufferBindings, &ssSize);
@@ -93,15 +93,15 @@ namespace Zene.Graphics
         internal DepthState depth;
         internal RenderState renderState;
 
-        internal double version;
+        internal floatv version;
 
         internal GL.FrameBufferBinding boundFrameBuffers = new GL.FrameBufferBinding();
         internal FramebufferGL baseFrameBuffer;
         internal ColourF frameClearColour = ColourF.Zero;
-        internal double frameClearDepth = 1d;
+        internal floatv frameClearDepth = 1;
         internal int frameClearStencil = 0;
 
-        public static GraphicsContext None { get; } = new GraphicsContext(false, false, 0, 0, 0d);
+        public static GraphicsContext None { get; } = new GraphicsContext(false, false, 0, 0, 0);
 
         private readonly List<IIdentifiable> _tracked = new List<IIdentifiable>();
 
