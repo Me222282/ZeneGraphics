@@ -27,7 +27,7 @@
 	  None
 	</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
 	<NoWarn>1701;1702;IDE0090</NoWarn>
-	<DefineConstants>$(DefineConstans);DEBUG;DOUBLE</DefineConstants>
+	<DefineConstants>$(DefineConstants);DEBUG;DOUBLE</DefineConstants>
 	<Optimize>false</Optimize>
 	<DebugType>full</DebugType>
 	<ErrorReport>prompt</ErrorReport>
@@ -39,7 +39,7 @@
 	<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
 	  None
 	</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
-	<DefineConstants>$(DefineConstans);RELEASE;DOUBLE</DefineConstants>
+	<DefineConstants>$(DefineConstants);RELEASE;DOUBLE</DefineConstants>
 	<DebugType>portable</DebugType>
 	<Optimize>true</Optimize>
 	<DebugSymbols>false</DebugSymbols>
