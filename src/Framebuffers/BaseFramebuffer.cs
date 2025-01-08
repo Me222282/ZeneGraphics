@@ -105,7 +105,7 @@ namespace Zene.Graphics
         /// Gets or sets the render size and location for the framebuffer.
         /// </summary>
         [OpenGLSupport(1.0)]
-        public static RectangleI View
+        public static GLBox View
         {
             get => GL.context.baseFrameBuffer.View;
             set => GL.context.baseFrameBuffer.View = value;

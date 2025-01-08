@@ -4,7 +4,7 @@ namespace Zene.Graphics
 {
     public class ViewportLock : Viewport
     {
-        public ViewportLock(IBox bounds)
+        public ViewportLock(GLBox bounds)
             : base(bounds)
         {
         }

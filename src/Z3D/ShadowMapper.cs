@@ -77,7 +77,7 @@ namespace Zene.Graphics.Z3D
         public IFramebuffer Framebuffer => _framebuffer;
         public IDrawingShader Shader { get => _shader; set => throw new NotSupportedException(); }
 
-        public IBox FrameBounds => new GLBox(Vector2.Zero, _framebuffer.Size);
+        public GLBox FrameBounds => new GLBox(Vector2I.Zero, _framebuffer.Size);
 
         public DepthState DepthState { get; } = new DepthState() { Testing = true };
         public RenderState RenderState { get; set; }

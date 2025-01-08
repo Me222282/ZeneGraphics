@@ -13,9 +13,9 @@ namespace Zene.Graphics
         {
             view = new GLBox(x, y, width, height);
         }
-        public Viewport(IBox bounds)
+        public Viewport(GLBox bounds)
         {
-            view = new GLBox(bounds);
+            view = bounds;
         }
 
         internal GLBox view;

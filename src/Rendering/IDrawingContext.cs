@@ -8,7 +8,7 @@ namespace Zene.Graphics
         public IFramebuffer Framebuffer { get; }
         public IDrawingShader Shader { get; set; }
 
-        public IBox FrameBounds { get; }
+        public GLBox FrameBounds { get; }
 
         public IMatrix Projection { get; set; }
         public IMatrix View { get; set; }

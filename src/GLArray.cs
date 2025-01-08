@@ -253,9 +253,9 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="box">The bounding box to source from.</param>
         /// <returns></returns>
-        public GLArray<T> SubSection(IBox box)
+        public GLArray<T> SubSection(RectangleI box)
         {
-            return SubSection((int)box.Width, (int)box.Height, (int)box.Left, Height - (int)box.Top - 1);
+            return SubSection(box.X, Height - box.Top - 1, box.Width, box.Height);
         }
         /// <summary>
         /// Gets a 3 dimensional section of the array.
@@ -288,15 +288,15 @@ namespace Zene.Graphics
 
             return output;
         }
-        /// <summary>
-        /// Gets a 3 dimensional section of the array.
-        /// </summary>
-        /// <param name="box">The bounding box to source from.</param>
-        /// <returns></returns>
-        public GLArray<T> SubSection(IBox3 box)
-        {
-            return SubSection((int)box.Width, (int)box.Height, (int)box.Depth,(int)box.Left, Height - (int)box.Top - 1, (int)box.Front);
-        }
+        ///// <summary>
+        ///// Gets a 3 dimensional section of the array.
+        ///// </summary>
+        ///// <param name="box">The bounding box to source from.</param>
+        ///// <returns></returns>
+        //public GLArray<T> SubSection(IBox3 box)
+        //{
+        //    return SubSection((int)box.Width, (int)box.Height, (int)box.Depth,(int)box.Left, Height - (int)box.Top - 1, (int)box.Front);
+        //}
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator() => ((IEnumerable<T>)Data).GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => Data.GetEnumerator();

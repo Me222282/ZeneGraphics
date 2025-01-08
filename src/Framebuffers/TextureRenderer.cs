@@ -330,7 +330,7 @@ namespace Zene.Graphics
         /// <param name="mask">The attachments to copy.</param>
         /// <param name="filter">The quality of the copy.</param>
         [OpenGLSupport(3.0)]
-        public void CopyFrameBuffer(IFramebuffer destination, IBox dstBox, BufferBit mask, TextureSampling filter)
+        public void CopyFrameBuffer(IFramebuffer destination, GLBox dstBox, BufferBit mask, TextureSampling filter)
         {
             BlitBuffer(destination, new GLBox(0, 0, _targetWidth, _targetHeight), dstBox, mask, filter);
         }
@@ -343,7 +343,7 @@ namespace Zene.Graphics
         /// <param name="mask">The attachments to copy.</param>
         /// <param name="filter">The quality of the copy.</param>
         [OpenGLSupport(3.0)]
-        public void CopyFrameBuffer(IFramebuffer destination, IBox box, IBox dstBox, BufferBit mask, TextureSampling filter)
+        public void CopyFrameBuffer(IFramebuffer destination, GLBox box, GLBox dstBox, BufferBit mask, TextureSampling filter)
         {
             BlitBuffer(destination, box, dstBox, mask, filter);
         }
@@ -368,7 +368,7 @@ namespace Zene.Graphics
         /// <param name="mask">The attachments to copy.</param>
         /// <param name="filter">The quality of the copy.</param>
         [OpenGLSupport(3.0)]
-        public void CopyFrameBuffer(IBox dstBox, BufferBit mask, TextureSampling filter)
+        public void CopyFrameBuffer(GLBox dstBox, BufferBit mask, TextureSampling filter)
         {
             BlitBuffer(null, new GLBox(0, 0, _targetWidth, _targetHeight), dstBox, mask, filter);
         }
@@ -380,7 +380,7 @@ namespace Zene.Graphics
         /// <param name="mask">The attachments to copy.</param>
         /// <param name="filter">The quality of the copy.</param>
         [OpenGLSupport(3.0)]
-        public void CopyFrameBuffer(IBox dstBox, IBox box, BufferBit mask, TextureSampling filter)
+        public void CopyFrameBuffer(GLBox dstBox, GLBox box, BufferBit mask, TextureSampling filter)
         {
             BlitBuffer(null, box, dstBox, mask, filter);
         }

@@ -251,7 +251,7 @@ namespace Zene.Graphics.Base
         /// <param name="mask">The bitwise or of the flags indicating which buffers are to be copied.</param>
         /// <param name="filter">Specifies the interpolation to be applied if the image is stretched.</param>
         [OpenGLSupport(3.0)]
-        protected void BlitBuffer(IFramebuffer destination, IBox srcBox, IBox dstBox, BufferBit mask, TextureSampling filter)
+        protected void BlitBuffer(IFramebuffer destination, GLBox srcBox, GLBox dstBox, BufferBit mask, TextureSampling filter)
         {
             if (destination == null)
             {
@@ -264,8 +264,8 @@ namespace Zene.Graphics.Base
             Bind(FrameTarget.Read);
 
             GL.BlitFramebuffer(
-                (int)srcBox.Left, (int)srcBox.Bottom, (int)srcBox.Right, (int)srcBox.Top,
-                (int)dstBox.Left, (int)dstBox.Bottom, (int)dstBox.Right, (int)dstBox.Top,
+                srcBox.Left, srcBox.Bottom, srcBox.Right, srcBox.Top,
+                dstBox.Left, dstBox.Bottom, dstBox.Right, dstBox.Top,
                 (uint)mask, (uint)filter);
         }
         /// <summary>

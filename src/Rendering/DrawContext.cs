@@ -25,7 +25,7 @@ namespace Zene.Graphics
 
         //public GLBox FrameBounds { get; set; }
         //IBox IDrawingContext.FrameBounds => FrameBounds;
-        IBox IDrawingContext.FrameBounds => new GLBox(Vector2I.Zero, Framebuffer.Properties.Size);
+        GLBox IDrawingContext.FrameBounds => new GLBox(Vector2I.Zero, Framebuffer.Properties.Size);
 
         public IMatrix Projection { get; set; } = Matrix.Identity;
         public IMatrix View { get; set; } = Matrix.Identity;

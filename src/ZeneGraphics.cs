@@ -435,11 +435,11 @@ namespace Zene.Graphics
         /// <param name="type">Specifies the data type of the returned data.</param>
         /// <returns></returns>
         [OpenGLSupport(1.0)]
-        public static unsafe GLArray<T> ReadPixels<T>(this IFramebuffer framebuffer, IBox bounds, BaseFormat format, TextureData type) where T : unmanaged
+        public static unsafe GLArray<T> ReadPixels<T>(this IFramebuffer framebuffer, RectangleI bounds, BaseFormat format, TextureData type) where T : unmanaged
         {
             framebuffer.Bind();
 
-            RectangleI rect = new RectangleI(bounds);
+            RectangleI rect = bounds;
 
             GLArray<T> data = new GLArray<T>(
                 (rect.Width * format.GetSize() * type.GetSize()) / sizeof(T),

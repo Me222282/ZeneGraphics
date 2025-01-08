@@ -94,7 +94,7 @@ namespace Zene.Graphics
         /// </summary>
         /// <param name="box">The bounding box to source from.</param>
         /// <returns></returns>
-        public new Bitmap SubSection(IBox box)
+        public new Bitmap SubSection(RectangleI box)
         {
             return new Bitmap(base.SubSection(box));
         }

@@ -8,7 +8,7 @@ namespace Zene.Graphics
 
     public unsafe class StateDebug
     {
-        public static GLBox Viewport
+        public static RectangleI Viewport
         {
             get
             {
@@ -16,7 +16,7 @@ namespace Zene.Graphics
 
                 GL.GetIntegerv(GLEnum.Viewport, ptr);
 
-                return new GLBox(ptr[0], ptr[1], ptr[2], ptr[3]);
+                return new RectangleI(ptr[0], ptr[1] + ptr[3], ptr[2], ptr[3]);
             }
         }
 
@@ -31,7 +31,7 @@ namespace Zene.Graphics
                 return *ptr > 0;
             }
         }
-        public static GLBox ScissorBox
+        public static RectangleI ScissorBox
         {
             get
             {
@@ -39,7 +39,7 @@ namespace Zene.Graphics
 
                 GL.GetIntegerv(GLEnum.ScissorBox, ptr);
 
-                return new GLBox(ptr[0], ptr[1], ptr[2], ptr[3]);
+                return new RectangleI(ptr[0], ptr[1] + ptr[3], ptr[2], ptr[3]);
             }
         }
 

@@ -24,9 +24,9 @@ namespace Zene.Graphics
             view = new GLBox(location, size);
             enabled = true;
         }
-        public Scissor(IBox bounds)
+        public Scissor(GLBox bounds)
         {
-            view = new GLBox(bounds);
+            view = bounds;
             enabled = true;
         }
 

@@ -46,7 +46,7 @@ namespace Zene.Graphics
         public IFramebuffer Framebuffer => _multiSFramebuffer;
         public IDrawingShader Shader { get; set; }
 
-        public IBox FrameBounds => new GLBox(Vector2I.Zero, Framebuffer.Properties.Size);
+        public GLBox FrameBounds => new GLBox(Vector2I.Zero, Framebuffer.Properties.Size);
 
         public IMatrix Projection { get; set; } = Matrix.Identity;
         public IMatrix View { get; set; } = Matrix.Identity;

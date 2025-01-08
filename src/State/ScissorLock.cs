@@ -9,7 +9,7 @@ namespace Zene.Graphics
         {
         }
 
-        public ScissorLock(IBox bounds)
+        public ScissorLock(GLBox bounds)
             : base(bounds)
         {
         }

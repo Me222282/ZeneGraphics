@@ -73,19 +73,19 @@ namespace Zene.Graphics
 
         public static void WriteFramebuffer(this IDrawingContext dc, IFramebuffer framebuffer, BufferBit mask, TextureSampling filter)
             => WriteFramebuffer(dc, framebuffer, new GLBox(Vector2I.Zero, framebuffer.Properties.Size), mask, filter);
-        public static void WriteFramebuffer(this IDrawingContext dc, IFramebuffer framebuffer, IBox source, BufferBit mask, TextureSampling filter)
+        public static void WriteFramebuffer(this IDrawingContext dc, IFramebuffer framebuffer, GLBox source, BufferBit mask, TextureSampling filter)
             => framebuffer.BlitBuffer(dc.Framebuffer, source, dc.FrameBounds, mask, filter);
 
         public static void Copy(this IDrawingContext dc, IDrawingContext source)
             => WriteFramebuffer(dc, source.Framebuffer, source.FrameBounds, BufferBit.All, TextureSampling.Nearest);
         public static void Copy(this IDrawingContext dc, IDrawingContext source, BufferBit mask)
             => WriteFramebuffer(dc, source.Framebuffer, source.FrameBounds, mask, TextureSampling.Nearest);
-        public static void Copy(this IDrawingContext dc, IDrawingContext source, IBox bounds, BufferBit mask)
+        public static void Copy(this IDrawingContext dc, IDrawingContext source, GLBox bounds, BufferBit mask)
             => WriteFramebuffer(dc, source.Framebuffer, bounds, mask, TextureSampling.Nearest);
-        public static void Copy(this IDrawingContext dc, IDrawingContext source, IBox bounds)
+        public static void Copy(this IDrawingContext dc, IDrawingContext source, GLBox bounds)
             => WriteFramebuffer(dc, source.Framebuffer, bounds, BufferBit.All, TextureSampling.Nearest);
 
-        public static void DrawBox(this IDrawingContext dc, IBox bounds, ColourF colour)
+        public static void DrawBox(this IDrawingContext dc, Box bounds, ColourF colour)
         {
             dc.Shader = Shapes.BasicShader;
             Shapes.BasicShader.Colour = colour;
@@ -107,7 +107,7 @@ namespace Zene.Graphics
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
-        public static void DrawBox(this IDrawingContext dc, IBox bounds, ITexture texture)
+        public static void DrawBox(this IDrawingContext dc, Box bounds, ITexture texture)
         {
             dc.Shader = Shapes.BasicShader;
             texture.Bind(0);
@@ -131,7 +131,7 @@ namespace Zene.Graphics
             Shapes.BasicShader.Texture = null;
             dc.Model = model;
         }
-        public static void DrawRoundedBox(this IDrawingContext dc, IBox bounds, ColourF colour, floatv cornerRadius)
+        public static void DrawRoundedBox(this IDrawingContext dc, Box bounds, ColourF colour, floatv cornerRadius)
         {
             dc.Shader = Shapes.BorderShader;
             Shapes.BorderShader.Colour = colour;
@@ -157,7 +157,7 @@ namespace Zene.Graphics
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
-        public static void DrawRoundedBox(this IDrawingContext dc, IBox bounds, ITexture texture, floatv cornerRadius)
+        public static void DrawRoundedBox(this IDrawingContext dc, Box bounds, ITexture texture, floatv cornerRadius)
         {
             dc.Shader = Shapes.BorderShader;
             Shapes.BorderShader.Texture = texture;
@@ -183,7 +183,7 @@ namespace Zene.Graphics
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
-        public static void DrawBorderBox(this IDrawingContext dc, IBox bounds, ColourF colour, floatv borderWidth, ColourF borderColour, floatv cornerRadius = 0)
+        public static void DrawBorderBox(this IDrawingContext dc, Box bounds, ColourF colour, floatv borderWidth, ColourF borderColour, floatv cornerRadius = 0)
         {
             dc.Shader = Shapes.BorderShader;
             Shapes.BorderShader.Colour = colour;
@@ -210,7 +210,7 @@ namespace Zene.Graphics
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
-        public static void DrawBorderBox(this IDrawingContext dc, IBox bounds, ITexture texture, floatv borderWidth, ColourF borderColour, floatv cornerRadius = 0)
+        public static void DrawBorderBox(this IDrawingContext dc, Box bounds, ITexture texture, floatv borderWidth, ColourF borderColour, floatv cornerRadius = 0)
         {
             dc.Shader = Shapes.BorderShader;
             Shapes.BorderShader.Texture = texture;
@@ -237,7 +237,7 @@ namespace Zene.Graphics
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
-        public static void DrawEllipse(this IDrawingContext dc, IBox bounds, ColourF colour)
+        public static void DrawEllipse(this IDrawingContext dc, Box bounds, ColourF colour)
         {
             dc.Shader = Shapes.CircleShader;
             Shapes.CircleShader.Colour = colour;
@@ -262,7 +262,7 @@ namespace Zene.Graphics
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
-        public static void DrawEllipse(this IDrawingContext dc, IBox bounds, ITexture texture)
+        public static void DrawEllipse(this IDrawingContext dc, Box bounds, ITexture texture)
         {
             dc.Shader = Shapes.BasicShader;
             Shapes.CircleShader.Texture = texture;
@@ -291,7 +291,7 @@ namespace Zene.Graphics
             => DrawEllipse(dc, new Box(location, radius), colour);
         public static void DrawCircle(this IDrawingContext dc, Vector2 location, floatv radius, ITexture texture)
         => DrawEllipse(dc, new Box(location, radius), texture);
-        private static void DrawRingP(this IDrawingContext dc, IBox bounds, floatv lineWidth, ColourF borderColour)
+        private static void DrawRingP(this IDrawingContext dc, Box bounds, floatv lineWidth, ColourF borderColour)
         {
             dc.Shader = Shapes.CircleShader;
             // Shapes.CircleShader.Colour = colour;
@@ -317,18 +317,18 @@ namespace Zene.Graphics
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
-        public static void DrawRing(this IDrawingContext dc, IBox bounds, floatv lineWidth, ColourF colour)
+        public static void DrawRing(this IDrawingContext dc, Box bounds, floatv lineWidth, ColourF colour)
         {
             Shapes.CircleShader.ColourSource = ColourSource.Discard;
             DrawRingP(dc, bounds, lineWidth, colour);
         }
-        public static void DrawBorderEllipse(this IDrawingContext dc, IBox bounds, floatv lineWidth, ColourF colour, ColourF borderColour)
+        public static void DrawBorderEllipse(this IDrawingContext dc, Box bounds, floatv lineWidth, ColourF colour, ColourF borderColour)
         {
             Shapes.CircleShader.ColourSource = ColourSource.UniformColour;
             Shapes.CircleShader.Colour = colour;
             DrawRingP(dc, bounds, lineWidth, borderColour);
         }
-        public static void DrawBorderEllipse(this IDrawingContext dc, IBox bounds, floatv lineWidth, ITexture texture, ColourF borderColour)
+        public static void DrawBorderEllipse(this IDrawingContext dc, Box bounds, floatv lineWidth, ITexture texture, ColourF borderColour)
         {
             Shapes.CircleShader.ColourSource = ColourSource.Texture;
             Shapes.CircleShader.Texture = texture;
