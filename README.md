@@ -2,7 +2,10 @@
 
 Temp
 
-Use the [clone](https://github.com/Me222282/ZeneGraphics/tree/clone) branch when using git clone to include dependencies from the Zene Library.
+To set the library to use double precision floats, set **UseDouble** to true. This is done in the .csproj file, e.g.
+```
+<ProjectReference Include="..\deps\Graphics\src\Graphics.csproj" AdditionalProperties="UseDouble=true" />
+```
 
 ## Credits
 

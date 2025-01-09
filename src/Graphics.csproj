@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Zene.Graphics</RootNamespace>
-	<Configurations>Debug;Release;Debug64;Release64</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -21,28 +20,8 @@
     </ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug64|AnyCPU'">
-	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
-	  None
-	</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
-	<NoWarn>1701;1702;IDE0090</NoWarn>
-	<DefineConstants>$(DefineConstants);DEBUG;DOUBLE</DefineConstants>
-	<Optimize>false</Optimize>
-	<DebugType>full</DebugType>
-	<ErrorReport>prompt</ErrorReport>
-	<DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release64|AnyCPU'">
-	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
-	  None
-	</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
-	<DefineConstants>$(DefineConstants);RELEASE;DOUBLE</DefineConstants>
-	<DebugType>portable</DebugType>
-	<Optimize>true</Optimize>
-	<DebugSymbols>false</DebugSymbols>
+  <PropertyGroup Condition="'$(UseDouble)'=='true'">
+	<DefineConstants>$(DefineConstants);DOUBLE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -79,7 +58,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Structs\src\Structs.csproj" />
+    <ProjectReference Include="..\..\Structs\src\Structs.csproj" AdditionalProperties="UseDouble=$(UseDouble)" />
   </ItemGroup>
 
   <ItemGroup>
