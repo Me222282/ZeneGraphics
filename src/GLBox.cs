@@ -474,6 +474,7 @@ namespace Zene.Graphics
         public static implicit operator Box(GLBox box) => new Box(box.Centre, box.Size);
         public static implicit operator Bounds(GLBox box) => new Bounds(box.Left, box.Right, box.Top, box.Bottom);
         public static implicit operator Rectangle(GLBox box) => new Rectangle(box.X, box.Y + box.Height, box.Width, box.Height);
+        public static implicit operator RectangleI(GLBox box) => new RectangleI(box.X, box.Y + box.Height, box.Width, box.Height);
 
         /// <summary>
         /// A <see cref="GLBox"/> with <see cref="X"/>, <see cref="Y"/>, <see cref="Width"/> and <see cref="Height"/> all set to 0.
