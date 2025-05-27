@@ -457,17 +457,19 @@ namespace Zene.Graphics
 
         public readonly override bool Equals(object obj)
         {
-            return obj is GLBox b &&
-                    X == b.Left && Width == b.Width &&
-                    Y == b.Bottom && Height == b.Height;
+            return obj is GLBox b && this == b;
         }
         public readonly override int GetHashCode()
         {
             return HashCode.Combine(X, Y, Width, Height);
         }
 
-        public static bool operator ==(GLBox l, GLBox r) => l.Equals(r);
-        public static bool operator !=(GLBox l, GLBox r) => !l.Equals(r);
+        public static bool operator ==(GLBox l, GLBox r)
+        {
+            return l.X == r.X && l.Width == r.Width &&
+                l.Y == r.Y && l.Height == r.Height;
+        }
+        public static bool operator !=(GLBox l, GLBox r) => !(l == r);
 
         public static GLBox operator *(GLBox box, int scale) => new GLBox(box.X * scale, box.Y * scale, box.Width * scale, box.Height * scale);
         public static GLBox operator *(GLBox box, Vector2I scale) => new GLBox(box.X * scale.X, box.Y * scale.Y, box.Width * scale.X, box.Height * scale.Y);
