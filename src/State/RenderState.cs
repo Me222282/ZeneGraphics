@@ -8,6 +8,22 @@ using Zene.Structs;
 
 namespace Zene.Graphics
 {
+    public enum MatrixMods : byte
+    {
+        /// <summary>
+        /// Draw functions ignore the inital state of <see cref="IDrawingContext.Model" />.
+        /// </summary>
+        None,
+        /// <summary>
+        /// Draw functions apply model multiplications before <see cref="IDrawingContext.Model" />.
+        /// </summary>
+        Pre,
+        /// <summary>
+        /// Draw functions apply model multiplications after <see cref="IDrawingContext.Model" />.
+        /// </summary>
+        Post
+    }
+    
     public class RenderState
     {
         protected internal bool Locked { get; set; } = false;
@@ -133,22 +149,47 @@ namespace Zene.Graphics
             }
         }
 
-        internal bool postMatrixMods = true;
+        private MatrixMods matrixMods = MatrixMods.Post;
         /// <summary>
-        /// Determines whether changes to matrices made by draw functions should be applied before or after the already set value.
+        /// Determines how changes to matrices made by draw functions should manage their inital values.
         /// </summary>
         /// <remarks>
-        /// True for multiplications to be applied after, False for before.
+        /// The default value is <see cref="MatrixMods.Post" />.
         /// </remarks>
-        public bool PostMatrixMods
+        public MatrixMods MatrixMods
         {
-            get => postMatrixMods;
+            get => matrixMods;
             set
             {
                 if (Locked) { return; }
 
-                postMatrixMods = value;
+                matrixMods = value;
+                modelMatrix = matrixMods switch
+                {
+                    MatrixMods.Pre => PreMatrixModsFunc,
+                    MatrixMods.Post => PostMatrixModsFunc,
+                    _ => NoMatrixModsFunc,
+                };
             }
         }
+        
+        internal Func<IMatrix, Matrix4, IMatrix> modelMatrix = PostMatrixModsFunc;
+        private static IMatrix PostMatrixModsFunc(IMatrix init, Matrix4 n)
+        {
+            Matrix4 m;
+            if (init is Matrix4 mod) { m = mod; }
+            else { m = new Matrix4(init); }
+            
+            return m * n;
+        }
+        private static IMatrix PreMatrixModsFunc(IMatrix init, Matrix4 n)
+        {
+            Matrix4 m;
+            if (init is Matrix4 mod) { m = mod; }
+            else { m = new Matrix4(init); }
+            
+            return n * m;
+        }
+        private static IMatrix NoMatrixModsFunc(IMatrix init, Matrix4 n) => n;
     }
 }

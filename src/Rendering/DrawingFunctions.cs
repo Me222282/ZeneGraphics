@@ -92,43 +92,19 @@ namespace Zene.Graphics
             Shapes.BasicShader.ColourSource = ColourSource.UniformColour;
 
             IMatrix model = dc.Model;
-            Matrix4 m;
-            if (model is Matrix4 mod) { m = mod; }
-            else { m = new Matrix4(model); }
-            if (dc.RenderState.postMatrixMods)
-            {
-                dc.Model = m * Matrix4.CreateBox(bounds);
-            }
-            else
-            {
-                dc.Model = Matrix4.CreateBox(bounds) * m;
-            }
-            
+            dc.Model = dc.RenderState.modelMatrix(model, Matrix4.CreateBox(bounds));
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
         public static void DrawBox(this IDrawingContext dc, Box bounds, ITexture texture)
         {
             dc.Shader = Shapes.BasicShader;
-            texture.Bind(0);
             Shapes.BasicShader.Texture = texture;
             Shapes.BasicShader.ColourSource = ColourSource.Texture;
 
             IMatrix model = dc.Model;
-            Matrix4 m;
-            if (model is Matrix4 mod) { m = mod; }
-            else { m = new Matrix4(model); }
-            if (dc.RenderState.postMatrixMods)
-            {
-                dc.Model = m * Matrix4.CreateBox(bounds);
-            }
-            else
-            {
-                dc.Model = Matrix4.CreateBox(bounds) * m;
-            }
-            
+            dc.Model = dc.RenderState.modelMatrix(model, Matrix4.CreateBox(bounds));
             dc.Draw(Shapes.Square);
-            Shapes.BasicShader.Texture = null;
             dc.Model = model;
         }
         public static void DrawRoundedBox(this IDrawingContext dc, Box bounds, ColourF colour, floatv cornerRadius)
@@ -142,18 +118,7 @@ namespace Zene.Graphics
             Shapes.BorderShader.Size = bounds.Size;
 
             IMatrix model = dc.Model;
-            Matrix4 m;
-            if (model is Matrix4 mod) { m = mod; }
-            else { m = new Matrix4(model); }
-            if (dc.RenderState.postMatrixMods)
-            {
-                dc.Model = m * Matrix4.CreateBox(bounds);
-            }
-            else
-            {
-                dc.Model = Matrix4.CreateBox(bounds) * m;
-            }
-            
+            dc.Model = dc.RenderState.modelMatrix(model, Matrix4.CreateBox(bounds));
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -168,18 +133,7 @@ namespace Zene.Graphics
             Shapes.BorderShader.Size = bounds.Size;
 
             IMatrix model = dc.Model;
-            Matrix4 m;
-            if (model is Matrix4 mod) { m = mod; }
-            else { m = new Matrix4(model); }
-            if (dc.RenderState.postMatrixMods)
-            {
-                dc.Model = m * Matrix4.CreateBox(bounds);
-            }
-            else
-            {
-                dc.Model = Matrix4.CreateBox(bounds) * m;
-            }
-            
+            dc.Model = dc.RenderState.modelMatrix(model, Matrix4.CreateBox(bounds));
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -195,18 +149,7 @@ namespace Zene.Graphics
             Shapes.BorderShader.Size = bounds.Size;
 
             IMatrix model = dc.Model;
-            Matrix4 m;
-            if (model is Matrix4 mod) { m = mod; }
-            else { m = new Matrix4(model); }
-            if (dc.RenderState.postMatrixMods)
-            {
-                dc.Model = m * Matrix4.CreateBox(bounds);
-            }
-            else
-            {
-                dc.Model = Matrix4.CreateBox(bounds) * m;
-            }
-            
+            dc.Model = dc.RenderState.modelMatrix(model, Matrix4.CreateBox(bounds));
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -222,18 +165,7 @@ namespace Zene.Graphics
             Shapes.BorderShader.Size = bounds.Size;
 
             IMatrix model = dc.Model;
-            Matrix4 m;
-            if (model is Matrix4 mod) { m = mod; }
-            else { m = new Matrix4(model); }
-            if (dc.RenderState.postMatrixMods)
-            {
-                dc.Model = m * Matrix4.CreateBox(bounds);
-            }
-            else
-            {
-                dc.Model = Matrix4.CreateBox(bounds) * m;
-            }
-            
+            dc.Model = dc.RenderState.modelMatrix(model, Matrix4.CreateBox(bounds));
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -247,18 +179,7 @@ namespace Zene.Graphics
             Shapes.CircleShader.Offset = 0.5f;
 
             IMatrix model = dc.Model;
-            Matrix4 m;
-            if (model is Matrix4 mod) { m = mod; }
-            else { m = new Matrix4(model); }
-            if (dc.RenderState.postMatrixMods)
-            {
-                dc.Model = m * Matrix4.CreateBox(bounds);
-            }
-            else
-            {
-                dc.Model = Matrix4.CreateBox(bounds) * m;
-            }
-            
+            dc.Model = dc.RenderState.modelMatrix(model, Matrix4.CreateBox(bounds));
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -272,18 +193,7 @@ namespace Zene.Graphics
             Shapes.CircleShader.Offset = 0.5f;
 
             IMatrix model = dc.Model;
-            Matrix4 m;
-            if (model is Matrix4 mod) { m = mod; }
-            else { m = new Matrix4(model); }
-            if (dc.RenderState.postMatrixMods)
-            {
-                dc.Model = m * Matrix4.CreateBox(bounds);
-            }
-            else
-            {
-                dc.Model = Matrix4.CreateBox(bounds) * m;
-            }
-            
+            dc.Model = dc.RenderState.modelMatrix(model, Matrix4.CreateBox(bounds));
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -302,18 +212,7 @@ namespace Zene.Graphics
             Shapes.CircleShader.Offset = 0.5f;
 
             IMatrix model = dc.Model;
-            Matrix4 m;
-            if (model is Matrix4 mod) { m = mod; }
-            else { m = new Matrix4(model); }
-            if (dc.RenderState.postMatrixMods)
-            {
-                dc.Model = m * Matrix4.CreateBox(bounds);
-            }
-            else
-            {
-                dc.Model = Matrix4.CreateBox(bounds) * m;
-            }
-            
+            dc.Model = dc.RenderState.modelMatrix(model, Matrix4.CreateBox(bounds));
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -367,7 +266,7 @@ namespace Zene.Graphics
             }
 
             floatv hsx = size.X * 0.5f;
-            // Box bounds = new Box(-hsx, hsx, size.Y, 0d);
+            // Box bounds = Box.FromBounds(-hsx, hsx, size.Y, 0d);
             
             // Shapes.CircleShader.Size = r * 2d;
             Shapes.CircleShader.Offset = ((hsx, size.Y - r) / size);
@@ -394,18 +293,7 @@ namespace Zene.Graphics
                 new Vector4(mid.X - y * sin, y * cos + mid.Y, 0, 1));
 
             IMatrix model = dc.Model;
-            Matrix4 m;
-            if (model is Matrix4 mm) { m = mm; }
-            else { m = new Matrix4(model); }
-            if (dc.RenderState.postMatrixMods)
-            {
-                dc.Model = m * mod;
-            }
-            else
-            {
-                dc.Model = mod * m;
-            }
-            
+            dc.Model = dc.RenderState.modelMatrix(model, mod);
             dc.Draw(Shapes.Square);
             dc.Model = model;
         }
@@ -440,18 +328,7 @@ namespace Zene.Graphics
             Shapes.BasicShader.ColourSource = ColourSource.UniformColour;
             
             IMatrix model = dc.Model;
-            Matrix4 m;
-            if (model is Matrix4 mod) { m = mod; }
-            else { m = new Matrix4(model); }
-            if (dc.RenderState.postMatrixMods)
-            {
-                dc.Model = m * CreateTriangle(a, b, c);
-            }
-            else
-            {
-                dc.Model = CreateTriangle(a, b, c) * m;
-            }
-            
+            dc.Model = dc.RenderState.modelMatrix(model, CreateTriangle(a, b, c));
             dc.Draw(Shapes.Triangle);
             dc.Model = model;
         }
@@ -462,18 +339,7 @@ namespace Zene.Graphics
             Shapes.BasicShader.ColourSource = ColourSource.UniformColour;
 
             IMatrix model = dc.Model;
-            Matrix4 m;
-            if (model is Matrix4 mod) { m = mod; }
-            else { m = new Matrix4(model); }
-            if (dc.RenderState.postMatrixMods)
-            {
-                dc.Model = m * CreateTriangle(tri.A, tri.B, tri.C);
-            }
-            else
-            {
-                dc.Model = CreateTriangle(tri.A, tri.B, tri.C) * m;
-            }
-            
+            dc.Model = dc.RenderState.modelMatrix(model, CreateTriangle(tri.A, tri.B, tri.C));
             dc.Draw(Shapes.Triangle);
             dc.Model = model;
         }

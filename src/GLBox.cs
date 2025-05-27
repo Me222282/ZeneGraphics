@@ -6,19 +6,19 @@ namespace Zene.Graphics
     /// <summary>
     /// A box stored by the bottom left point, <see cref="Width"/> and <see cref="Height"/> values as integers.
     /// </summary>
-    public struct GLBox
+    public struct GLBox : IBox
     {
         /// <summary>
         /// Creates a box from a location and size.
         /// </summary>
-        /// <param name="x">The x value of the location.</param>
-        /// <param name="y">The y value of the location.</param>
+        /// <param name="left">The x value of the location.</param>
+        /// <param name="bottom">The y value of the location.</param>
         /// <param name="w">The width value of the size.</param>
         /// <param name="h">The height value of the size.</param>
-        public GLBox(int x, int y, int w, int h)
+        public GLBox(int left, int bottom, int w, int h)
         {
-            X = x;
-            Y = y;
+            X = left;
+            Y = bottom;
             Width = w;
             Height = h;
         }
@@ -29,6 +29,8 @@ namespace Zene.Graphics
         /// <param name="size">The size of the rectangle.</param>
         public GLBox(Vector2I location, Vector2I size)
         {
+            //X = location.X - (size.X / 2);
+            //Y = location.Y - (size.Y / 2);
             X = location.X;
             Y = location.Y;
             Width = size.X;
@@ -37,14 +39,14 @@ namespace Zene.Graphics
         /// <summary>
         /// Creates a box from a <see cref="floatv"/> based location and size.
         /// </summary>
-        /// <param name="x">The x value of the location.</param>
-        /// <param name="y">The y value of the location.</param>
+        /// <param name="left">The x value of the location.</param>
+        /// <param name="bottom">The y value of the location.</param>
         /// <param name="w">The width value of the size.</param>
         /// <param name="h">The height value of the size.</param>
-        public GLBox(floatv x, floatv y, floatv w, floatv h)
+        public GLBox(floatv left, floatv bottom, floatv w, floatv h)
         {
-            X = (int)x;
-            Y = (int)y;
+            X = (int)left;
+            Y = (int)bottom;
             Width = (int)w;
             Height = (int)h;
         }
@@ -109,18 +111,22 @@ namespace Zene.Graphics
         /// The left x location of the box.
         /// </summary>
         public int X { readonly get; set; }
+        floatv IBox.X { get => X; set => X = (int)value; }
         /// <summary>
         /// The bottom y location of the box.
         /// </summary>
         public int Y { readonly get; set; }
+        floatv IBox.Y { get => Y; set => Y = (int)value; }
         /// <summary>
         /// The width of the box.
         /// </summary>
         public int Width { readonly get; set; }
+        floatv IBox.Width { get => Width; set => Width = (int)value; }
         /// <summary>
         /// The height of the box.
         /// </summary>
         public int Height { readonly get; set; }
+        floatv IBox.Height { get => Height; set => Height = (int)value; }
 
         /// <summary>
         /// The center location of the box.
@@ -134,6 +140,7 @@ namespace Zene.Graphics
                 Y = value.Y - (Height / 2);
             }
         }
+        Vector2 IBox.Centre { get => Centre; set => Centre = (Vector2I)value; }
 
         /// <summary>
         /// The bottom-left location of the box.
@@ -159,6 +166,7 @@ namespace Zene.Graphics
                 Height = value.Y;
             }
         }
+        Vector2 IBox.Size { get => Size; set => Size = (Vector2I)value; }
 
         /// <summary>
         /// The left side of the box.
@@ -169,13 +177,14 @@ namespace Zene.Graphics
             set
             {
                 Width += X - value;
-                if (Width < 0)
-                {
-                    Width = 0;
-                }
+                //if (Width < 0)
+                //{
+                //    Width = 0;
+                //}
                 X = value;
             }
         }
+        floatv IBox.Left { get => Left; set => Left = (int)value; }
         /// <summary>
         /// The right side of the box.
         /// </summary>
@@ -185,12 +194,13 @@ namespace Zene.Graphics
             set
             {
                 Width = value - X;
-                if (Width < 0)
-                {
-                    Width = 0;
-                }
+                //if (Width < 0)
+                //{
+                //    Width = 0;
+                //}
             }
         }
+        floatv IBox.Right { get => Right; set => Right = (int)value; }
         /// <summary>
         /// The bottom side of the box.
         /// </summary>
@@ -199,14 +209,15 @@ namespace Zene.Graphics
             readonly get => Y;
             set
             {
-                Height = Y - value;
-                if (Height < 0)
-                {
-                    Height = 0;
-                }
+                Height += Y - value;
+                //if (Height < 0)
+                //{
+                //    Height = 0;
+                //}
                 Y = value;
             }
         }
+        floatv IBox.Bottom { get => Bottom; set => Bottom = (int)value; }
         /// <summary>
         /// The top side of the box.
         /// </summary>
@@ -216,12 +227,13 @@ namespace Zene.Graphics
             set
             {
                 Height = value - Y;
-                if (Height < 0)
-                {
-                    Height = 0;
-                }
+                //if (Height < 0)
+                //{
+                //    Height = 0;
+                //}
             }
         }
+        floatv IBox.Top { get => Top; set => Top = (int)value; }
 
         /// <summary>
         /// The top-right point.
@@ -447,7 +459,7 @@ namespace Zene.Graphics
         {
             return obj is GLBox b &&
                     X == b.Left && Width == b.Width &&
-                    Y == b.Top && Height == b.Height;
+                    Y == b.Bottom && Height == b.Height;
         }
         public readonly override int GetHashCode()
         {
@@ -464,8 +476,8 @@ namespace Zene.Graphics
 
         public static GLBox operator +(GLBox box, Vector2I offset) => new GLBox(box.X + offset.X, box.Y + offset.Y, box.Width, box.Height);
         public static GLBox operator -(GLBox box, Vector2I offset) => new GLBox(box.X - offset.X, box.Y - offset.Y, box.Width, box.Height);
-        //public static GLBox operator +(GLBox a, GLBox b) => a.Add(b);
-        //public static GLBox operator -(GLBox a, GLBox b) => a.Clamped(b);
+        public static GLBox operator +(GLBox a, GLBox b) => a.Add(b);
+        public static GLBox operator -(GLBox a, GLBox b) => a.Clamped(b);
 
         public static explicit operator GLBox(Box box) => new GLBox(box);
         public static explicit operator GLBox(Bounds box) => new GLBox(box);
