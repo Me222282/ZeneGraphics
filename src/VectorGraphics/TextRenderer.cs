@@ -289,11 +289,16 @@ namespace Zene.Graphics
             }
             // No text is to be drawn
             if (text == null || text == "") { return; }
-
-            if (text.Length > _mCapacity)
+            
+            int dl = text.Length;
+            if (drawCaret) { dl++; }
+            else { caretIndex = -1; }
+            if (caretIndex > text.Length)
             {
-                SetCap(text.Length);
+                caretIndex = text.Length;
             }
+            // caret needs to be in capacity
+            if (dl > _mCapacity) { SetCap(dl); }
 
             // Pixel space to normalised space
             Vector2 textureMultiplier = 1 /
@@ -307,14 +312,6 @@ namespace Zene.Graphics
 
             // Get bounding box of text
             Vector2 frameSize = font.GetFrameSize(text, charSpace, lineSpace, TabSize) * sizeMultiplier;
-
-            int dl = text.Length;
-            if (drawCaret) { dl++; }
-            else { caretIndex = -1; }
-            if (caretIndex > text.Length)
-            {
-                caretIndex = text.Length;
-            }
 
             Vector2 starting = centred ? frameSize / (-2, 2) : 0;
             // The current character offset
